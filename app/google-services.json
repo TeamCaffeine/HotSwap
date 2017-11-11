@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "362430096656",
+    "firebase_url": "https://hotswap-c9cf2.firebaseio.com",
+    "project_id": "hotswap-c9cf2",
+    "storage_bucket": "hotswap-c9cf2.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:362430096656:android:cb55830a6d20cb1c",
+        "android_client_info": {
+          "package_name": "com.teamcaffeine.hotswap"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "362430096656-8elu0knqh6skspqntkful6cviui3l5r1.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCtPr8NFNSbK38iJVWTOR3kwxUi5i69Vnc"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
