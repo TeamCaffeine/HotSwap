@@ -1,11 +1,10 @@
 package com.teamcaffeine.hotswap;
-// hi jake
-// testing
+
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
 public class HomeActivity extends AppCompatActivity {
-    private String hi;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
