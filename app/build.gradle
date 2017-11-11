@@ -27,7 +27,7 @@ dependencies {
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
 
     compile 'com.google.firebase:firebase-core:9.6.0'
-    // random comment testing
+    //noinspection GradleCompatible
     compile 'com.google.firebase:firebase-messaging:9.6.0'
     compile 'com.firebase:firebase-jobdispatcher:0.6.0'
 }
