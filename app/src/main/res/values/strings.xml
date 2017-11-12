@@ -3,4 +3,8 @@
     <string name="msg_token_fmt" translatable="false">InstanceID Token: %s</string>
     <string name="default_notification_channel_id" translatable="false">fcm_default_channel</string>
     <string name="msg_subscribed">Subscribed to news topic</string>
+
+    <!-- Facebook application ID and custom URL scheme (app ID prefixed by 'fb'). -->
+    <string name="facebook_application_id" translatable="false">168017580454797</string>
+    <string name="facebook_login_protocol_scheme" translatable="false">fb168017580454797</string>
 </resources>
