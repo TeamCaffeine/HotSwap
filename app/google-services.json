@@ -15,6 +15,22 @@
       },
       "oauth_client": [
         {
+          "client_id": "362430096656-v8p6lafd366ve72mr9gl2lo7s71edk98.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.teamcaffeine.hotswap",
+            "certificate_hash": "f9d1190bb48763058ac36c9576abcde8265775e9"
+          }
+        },
+        {
+          "client_id": "362430096656-caooeh3ut58qu9nu8sq9rh80ku6heb51.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.teamcaffeine.hotswap",
+            "certificate_hash": "7b77544cafb1f4f8c280161a5f63dee668b4ff02"
+          }
+        },
+        {
           "client_id": "362430096656-8elu0knqh6skspqntkful6cviui3l5r1.apps.googleusercontent.com",
           "client_type": 3
         }
@@ -29,8 +45,13 @@
           "status": 1
         },
         "appinvite_service": {
-          "status": 1,
-          "other_platform_oauth_client": []
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "362430096656-8elu0knqh6skspqntkful6cviui3l5r1.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         },
         "ads_service": {
           "status": 2
