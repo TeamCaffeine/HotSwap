@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -12,6 +13,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -24,8 +26,8 @@ import com.google.firebase.auth.GoogleAuthProvider;
 /**
  * Demonstrate Firebase Authentication using a Google ID Token.
  */
-public class GoogleSignInActivity extends BaseActivity implements
-        View.OnClickListener {
+public class GoogleSignInActivity extends BaseActivity {
+//        implements View.OnClickListener {
 
     private static final String TAG = "GoogleActivity";
     private static final int RC_SIGN_IN = 9001;
@@ -38,6 +40,10 @@ public class GoogleSignInActivity extends BaseActivity implements
     private TextView mStatusTextView;
     private TextView mDetailTextView;
 
+    SignInButton btnSignIn;
+    Button btnSignOut;
+    Button btnDisconnect;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,14 +54,35 @@ public class GoogleSignInActivity extends BaseActivity implements
         mDetailTextView = findViewById(R.id.detail);
 
         // Button listeners
-        findViewById(R.id.sign_in_button).setOnClickListener(this);
-        findViewById(R.id.sign_out_button).setOnClickListener(this);
-        findViewById(R.id.disconnect_button).setOnClickListener(this);
+        btnSignIn = findViewById(R.id.sign_in_button);
+        btnSignOut = findViewById(R.id.sign_out_button);
+        btnDisconnect = findViewById(R.id.disconnect_button);
+
+        btnSignIn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                signIn();
+            }
+        });
+
+        btnSignOut.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                signOut();
+            }
+        });
+
+        btnDisconnect.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                revokeAccess();
+            }
+        });
 
         // [START config_signin]
         // Configure Google Sign In
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken(getString(R.string.default_web_client_id))
+                .requestIdToken(getString(R.string.google_web_client_id))
                 .requestEmail()
                 .build();
         // [END config_signin]
@@ -185,17 +212,17 @@ public class GoogleSignInActivity extends BaseActivity implements
         }
     }
 
-    @Override
-    public void onClick(View v) {
-        int i = v.getId();
-        if (i == R.id.sign_in_button) {
-            signIn();
-        } else if (i == R.id.sign_out_button) {
-            signOut();
-        } else if (i == R.id.disconnect_button) {
-            revokeAccess();
-        }
-    }
+//    @Override
+//    public void onClick(View v) {
+//        int i = v.getId();
+//        if (i == R.id.sign_in_button) {
+//            signIn();
+//        } else if (i == R.id.sign_out_button) {
+//            signOut();
+//        } else if (i == R.id.disconnect_button) {
+//            revokeAccess();
+//        }
+//    }
 }
 
 ///**
