@@ -10,9 +10,6 @@
     <string name="facebook_application_id" translatable="false">497436047284132</string>
     <string name="facebook_login_protocol_scheme" translatable="false">fb497436047284132</string>
 
-    <!--Google Sign In OAuth ID-->
-    <string name="google_web_client_id">362430096656-caooeh3ut58qu9nu8sq9rh80ku6heb51.apps.googleusercontent.com</string>
-
     <!--Login Activity Strings-->
     <string name="label_google_sign_in">Firebase + Google Sign In</string>
     <string name="desc_google_sign_in">Use a Google Sign In credential to authenticate with Firebase.</string>
