@@ -5,8 +5,8 @@
     <string name="msg_subscribed">Subscribed to news topic</string>
 
     <!-- Facebook application ID and custom URL scheme (app ID prefixed by 'fb'). -->
-    <string name="facebook_application_id" translatable="false">168017580454797</string>
-    <string name="facebook_login_protocol_scheme" translatable="false">fb168017580454797</string>
+    <string name="facebook_application_id" translatable="false">497436047284132</string>
+    <string name="facebook_login_protocol_scheme" translatable="false">fb497436047284132</string>
 
     <!--Google Sign In OAuth ID-->
     <string name="google_web_client_id">362430096656-caooeh3ut58qu9nu8sq9rh80ku6heb51.apps.googleusercontent.com</string>
