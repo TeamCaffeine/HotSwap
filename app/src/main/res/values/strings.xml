@@ -5,6 +5,8 @@
     <string name="msg_subscribed">Subscribed to news topic</string>
 
     <!-- Facebook application ID and custom URL scheme (app ID prefixed by 'fb'). -->
+    <!--<string name="facebook_app_id">497436047284132</string>-->
+    <!--<string name="fb_login_protocol_scheme">fb497436047284132</string>-->
     <string name="facebook_application_id" translatable="false">497436047284132</string>
     <string name="facebook_login_protocol_scheme" translatable="false">fb497436047284132</string>
 
