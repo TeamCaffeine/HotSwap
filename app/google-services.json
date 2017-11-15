@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "362430096656-n8m4gfjgr2kj0l22apshds916eef246a.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.teamcaffeine.hotswap",
+            "certificate_hash": "4d014df63ec9aaaca4d2f8230da15a71aa02240f"
+          }
+        },
+        {
           "client_id": "362430096656-v8p6lafd366ve72mr9gl2lo7s71edk98.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
