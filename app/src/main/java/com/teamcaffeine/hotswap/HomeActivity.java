@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.Button;
 
 import com.facebook.login.LoginManager;
+import com.google.firebase.auth.FirebaseAuth;
 
 public class HomeActivity extends AppCompatActivity {
 
@@ -19,7 +20,7 @@ public class HomeActivity extends AppCompatActivity {
         logout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                LoginManager.getInstance().logOut();
+                FirebaseAuth.getInstance().signOut();
                 Intent logout = new Intent(HomeActivity.this, LoginActivity.class);
                 startActivity(logout);
                 finish();
