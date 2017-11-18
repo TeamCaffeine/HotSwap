@@ -85,9 +85,13 @@ public class EmailPasswordActivity extends BaseActivity implements
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "createUserWithEmail:failure", task.getException());
-                            Toast.makeText(EmailPasswordActivity.this, "Authentication failed.",
-                                    Toast.LENGTH_SHORT).show();
-                            // TODO: Parse exception, display detailed error message to user
+                            if (task.getException() != null) {
+                                Toast.makeText(EmailPasswordActivity.this, task.getException().getMessage(),
+                                        Toast.LENGTH_SHORT).show();
+                            } else {
+                                Toast.makeText(EmailPasswordActivity.this, R.string.authentication_failed,
+                                        Toast.LENGTH_SHORT).show();
+                            }
                             updateUI(null);
                         }
 
@@ -120,9 +124,13 @@ public class EmailPasswordActivity extends BaseActivity implements
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "signInWithEmail:failure", task.getException());
-                            Toast.makeText(EmailPasswordActivity.this, "Authentication failed.",
-                                    Toast.LENGTH_SHORT).show();
-                            // TODO: Parse exception, display detailed error message to user
+                            if (task.getException() != null) {
+                                Toast.makeText(EmailPasswordActivity.this, task.getException().getMessage(),
+                                        Toast.LENGTH_SHORT).show();
+                            } else {
+                                Toast.makeText(EmailPasswordActivity.this, R.string.authentication_failed,
+                                        Toast.LENGTH_SHORT).show();
+                            }
                             updateUI(null);
                         }
 
@@ -140,7 +148,8 @@ public class EmailPasswordActivity extends BaseActivity implements
     private void signOut() {
         mAuth.signOut();
         updateUI(null);
-        // TODO: Display message indicating successful sign out
+        Toast.makeText(EmailPasswordActivity.this, R.string.successfully_signed_out,
+                Toast.LENGTH_SHORT).show();
     }
 
     private void sendEmailVerification() {
@@ -160,14 +169,13 @@ public class EmailPasswordActivity extends BaseActivity implements
 
                         if (task.isSuccessful()) {
                             Toast.makeText(EmailPasswordActivity.this,
-                                    "Verification email sent to " + user.getEmail(),
+                                    getString(R.string.verification_sent_to) + user.getEmail(),
                                     Toast.LENGTH_SHORT).show();
                         } else {
                             Log.e(TAG, "sendEmailVerification", task.getException());
                             Toast.makeText(EmailPasswordActivity.this,
-                                    "Failed to send verification email.",
+                                    R.string.failed_to_send_verification_email,
                                     Toast.LENGTH_SHORT).show();
-                            // TODO: Parse exception, display detailed error message to user
                         }
                         // [END_EXCLUDE]
                     }

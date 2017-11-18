@@ -130,9 +130,13 @@ public class FacebookLoginActivity extends BaseActivity implements
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "signInWithCredential:failure", task.getException());
-                            Toast.makeText(FacebookLoginActivity.this, "Authentication failed.",
-                                    Toast.LENGTH_SHORT).show();
-                            // TODO: Parse exception, display detailed error message to user
+                            if (task.getException() != null) {
+                                Toast.makeText(FacebookLoginActivity.this, task.getException().getMessage(),
+                                        Toast.LENGTH_SHORT).show();
+                            } else {
+                                Toast.makeText(FacebookLoginActivity.this, R.string.authentication_failed,
+                                        Toast.LENGTH_SHORT).show();
+                            }
                             updateUI(null);
                         }
 
@@ -149,7 +153,8 @@ public class FacebookLoginActivity extends BaseActivity implements
         LoginManager.getInstance().logOut();
 
         updateUI(null);
-        // TODO: Display message indicating successful sign out
+        Toast.makeText(FacebookLoginActivity.this, R.string.successfully_signed_out,
+                Toast.LENGTH_SHORT).show();
     }
 
     private void updateUI(FirebaseUser user) {
