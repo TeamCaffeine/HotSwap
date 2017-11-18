@@ -9,6 +9,7 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        resConfigs "auto"
     }
     buildTypes {
         release {
@@ -18,18 +19,39 @@ android {
     }
 }
 
+repositories {
+    mavenCentral()
+}
+
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation 'com.android.support:appcompat-v7:26.1.0'
     implementation 'com.android.support.constraint:constraint-layout:1.0.2'
+    implementation 'com.google.firebase:firebase-database:11.6.0'
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.1'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
 
-    compile 'com.google.firebase:firebase-core:9.6.0'
     //noinspection GradleCompatible
-    compile 'com.google.firebase:firebase-messaging:9.6.0'
+    compile 'com.google.firebase:firebase-core:11.6.0'
+    //noinspection GradleCompatible
+    compile 'com.google.firebase:firebase-messaging:11.6.0'
     compile 'com.firebase:firebase-jobdispatcher:0.6.0'
+
+    // FirebaseUI for Firebase Auth
+    compile 'com.firebaseui:firebase-ui-auth:3.1.0'
+
+    // Facebook login dependency
+    compile 'com.facebook.android:facebook-login:4.28.0'
+
+    compile 'com.google.firebase:firebase-auth:11.6.0'
+
+    compile 'com.google.android.gms:play-services-auth:11.6.0'
+
+    compile 'com.android.support:design:26.1.0'
+    compile 'com.firebase:firebase-client-android:2.5.2+'
+    compile 'com.facebook.android:facebook-android-sdk:[4,5)'
 }
+
 
 apply plugin: 'com.google.gms.google-services'
