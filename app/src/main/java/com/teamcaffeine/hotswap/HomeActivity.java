@@ -15,7 +15,7 @@ public class HomeActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        SessionManager.shouldLogIn(this);
+        SessionHandler.shouldLogIn(this);
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);

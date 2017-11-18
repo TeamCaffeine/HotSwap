@@ -9,7 +9,7 @@ import com.google.firebase.auth.FirebaseAuth;
 /**
  * Safety class to route users away from activities if their login status is incorrect
  */
-public final class SessionManager {
+public final class SessionHandler {
     public static void shouldLogIn(Context context) {
         if (FirebaseAuth.getInstance().getCurrentUser() == null) {
             Toast.makeText(context, "Login required.", Toast.LENGTH_SHORT).show();
