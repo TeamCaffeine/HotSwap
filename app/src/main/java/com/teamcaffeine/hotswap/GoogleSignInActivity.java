@@ -24,10 +24,9 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 
 /**
- * Demonstrate Firebase Authentication using a Google ID Token.
+ * Firebase Authentication using a Google ID Token.
  */
 public class GoogleSignInActivity extends BaseActivity {
-//        implements View.OnClickListener {
 
     private static final String TAG = "GoogleActivity";
     private static final int RC_SIGN_IN = 9001;
@@ -149,6 +148,7 @@ public class GoogleSignInActivity extends BaseActivity {
                             Log.w(TAG, "signInWithCredential:failure", task.getException());
                             Toast.makeText(GoogleSignInActivity.this, "Authentication failed.",
                                     Toast.LENGTH_SHORT).show();
+                            // TODO: Parse exception, display detailed error message to user
                             updateUI(null);
                         }
 
@@ -179,6 +179,7 @@ public class GoogleSignInActivity extends BaseActivity {
                         updateUI(null);
                     }
                 });
+        // TODO: Display message indicating successful sign out
     }
 
     private void revokeAccess() {
@@ -211,23 +212,4 @@ public class GoogleSignInActivity extends BaseActivity {
             findViewById(R.id.sign_out_and_disconnect).setVisibility(View.GONE);
         }
     }
-
-//    @Override
-//    public void onClick(View v) {
-//        int i = v.getId();
-//        if (i == R.id.sign_in_button) {
-//            signIn();
-//        } else if (i == R.id.sign_out_button) {
-//            signOut();
-//        } else if (i == R.id.disconnect_button) {
-//            revokeAccess();
-//        }
-//    }
 }
-
-///**
-// * Created by megan on 11/11/2017.
-// */
-//
-//public class GoogleSignInActivity {
-//}

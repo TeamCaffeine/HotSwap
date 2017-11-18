@@ -1,7 +1,6 @@
 package com.teamcaffeine.hotswap;
 
 import android.content.Intent;
-import android.hardware.camera2.params.Face;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.util.Log;
@@ -27,7 +26,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 /**
- * Demonstrate Firebase Authentication using a Facebook access token.
+ * Firebase Authentication using a Facebook access token.
  */
 public class FacebookLoginActivity extends BaseActivity implements
         View.OnClickListener {
@@ -133,6 +132,7 @@ public class FacebookLoginActivity extends BaseActivity implements
                             Log.w(TAG, "signInWithCredential:failure", task.getException());
                             Toast.makeText(FacebookLoginActivity.this, "Authentication failed.",
                                     Toast.LENGTH_SHORT).show();
+                            // TODO: Parse exception, display detailed error message to user
                             updateUI(null);
                         }
 
@@ -149,6 +149,7 @@ public class FacebookLoginActivity extends BaseActivity implements
         LoginManager.getInstance().logOut();
 
         updateUI(null);
+        // TODO: Display message indicating successful sign out
     }
 
     private void updateUI(FirebaseUser user) {
@@ -176,10 +177,3 @@ public class FacebookLoginActivity extends BaseActivity implements
         }
     }
 }
-
-///**
-// * Created by megan on 11/11/2017.
-// */
-//
-//public class FacebookLoginActivity {
-//}

@@ -32,10 +32,3 @@ public class BaseActivity extends AppCompatActivity {
     }
 
 }
-
-///**
-// * Created by megan on 11/11/2017.
-// */
-//
-//public class BaseActivity {
-//}

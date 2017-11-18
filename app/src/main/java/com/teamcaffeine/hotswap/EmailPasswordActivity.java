@@ -15,6 +15,9 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+/**
+ * Firebase Authentication using an email-password access token
+ */
 public class EmailPasswordActivity extends BaseActivity implements
         View.OnClickListener {
 
@@ -84,6 +87,7 @@ public class EmailPasswordActivity extends BaseActivity implements
                             Log.w(TAG, "createUserWithEmail:failure", task.getException());
                             Toast.makeText(EmailPasswordActivity.this, "Authentication failed.",
                                     Toast.LENGTH_SHORT).show();
+                            // TODO: Parse exception, display detailed error message to user
                             updateUI(null);
                         }
 
@@ -118,6 +122,7 @@ public class EmailPasswordActivity extends BaseActivity implements
                             Log.w(TAG, "signInWithEmail:failure", task.getException());
                             Toast.makeText(EmailPasswordActivity.this, "Authentication failed.",
                                     Toast.LENGTH_SHORT).show();
+                            // TODO: Parse exception, display detailed error message to user
                             updateUI(null);
                         }
 
@@ -135,6 +140,7 @@ public class EmailPasswordActivity extends BaseActivity implements
     private void signOut() {
         mAuth.signOut();
         updateUI(null);
+        // TODO: Display message indicating successful sign out
     }
 
     private void sendEmailVerification() {
@@ -161,6 +167,7 @@ public class EmailPasswordActivity extends BaseActivity implements
                             Toast.makeText(EmailPasswordActivity.this,
                                     "Failed to send verification email.",
                                     Toast.LENGTH_SHORT).show();
+                            // TODO: Parse exception, display detailed error message to user
                         }
                         // [END_EXCLUDE]
                     }
@@ -226,10 +233,3 @@ public class EmailPasswordActivity extends BaseActivity implements
         }
     }
 }
-
-///**
-// * Created by megan on 11/11/2017.
-// */
-//
-//public class EmailPasswordActivity {
-//}
