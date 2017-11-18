@@ -8,6 +8,7 @@ import android.widget.Button;
 
 import com.facebook.login.widget.LoginButton;
 import com.google.android.gms.common.SignInButton;
+import com.google.firebase.auth.FirebaseAuth;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -17,6 +18,11 @@ public class LoginActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        if (FirebaseAuth.getInstance().getCurrentUser() != null) {
+            Intent home = new Intent(this, HomeActivity.class);
+            startActivity(home);
+        }
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 

@@ -12,13 +12,15 @@ public class SplashActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        Intent intent;
+        // Check if the user is logged in - if they are, send them to their home page,
+        // if not, send them to the login activity
+        Intent appEntry;
         if (FirebaseAuth.getInstance().getCurrentUser() != null) {
-            intent = new Intent(this, HomeActivity.class);
+            appEntry = new Intent(this, HomeActivity.class);
         } else {
-            intent = new Intent(this, LoginActivity.class);
+            appEntry = new Intent(this, LoginActivity.class);
         }
-        startActivity(intent);
+        startActivity(appEntry);
         finish();
     }
 }
