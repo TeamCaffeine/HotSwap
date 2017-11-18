@@ -146,9 +146,13 @@ public class GoogleSignInActivity extends BaseActivity {
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "signInWithCredential:failure", task.getException());
-                            Toast.makeText(GoogleSignInActivity.this, "Authentication failed.",
-                                    Toast.LENGTH_SHORT).show();
-                            // TODO: Parse exception, display detailed error message to user
+                            if (task.getException() != null) {
+                                Toast.makeText(GoogleSignInActivity.this, task.getException().getMessage(),
+                                        Toast.LENGTH_SHORT).show();
+                            } else {
+                                Toast.makeText(GoogleSignInActivity.this, R.string.authentication_failed,
+                                        Toast.LENGTH_SHORT).show();
+                            }
                             updateUI(null);
                         }
 
@@ -177,9 +181,10 @@ public class GoogleSignInActivity extends BaseActivity {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         updateUI(null);
+                        Toast.makeText(GoogleSignInActivity.this, R.string.successfully_signed_out,
+                                Toast.LENGTH_SHORT).show();
                     }
                 });
-        // TODO: Display message indicating successful sign out
     }
 
     private void revokeAccess() {
