@@ -1,8 +1,10 @@
-package com.teamcaffeine.hotswap;
+package com.teamcaffeine.hotswap.activity.login;
 
 import android.app.ProgressDialog;
 import android.support.annotation.VisibleForTesting;
 import android.support.v7.app.AppCompatActivity;
+
+import com.teamcaffeine.hotswap.R;
 
 public class BaseActivity extends AppCompatActivity {
 

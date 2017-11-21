@@ -1,4 +1,4 @@
-package com.teamcaffeine.hotswap;
+package com.teamcaffeine.hotswap.notification;
 
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -14,6 +14,8 @@ import com.firebase.jobdispatcher.GooglePlayDriver;
 import com.firebase.jobdispatcher.Job;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
+import com.teamcaffeine.hotswap.activity.HomeActivity;
+import com.teamcaffeine.hotswap.R;
 
 public class HSFirebaseMessagingService extends FirebaseMessagingService {
 

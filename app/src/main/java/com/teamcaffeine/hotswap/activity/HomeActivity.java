@@ -1,4 +1,4 @@
-package com.teamcaffeine.hotswap;
+package com.teamcaffeine.hotswap.activity;
 
 import android.content.Intent;
 import android.support.annotation.NonNull;
@@ -10,6 +10,9 @@ import android.widget.Button;
 import com.firebase.ui.auth.AuthUI;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.teamcaffeine.hotswap.R;
+import com.teamcaffeine.hotswap.utility.SessionHandler;
+import com.teamcaffeine.hotswap.activity.login.LoginActivity;
 
 public class HomeActivity extends AppCompatActivity {
 
