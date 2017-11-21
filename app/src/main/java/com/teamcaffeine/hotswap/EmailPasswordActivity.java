@@ -1,5 +1,6 @@
 package com.teamcaffeine.hotswap;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
@@ -15,6 +16,9 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+/**
+ * Firebase Authentication using an email-password access token
+ */
 public class EmailPasswordActivity extends BaseActivity implements
         View.OnClickListener {
 
@@ -82,8 +86,13 @@ public class EmailPasswordActivity extends BaseActivity implements
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "createUserWithEmail:failure", task.getException());
-                            Toast.makeText(EmailPasswordActivity.this, "Authentication failed.",
-                                    Toast.LENGTH_SHORT).show();
+                            if (task.getException() != null) {
+                                Toast.makeText(EmailPasswordActivity.this, task.getException().getMessage(),
+                                        Toast.LENGTH_SHORT).show();
+                            } else {
+                                Toast.makeText(EmailPasswordActivity.this, R.string.authentication_failed,
+                                        Toast.LENGTH_SHORT).show();
+                            }
                             updateUI(null);
                         }
 
@@ -109,15 +118,21 @@ public class EmailPasswordActivity extends BaseActivity implements
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-                            // Sign in success, update UI with the signed-in user's information
+                            // Sign in success, send user to app home page
                             Log.d(TAG, "signInWithEmail:success");
-                            FirebaseUser user = mAuth.getCurrentUser();
-                            updateUI(user);
+                            Intent home = new Intent(getApplicationContext(), HomeActivity.class);
+                            startActivity(home);
+                            finish();
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "signInWithEmail:failure", task.getException());
-                            Toast.makeText(EmailPasswordActivity.this, "Authentication failed.",
-                                    Toast.LENGTH_SHORT).show();
+                            if (task.getException() != null) {
+                                Toast.makeText(EmailPasswordActivity.this, task.getException().getMessage(),
+                                        Toast.LENGTH_SHORT).show();
+                            } else {
+                                Toast.makeText(EmailPasswordActivity.this, R.string.authentication_failed,
+                                        Toast.LENGTH_SHORT).show();
+                            }
                             updateUI(null);
                         }
 
@@ -135,6 +150,8 @@ public class EmailPasswordActivity extends BaseActivity implements
     private void signOut() {
         mAuth.signOut();
         updateUI(null);
+        Toast.makeText(EmailPasswordActivity.this, R.string.successfully_signed_out,
+                Toast.LENGTH_SHORT).show();
     }
 
     private void sendEmailVerification() {
@@ -154,12 +171,12 @@ public class EmailPasswordActivity extends BaseActivity implements
 
                         if (task.isSuccessful()) {
                             Toast.makeText(EmailPasswordActivity.this,
-                                    "Verification email sent to " + user.getEmail(),
+                                    getString(R.string.verification_sent_to) + user.getEmail(),
                                     Toast.LENGTH_SHORT).show();
                         } else {
                             Log.e(TAG, "sendEmailVerification", task.getException());
                             Toast.makeText(EmailPasswordActivity.this,
-                                    "Failed to send verification email.",
+                                    R.string.failed_to_send_verification_email,
                                     Toast.LENGTH_SHORT).show();
                         }
                         // [END_EXCLUDE]
@@ -226,10 +243,3 @@ public class EmailPasswordActivity extends BaseActivity implements
         }
     }
 }
-
-///**
-// * Created by megan on 11/11/2017.
-// */
-//
-//public class EmailPasswordActivity {
-//}

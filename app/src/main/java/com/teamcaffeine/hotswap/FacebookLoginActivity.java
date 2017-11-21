@@ -1,7 +1,6 @@
 package com.teamcaffeine.hotswap;
 
 import android.content.Intent;
-import android.hardware.camera2.params.Face;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.util.Log;
@@ -13,8 +12,6 @@ import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
-import com.facebook.FacebookSdk;
-import com.facebook.appevents.AppEventsLogger;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
@@ -27,7 +24,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 /**
- * Demonstrate Firebase Authentication using a Facebook access token.
+ * Firebase Authentication using a Facebook access token.
  */
 public class FacebookLoginActivity extends BaseActivity implements
         View.OnClickListener {
@@ -46,8 +43,6 @@ public class FacebookLoginActivity extends BaseActivity implements
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        FacebookSdk.sdkInitialize(getApplicationContext());
-        AppEventsLogger.activateApp(this);
         setContentView(R.layout.activity_facebook);
 
         // Views
@@ -124,16 +119,23 @@ public class FacebookLoginActivity extends BaseActivity implements
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-                            // Sign in success, update UI with the signed-in user's information
+                            // Sign in success, send user to app home page
                             Log.d(TAG, "signInWithCredential:success");
-                            FirebaseUser user = mAuth.getCurrentUser();
-                            updateUI(user);
+                            Intent home = new Intent(getApplicationContext(), HomeActivity.class);
+                            startActivity(home);
+                            finish();
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "signInWithCredential:failure", task.getException());
-                            Toast.makeText(FacebookLoginActivity.this, "Authentication failed.",
-                                    Toast.LENGTH_SHORT).show();
+                            if (task.getException() != null) {
+                                Toast.makeText(FacebookLoginActivity.this, task.getException().getMessage(),
+                                        Toast.LENGTH_SHORT).show();
+                            } else {
+                                Toast.makeText(FacebookLoginActivity.this, R.string.authentication_failed,
+                                        Toast.LENGTH_SHORT).show();
+                            }
                             updateUI(null);
+                            LoginManager.getInstance().logOut();
                         }
 
                         // [START_EXCLUDE]
@@ -149,6 +151,8 @@ public class FacebookLoginActivity extends BaseActivity implements
         LoginManager.getInstance().logOut();
 
         updateUI(null);
+        Toast.makeText(FacebookLoginActivity.this, R.string.successfully_signed_out,
+                Toast.LENGTH_SHORT).show();
     }
 
     private void updateUI(FirebaseUser user) {
@@ -176,10 +180,3 @@ public class FacebookLoginActivity extends BaseActivity implements
         }
     }
 }
-
-///**
-// * Created by megan on 11/11/2017.
-// */
-//
-//public class FacebookLoginActivity {
-//}

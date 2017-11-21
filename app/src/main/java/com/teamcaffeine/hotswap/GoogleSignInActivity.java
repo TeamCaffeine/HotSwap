@@ -24,10 +24,9 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 
 /**
- * Demonstrate Firebase Authentication using a Google ID Token.
+ * Firebase Authentication using a Google ID Token.
  */
 public class GoogleSignInActivity extends BaseActivity {
-//        implements View.OnClickListener {
 
     private static final String TAG = "GoogleActivity";
     private static final int RC_SIGN_IN = 9001;
@@ -140,15 +139,21 @@ public class GoogleSignInActivity extends BaseActivity {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-                            // Sign in success, update UI with the signed-in user's information
+                            // Sign in success, send user to app home page
                             Log.d(TAG, "signInWithCredential:success");
-                            FirebaseUser user = mAuth.getCurrentUser();
-                            updateUI(user);
+                            Intent home = new Intent(getApplicationContext(), HomeActivity.class);
+                            startActivity(home);
+                            finish();
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "signInWithCredential:failure", task.getException());
-                            Toast.makeText(GoogleSignInActivity.this, "Authentication failed.",
-                                    Toast.LENGTH_SHORT).show();
+                            if (task.getException() != null) {
+                                Toast.makeText(GoogleSignInActivity.this, task.getException().getMessage(),
+                                        Toast.LENGTH_SHORT).show();
+                            } else {
+                                Toast.makeText(GoogleSignInActivity.this, R.string.authentication_failed,
+                                        Toast.LENGTH_SHORT).show();
+                            }
                             updateUI(null);
                         }
 
@@ -177,6 +182,8 @@ public class GoogleSignInActivity extends BaseActivity {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         updateUI(null);
+                        Toast.makeText(GoogleSignInActivity.this, R.string.successfully_signed_out,
+                                Toast.LENGTH_SHORT).show();
                     }
                 });
     }
@@ -211,23 +218,4 @@ public class GoogleSignInActivity extends BaseActivity {
             findViewById(R.id.sign_out_and_disconnect).setVisibility(View.GONE);
         }
     }
-
-//    @Override
-//    public void onClick(View v) {
-//        int i = v.getId();
-//        if (i == R.id.sign_in_button) {
-//            signIn();
-//        } else if (i == R.id.sign_out_button) {
-//            signOut();
-//        } else if (i == R.id.disconnect_button) {
-//            revokeAccess();
-//        }
-//    }
 }
-
-///**
-// * Created by megan on 11/11/2017.
-// */
-//
-//public class GoogleSignInActivity {
-//}
