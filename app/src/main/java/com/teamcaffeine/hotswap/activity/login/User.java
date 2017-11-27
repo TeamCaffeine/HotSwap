@@ -1,6 +1,8 @@
 package com.teamcaffeine.hotswap.activity.login;
 
+import java.text.DateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -9,6 +11,7 @@ public class User {
     private String Uid;
     private String userName;
     private String password;
+    private String dateCreated;
     private String firstName;
     private String lastName;
 
@@ -21,12 +24,13 @@ public class User {
     User() {
     }
 
-    public User(String Uid, String userName, String password, String firstName, String lastName, ArrayList<String> items,
+    public User(String Uid, String userName, String password, String dateCreated, String firstName, String lastName, ArrayList<String> items,
                 ArrayList<String> currentlyRenting, ArrayList<String> currentlyLending, ArrayList<String> paymentOptions,
                 ArrayList<String> linkedAccounts) {
         this.Uid = Uid;
         this.userName = userName;
         this.password = password;
+        this.dateCreated = dateCreated;
         this.firstName = firstName;
         this.lastName = lastName;
         this.items = items;
@@ -45,6 +49,7 @@ public class User {
         result.put("Uid", Uid);
         result.put("userName", userName);
         result.put("password", password);
+        result.put("dateCreated", dateCreated);
         result.put("firstName", firstName);
         result.put("lastName", lastName);
         result.put("items", items);
@@ -65,6 +70,10 @@ public class User {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public void setDateCreated(String dateCreated) {
+        this.dateCreated = dateCreated;
     }
 
     public void setFirstName(String firstName) {
@@ -105,6 +114,10 @@ public class User {
 
     public String getPassword() {
         return password;
+    }
+
+    public String getDateCreated() {
+        return dateCreated;
     }
 
     public String getFirstName() {

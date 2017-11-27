@@ -74,6 +74,7 @@ public class EmailPasswordActivity extends AppCompatActivity {
                                             User currentUser = dataSnapshot.getValue(User.class);
                                             String fullName = currentUser.getFirstName() + " " + currentUser.getLastName();
                                             i.putExtra("fullName", fullName);
+                                            i.putExtra("dateCreated",currentUser.getDateCreated());
                                             startActivity(i);
                                         }
 

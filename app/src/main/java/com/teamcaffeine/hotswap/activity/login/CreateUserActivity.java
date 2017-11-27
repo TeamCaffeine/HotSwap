@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
+import android.text.format.Time;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -20,7 +21,12 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.teamcaffeine.hotswap.R;
 import com.teamcaffeine.hotswap.activity.ProfileActivity;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.util.Calendar;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -67,7 +73,9 @@ public class CreateUserActivity extends AppCompatActivity {
                                     DatabaseReference users = database.getReference().child("Users");
 
                                     String userKey = user.getUid();
-                                    User userData = new User(userKey, edtNewUser.getText().toString(), edtNewPass.getText().toString(), edtFirstName.getText().toString(), edtLastName.getText().toString(),
+                                    DateFormat dateFormat = new SimpleDateFormat("MMMM d, yyyy");
+                                    Date dateCreated = new Date();
+                                    User userData = new User(userKey, edtNewUser.getText().toString(), edtNewPass.getText().toString(), dateFormat.format(dateCreated), edtFirstName.getText().toString(), edtLastName.getText().toString(),
                                             new ArrayList<String>(), new ArrayList<String>(), new ArrayList<String>(), new ArrayList<String>(), new ArrayList<String>());
 
                                     Map<String, Object> userUpdate = new HashMap<>();
@@ -78,6 +86,7 @@ public class CreateUserActivity extends AppCompatActivity {
                                     i.putExtra("userName", user.getEmail());
                                     i.putExtra("Uid", userKey);
                                     i.putExtra("fullName", edtFirstName.getText().toString() + " "  + edtLastName.getText().toString());
+                                    i.putExtra("dateCreated", dateFormat.format(dateCreated));
                                     startActivity(i);
                                 } else {
                                     // If sign in fails, display a message to the user.
