@@ -1,4 +1,4 @@
-package com.teamcaffeine.hotswap;
+package com.teamcaffeine.hotswap.activity.login;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -9,6 +9,8 @@ import android.widget.Button;
 import com.facebook.login.widget.LoginButton;
 import com.google.android.gms.common.SignInButton;
 import com.google.firebase.auth.FirebaseAuth;
+import com.teamcaffeine.hotswap.R;
+import com.teamcaffeine.hotswap.activity.HomeActivity;
 
 public class LoginActivity extends AppCompatActivity {
 

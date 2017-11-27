@@ -1,4 +1,4 @@
-package com.teamcaffeine.hotswap;
+package com.teamcaffeine.hotswap.activity.login;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -22,6 +22,8 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.teamcaffeine.hotswap.activity.HomeActivity;
+import com.teamcaffeine.hotswap.R;
 
 /**
  * Firebase Authentication using a Facebook access token.
