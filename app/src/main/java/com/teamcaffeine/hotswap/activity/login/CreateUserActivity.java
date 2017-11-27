@@ -30,7 +30,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-public class CreateUserActivity extends AppCompatActivity {
+public class CreateUserActivity extends BaseActivity {
 
     String TAG = "FirebaseAuth";
 
@@ -87,6 +87,7 @@ public class CreateUserActivity extends AppCompatActivity {
                                     i.putExtra("Uid", userKey);
                                     i.putExtra("fullName", edtFirstName.getText().toString() + " "  + edtLastName.getText().toString());
                                     i.putExtra("dateCreated", dateFormat.format(dateCreated));
+                                    i.putExtra("loginType", "EmailPassword");
                                     startActivity(i);
                                 } else {
                                     // If sign in fails, display a message to the user.

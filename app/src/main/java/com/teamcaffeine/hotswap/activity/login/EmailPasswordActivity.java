@@ -24,7 +24,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.teamcaffeine.hotswap.R;
 import com.teamcaffeine.hotswap.activity.ProfileActivity;
 
-public class EmailPasswordActivity extends AppCompatActivity {
+public class EmailPasswordActivity extends BaseActivity {
 
     String TAG = "FirebaseAuth";
 
@@ -75,6 +75,7 @@ public class EmailPasswordActivity extends AppCompatActivity {
                                             String fullName = currentUser.getFirstName() + " " + currentUser.getLastName();
                                             i.putExtra("fullName", fullName);
                                             i.putExtra("dateCreated",currentUser.getDateCreated());
+                                            i.putExtra("loginType", "EmailPassword");
                                             startActivity(i);
                                         }
 

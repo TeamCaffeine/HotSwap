@@ -36,9 +36,17 @@ public class FacebookLoginActivity extends BaseActivity implements
     private TextView mStatusTextView;
     private TextView mDetailTextView;
 
-    // [START declare_auth]
+    //*********************************************
+    // (Megan) Trying something out:
+    // The BaseActivity has the Firebase connection
+    //*********************************************
+
+
+//    // [START declare_auth]
+//    private FirebaseAuth mAuth;
+//    // [END declare_auth]
+
     private FirebaseAuth mAuth;
-    // [END declare_auth]
 
     private CallbackManager mCallbackManager;
 
@@ -52,10 +60,18 @@ public class FacebookLoginActivity extends BaseActivity implements
         mDetailTextView = findViewById(R.id.detail);
         findViewById(R.id.button_facebook_signout).setOnClickListener(this);
 
-        // [START initialize_auth]
-        // Initialize Firebase Auth
-        mAuth = FirebaseAuth.getInstance();
-        // [END initialize_auth]
+        //*********************************************
+        // (Megan) Trying something out:
+        // The BaseActivity has the Firebase connection
+        //*********************************************
+
+
+//        // [START initialize_auth]
+//        // Initialize Firebase Auth
+//        mAuth = FirebaseAuth.getInstance();
+//        // [END initialize_auth]
+
+        mAuth = getmAuth();
 
         // [START initialize_fblogin]
         // Initialize Facebook Login button
@@ -88,15 +104,22 @@ public class FacebookLoginActivity extends BaseActivity implements
         // [END initialize_fblogin]
     }
 
-    // [START on_start_check_user]
-    @Override
-    public void onStart() {
-        super.onStart();
-        // Check if user is signed in (non-null) and update UI accordingly.
-        FirebaseUser currentUser = mAuth.getCurrentUser();
-        updateUI(currentUser);
-    }
-    // [END on_start_check_user]
+
+    //*********************************************
+    // (Megan) Trying something out:
+    // The BaseActivity has the Firebase connection
+    //*********************************************
+
+
+//    // [START on_start_check_user]
+//    @Override
+//    public void onStart() {
+//        super.onStart();
+//        // Check if user is signed in (non-null) and update UI accordingly.
+//        FirebaseUser currentUser = mAuth.getCurrentUser();
+//        updateUI(currentUser);
+//    }
+//    // [END on_start_check_user]
 
     // [START on_activity_result]
     @Override
@@ -148,14 +171,20 @@ public class FacebookLoginActivity extends BaseActivity implements
     }
     // [END auth_with_facebook]
 
-    public void signOut() {
-        mAuth.signOut();
-        LoginManager.getInstance().logOut();
+    //*********************************************
+    // (Megan) Trying something out:
+    // The BaseActivity has the Firebase connection
+    //*********************************************
 
-        updateUI(null);
-        Toast.makeText(FacebookLoginActivity.this, R.string.successfully_signed_out,
-                Toast.LENGTH_SHORT).show();
-    }
+
+//    public void signOut() {
+//        mAuth.signOut();
+//        LoginManager.getInstance().logOut();
+//
+//        updateUI(null);
+//        Toast.makeText(FacebookLoginActivity.this, R.string.successfully_signed_out,
+//                Toast.LENGTH_SHORT).show();
+//    }
 
     private void updateUI(FirebaseUser user) {
         hideProgressDialog();

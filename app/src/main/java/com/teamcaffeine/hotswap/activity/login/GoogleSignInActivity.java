@@ -33,9 +33,16 @@ public class GoogleSignInActivity extends BaseActivity {
     private static final String TAG = "GoogleActivity";
     private static final int RC_SIGN_IN = 9001;
 
-    // [START declare_auth]
+    //*********************************************
+    // (Megan) Trying something out:
+    // The BaseActivity has the Firebase connection
+    //*********************************************
+
+//    // [START declare_auth]
+//    private FirebaseAuth mAuth;
+//    // [END declare_auth]
+
     private FirebaseAuth mAuth;
-    // [END declare_auth]
 
     private GoogleSignInClient mGoogleSignInClient;
     private TextView mStatusTextView;
@@ -90,20 +97,34 @@ public class GoogleSignInActivity extends BaseActivity {
 
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
 
-        // [START initialize_auth]
-        mAuth = FirebaseAuth.getInstance();
-        // [END initialize_auth]
+        //*********************************************
+        // (Megan) Trying something out:
+        // The BaseActivity has the Firebase connection
+        //*********************************************
+
+//        // [START initialize_auth]
+//        mAuth = FirebaseAuth.getInstance();
+//        // [END initialize_auth]
+
+        mAuth = getmAuth();
     }
 
-    // [START on_start_check_user]
-    @Override
-    public void onStart() {
-        super.onStart();
-        // Check if user is signed in (non-null) and update UI accordingly.
-        FirebaseUser currentUser = mAuth.getCurrentUser();
-        updateUI(currentUser);
-    }
-    // [END on_start_check_user]
+
+    //*********************************************
+    // (Megan) Trying something out:
+    // The BaseActivity has the Firebase connection
+    //*********************************************
+
+
+//    // [START on_start_check_user]
+//    @Override
+//    public void onStart() {
+//        super.onStart();
+//        // Check if user is signed in (non-null) and update UI accordingly.
+//        FirebaseUser currentUser = mAuth.getCurrentUser();
+//        updateUI(currentUser);
+//    }
+//    // [END on_start_check_user]
 
     // [START onactivityresult]
     @Override
@@ -174,21 +195,26 @@ public class GoogleSignInActivity extends BaseActivity {
     }
     // [END signin]
 
-    private void signOut() {
-        // Firebase sign out
-        mAuth.signOut();
+    //*********************************************
+    // (Megan) Trying something out:
+    // The BaseActivity has the signOut() method
+    //*********************************************
 
-        // Google sign out
-        mGoogleSignInClient.signOut().addOnCompleteListener(this,
-                new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        updateUI(null);
-                        Toast.makeText(GoogleSignInActivity.this, R.string.successfully_signed_out,
-                                Toast.LENGTH_SHORT).show();
-                    }
-                });
-    }
+//    private void signOut() {
+//        // Firebase sign out
+//        mAuth.signOut();
+//
+//        // Google sign out
+//        mGoogleSignInClient.signOut().addOnCompleteListener(this,
+//                new OnCompleteListener<Void>() {
+//                    @Override
+//                    public void onComplete(@NonNull Task<Void> task) {
+//                        updateUI(null);
+//                        Toast.makeText(GoogleSignInActivity.this, R.string.successfully_signed_out,
+//                                Toast.LENGTH_SHORT).show();
+//                    }
+//                });
+//    }
 
     private void revokeAccess() {
         // Firebase sign out
