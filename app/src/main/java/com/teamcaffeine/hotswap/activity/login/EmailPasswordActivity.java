@@ -10,13 +10,21 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.firebase.ui.auth.User;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 import com.teamcaffeine.hotswap.activity.HomeActivity;
 import com.teamcaffeine.hotswap.R;
+import com.teamcaffeine.hotswap.activity.ProfileActivity;
 
 /**
  * Firebase Authentication using an email-password access token
@@ -122,9 +130,31 @@ public class EmailPasswordActivity extends BaseActivity implements
                         if (task.isSuccessful()) {
                             // Sign in success, send user to app home page
                             Log.d(TAG, "signInWithEmail:success");
-                            Intent home = new Intent(getApplicationContext(), HomeActivity.class);
-                            startActivity(home);
-                            finish();
+                            final FirebaseUser user = mAuth.getCurrentUser();
+                            final Intent i = new Intent(getApplicationContext(), ProfileActivity.class);
+                            i.putExtra("userName", user.getEmail());
+                            i.putExtra("Uid", user.getUid());
+//                            startActivity(i);
+//                            finish();
+                            // Retreive user first and last name
+                            final FirebaseDatabase database = FirebaseDatabase.getInstance();
+                            DatabaseReference users = database.getReference().child("Users/");
+                            Query userFullName = users.child(user.getUid());
+
+                            userFullName.addListenerForSingleValueEvent(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(DataSnapshot dataSnapshot) {
+                                    User currentUser = dataSnapshot.getValue(User.class);
+                                    String fullName = currentUser.getFirstName() + " " + currentUser.getLastName();
+                                    i.putExtra("fullName", fullName);
+                                    startActivity(i);
+                                }
+
+                                @Override
+                                public void onCancelled(DatabaseError databaseError) {
+
+                                }
+                            });
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "signInWithEmail:failure", task.getException());
