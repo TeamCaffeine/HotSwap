@@ -65,4 +65,5 @@
     <string name="successfully_signed_out">You have been successfully signed out.</string>
     <string name="verification_sent_to">Verification email sent to</string>
     <string name="failed_to_send_verification_email">Failed to send verification email.</string>
+    <string name="title_activity_inbox">InboxActivity</string>
 </resources>
