@@ -11,7 +11,7 @@ import android.widget.LinearLayout;
 
 import com.teamcaffeine.hotswap.R;
 
-public class NavigationActivity extends AppCompatActivity {
+public abstract class NavigationActivity extends AppCompatActivity {
 
     private final String TAG = "NavigationActivity";
 
@@ -30,7 +30,7 @@ public class NavigationActivity extends AppCompatActivity {
                     Log.i(TAG, "nav home: ");
                     i = new Intent(getApplicationContext(), NavigationHomeActivity.class);
                     startActivity(i);
-                    finish();
+                    finish(); //TODO decide if we want this activity to finish after next nav bar activity is selected. Or, if it should stay on the backstack.
                     return true;
                 case R.id.navigation_search:
                     Log.i(TAG, "nav search: ");
