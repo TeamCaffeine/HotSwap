@@ -40,7 +40,17 @@ public abstract class NavigationActivity extends AppCompatActivity {
                     return true;
                 case R.id.navigation_inbox:
                     Log.i(TAG, "nav inbox: ");
+                    i = new Intent(getApplicationContext(), NavigationInboxActivity.class);
+                    startActivity(i);
+                    finish();
                     return true;
+                case R.id.navigation_profile:
+                    Log.i(TAG, "nav profile: ");
+                    i = new Intent(getApplicationContext(), NavigationProfileActivity.class);
+                    startActivity(i);
+                    finish();
+                    return true;
+
             }
             return false;
         }

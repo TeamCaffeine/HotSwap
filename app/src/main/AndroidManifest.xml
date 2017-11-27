@@ -74,6 +74,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".activity.navigation.NavigationInboxActivity" />
+        <activity android:name=".activity.navigation.NavigationProfileActivity"></activity>
     </application>
 
 </manifest>
