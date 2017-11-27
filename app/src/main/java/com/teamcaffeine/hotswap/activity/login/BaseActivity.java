@@ -1,6 +1,7 @@
 package com.teamcaffeine.hotswap.activity.login;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.annotation.VisibleForTesting;
@@ -10,7 +11,14 @@ import android.widget.Toast;
 import com.facebook.login.LoginManager;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 import com.teamcaffeine.hotswap.R;
+import com.teamcaffeine.hotswap.activity.ProfileActivity;
 
 public class BaseActivity extends AppCompatActivity {
 
@@ -38,8 +46,37 @@ public class BaseActivity extends AppCompatActivity {
     @Override
     public void onStart() {
         super.onStart();
-        // Check if user is signed in (non-null) and update UI accordingly.
-        FirebaseUser currentUser = mAuth.getCurrentUser();
+        // Check if user is signed in (non-null)
+        // if user is already signed in, update the Bundle accordingly
+//        ////////////FirebaseUser currentUser = mAuth.getCurrentUser();
+        final FirebaseUser user = mAuth.getCurrentUser();
+        if (user != null) {
+            final Intent i = new Intent(getApplicationContext(), ProfileActivity.class);
+            i.putExtra("userName", user.getEmail());
+            i.putExtra("Uid", user.getUid());
+
+            // Retreive user first and last name
+            final FirebaseDatabase database = FirebaseDatabase.getInstance();
+            DatabaseReference users = database.getReference().child("Users/");
+            Query userFullName = users.child(user.getUid());
+
+            userFullName.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    User currentUser = dataSnapshot.getValue(User.class);
+                    String fullName = currentUser.getFirstName() + " " + currentUser.getLastName();
+                    i.putExtra("fullName", fullName);
+                    i.putExtra("dateCreated", currentUser.getDateCreated());
+                    startActivity(i);
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+        }
+
     }
     // [END on_start_check_user]
 
@@ -79,6 +116,10 @@ public class BaseActivity extends AppCompatActivity {
 
     public FirebaseAuth getmAuth() {
         return mAuth;
+    }
+
+    public FirebaseUser getCurrentUser() {
+        return mAuth.getCurrentUser();
     }
 
 }

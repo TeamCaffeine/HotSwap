@@ -24,12 +24,12 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.teamcaffeine.hotswap.activity.HomeActivity;
 import com.teamcaffeine.hotswap.R;
+import com.teamcaffeine.hotswap.activity.ProfileActivity;
 
 /**
  * Firebase Authentication using a Facebook access token.
  */
-public class FacebookLoginActivity extends BaseActivity implements
-        View.OnClickListener {
+public class FacebookLoginActivity extends BaseActivity {
 
     private static final String TAG = "FacebookLogin";
 
@@ -58,7 +58,15 @@ public class FacebookLoginActivity extends BaseActivity implements
         // Views
         mStatusTextView = findViewById(R.id.status);
         mDetailTextView = findViewById(R.id.detail);
-        findViewById(R.id.button_facebook_signout).setOnClickListener(this);
+
+        //*********************************************
+        // (Megan) Trying something out:
+        // The BaseActivity has the Firebase connection
+        // therefore we do not need the signout button here, we will use the signout button in Profile
+        //*********************************************
+
+
+//        findViewById(R.id.button_facebook_signout).setOnClickListener(this);
 
         //*********************************************
         // (Megan) Trying something out:
@@ -89,7 +97,7 @@ public class FacebookLoginActivity extends BaseActivity implements
             public void onCancel() {
                 Log.d(TAG, "facebook:onCancel");
                 // [START_EXCLUDE]
-                updateUI(null);
+//                updateUI(null);
                 // [END_EXCLUDE]
             }
 
@@ -97,7 +105,7 @@ public class FacebookLoginActivity extends BaseActivity implements
             public void onError(FacebookException error) {
                 Log.d(TAG, "facebook:onError", error);
                 // [START_EXCLUDE]
-                updateUI(null);
+//                updateUI(null);
                 // [END_EXCLUDE]
             }
         });
@@ -146,8 +154,8 @@ public class FacebookLoginActivity extends BaseActivity implements
                         if (task.isSuccessful()) {
                             // Sign in success, send user to app home page
                             Log.d(TAG, "signInWithCredential:success");
-                            Intent home = new Intent(getApplicationContext(), HomeActivity.class);
-                            startActivity(home);
+                            Intent i = new Intent(getApplicationContext(), ProfileActivity.class);
+                            startActivity(i);
                             finish();
                         } else {
                             // If sign in fails, display a message to the user.
@@ -159,7 +167,7 @@ public class FacebookLoginActivity extends BaseActivity implements
                                 Toast.makeText(FacebookLoginActivity.this, R.string.authentication_failed,
                                         Toast.LENGTH_SHORT).show();
                             }
-                            updateUI(null);
+//                            updateUI(null);
                             LoginManager.getInstance().logOut();
                         }
 
@@ -186,28 +194,36 @@ public class FacebookLoginActivity extends BaseActivity implements
 //                Toast.LENGTH_SHORT).show();
 //    }
 
-    private void updateUI(FirebaseUser user) {
-        hideProgressDialog();
-        if (user != null) {
-            mStatusTextView.setText(getString(R.string.facebook_status_fmt, user.getDisplayName()));
-            mDetailTextView.setText(getString(R.string.firebase_status_fmt, user.getUid()));
+    //*********************************************
+    // (Megan) Trying something out:
+    // The BaseActivity has the Firebase connection
+    // so the FacebookActivity will open the ProfileActivity
+    // so we do not need to update the UI
+    // and we do not the the onClick
+    //*********************************************
 
-            findViewById(R.id.button_facebook_login).setVisibility(View.GONE);
-            findViewById(R.id.button_facebook_signout).setVisibility(View.VISIBLE);
-        } else {
-            mStatusTextView.setText(R.string.signed_out);
-            mDetailTextView.setText(null);
-
-            findViewById(R.id.button_facebook_login).setVisibility(View.VISIBLE);
-            findViewById(R.id.button_facebook_signout).setVisibility(View.GONE);
-        }
-    }
-
-    @Override
-    public void onClick(View v) {
-        int i = v.getId();
-        if (i == R.id.button_facebook_signout) {
-            signOut();
-        }
-    }
+//    private void updateUI(FirebaseUser user) {
+//        hideProgressDialog();
+//        if (user != null) {
+//            mStatusTextView.setText(getString(R.string.facebook_status_fmt, user.getDisplayName()));
+//            mDetailTextView.setText(getString(R.string.firebase_status_fmt, user.getUid()));
+//
+//            findViewById(R.id.button_facebook_login).setVisibility(View.GONE);
+//            findViewById(R.id.button_facebook_signout).setVisibility(View.VISIBLE);
+//        } else {
+//            mStatusTextView.setText(R.string.signed_out);
+//            mDetailTextView.setText(null);
+//
+//            findViewById(R.id.button_facebook_login).setVisibility(View.VISIBLE);
+//            findViewById(R.id.button_facebook_signout).setVisibility(View.GONE);
+//        }
+//    }
+//
+//    @Override
+//    public void onClick(View v) {
+//        int i = v.getId();
+//        if (i == R.id.button_facebook_signout) {
+//            signOut();
+//        }
+//    }
 }
