@@ -1,6 +1,7 @@
 package com.teamcaffeine.hotswap.activity.navigation;
 
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -8,12 +9,14 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.teamcaffeine.hotswap.R;
+import com.teamcaffeine.hotswap.activity.messaging.InboxFragment;
 
 /**
  * A simple {@link Fragment} subclass.
  */
 public class SearchFragment extends Fragment {
 
+    SearchFragment.SearchFragmentListener SFL;
 
     public SearchFragment() {
         // Required empty public constructor
@@ -25,6 +28,15 @@ public class SearchFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_search, container, false);
+    }
+
+    public interface SearchFragmentListener {
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        SFL = (SearchFragment.SearchFragmentListener) context;
     }
 
 }

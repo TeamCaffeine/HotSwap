@@ -12,7 +12,7 @@ import android.view.MenuItem;
 import com.teamcaffeine.hotswap.R;
 import com.teamcaffeine.hotswap.activity.messaging.InboxFragment;
 
-public class NavigationActivity extends AppCompatActivity implements InboxFragment.InboxFragmentListener, BlankFragment2.BlankFragment2Listener {
+public class NavigationActivity extends AppCompatActivity implements InboxFragment.InboxFragmentListener, SearchFragment.SearchFragmentListener, BlankFragment2.BlankFragment2Listener {
 
     private final String TAG = "NavigationActivity";
 
@@ -21,6 +21,7 @@ public class NavigationActivity extends AppCompatActivity implements InboxFragme
     //TODO set your private fragments here
     private InboxFragment inboxFragment;
     private BlankFragment2 blankFragment2;
+    private SearchFragment searchFragment;
     final FragmentManager fragmentManager = getSupportFragmentManager();
     FragmentTransaction ft;
 
@@ -40,7 +41,7 @@ public class NavigationActivity extends AppCompatActivity implements InboxFragme
                 case R.id.navigation_search:
                     Log.i(TAG, "nav search: ");
                     ft = fragmentManager.beginTransaction();
-                    ft.replace(R.id.dynamicContent, blankFragment2);
+                    ft.replace(R.id.dynamicContent, searchFragment);
                     ft.commit();
                     return true;
                 case R.id.navigation_inbox:
@@ -67,6 +68,7 @@ public class NavigationActivity extends AppCompatActivity implements InboxFragme
 
         //TODO replace these with your fragments
         inboxFragment = new InboxFragment();
+        searchFragment = new SearchFragment();
         blankFragment2 = new BlankFragment2();
     }
 }
