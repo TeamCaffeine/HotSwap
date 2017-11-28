@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.util.Log;
-import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -22,7 +21,12 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.teamcaffeine.hotswap.activity.HomeActivity;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 import com.teamcaffeine.hotswap.R;
 import com.teamcaffeine.hotswap.activity.ProfileActivity;
 
@@ -154,9 +158,10 @@ public class FacebookLoginActivity extends BaseActivity {
                         if (task.isSuccessful()) {
                             // Sign in success, send user to app home page
                             Log.d(TAG, "signInWithCredential:success");
-                            Intent i = new Intent(getApplicationContext(), ProfileActivity.class);
+                            Intent i = checkIfUserHasSignedInBefore();
+//                            Intent i = new Intent(getApplicationContext(), ProfileActivity.class);
                             startActivity(i);
-                            finish();
+//                            finish();
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "signInWithCredential:failure", task.getException());
@@ -176,6 +181,40 @@ public class FacebookLoginActivity extends BaseActivity {
                         // [END_EXCLUDE]
                     }
                 });
+    }
+
+    public Intent checkIfUserHasSignedInBefore() {
+        final FirebaseUser user = mAuth.getCurrentUser();
+        final Intent i = new Intent(getApplicationContext(), ProfileActivity.class);
+        i.putExtra("userName", user.getEmail());
+        i.putExtra("Uid", user.getUid());
+
+        // Retreive user first and last name
+        final FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference users = database.getReference().child("Users/");
+        Query userFullName = users.child(user.getUid());
+
+        if (userFullName != null) {
+            userFullName.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    User currentUser = dataSnapshot.getValue(User.class);
+                    String fullName = currentUser.getFirstName() + " " + currentUser.getLastName();
+                    i.putExtra("fullName", fullName);
+                    i.putExtra("dateCreated", currentUser.getDateCreated());
+                    i.putExtra("loginType", "EmailPassword");
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+        } else {
+
+        }
+
+        return i;
     }
     // [END auth_with_facebook]
 

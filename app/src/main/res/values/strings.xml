@@ -65,4 +65,7 @@
     <string name="successfully_signed_out">You have been successfully signed out.</string>
     <string name="verification_sent_to">Verification email sent to</string>
     <string name="failed_to_send_verification_email">Failed to send verification email.</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

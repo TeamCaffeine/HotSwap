@@ -1,13 +1,18 @@
 package com.teamcaffeine.hotswap.activity.login;
 
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.v7.app.AppCompatActivity;
+import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -24,7 +29,15 @@ import com.google.firebase.database.ValueEventListener;
 import com.teamcaffeine.hotswap.R;
 import com.teamcaffeine.hotswap.activity.ProfileActivity;
 
-public class EmailPasswordActivity extends BaseActivity {
+/**
+ * A simple {@link Fragment} subclass.
+ */
+public class EmailPasswordFragment extends Fragment {
+
+
+    public EmailPasswordFragment() {
+        // Required empty public constructor
+    }
 
     String TAG = "FirebaseAuth";
 
@@ -35,31 +48,38 @@ public class EmailPasswordActivity extends BaseActivity {
     private Button btnSubmitLogin;
     private Button btnCreateUser;
 
+
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_emailpassword);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        View view = inflater.inflate (R.layout.activity_emailpassword, container,false);
+        return view;
+    }
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
 
         mAuth = FirebaseAuth.getInstance();
 
-        edtUser = findViewById(R.id.edtEmail);
-        edtPass = findViewById(R.id.edtPassword);
-        btnSubmitLogin = findViewById(R.id.btnSignIn);
-        btnCreateUser = findViewById(R.id.btnCreateUser);
+        edtUser = view.findViewById(R.id.edtEmail);
+        edtPass = view.findViewById(R.id.edtPassword);
+        btnSubmitLogin = view.findViewById(R.id.btnSignIn);
+        btnCreateUser = view.findViewById(R.id.btnCreateUser);
 
         btnSubmitLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
                 mAuth.signInWithEmailAndPassword(edtUser.getText().toString(), edtPass.getText().toString())
-                        .addOnCompleteListener(EmailPasswordActivity.this, new OnCompleteListener<AuthResult>() {
+                        .addOnCompleteListener(getActivity(), new OnCompleteListener<AuthResult>() {
                             @Override
                             public void onComplete(@NonNull Task<AuthResult> task) {
                                 if (task.isSuccessful()) {
                                     // Sign in success, update UI with the signed-in user's information
                                     Log.d(TAG, "signInWithEmail:success");
                                     final FirebaseUser user = mAuth.getCurrentUser();
-                                    final Intent i = new Intent(getApplicationContext(), ProfileActivity.class);
+                                    final Intent i = new Intent(getActivity(), ProfileActivity.class);
                                     i.putExtra("userName", user.getEmail());
                                     i.putExtra("Uid", user.getUid());
 
@@ -89,7 +109,7 @@ public class EmailPasswordActivity extends BaseActivity {
                                 } else {
                                     // If sign in fails, display a message to the user.
                                     Log.w(TAG, "signInWithEmail:failure", task.getException());
-                                    Toast.makeText(EmailPasswordActivity.this, "Authentication failed.",
+                                    Toast.makeText(getActivity(), "Authentication failed.",
                                             Toast.LENGTH_SHORT).show();
                                 }
                             }
@@ -100,9 +120,14 @@ public class EmailPasswordActivity extends BaseActivity {
         btnCreateUser.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent i = new Intent(getApplicationContext(), CreateUserActivity.class);
+                Intent i = new Intent(getActivity(), CreateUserActivity.class);
                 startActivity(i);
             }
         });
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
     }
 }
