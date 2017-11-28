@@ -26,7 +26,6 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.maps.GoogleMap;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.squareup.okhttp.Callback;
@@ -45,7 +44,7 @@ import java.io.IOException;
 
 public class LocationPrefs extends AppCompatActivity
         implements LocationListener, GoogleApiClient.ConnectionCallbacks,
-        GoogleApiClient.OnConnectionFailedListener, GoogleMap.OnMarkerDragListener {
+        GoogleApiClient.OnConnectionFailedListener {
     Button buttonLocation;
     EditText zip;
     TextView msg, result, cancel, save;
@@ -131,11 +130,11 @@ public class LocationPrefs extends AppCompatActivity
                             Gson gson = new Gson();
                             JsonObject jsonObject = gson.fromJson(jsonData, JsonObject.class);
                             final String zipcode = jsonObject.getAsJsonArray("results").get(0)
-                                    .getAsJsonObject().getAsJsonArray("address_components").get(6)
+                                    .getAsJsonObject().getAsJsonArray("address_components").get(7)
                                     .getAsJsonObject().get("long_name")
                                     .getAsString();
                             final String city = jsonObject.getAsJsonArray("results").get(0)
-                                    .getAsJsonObject().getAsJsonArray("address_components").get(2)
+                                    .getAsJsonObject().getAsJsonArray("address_components").get(3)
                                     .getAsJsonObject().get("long_name")
                                     .getAsString();
                             LocationPrefs.this.runOnUiThread(new Runnable() {
@@ -203,6 +202,7 @@ public class LocationPrefs extends AppCompatActivity
                 Intent goHome = new Intent(LocationPrefs.this, NavigationActivity.class);
                 goHome.putExtra("city", result.getText().toString());
                 goHome.putExtra("zip", zip.getText().toString());
+                goHome.putExtra("frgToLoad", 1);
                 startActivity(goHome);
 
             }
@@ -212,6 +212,7 @@ public class LocationPrefs extends AppCompatActivity
             @Override
             public void onClick(View view) {
                 Intent goHome = new Intent(LocationPrefs.this, NavigationActivity.class);
+                goHome.putExtra("frgToLoad", 1);
                 startActivity(goHome);
             }
         });

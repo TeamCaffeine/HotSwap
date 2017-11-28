@@ -70,5 +70,12 @@ public class NavigationActivity extends AppCompatActivity implements InboxFragme
         inboxFragment = new InboxFragment();
         searchFragment = new SearchFragment();
         blankFragment2 = new BlankFragment2();
+        int intentFragment = getIntent().getExtras().getInt("frgToLoad");
+        switch (intentFragment) {
+            case 1:
+                ft = fragmentManager.beginTransaction();
+                ft.replace(R.id.dynamicContent, searchFragment);
+                ft.commit();
+        }
     }
 }
