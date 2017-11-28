@@ -17,6 +17,7 @@ public class NavigationActivity extends AppCompatActivity implements BlankFragme
 
     public BottomNavigationView navigation;
 
+    //TODO set your private fragments here
     private BlankFragment blankFragment;
     private BlankFragment2 blankFragment2;
     final FragmentManager fragmentManager = getSupportFragmentManager();
@@ -28,6 +29,7 @@ public class NavigationActivity extends AppCompatActivity implements BlankFragme
         @Override
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
             switch (item.getItemId()) {
+                //TODO add a case for your fragment
                 case R.id.navigation_home:
                     Log.i(TAG, "nav home: ");
                     ft = fragmentManager.beginTransaction();
@@ -56,9 +58,10 @@ public class NavigationActivity extends AppCompatActivity implements BlankFragme
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_navigation);
 
-        navigation = (BottomNavigationView) findViewById(R.id.navigation);
+        navigation = findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
+        //TODO replace these with your fragments
         blankFragment = new BlankFragment();
         blankFragment2 = new BlankFragment2();
     }
