@@ -43,7 +43,7 @@ public class LoginFragment extends BaseLoginFragment {
             startActivity(i);
         }
 
-        View view = inflater.inflate (R.layout.activity_create_user, container,false);
+        View view = inflater.inflate (R.layout.activity_login, container,false);
         return view;
     }
 
