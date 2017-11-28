@@ -75,4 +75,8 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">First Blank Fragment</string>
     <string name="hello_blank_fragment2">XDDDDD</string>
+
+    <!-- Search Activity Resources -->
+    <string name="google_maps_key" templateMergeStrategy="preserve" translatable="false">
+        AIzaSyDVEVPxdS5ZWc-uRiSWZXDAM4ZAhqwOKGM</string>
 </resources>

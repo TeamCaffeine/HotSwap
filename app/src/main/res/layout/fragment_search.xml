@@ -1,13 +1,91 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
+<LinearLayout
     android:layout_height="match_parent"
-    tools:context="com.teamcaffeine.hotswap.activity.navigation.SearchFragment">
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:focusable="true"
+    android:focusableInTouchMode="true">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <EditText
+            android:id="@+id/tfLocation"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="4"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:ems="10"
+            android:hint="Item Name"/>
+
+        <Button
+            android:id="@+id/bSearch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_above="@+id/map"
+            android:layout_toEndOf="@+id/tfLocation"
+            android:onClick="onClick"
+            android:text="Search" />
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <Button
+            android:id="@+id/setLocaleButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Set Location" />
+
+        <TextView
+            android:id="@+id/setLocaleMsg"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="4"
+            android:text="" />
+
+        <SeekBar
+            android:id="@+id/circleFilter"
+            style="@style/Widget.AppCompat.SeekBar.Discrete"
+            android:layout_width="250dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:max="5000"
+            android:progress="500" />
+
+    </LinearLayout>
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:orientation="vertical">
 
-</FrameLayout>
+
+        <fragment
+            android:id="@+id/map"
+            android:name="com.google.android.gms.maps.SupportMapFragment"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="0.5" />
+
+        <ListView
+            android:id="@+id/itemLists"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="0.5"
+            android:fastScrollAlwaysVisible="false" />
+
+
+    </LinearLayout>
+
+
+</LinearLayout>

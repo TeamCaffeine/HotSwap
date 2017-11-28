@@ -9,7 +9,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.teamcaffeine.hotswap.R;
-import com.teamcaffeine.hotswap.activity.messaging.InboxFragment;
 
 /**
  * A simple {@link Fragment} subclass.
