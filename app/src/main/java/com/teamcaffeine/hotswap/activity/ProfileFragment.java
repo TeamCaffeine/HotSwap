@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.google.firebase.auth.FirebaseUser;
 import com.teamcaffeine.hotswap.R;
 import com.teamcaffeine.hotswap.activity.login.BaseLoginFragment;
 
@@ -27,6 +28,8 @@ public class ProfileFragment extends BaseLoginFragment {
     private TextView name;
     private TextView memberSince;
     private Button logout;
+
+    private FirebaseUser currentUser = getCurrentUser();
 
 
     @Override
