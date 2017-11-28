@@ -68,4 +68,6 @@
 
     <!-- List Item Activity Strings -->
     <string name="list_item_title">List an Item:</string>
+    <string name="title_activity_list_item">ListItemActivity</string>
+    <string name="action_settings">Settings</string>
 </resources>
