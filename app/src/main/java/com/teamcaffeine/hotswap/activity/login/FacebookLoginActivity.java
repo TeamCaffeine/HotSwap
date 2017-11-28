@@ -33,7 +33,7 @@ import com.teamcaffeine.hotswap.activity.ProfileActivity;
 /**
  * Firebase Authentication using a Facebook access token.
  */
-public class FacebookLoginActivity extends BaseActivity {
+public class FacebookLoginActivity extends BaseLoginActivity {
 
     private static final String TAG = "FacebookLogin";
 
@@ -42,7 +42,7 @@ public class FacebookLoginActivity extends BaseActivity {
 
     //*********************************************
     // (Megan) Trying something out:
-    // The BaseActivity has the Firebase connection
+    // The BaseLoginActivity has the Firebase connection
     //*********************************************
 
 
@@ -65,7 +65,7 @@ public class FacebookLoginActivity extends BaseActivity {
 
         //*********************************************
         // (Megan) Trying something out:
-        // The BaseActivity has the Firebase connection
+        // The BaseLoginActivity has the Firebase connection
         // therefore we do not need the signout button here, we will use the signout button in Profile
         //*********************************************
 
@@ -74,7 +74,7 @@ public class FacebookLoginActivity extends BaseActivity {
 
         //*********************************************
         // (Megan) Trying something out:
-        // The BaseActivity has the Firebase connection
+        // The BaseLoginActivity has the Firebase connection
         //*********************************************
 
 
@@ -119,7 +119,7 @@ public class FacebookLoginActivity extends BaseActivity {
 
     //*********************************************
     // (Megan) Trying something out:
-    // The BaseActivity has the Firebase connection
+    // The BaseLoginActivity has the Firebase connection
     //*********************************************
 
 
@@ -220,7 +220,7 @@ public class FacebookLoginActivity extends BaseActivity {
 
     //*********************************************
     // (Megan) Trying something out:
-    // The BaseActivity has the Firebase connection
+    // The BaseLoginActivity has the Firebase connection
     //*********************************************
 
 
@@ -235,7 +235,7 @@ public class FacebookLoginActivity extends BaseActivity {
 
     //*********************************************
     // (Megan) Trying something out:
-    // The BaseActivity has the Firebase connection
+    // The BaseLoginActivity has the Firebase connection
     // so the FacebookActivity will open the ProfileActivity
     // so we do not need to update the UI
     // and we do not the the onClick

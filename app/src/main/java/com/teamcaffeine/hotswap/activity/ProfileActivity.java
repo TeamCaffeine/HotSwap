@@ -1,17 +1,14 @@
 package com.teamcaffeine.hotswap.activity;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.google.firebase.auth.FirebaseAuth;
 import com.teamcaffeine.hotswap.R;
-import com.teamcaffeine.hotswap.activity.login.BaseActivity;
-import com.teamcaffeine.hotswap.activity.login.EmailPasswordActivity;
+import com.teamcaffeine.hotswap.activity.login.BaseLoginActivity;
 
-public class ProfileActivity extends BaseActivity {
+public class ProfileActivity extends BaseLoginActivity {
 
     // create objects to reference layout objects
     private TextView name;

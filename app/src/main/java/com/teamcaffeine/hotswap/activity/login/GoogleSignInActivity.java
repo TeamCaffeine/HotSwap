@@ -28,14 +28,14 @@ import com.teamcaffeine.hotswap.R;
 /**
  * Firebase Authentication using a Google ID Token.
  */
-public class GoogleSignInActivity extends BaseActivity {
+public class GoogleSignInActivity extends BaseLoginActivity {
 
     private static final String TAG = "GoogleActivity";
     private static final int RC_SIGN_IN = 9001;
 
     //*********************************************
     // (Megan) Trying something out:
-    // The BaseActivity has the Firebase connection
+    // The BaseLoginActivity has the Firebase connection
     //*********************************************
 
 //    // [START declare_auth]
@@ -99,7 +99,7 @@ public class GoogleSignInActivity extends BaseActivity {
 
         //*********************************************
         // (Megan) Trying something out:
-        // The BaseActivity has the Firebase connection
+        // The BaseLoginActivity has the Firebase connection
         //*********************************************
 
 //        // [START initialize_auth]
@@ -112,7 +112,7 @@ public class GoogleSignInActivity extends BaseActivity {
 
     //*********************************************
     // (Megan) Trying something out:
-    // The BaseActivity has the Firebase connection
+    // The BaseLoginActivity has the Firebase connection
     //*********************************************
 
 
@@ -197,7 +197,7 @@ public class GoogleSignInActivity extends BaseActivity {
 
     //*********************************************
     // (Megan) Trying something out:
-    // The BaseActivity has the signOut() method
+    // The BaseLoginActivity has the signOut() method
     //*********************************************
 
 //    private void signOut() {

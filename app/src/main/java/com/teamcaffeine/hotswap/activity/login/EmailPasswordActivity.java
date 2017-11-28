@@ -21,7 +21,7 @@ import com.teamcaffeine.hotswap.R;
 /**
  * Firebase Authentication using an email-password access token
  */
-public class EmailPasswordActivity extends BaseActivity implements
+public class EmailPasswordActivity extends BaseLoginActivity implements
         View.OnClickListener {
 
     private static final String TAG = "EmailPassword";
@@ -63,7 +63,7 @@ public class EmailPasswordActivity extends BaseActivity implements
         super.onStart();
         // Check if user is signed in (non-null) and update UI accordingly.
         FirebaseUser currentUser = mAuth.getCurrentUser();
-        updateUI(currentUser);
+//        updateUI(currentUser);
     }
     // [END on_start_check_user]
 
@@ -84,7 +84,7 @@ public class EmailPasswordActivity extends BaseActivity implements
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "createUserWithEmail:success");
                             FirebaseUser user = mAuth.getCurrentUser();
-                            updateUI(user);
+//                            updateUI(user);
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "createUserWithEmail:failure", task.getException());
@@ -95,7 +95,7 @@ public class EmailPasswordActivity extends BaseActivity implements
                                 Toast.makeText(EmailPasswordActivity.this, R.string.authentication_failed,
                                         Toast.LENGTH_SHORT).show();
                             }
-                            updateUI(null);
+//                            updateUI(null);
                         }
 
                         // [START_EXCLUDE]
@@ -135,7 +135,7 @@ public class EmailPasswordActivity extends BaseActivity implements
                                 Toast.makeText(EmailPasswordActivity.this, R.string.authentication_failed,
                                         Toast.LENGTH_SHORT).show();
                             }
-                            updateUI(null);
+//                            updateUI(null);
                         }
 
                         // [START_EXCLUDE]
@@ -149,12 +149,18 @@ public class EmailPasswordActivity extends BaseActivity implements
         // [END sign_in_with_email]
     }
 
-    private void signOut() {
-        mAuth.signOut();
-        updateUI(null);
-        Toast.makeText(EmailPasswordActivity.this, R.string.successfully_signed_out,
-                Toast.LENGTH_SHORT).show();
-    }
+    //*********************************************
+    // (Megan) Trying something out:
+    // The BaseLoginActivity has the Firebase connection
+    // therefore we do not need the signout button here, we will use the signout button in Profile
+    //*********************************************
+
+//    private void signOut() {
+//        mAuth.signOut();
+//        updateUI(null);
+//        Toast.makeText(EmailPasswordActivity.this, R.string.successfully_signed_out,
+//                Toast.LENGTH_SHORT).show();
+//    }
 
     private void sendEmailVerification() {
         // Disable button
@@ -209,27 +215,33 @@ public class EmailPasswordActivity extends BaseActivity implements
         return valid;
     }
 
-    private void updateUI(FirebaseUser user) {
-        hideProgressDialog();
-        if (user != null) {
-            mStatusTextView.setText(getString(R.string.emailpassword_status_fmt,
-                    user.getEmail(), user.isEmailVerified()));
-            mDetailTextView.setText(getString(R.string.firebase_status_fmt, user.getUid()));
+    //*********************************************
+    // (Megan) Trying something out:
+    // we do not need to update the UI
+    // instead we will just send the user to the main activity
+    //*********************************************
 
-            findViewById(R.id.email_password_buttons).setVisibility(View.GONE);
-            findViewById(R.id.email_password_fields).setVisibility(View.GONE);
-            findViewById(R.id.signed_in_buttons).setVisibility(View.VISIBLE);
-
-            findViewById(R.id.verify_email_button).setEnabled(!user.isEmailVerified());
-        } else {
-            mStatusTextView.setText(R.string.signed_out);
-            mDetailTextView.setText(null);
-
-            findViewById(R.id.email_password_buttons).setVisibility(View.VISIBLE);
-            findViewById(R.id.email_password_fields).setVisibility(View.VISIBLE);
-            findViewById(R.id.signed_in_buttons).setVisibility(View.GONE);
-        }
-    }
+//    private void updateUI(FirebaseUser user) {
+//        hideProgressDialog();
+//        if (user != null) {
+//            mStatusTextView.setText(getString(R.string.emailpassword_status_fmt,
+//                    user.getEmail(), user.isEmailVerified()));
+//            mDetailTextView.setText(getString(R.string.firebase_status_fmt, user.getUid()));
+//
+//            findViewById(R.id.email_password_buttons).setVisibility(View.GONE);
+//            findViewById(R.id.email_password_fields).setVisibility(View.GONE);
+//            findViewById(R.id.signed_in_buttons).setVisibility(View.VISIBLE);
+//
+//            findViewById(R.id.verify_email_button).setEnabled(!user.isEmailVerified());
+//        } else {
+//            mStatusTextView.setText(R.string.signed_out);
+//            mDetailTextView.setText(null);
+//
+//            findViewById(R.id.email_password_buttons).setVisibility(View.VISIBLE);
+//            findViewById(R.id.email_password_fields).setVisibility(View.VISIBLE);
+//            findViewById(R.id.signed_in_buttons).setVisibility(View.GONE);
+//        }
+//    }
 
     @Override
     public void onClick(View v) {

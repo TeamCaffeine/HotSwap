@@ -2,19 +2,16 @@ package com.teamcaffeine.hotswap.activity.login;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 
 import com.facebook.login.widget.LoginButton;
 import com.google.android.gms.common.SignInButton;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.teamcaffeine.hotswap.R;
-import com.teamcaffeine.hotswap.activity.HomeActivity;
 import com.teamcaffeine.hotswap.activity.ProfileActivity;
 
-public class LoginActivity extends BaseActivity {
+public class LoginActivity extends BaseLoginActivity {
 
     SignInButton btnGoogleSignIn;
     LoginButton btnFacebookLogin;

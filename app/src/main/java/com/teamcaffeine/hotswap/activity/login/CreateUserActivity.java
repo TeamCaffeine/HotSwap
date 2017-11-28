@@ -3,8 +3,6 @@ package com.teamcaffeine.hotswap.activity.login;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.v7.app.AppCompatActivity;
-import android.text.format.Time;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -23,14 +21,12 @@ import com.teamcaffeine.hotswap.activity.ProfileActivity;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.util.Calendar;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-public class CreateUserActivity extends BaseActivity {
+public class CreateUserActivity extends BaseLoginActivity {
 
     String TAG = "FirebaseAuth";
 

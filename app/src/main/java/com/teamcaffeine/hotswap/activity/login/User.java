@@ -24,12 +24,10 @@ public class User {
     User() {
     }
 
-    public User(String Uid, String userName, String password, String dateCreated, String firstName, String lastName, ArrayList<String> items,
+    public User(String Uid, String dateCreated, String firstName, String lastName, ArrayList<String> items,
                 ArrayList<String> currentlyRenting, ArrayList<String> currentlyLending, ArrayList<String> paymentOptions,
                 ArrayList<String> linkedAccounts) {
         this.Uid = Uid;
-        this.userName = userName;
-        this.password = password;
         this.dateCreated = dateCreated;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -47,8 +45,6 @@ public class User {
     public Map<String, Object> toMap() {
         HashMap<String, Object> result = new HashMap<>();
         result.put("Uid", Uid);
-        result.put("userName", userName);
-        result.put("password", password);
         result.put("dateCreated", dateCreated);
         result.put("firstName", firstName);
         result.put("lastName", lastName);
@@ -62,14 +58,6 @@ public class User {
 
     public void setUid(String uid) {
         this.Uid = uid;
-    }
-
-    public void setUserName(String userName) {
-        this.userName = userName;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
     }
 
     public void setDateCreated(String dateCreated) {
@@ -106,14 +94,6 @@ public class User {
 
     public String getUid() {
         return Uid;
-    }
-
-    public String getUserName() {
-        return userName;
-    }
-
-    public String getPassword() {
-        return password;
     }
 
     public String getDateCreated() {

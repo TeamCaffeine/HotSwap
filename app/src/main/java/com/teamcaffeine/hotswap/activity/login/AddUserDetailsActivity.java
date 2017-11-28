@@ -1,9 +1,7 @@
 package com.teamcaffeine.hotswap.activity.login;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
 
@@ -20,7 +18,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-public class AddUserDetailsActivity extends BaseActivity {
+public class AddUserDetailsActivity extends BaseLoginActivity {
 
     private FirebaseUser user;
     private EditText firstName;
@@ -38,27 +36,30 @@ public class AddUserDetailsActivity extends BaseActivity {
 
         user = getCurrentUser();
 
+        String firstName_string = firstName.getText().toString();
+        String lastName_string = lastName.getText().toString();
+
         Intent i = new Intent(getApplicationContext(), ProfileActivity.class);
 
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference users = database.getReference().child("Users");
 
-        String userKey = user.getUid();
+        String uid = user.getUid();
         DateFormat dateFormat = new SimpleDateFormat("MMMM d, yyyy");
         Date dateCreated = new Date();
-        User userData = new User(userKey, edtNewUser.getText().toString(), edtNewPass.getText().toString(), dateFormat.format(dateCreated), edtFirstName.getText().toString(), edtLastName.getText().toString(),
-                new ArrayList<String>(), new ArrayList<String>(), new ArrayList<String>(), new ArrayList<String>(), new ArrayList<String>());
+        User userData = new User(uid, dateFormat.format(dateCreated), firstName_string, lastName_string,
+                new ArrayList<String>(), new ArrayList<String>(), new ArrayList<String>(),
+                new ArrayList<String>(), new ArrayList<String>());
 
         Map<String, Object> userUpdate = new HashMap<>();
-        userUpdate.put(userKey, userData.toMap());
+        userUpdate.put(uid, userData.toMap());
 
         users.updateChildren(userUpdate);
 
         i.putExtra("userName", user.getEmail());
-        i.putExtra("Uid", userKey);
-        i.putExtra("fullName", edtFirstName.getText().toString() + " "  + edtLastName.getText().toString());
+        i.putExtra("Uid", uid);
+        i.putExtra("fullName", firstName_string + " "  + lastName_string);
         i.putExtra("dateCreated", dateFormat.format(dateCreated));
-        i.putExtra("loginType", "EmailPassword");
         startActivity(i);
     }
 }

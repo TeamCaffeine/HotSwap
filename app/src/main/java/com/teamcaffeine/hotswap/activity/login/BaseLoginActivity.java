@@ -20,11 +20,11 @@ import com.google.firebase.database.ValueEventListener;
 import com.teamcaffeine.hotswap.R;
 import com.teamcaffeine.hotswap.activity.ProfileActivity;
 
-public class BaseActivity extends AppCompatActivity {
+public class BaseLoginActivity extends AppCompatActivity {
 
     // (Megan) Trying something out:
-    // The BaseActivity is what creates the connection to Firebase
-    // and then everything else extends the BaseActivity
+    // The BaseLoginActivity is what creates the connection to Firebase
+    // and then everything else extends the BaseLoginActivity
     // That way, every Activity can access the Firebase connection
     // so, for example, the Profile Activity can use the logout functionality
 
@@ -83,7 +83,7 @@ public class BaseActivity extends AppCompatActivity {
     public void signOut() {
         mAuth.signOut();
         LoginManager.getInstance().logOut();
-        Toast.makeText(BaseActivity.this, R.string.successfully_signed_out,
+        Toast.makeText(BaseLoginActivity.this, R.string.successfully_signed_out,
                 Toast.LENGTH_LONG).show();
     }
 
