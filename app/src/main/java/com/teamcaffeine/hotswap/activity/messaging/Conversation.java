@@ -4,12 +4,12 @@ package com.teamcaffeine.hotswap.activity.messaging;
  * Created by william on 26/11/2017.
  */
 
-public class conversation {
+public class Conversation {
     private int convoProfilePic;
     private String convoName;
     private String convoLastMessage;
 
-    public conversation(int convoProfilePic, String convoName, String convoLastMessage) {
+    public Conversation(int convoProfilePic, String convoName, String convoLastMessage) {
         this.convoProfilePic = convoProfilePic;
         this.convoName = convoName;
         this.convoLastMessage = convoLastMessage;

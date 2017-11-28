@@ -12,14 +12,14 @@ import android.view.MenuItem;
 import com.teamcaffeine.hotswap.R;
 import com.teamcaffeine.hotswap.activity.messaging.InboxFragment;
 
-public class NavigationActivity extends AppCompatActivity implements BlankFragment.BlankFragmentListener, BlankFragment2.BlankFragment2Listener {
+public class NavigationActivity extends AppCompatActivity implements InboxFragment.InboxFragmentListener, BlankFragment2.BlankFragment2Listener {
 
     private final String TAG = "NavigationActivity";
 
     public BottomNavigationView navigation;
 
     //TODO set your private fragments here
-    private InboxFragment blankFragment;
+    private InboxFragment inboxFragment;
     private BlankFragment2 blankFragment2;
     final FragmentManager fragmentManager = getSupportFragmentManager();
     FragmentTransaction ft;
@@ -34,7 +34,7 @@ public class NavigationActivity extends AppCompatActivity implements BlankFragme
                 case R.id.navigation_home:
                     Log.i(TAG, "nav home: ");
                     ft = fragmentManager.beginTransaction();
-                    ft.replace(R.id.dynamicContent, blankFragment);
+                    ft.replace(R.id.dynamicContent, blankFragment2);
                     ft.commit();
                     return true;
                 case R.id.navigation_search:
@@ -45,6 +45,9 @@ public class NavigationActivity extends AppCompatActivity implements BlankFragme
                     return true;
                 case R.id.navigation_inbox:
                     Log.i(TAG, "nav inbox: ");
+                    ft = fragmentManager.beginTransaction();
+                    ft.replace(R.id.dynamicContent, inboxFragment);
+                    ft.commit();
                     return true;
                 case R.id.navigation_profile:
                     Log.i(TAG, "nav profile: ");
@@ -63,7 +66,7 @@ public class NavigationActivity extends AppCompatActivity implements BlankFragme
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
         //TODO replace these with your fragments
-        blankFragment = new InboxFragment();
+        inboxFragment = new InboxFragment();
         blankFragment2 = new BlankFragment2();
     }
 }
