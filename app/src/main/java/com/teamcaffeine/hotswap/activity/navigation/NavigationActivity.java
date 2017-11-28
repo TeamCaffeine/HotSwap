@@ -11,9 +11,12 @@ import android.view.MenuItem;
 
 import com.teamcaffeine.hotswap.R;
 import com.teamcaffeine.hotswap.activity.ListItemFragment;
+import com.teamcaffeine.hotswap.activity.ProfileFragment;
+import com.teamcaffeine.hotswap.activity.messaging.InboxFragment;
 
 public class NavigationActivity extends AppCompatActivity implements
-        BlankFragment.BlankFragmentListener,
+        InboxFragment.InboxFragmentListener,
+        ProfileFragment.ProfileFragmentListener,
         ListItemFragment.ListItemFragmentListener {
 
     private final String TAG = "NavigationActivity";
@@ -21,8 +24,10 @@ public class NavigationActivity extends AppCompatActivity implements
     public BottomNavigationView navigation;
 
     //TODO set your private fragments here
-    private BlankFragment blankFragment;
     private ListItemFragment listItemFragment;
+    private InboxFragment inboxFragment;
+    private ProfileFragment profileFragment;
+
     final FragmentManager fragmentManager = getSupportFragmentManager();
     FragmentTransaction ft;
 
@@ -36,7 +41,7 @@ public class NavigationActivity extends AppCompatActivity implements
                 case R.id.navigation_home:
                     Log.i(TAG, "nav home: ");
                     ft = fragmentManager.beginTransaction();
-                    ft.replace(R.id.dynamicContent, blankFragment);
+                    ft.replace(R.id.dynamicContent, profileFragment);
                     ft.commit();
                     return true;
                 case R.id.navigation_search:
@@ -47,9 +52,15 @@ public class NavigationActivity extends AppCompatActivity implements
                     return true;
                 case R.id.navigation_inbox:
                     Log.i(TAG, "nav inbox: ");
+                    ft = fragmentManager.beginTransaction();
+                    ft.replace(R.id.dynamicContent, inboxFragment);
+                    ft.commit();
                     return true;
                 case R.id.navigation_profile:
                     Log.i(TAG, "nav profile: ");
+                    ft = fragmentManager.beginTransaction();
+                    ft.replace(R.id.dynamicContent, profileFragment);
+                    ft.commit();
                     return true;
             }
             return false;
@@ -65,7 +76,8 @@ public class NavigationActivity extends AppCompatActivity implements
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
         //TODO replace these with your fragments
-        blankFragment = new BlankFragment();
         listItemFragment = new ListItemFragment();
+        inboxFragment = new InboxFragment();
+        profileFragment = new ProfileFragment();
     }
 }
