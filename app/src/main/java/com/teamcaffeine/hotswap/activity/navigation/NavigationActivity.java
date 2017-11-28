@@ -10,8 +10,11 @@ import android.util.Log;
 import android.view.MenuItem;
 
 import com.teamcaffeine.hotswap.R;
+import com.teamcaffeine.hotswap.activity.ListItemFragment;
 
-public class NavigationActivity extends AppCompatActivity implements BlankFragment.BlankFragmentListener, BlankFragment2.BlankFragment2Listener {
+public class NavigationActivity extends AppCompatActivity implements
+        BlankFragment.BlankFragmentListener,
+        ListItemFragment.ListItemFragmentListener {
 
     private final String TAG = "NavigationActivity";
 
@@ -19,7 +22,7 @@ public class NavigationActivity extends AppCompatActivity implements BlankFragme
 
     //TODO set your private fragments here
     private BlankFragment blankFragment;
-    private BlankFragment2 blankFragment2;
+    private ListItemFragment listItemFragment;
     final FragmentManager fragmentManager = getSupportFragmentManager();
     FragmentTransaction ft;
 
@@ -37,9 +40,9 @@ public class NavigationActivity extends AppCompatActivity implements BlankFragme
                     ft.commit();
                     return true;
                 case R.id.navigation_search:
-                    Log.i(TAG, "nav search: ");
+                    Log.i(TAG, "nav list: ");
                     ft = fragmentManager.beginTransaction();
-                    ft.replace(R.id.dynamicContent, blankFragment2);
+                    ft.replace(R.id.dynamicContent, listItemFragment);
                     ft.commit();
                     return true;
                 case R.id.navigation_inbox:
@@ -63,6 +66,6 @@ public class NavigationActivity extends AppCompatActivity implements BlankFragme
 
         //TODO replace these with your fragments
         blankFragment = new BlankFragment();
-        blankFragment2 = new BlankFragment2();
+        listItemFragment = new ListItemFragment();
     }
 }
