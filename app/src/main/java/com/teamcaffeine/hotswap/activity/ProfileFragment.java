@@ -59,6 +59,7 @@ public class ProfileFragment extends Fragment {
         mAuth = FirebaseAuth.getInstance();
 
         // get the bundle from the intent
+        //****keeping these lines commented out for now, we will need them when we implement the fragment with login
 //        Bundle bundle = getIntent().getExtras();
 //        String fullName = bundle.getString("fullName");
 //        String dateCreated = bundle.getString("dateCreated");

@@ -40,16 +40,6 @@ public class FacebookLoginActivity extends BaseLoginActivity {
     private TextView mStatusTextView;
     private TextView mDetailTextView;
 
-    //*********************************************
-    // (Megan) Trying something out:
-    // The BaseLoginActivity has the Firebase connection
-    //*********************************************
-
-
-//    // [START declare_auth]
-//    private FirebaseAuth mAuth;
-//    // [END declare_auth]
-
     private FirebaseAuth mAuth;
 
     private CallbackManager mCallbackManager;
@@ -62,26 +52,6 @@ public class FacebookLoginActivity extends BaseLoginActivity {
         // Views
         mStatusTextView = findViewById(R.id.status);
         mDetailTextView = findViewById(R.id.detail);
-
-        //*********************************************
-        // (Megan) Trying something out:
-        // The BaseLoginActivity has the Firebase connection
-        // therefore we do not need the signout button here, we will use the signout button in Profile
-        //*********************************************
-
-
-//        findViewById(R.id.button_facebook_signout).setOnClickListener(this);
-
-        //*********************************************
-        // (Megan) Trying something out:
-        // The BaseLoginActivity has the Firebase connection
-        //*********************************************
-
-
-//        // [START initialize_auth]
-//        // Initialize Firebase Auth
-//        mAuth = FirebaseAuth.getInstance();
-//        // [END initialize_auth]
 
         mAuth = getmAuth();
 
@@ -100,38 +70,15 @@ public class FacebookLoginActivity extends BaseLoginActivity {
             @Override
             public void onCancel() {
                 Log.d(TAG, "facebook:onCancel");
-                // [START_EXCLUDE]
-//                updateUI(null);
-                // [END_EXCLUDE]
             }
 
             @Override
             public void onError(FacebookException error) {
                 Log.d(TAG, "facebook:onError", error);
-                // [START_EXCLUDE]
-//                updateUI(null);
-                // [END_EXCLUDE]
             }
         });
         // [END initialize_fblogin]
     }
-
-
-    //*********************************************
-    // (Megan) Trying something out:
-    // The BaseLoginActivity has the Firebase connection
-    //*********************************************
-
-
-//    // [START on_start_check_user]
-//    @Override
-//    public void onStart() {
-//        super.onStart();
-//        // Check if user is signed in (non-null) and update UI accordingly.
-//        FirebaseUser currentUser = mAuth.getCurrentUser();
-//        updateUI(currentUser);
-//    }
-//    // [END on_start_check_user]
 
     // [START on_activity_result]
     @Override
@@ -158,7 +105,9 @@ public class FacebookLoginActivity extends BaseLoginActivity {
                         if (task.isSuccessful()) {
                             // Sign in success, send user to app home page
                             Log.d(TAG, "signInWithCredential:success");
+                            //TODO: write method to check if user still needs to add user details
                             Intent i = checkIfUserHasSignedInBefore();
+                            //***keeping this intent here for now, commented out
 //                            Intent i = new Intent(getApplicationContext(), ProfileActivity.class);
                             startActivity(i);
 //                            finish();
@@ -172,7 +121,6 @@ public class FacebookLoginActivity extends BaseLoginActivity {
                                 Toast.makeText(FacebookLoginActivity.this, R.string.authentication_failed,
                                         Toast.LENGTH_SHORT).show();
                             }
-//                            updateUI(null);
                             LoginManager.getInstance().logOut();
                         }
 
@@ -183,6 +131,7 @@ public class FacebookLoginActivity extends BaseLoginActivity {
                 });
     }
 
+    //TODO: finish this method, check logic
     public Intent checkIfUserHasSignedInBefore() {
         final FirebaseUser user = mAuth.getCurrentUser();
         final Intent i = new Intent(getApplicationContext(), HomeActivity.class);
@@ -211,58 +160,10 @@ public class FacebookLoginActivity extends BaseLoginActivity {
                 }
             });
         } else {
-
+            //TODO: finish else
         }
 
         return i;
     }
     // [END auth_with_facebook]
-
-    //*********************************************
-    // (Megan) Trying something out:
-    // The BaseLoginActivity has the Firebase connection
-    //*********************************************
-
-
-//    public void signOut() {
-//        mAuth.signOut();
-//        LoginManager.getInstance().logOut();
-//
-//        updateUI(null);
-//        Toast.makeText(FacebookLoginActivity.this, R.string.successfully_signed_out,
-//                Toast.LENGTH_SHORT).show();
-//    }
-
-    //*********************************************
-    // (Megan) Trying something out:
-    // The BaseLoginActivity has the Firebase connection
-    // so the FacebookActivity will open the ProfileActivity
-    // so we do not need to update the UI
-    // and we do not the the onClick
-    //*********************************************
-
-//    private void updateUI(FirebaseUser user) {
-//        hideProgressDialog();
-//        if (user != null) {
-//            mStatusTextView.setText(getString(R.string.facebook_status_fmt, user.getDisplayName()));
-//            mDetailTextView.setText(getString(R.string.firebase_status_fmt, user.getUid()));
-//
-//            findViewById(R.id.button_facebook_login).setVisibility(View.GONE);
-//            findViewById(R.id.button_facebook_signout).setVisibility(View.VISIBLE);
-//        } else {
-//            mStatusTextView.setText(R.string.signed_out);
-//            mDetailTextView.setText(null);
-//
-//            findViewById(R.id.button_facebook_login).setVisibility(View.VISIBLE);
-//            findViewById(R.id.button_facebook_signout).setVisibility(View.GONE);
-//        }
-//    }
-//
-//    @Override
-//    public void onClick(View v) {
-//        int i = v.getId();
-//        if (i == R.id.button_facebook_signout) {
-//            signOut();
-//        }
-//    }
 }

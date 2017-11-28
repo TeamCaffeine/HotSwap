@@ -48,7 +48,6 @@ public class BaseLoginActivity extends AppCompatActivity {
         super.onStart();
         // Check if user is signed in (non-null)
         // if user is already signed in, update the Bundle accordingly
-//        ////////////FirebaseUser currentUser = mAuth.getCurrentUser();
         final FirebaseUser user = mAuth.getCurrentUser();
         if (user != null) {
             final Intent i = new Intent(getApplicationContext(), HomeActivity.class);

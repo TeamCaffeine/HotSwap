@@ -57,22 +57,6 @@ public class EmailPasswordActivity extends BaseLoginActivity implements
         // [END initialize_auth]
     }
 
-    //*********************************************
-    // (Megan) Trying something out:
-    // The BaseLoginActivity has the Firebase connection
-    // therefore we do not need the onStart here, because it is in the BaseLoginActivity
-    //*********************************************
-
-//    // [START on_start_check_user]
-//    @Override
-//    public void onStart() {
-//        super.onStart();
-//        // Check if user is signed in (non-null) and update UI accordingly.
-//        FirebaseUser currentUser = mAuth.getCurrentUser();
-////        updateUI(currentUser);
-//    }
-//    // [END on_start_check_user]
-
     private void createAccount(String email, String password) {
         Log.d(TAG, "createAccount:" + email);
         if (!validateForm()) {
@@ -101,7 +85,6 @@ public class EmailPasswordActivity extends BaseLoginActivity implements
                                 Toast.makeText(EmailPasswordActivity.this, R.string.authentication_failed,
                                         Toast.LENGTH_SHORT).show();
                             }
-//                            updateUI(null);
                         }
 
                         // [START_EXCLUDE]
@@ -141,7 +124,6 @@ public class EmailPasswordActivity extends BaseLoginActivity implements
                                 Toast.makeText(EmailPasswordActivity.this, R.string.authentication_failed,
                                         Toast.LENGTH_SHORT).show();
                             }
-//                            updateUI(null);
                         }
 
                         // [START_EXCLUDE]
@@ -154,19 +136,6 @@ public class EmailPasswordActivity extends BaseLoginActivity implements
                 });
         // [END sign_in_with_email]
     }
-
-    //*********************************************
-    // (Megan) Trying something out:
-    // The BaseLoginActivity has the Firebase connection
-    // therefore we do not need the signout button here, we will use the signout button in Profile
-    //*********************************************
-
-//    private void signOut() {
-//        mAuth.signOut();
-//        updateUI(null);
-//        Toast.makeText(EmailPasswordActivity.this, R.string.successfully_signed_out,
-//                Toast.LENGTH_SHORT).show();
-//    }
 
     private void sendEmailVerification() {
         // Disable button
@@ -220,34 +189,6 @@ public class EmailPasswordActivity extends BaseLoginActivity implements
 
         return valid;
     }
-
-    //*********************************************
-    // (Megan) Trying something out:
-    // we do not need to update the UI
-    // instead we will just send the user to the main activity
-    //*********************************************
-
-//    private void updateUI(FirebaseUser user) {
-//        hideProgressDialog();
-//        if (user != null) {
-//            mStatusTextView.setText(getString(R.string.emailpassword_status_fmt,
-//                    user.getEmail(), user.isEmailVerified()));
-//            mDetailTextView.setText(getString(R.string.firebase_status_fmt, user.getUid()));
-//
-//            findViewById(R.id.email_password_buttons).setVisibility(View.GONE);
-//            findViewById(R.id.email_password_fields).setVisibility(View.GONE);
-//            findViewById(R.id.signed_in_buttons).setVisibility(View.VISIBLE);
-//
-//            findViewById(R.id.verify_email_button).setEnabled(!user.isEmailVerified());
-//        } else {
-//            mStatusTextView.setText(R.string.signed_out);
-//            mDetailTextView.setText(null);
-//
-//            findViewById(R.id.email_password_buttons).setVisibility(View.VISIBLE);
-//            findViewById(R.id.email_password_fields).setVisibility(View.VISIBLE);
-//            findViewById(R.id.signed_in_buttons).setVisibility(View.GONE);
-//        }
-//    }
 
     @Override
     public void onClick(View v) {

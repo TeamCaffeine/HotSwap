@@ -33,15 +33,6 @@ public class GoogleSignInActivity extends BaseLoginActivity {
     private static final String TAG = "GoogleActivity";
     private static final int RC_SIGN_IN = 9001;
 
-    //*********************************************
-    // (Megan) Trying something out:
-    // The BaseLoginActivity has the Firebase connection
-    //*********************************************
-
-//    // [START declare_auth]
-//    private FirebaseAuth mAuth;
-//    // [END declare_auth]
-
     private FirebaseAuth mAuth;
 
     private GoogleSignInClient mGoogleSignInClient;
@@ -97,34 +88,8 @@ public class GoogleSignInActivity extends BaseLoginActivity {
 
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
 
-        //*********************************************
-        // (Megan) Trying something out:
-        // The BaseLoginActivity has the Firebase connection
-        //*********************************************
-
-//        // [START initialize_auth]
-//        mAuth = FirebaseAuth.getInstance();
-//        // [END initialize_auth]
-
         mAuth = getmAuth();
     }
-
-
-    //*********************************************
-    // (Megan) Trying something out:
-    // The BaseLoginActivity has the Firebase connection
-    //*********************************************
-
-
-//    // [START on_start_check_user]
-//    @Override
-//    public void onStart() {
-//        super.onStart();
-//        // Check if user is signed in (non-null) and update UI accordingly.
-//        FirebaseUser currentUser = mAuth.getCurrentUser();
-//        updateUI(currentUser);
-//    }
-//    // [END on_start_check_user]
 
     // [START onactivityresult]
     @Override
@@ -194,27 +159,6 @@ public class GoogleSignInActivity extends BaseLoginActivity {
         startActivityForResult(signInIntent, RC_SIGN_IN);
     }
     // [END signin]
-
-    //*********************************************
-    // (Megan) Trying something out:
-    // The BaseLoginActivity has the signOut() method
-    //*********************************************
-
-//    private void signOut() {
-//        // Firebase sign out
-//        mAuth.signOut();
-//
-//        // Google sign out
-//        mGoogleSignInClient.signOut().addOnCompleteListener(this,
-//                new OnCompleteListener<Void>() {
-//                    @Override
-//                    public void onComplete(@NonNull Task<Void> task) {
-//                        updateUI(null);
-//                        Toast.makeText(GoogleSignInActivity.this, R.string.successfully_signed_out,
-//                                Toast.LENGTH_SHORT).show();
-//                    }
-//                });
-//    }
 
     private void revokeAccess() {
         // Firebase sign out
