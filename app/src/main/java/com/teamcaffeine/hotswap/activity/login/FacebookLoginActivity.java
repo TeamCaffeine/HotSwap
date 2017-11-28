@@ -186,7 +186,7 @@ public class FacebookLoginActivity extends BaseLoginActivity {
     public Intent checkIfUserHasSignedInBefore() {
         final FirebaseUser user = mAuth.getCurrentUser();
         final Intent i = new Intent(getApplicationContext(), ProfileActivity.class);
-        i.putExtra("userName", user.getEmail());
+        i.putExtra("email", user.getEmail());
         i.putExtra("Uid", user.getUid());
 
         // Retreive user first and last name

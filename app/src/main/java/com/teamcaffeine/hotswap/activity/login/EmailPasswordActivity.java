@@ -53,19 +53,25 @@ public class EmailPasswordActivity extends BaseLoginActivity implements
         findViewById(R.id.verify_email_button).setOnClickListener(this);
 
         // [START initialize_auth]
-        mAuth = FirebaseAuth.getInstance();
+        mAuth = getmAuth();
         // [END initialize_auth]
     }
 
-    // [START on_start_check_user]
-    @Override
-    public void onStart() {
-        super.onStart();
-        // Check if user is signed in (non-null) and update UI accordingly.
-        FirebaseUser currentUser = mAuth.getCurrentUser();
-//        updateUI(currentUser);
-    }
-    // [END on_start_check_user]
+    //*********************************************
+    // (Megan) Trying something out:
+    // The BaseLoginActivity has the Firebase connection
+    // therefore we do not need the onStart here, because it is in the BaseLoginActivity
+    //*********************************************
+
+//    // [START on_start_check_user]
+//    @Override
+//    public void onStart() {
+//        super.onStart();
+//        // Check if user is signed in (non-null) and update UI accordingly.
+//        FirebaseUser currentUser = mAuth.getCurrentUser();
+////        updateUI(currentUser);
+//    }
+//    // [END on_start_check_user]
 
     private void createAccount(String email, String password) {
         Log.d(TAG, "createAccount:" + email);

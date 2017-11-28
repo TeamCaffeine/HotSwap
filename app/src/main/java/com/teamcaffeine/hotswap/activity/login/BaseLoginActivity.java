@@ -52,12 +52,12 @@ public class BaseLoginActivity extends AppCompatActivity {
         final FirebaseUser user = mAuth.getCurrentUser();
         if (user != null) {
             final Intent i = new Intent(getApplicationContext(), ProfileActivity.class);
-            i.putExtra("userName", user.getEmail());
+            i.putExtra("email", user.getEmail());
             i.putExtra("Uid", user.getUid());
 
             // Retreive user first and last name
             final FirebaseDatabase database = FirebaseDatabase.getInstance();
-            DatabaseReference users = database.getReference().child("Users/");
+            DatabaseReference users = database.getReference().child("Users");
             Query userFullName = users.child(user.getUid());
 
             userFullName.addListenerForSingleValueEvent(new ValueEventListener() {

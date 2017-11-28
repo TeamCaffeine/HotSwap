@@ -45,9 +45,10 @@ public class AddUserDetailsActivity extends BaseLoginActivity {
         DatabaseReference users = database.getReference().child("Users");
 
         String uid = user.getUid();
+        String email = user.getEmail();
         DateFormat dateFormat = new SimpleDateFormat("MMMM d, yyyy");
         Date dateCreated = new Date();
-        User userData = new User(uid, dateFormat.format(dateCreated), firstName_string, lastName_string,
+        User userData = new User(uid, email, dateFormat.format(dateCreated), firstName_string, lastName_string,
                 new ArrayList<String>(), new ArrayList<String>(), new ArrayList<String>(),
                 new ArrayList<String>(), new ArrayList<String>());
 
@@ -56,7 +57,7 @@ public class AddUserDetailsActivity extends BaseLoginActivity {
 
         users.updateChildren(userUpdate);
 
-        i.putExtra("userName", user.getEmail());
+        i.putExtra("email", user.getEmail());
         i.putExtra("Uid", uid);
         i.putExtra("fullName", firstName_string + " "  + lastName_string);
         i.putExtra("dateCreated", dateFormat.format(dateCreated));
