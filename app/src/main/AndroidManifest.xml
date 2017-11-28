@@ -67,6 +67,8 @@
             android:name=".activity.ListItemActivity"
             android:label="@string/title_activity_list_item"
             android:theme="@style/AppTheme">
+		</activity>
+        <activity android:name=".activity.navigation.NavigationActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
