@@ -28,7 +28,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.teamcaffeine.hotswap.R;
-import com.teamcaffeine.hotswap.activity.ProfileActivity;
+import com.teamcaffeine.hotswap.activity.HomeActivity;
 
 /**
  * Firebase Authentication using a Facebook access token.
@@ -185,7 +185,7 @@ public class FacebookLoginActivity extends BaseLoginActivity {
 
     public Intent checkIfUserHasSignedInBefore() {
         final FirebaseUser user = mAuth.getCurrentUser();
-        final Intent i = new Intent(getApplicationContext(), ProfileActivity.class);
+        final Intent i = new Intent(getApplicationContext(), HomeActivity.class);
         i.putExtra("email", user.getEmail());
         i.putExtra("Uid", user.getUid());
 

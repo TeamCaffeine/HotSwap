@@ -18,7 +18,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.teamcaffeine.hotswap.R;
-import com.teamcaffeine.hotswap.activity.ProfileActivity;
+import com.teamcaffeine.hotswap.activity.HomeActivity;
 
 public class BaseLoginActivity extends AppCompatActivity {
 
@@ -51,7 +51,7 @@ public class BaseLoginActivity extends AppCompatActivity {
 //        ////////////FirebaseUser currentUser = mAuth.getCurrentUser();
         final FirebaseUser user = mAuth.getCurrentUser();
         if (user != null) {
-            final Intent i = new Intent(getApplicationContext(), ProfileActivity.class);
+            final Intent i = new Intent(getApplicationContext(), HomeActivity.class);
             i.putExtra("email", user.getEmail());
             i.putExtra("Uid", user.getUid());
 

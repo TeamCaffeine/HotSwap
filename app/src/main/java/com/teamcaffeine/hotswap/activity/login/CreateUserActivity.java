@@ -17,7 +17,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.teamcaffeine.hotswap.R;
-import com.teamcaffeine.hotswap.activity.ProfileActivity;
+import com.teamcaffeine.hotswap.activity.HomeActivity;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -63,7 +63,7 @@ public class CreateUserActivity extends BaseLoginActivity {
                                     // Sign in success, update UI with the signed-in user's information
                                     Log.d(TAG, "createUserWithEmail:success");
                                     FirebaseUser user = mAuth.getCurrentUser();
-                                    Intent i = new Intent(getApplicationContext(), ProfileActivity.class);
+                                    Intent i = new Intent(getApplicationContext(), HomeActivity.class);
 
                                     FirebaseDatabase database = FirebaseDatabase.getInstance();
                                     DatabaseReference users = database.getReference().child("Users");
