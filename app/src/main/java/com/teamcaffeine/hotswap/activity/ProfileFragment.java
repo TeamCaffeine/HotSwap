@@ -4,12 +4,16 @@ package com.teamcaffeine.hotswap.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.PersistableBundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -87,6 +91,23 @@ public class ProfileFragment extends Fragment {
         inviteFriends.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                View popupView = LayoutInflater.from(getActivity()).inflate(R.layout.profile_invite_popup, null);
+                final PopupWindow popupWindow = new PopupWindow(popupView, 800, 800);
+
+                // define your view here that found in popup_layout
+                // for example let consider you have a button
+
+                Button closePopUp = (Button) popupView.findViewById(R.id.btnClose);
+
+                // finally show up your popwindow
+                popupWindow.showAsDropDown(popupView, 100, 300);
+
+                closePopUp.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        popupWindow.dismiss();
+                    }
+                });
             }
         });
     }
