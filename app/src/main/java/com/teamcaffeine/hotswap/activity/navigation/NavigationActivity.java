@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.MenuItem;
 
 import com.teamcaffeine.hotswap.R;
+import com.teamcaffeine.hotswap.activity.messaging.InboxFragment;
 
 public class NavigationActivity extends AppCompatActivity implements BlankFragment.BlankFragmentListener, BlankFragment2.BlankFragment2Listener {
 
@@ -18,7 +19,7 @@ public class NavigationActivity extends AppCompatActivity implements BlankFragme
     public BottomNavigationView navigation;
 
     //TODO set your private fragments here
-    private BlankFragment blankFragment;
+    private InboxFragment blankFragment;
     private BlankFragment2 blankFragment2;
     final FragmentManager fragmentManager = getSupportFragmentManager();
     FragmentTransaction ft;
@@ -62,7 +63,7 @@ public class NavigationActivity extends AppCompatActivity implements BlankFragme
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
         //TODO replace these with your fragments
-        blankFragment = new BlankFragment();
+        blankFragment = new InboxFragment();
         blankFragment2 = new BlankFragment2();
     }
 }
