@@ -9,10 +9,12 @@ import android.widget.Button;
 import com.facebook.login.widget.LoginButton;
 import com.google.android.gms.common.SignInButton;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.teamcaffeine.hotswap.R;
 import com.teamcaffeine.hotswap.activity.HomeActivity;
+import com.teamcaffeine.hotswap.activity.ProfileActivity;
 
-public class LoginActivity extends AppCompatActivity {
+public class LoginActivity extends BaseActivity {
 
     SignInButton btnGoogleSignIn;
     LoginButton btnFacebookLogin;
@@ -20,9 +22,10 @@ public class LoginActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        if (FirebaseAuth.getInstance().getCurrentUser() != null) {
-            Intent home = new Intent(this, HomeActivity.class);
-            startActivity(home);
+        FirebaseUser currentUser = getCurrentUser();
+        if (currentUser != null) {
+            Intent i = new Intent(this, ProfileActivity.class);
+            startActivity(i);
         }
 
         super.onCreate(savedInstanceState);

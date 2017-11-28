@@ -70,7 +70,8 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-        <activity android:name=".activity.login.CreateUserActivity"></activity>
+        <activity android:name=".activity.login.CreateUserActivity" />
+        <activity android:name=".activity.login.AddUserDetailsActivity"></activity>
     </application>
 
 </manifest>

@@ -12,12 +12,11 @@ import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseUser;
 import com.teamcaffeine.hotswap.R;
-import com.teamcaffeine.hotswap.activity.login.BaseLoginFragment;
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class ProfileFragment extends BaseLoginFragment {
+public class ProfileFragment extends Fragment {
 
 
     public ProfileFragment() {
