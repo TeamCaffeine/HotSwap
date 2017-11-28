@@ -1,15 +1,13 @@
 package com.teamcaffeine.hotswap.activity.navigation;
 
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.MenuItem;
-import android.widget.FrameLayout;
 
 import com.teamcaffeine.hotswap.R;
 
@@ -17,10 +15,12 @@ public class NavigationActivity extends AppCompatActivity implements BlankFragme
 
     private final String TAG = "NavigationActivity";
 
-    FrameLayout dynamicContent;
+    public BottomNavigationView navigation;
+
+    private BlankFragment blankFragment;
+    private BlankFragment2 blankFragment2;
     final FragmentManager fragmentManager = getSupportFragmentManager();
     FragmentTransaction ft;
-    public BottomNavigationView navigation;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -31,13 +31,13 @@ public class NavigationActivity extends AppCompatActivity implements BlankFragme
                 case R.id.navigation_home:
                     Log.i(TAG, "nav home: ");
                     ft = fragmentManager.beginTransaction();
-                    ft.replace(R.id.fragment, new BlankFragment());
+                    ft.replace(R.id.dynamicContent, blankFragment);
                     ft.commit();
                     return true;
                 case R.id.navigation_search:
                     Log.i(TAG, "nav search: ");
                     ft = fragmentManager.beginTransaction();
-                    ft.replace(R.id.fragment, new BlankFragment2());
+                    ft.replace(R.id.dynamicContent, blankFragment2);
                     ft.commit();
                     return true;
                 case R.id.navigation_inbox:
@@ -56,9 +56,10 @@ public class NavigationActivity extends AppCompatActivity implements BlankFragme
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_navigation);
 
-        dynamicContent = (FrameLayout) findViewById(R.id.dynamicContent);
-
         navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+
+        blankFragment = new BlankFragment();
+        blankFragment2 = new BlankFragment2();
     }
 }

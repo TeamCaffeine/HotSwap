@@ -26,12 +26,6 @@
         android:orientation="vertical"
         android:layout_marginBottom="56dp"
         android:layout_gravity="bottom">
-
-        <fragment
-            android:id="@+id/fragment"
-            android:name="com.teamcaffeine.hotswap.activity.navigation.BlankFragment"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
     </FrameLayout>
 
 </android.support.constraint.ConstraintLayout>
