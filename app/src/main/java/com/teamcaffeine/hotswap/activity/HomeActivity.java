@@ -22,26 +22,5 @@ public class HomeActivity extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
-
-        Button logout = (Button) findViewById(R.id.btnFacebookLogout);
-        logout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                AuthUI.getInstance()
-                        .signOut(HomeActivity.this)
-                        .addOnCompleteListener(new OnCompleteListener<Void>() {
-                            @Override
-                            public void onComplete(@NonNull Task<Void> task) {
-                                if (task.isSuccessful()) {
-                                    Intent logout = new Intent(HomeActivity.this, LoginActivity.class);
-                                    startActivity(logout);
-                                    finish();
-                                } else {
-                                    // TODO: Handle unsuccessful sign out
-                                }
-                            }
-                        });
-            }
-        });
     }
 }
