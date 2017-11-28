@@ -35,7 +35,7 @@ import java.util.Map;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class CreateUserFragment extends Fragment {
+public class CreateUserFragment extends BaseLoginFragment {
 
 
     public CreateUserFragment() {

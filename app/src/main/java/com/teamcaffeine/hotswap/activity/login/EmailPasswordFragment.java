@@ -32,7 +32,7 @@ import com.teamcaffeine.hotswap.activity.ProfileActivity;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class EmailPasswordFragment extends Fragment {
+public class EmailPasswordFragment extends BaseLoginFragment {
 
 
     public EmailPasswordFragment() {
