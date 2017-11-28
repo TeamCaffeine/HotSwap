@@ -1,5 +1,7 @@
 package com.teamcaffeine.hotswap.activity.navigation;
 
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -7,16 +9,17 @@ import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.MenuItem;
-import android.widget.LinearLayout;
+import android.widget.FrameLayout;
 
 import com.teamcaffeine.hotswap.R;
 
-public abstract class NavigationActivity extends AppCompatActivity {
+public class NavigationActivity extends AppCompatActivity implements BlankFragment.BlankFragmentListener, BlankFragment2.BlankFragment2Listener {
 
     private final String TAG = "NavigationActivity";
 
-    LinearLayout dynamicContent;
-
+    FrameLayout dynamicContent;
+    final FragmentManager fragmentManager = getSupportFragmentManager();
+    FragmentTransaction ft;
     public BottomNavigationView navigation;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
@@ -24,33 +27,25 @@ public abstract class NavigationActivity extends AppCompatActivity {
 
         @Override
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-            Intent i;
             switch (item.getItemId()) {
                 case R.id.navigation_home:
                     Log.i(TAG, "nav home: ");
-                    i = new Intent(getApplicationContext(), NavigationHomeActivity.class);
-                    startActivity(i);
-                    finish(); //TODO decide if we want this activity to finish after next nav bar activity is selected. Or, if it should stay on the backstack.
+                    ft = fragmentManager.beginTransaction();
+                    ft.replace(R.id.fragment, new BlankFragment());
+                    ft.commit();
                     return true;
                 case R.id.navigation_search:
                     Log.i(TAG, "nav search: ");
-                    i = new Intent(getApplicationContext(), NavigationSearchActivity.class);
-                    startActivity(i);
-                    finish();
+                    ft = fragmentManager.beginTransaction();
+                    ft.replace(R.id.fragment, new BlankFragment2());
+                    ft.commit();
                     return true;
                 case R.id.navigation_inbox:
                     Log.i(TAG, "nav inbox: ");
-                    i = new Intent(getApplicationContext(), NavigationInboxActivity.class);
-                    startActivity(i);
-                    finish();
                     return true;
                 case R.id.navigation_profile:
                     Log.i(TAG, "nav profile: ");
-                    i = new Intent(getApplicationContext(), NavigationProfileActivity.class);
-                    startActivity(i);
-                    finish();
                     return true;
-
             }
             return false;
         }
@@ -61,7 +56,7 @@ public abstract class NavigationActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_navigation);
 
-        dynamicContent = (LinearLayout) findViewById(R.id.dynamicContent);
+        dynamicContent = (FrameLayout) findViewById(R.id.dynamicContent);
 
         navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
