@@ -71,7 +71,7 @@ public class CreateUserActivity extends BaseLoginActivity {
                                     String userKey = user.getUid();
                                     DateFormat dateFormat = new SimpleDateFormat("MMMM d, yyyy");
                                     Date dateCreated = new Date();
-                                    User userData = new User(userKey, edtNewUser.getText().toString(), edtNewPass.getText().toString(), dateFormat.format(dateCreated), edtFirstName.getText().toString(), edtLastName.getText().toString(),
+                                    User userData = new User(userKey, edtNewUser.getText().toString(), dateFormat.format(dateCreated), edtFirstName.getText().toString(), edtLastName.getText().toString(),
                                             new ArrayList<String>(), new ArrayList<String>(), new ArrayList<String>(), new ArrayList<String>(), new ArrayList<String>());
 
                                     Map<String, Object> userUpdate = new HashMap<>();

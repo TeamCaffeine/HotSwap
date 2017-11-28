@@ -28,14 +28,18 @@
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1"
-                android:text="Name" />
+                android:text="Name"
+                android:textAlignment="center"
+                android:textSize="24sp"
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/txtMemberSince"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1"
-                android:text="Member Since:" />
+                android:text="Member Since:"
+                android:textAlignment="center" />
         </LinearLayout>
 
         <ImageView
@@ -43,7 +47,7 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            app:srcCompat="@drawable/com_facebook_button_icon_blue" />
+            app:srcCompat="@drawable/com_facebook_profile_picture_blank_square" />
 
         <!--app:srcCompat="@drawable/com_facebook_profile_picture_blank_square" />-->
     </LinearLayout>
@@ -66,8 +70,9 @@
         android:layout_height="0dp"
         android:layout_weight="1"
         android:text="Payment" />
+
     <Button
-        android:id="@+id/txtInviteFriends"
+        android:id="@+id/btnInviteFriends"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
