@@ -17,7 +17,8 @@ import com.teamcaffeine.hotswap.activity.messaging.InboxFragment;
 public class NavigationActivity extends AppCompatActivity implements
         InboxFragment.InboxFragmentListener,
         ProfileFragment.ProfileFragmentListener,
-        ListItemFragment.ListItemFragmentListener {
+        ListItemFragment.ListItemFragmentListener,
+        SearchFragment.SearchFragmentListener {
 
     private final String TAG = "NavigationActivity";
 
@@ -27,6 +28,7 @@ public class NavigationActivity extends AppCompatActivity implements
     private ListItemFragment listItemFragment;
     private InboxFragment inboxFragment;
     private ProfileFragment profileFragment;
+    private SearchFragment searchFragment;
 
     final FragmentManager fragmentManager = getSupportFragmentManager();
     FragmentTransaction ft;
@@ -41,13 +43,13 @@ public class NavigationActivity extends AppCompatActivity implements
                 case R.id.navigation_home:
                     Log.i(TAG, "nav home: ");
                     ft = fragmentManager.beginTransaction();
-                    ft.replace(R.id.dynamicContent, profileFragment);
+                    ft.replace(R.id.dynamicContent, listItemFragment);
                     ft.commit();
                     return true;
                 case R.id.navigation_search:
-                    Log.i(TAG, "nav list: ");
+                    Log.i(TAG, "nav search: ");
                     ft = fragmentManager.beginTransaction();
-                    ft.replace(R.id.dynamicContent, listItemFragment);
+                    ft.replace(R.id.dynamicContent, searchFragment);
                     ft.commit();
                     return true;
                 case R.id.navigation_inbox:
@@ -79,5 +81,16 @@ public class NavigationActivity extends AppCompatActivity implements
         listItemFragment = new ListItemFragment();
         inboxFragment = new InboxFragment();
         profileFragment = new ProfileFragment();
+        searchFragment = new SearchFragment();
+
+        int intentFragment = getIntent().getExtras().getInt("frgToLoad");
+        switch (intentFragment) {
+            case 1:
+                ft = fragmentManager.beginTransaction();
+                ft.replace(R.id.dynamicContent, searchFragment);
+                ft.commit();
+        }
+
+        navigation.setSelectedItemId(R.id.navigation_home);
     }
 }

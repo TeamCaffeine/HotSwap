@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/content"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/locale"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_weight="1"
+            android:background="@color/tony_blue"
+            android:minHeight="?attr/actionBarSize"
+            android:theme="?attr/actionBarTheme">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Set Location"
+                android:layout_gravity="center"
+                android:id="@+id/toolbar_title"
+                android:textStyle="bold"
+                android:textSize="24dp"
+                android:textColor="#FFF"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Cancel"
+                android:layout_gravity="right"
+                android:id="@+id/cancel"
+                android:padding="20dp"
+                android:textColor="#0000EE"
+                android:onClick="onClick"
+                android:clickable="true"/>
+
+
+        </android.support.v7.widget.Toolbar>
+
+
+    </LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <Button
+            android:id="@+id/buttonLocale"
+            android:layout_width="250dp"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:background="@color/tony_blue"
+            android:singleLine="true"
+            android:text="Get Current Location"
+            android:textColor="#FFF"
+            android:textSize="16dp"
+            android:padding="10dp"
+            />
+
+        <EditText
+            android:id="@+id/zipText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/buttonLocale"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="12dp"
+            android:background="@drawable/zipborder"
+            android:ems="10"
+            android:gravity="center_horizontal"
+            android:hint="Enter Zip Code"
+            android:inputType="number" />
+
+        <TextView
+            android:id="@+id/result"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/zipText"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="14dp"
+            android:textColor="#000" />
+
+        <TextView
+            android:id="@+id/msgLocale"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/buttonLocale"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="15dp"
+            android:text="Where are you swapping?"
+            android:textColor="#000000" />
+
+        <Button
+            android:id="@+id/saveButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:background="@color/tony_blue"
+            android:text="Save"
+            android:textColor="#FFF"
+            android:textSize="16dp" />
+
+
+    </RelativeLayout>
+
+</LinearLayout>
