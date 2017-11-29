@@ -65,7 +65,7 @@ public class BaseLoginActivity extends AppCompatActivity {
                     User currentUser = dataSnapshot.getValue(User.class);
                     String fullName = currentUser.getFirstName() + " " + currentUser.getLastName();
                     i.putExtra("fullName", fullName);
-                    i.putExtra("dateCreated", currentUser.getDateCreated());
+                    i.putExtra("dateCreated", currentUser.getMemberSince());
                     startActivity(i);
                 }
 
