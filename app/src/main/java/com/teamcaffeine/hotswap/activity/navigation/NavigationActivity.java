@@ -90,5 +90,7 @@ public class NavigationActivity extends AppCompatActivity implements
                 ft.replace(R.id.dynamicContent, searchFragment);
                 ft.commit();
         }
+
+        navigation.setSelectedItemId(R.id.navigation_home);
     }
 }

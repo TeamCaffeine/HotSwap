@@ -237,7 +237,8 @@ public class SearchFragment extends Fragment implements OnMapReadyCallback, Goog
         LocationManager locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
         Criteria criteria = new Criteria();
 
-        Location location = locationManager.getLastKnownLocation(locationManager.getBestProvider(criteria, false));
+        // Location location = locationManager.getLastKnownLocation(locationManager.getBestProvider(criteria, false));
+        Location location = locationManager.getLastKnownLocation(locationManager.NETWORK_PROVIDER);
         // how the map zooms into current location
         // if preferences exist
         Intent intent = getActivity().getIntent();
