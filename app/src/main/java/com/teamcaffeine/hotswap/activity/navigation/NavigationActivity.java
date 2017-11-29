@@ -10,18 +10,24 @@ import android.util.Log;
 import android.view.MenuItem;
 
 import com.teamcaffeine.hotswap.R;
+import com.teamcaffeine.hotswap.activity.ListItemFragment;
 import com.teamcaffeine.hotswap.activity.ProfileFragment;
 import com.teamcaffeine.hotswap.activity.messaging.InboxFragment;
 
-public class NavigationActivity extends AppCompatActivity implements InboxFragment.InboxFragmentListener, ProfileFragment.ProfileFragmentListener {
+public class NavigationActivity extends AppCompatActivity implements
+        InboxFragment.InboxFragmentListener,
+        ProfileFragment.ProfileFragmentListener,
+        ListItemFragment.ListItemFragmentListener {
 
     private final String TAG = "NavigationActivity";
 
     public BottomNavigationView navigation;
 
     //TODO set your private fragments here
+    private ListItemFragment listItemFragment;
     private InboxFragment inboxFragment;
     private ProfileFragment profileFragment;
+
     final FragmentManager fragmentManager = getSupportFragmentManager();
     FragmentTransaction ft;
 
@@ -35,13 +41,13 @@ public class NavigationActivity extends AppCompatActivity implements InboxFragme
                 case R.id.navigation_home:
                     Log.i(TAG, "nav home: ");
                     ft = fragmentManager.beginTransaction();
-//                    ft.replace(R.id.dynamicContent, blankFragment2);
+                    ft.replace(R.id.dynamicContent, profileFragment);
                     ft.commit();
                     return true;
                 case R.id.navigation_search:
-                    Log.i(TAG, "nav search: ");
+                    Log.i(TAG, "nav list: ");
                     ft = fragmentManager.beginTransaction();
-//                    ft.replace(R.id.dynamicContent, blankFragment2);
+                    ft.replace(R.id.dynamicContent, listItemFragment);
                     ft.commit();
                     return true;
                 case R.id.navigation_inbox:
@@ -70,6 +76,7 @@ public class NavigationActivity extends AppCompatActivity implements InboxFragme
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
         //TODO replace these with your fragments
+        listItemFragment = new ListItemFragment();
         inboxFragment = new InboxFragment();
         profileFragment = new ProfileFragment();
     }

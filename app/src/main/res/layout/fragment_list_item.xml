@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:orientation="vertical" android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="0.5"
+            android:text="@string/list_item_title"
+            android:textAlignment="center"
+            android:textSize="30sp" />
+
+        <EditText
+            android:id="@+id/editItemName"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="0.5"
+            android:ems="10"
+            android:hint="Item Name"
+            android:inputType="textPersonName"
+            android:textSize="18sp" />
+
+        <EditText
+            android:id="@+id/editTags"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="0.5"
+            android:ems="10"
+            android:hint="Item Tags (separated by commas)"
+            android:inputType="textPersonName"
+            android:textSize="18sp" />
+
+        <EditText
+            android:id="@+id/editAddressLine1"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="0.5"
+            android:ems="10"
+            android:hint="Address Line 1"
+            android:inputType="textPersonName"
+            android:textSize="18sp" />
+
+        <EditText
+            android:id="@+id/editAddressLine2"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="0.5"
+            android:ems="10"
+            android:hint="Address Line 2"
+            android:inputType="textPersonName"
+            android:textSize="18sp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="0.5"
+            android:orientation="horizontal">
+
+            <EditText
+                android:id="@+id/editCity"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="3"
+                android:ems="10"
+                android:hint="City"
+                android:inputType="textPersonName"
+                android:textSize="18sp" />
+
+            <EditText
+                android:id="@+id/editState"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="2"
+                android:ems="10"
+                android:hint="State"
+                android:inputType="textPersonName"
+                android:textSize="18sp" />
+
+            <EditText
+                android:id="@+id/editZIP"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="2"
+                android:ems="10"
+                android:hint="ZIP"
+                android:inputType="number"
+                android:textSize="18sp" />
+
+        </LinearLayout>
+
+        <com.squareup.timessquare.CalendarPickerView
+            android:id="@+id/calendar_view"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_alignParentTop="true"
+            android:layout_weight="3" />
+
+        <Button
+            android:id="@+id/listItemButton"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="0.5"
+            android:gravity="center"
+            android:text="List Item"
+            android:textAlignment="center"
+            android:textSize="24sp" />
+
+    </LinearLayout>
+</ScrollView>

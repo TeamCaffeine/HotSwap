@@ -66,6 +66,11 @@
     <string name="verification_sent_to">Verification email sent to</string>
     <string name="failed_to_send_verification_email">Failed to send verification email.</string>
 
+    <!-- List Item Activity Strings -->
+    <string name="list_item_title">List an Item:</string>
+    <string name="title_activity_list_item">ListItemActivity</string>
+	
+    <string name="action_settings">Settings</string>
     <string name="title_activity_navigation">NavigationActivity</string>
     <string name="title_home">Home</string>
     <string name="title_search">Search</string>
