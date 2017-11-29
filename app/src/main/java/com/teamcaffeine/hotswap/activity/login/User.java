@@ -8,60 +8,52 @@ import java.util.Map;
 
 
 public class User {
+    private boolean addedDetails;
     private String Uid;
-    private String email;
-    private String dateCreated;
     private String firstName;
     private String lastName;
-
-    private ArrayList<String> items;
-    private ArrayList<String> currentlyRenting;
-    private ArrayList<String> currentlyLending;
-    private ArrayList<String> paymentOptions;
-    private ArrayList<String> linkedAccounts;
+    private String email;
+    private String memberSince;
+    private String phoneNumber;
 
     User() {
     }
 
-    public User(String Uid, String email, String dateCreated, String firstName, String lastName, ArrayList<String> items,
-                ArrayList<String> currentlyRenting, ArrayList<String> currentlyLending, ArrayList<String> paymentOptions,
-                ArrayList<String> linkedAccounts) {
+    public User(boolean addedDetails, String Uid, String firstName, String lastName,
+                String email, String memberSince, String phoneNumber) {
+        this.addedDetails = addedDetails;
         this.Uid = Uid;
-        this.email = email;
-        this.dateCreated = dateCreated;
         this.firstName = firstName;
         this.lastName = lastName;
-        this.items = items;
-        this.currentlyRenting = currentlyRenting;
-        this.currentlyLending = currentlyLending;
-        this.paymentOptions = paymentOptions;
-        this.linkedAccounts = linkedAccounts;
+        this.email = email;
+        this.memberSince = memberSince;
+        this.phoneNumber = phoneNumber;
     }
 
-    public User(String Uid) {
+    public User(String Uid, String email) {
+        this.addedDetails = false;
         this.Uid = Uid;
+        this.email = email;
     }
 
     public Map<String, Object> toMap() {
         HashMap<String, Object> result = new HashMap<>();
+        result.put("addedDetails", addedDetails);
         result.put("Uid", Uid);
-        result.put("dateCreated", dateCreated);
         result.put("firstName", firstName);
         result.put("lastName", lastName);
-        result.put("items", items);
-        result.put("currentlyRenting", currentlyRenting);
-        result.put("currentlyLending", currentlyLending);
-        result.put("paymentOptions", paymentOptions);
-        result.put("linkedAccounts", linkedAccounts);
+        result.put("email", email);
+        result.put("memberSince", memberSince);
+        result.put("phoneNumber", phoneNumber);
         return result;
+    }
+
+    public void setAddedDetails(boolean addedDetails) {
+        this.addedDetails = addedDetails;
     }
 
     public void setUid(String uid) {
         this.Uid = uid;
-    }
-
-    public void setDateCreated(String dateCreated) {
-        this.dateCreated = dateCreated;
     }
 
     public void setFirstName(String firstName) {
@@ -72,36 +64,24 @@ public class User {
         this.lastName = lastName;
     }
 
-    public void setItems(ArrayList<String> tests) {
-        this.items = tests;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
-    public void setCurrentlyRenting(ArrayList<String> currentlyRenting) {
-        this.currentlyRenting = currentlyRenting;
+    public void setMemberSince(String memberSince) {
+        this.memberSince = memberSince;
     }
 
-    public void setCurrentlyLending(ArrayList<String> currentlyLending) {
-        this.currentlyLending = currentlyLending;
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
     }
 
-    public void setPaymentOptions(ArrayList<String> paymentOptions) {
-        this.paymentOptions = paymentOptions;
-    }
-
-    public void setLinkedAccounts(ArrayList<String> linkedAccounts) {
-        this.linkedAccounts = linkedAccounts;
+    public boolean getAddedDetails() {
+        return addedDetails;
     }
 
     public String getUid() {
         return Uid;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public String getDateCreated() {
-        return dateCreated;
     }
 
     public String getFirstName() {
@@ -112,23 +92,15 @@ public class User {
         return lastName;
     }
 
-    public ArrayList<String> getItems() {
-        return items;
+    public String getEmail() {
+        return email;
     }
 
-    public ArrayList<String> getCurrentlyRenting() {
-        return currentlyRenting;
+    public String getMemberSince() {
+        return memberSince;
     }
 
-    public ArrayList<String> getCurrentlyLending() {
-        return currentlyLending;
-    }
-
-    public ArrayList<String> getPaymentOptions() {
-        return paymentOptions;
-    }
-
-    public ArrayList<String> getLinkedAccounts() {
-        return linkedAccounts;
+    public String getPhoneNumber() {
+        return phoneNumber;
     }
 }
