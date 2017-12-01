@@ -88,7 +88,6 @@ public class BaseLoginActivity extends AppCompatActivity {
 
     // This was here before Megan wanted to try something out
 
-    @VisibleForTesting
     public ProgressDialog mProgressDialog;
 
     public void showProgressDialog() {
