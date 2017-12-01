@@ -3,8 +3,10 @@ package com.teamcaffeine.hotswap.activity.login;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -47,26 +49,37 @@ public class AddUserDetailsActivity extends AppCompatActivity {
         addPayment = findViewById(R.id.btnPayment);
         submit = findViewById(R.id.btnSubmit);
 
-        String firstName_string = firstName.getText().toString();
-        String lastName_string = lastName.getText().toString();
-        String phoneNumber_string = phoneNumber.getText().toString();
+        final FirebaseDatabase database = FirebaseDatabase.getInstance();
+        final DatabaseReference users = database.getReference().child("Users");
 
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference users = database.getReference().child("Users");
+        submit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String firstName_string = firstName.getText().toString();
+                String lastName_string = lastName.getText().toString();
+                String phoneNumber_string = phoneNumber.getText().toString();
 
-        boolean addedDetails = true;
-        String uid = user.getUid();
-        String email = user.getEmail();
-        DateFormat dateFormat = new SimpleDateFormat("MMMM, yyyy");
-        Date memberSince = new Date();
-        User userData = new User(addedDetails,uid,firstName_string, lastName_string,email,dateFormat.format(memberSince),phoneNumber_string);
+                if (firstName_string != "" && lastName_string != "" && phoneNumber_string != "") {
 
-        Map<String, Object> userUpdate = new HashMap<>();
-        userUpdate.put(uid, userData.toMap());
+                    boolean addedDetails = true;
+                    String uid = user.getUid();
+                    String email = user.getEmail();
+                    DateFormat dateFormat = new SimpleDateFormat("MMMM, yyyy");
+                    Date memberSince = new Date();
+                    User userData = new User(addedDetails, uid, firstName_string, lastName_string, email, dateFormat.format(memberSince), phoneNumber_string);
 
-        users.updateChildren(userUpdate);
+                    Map<String, Object> userUpdate = new HashMap<>();
+                    userUpdate.put(uid, userData.toMap());
 
-        Intent i = new Intent(AddUserDetailsActivity.this, NavigationActivity.class);
-        startActivity(i);
+                    users.updateChildren(userUpdate);
+
+                    Intent i = new Intent(AddUserDetailsActivity.this, NavigationActivity.class);
+                    startActivity(i);
+                } else {
+                    Toast.makeText(AddUserDetailsActivity.this, "Please enter all details",
+                            Toast.LENGTH_LONG).show();
+                }
+            }
+        });
     }
 }
