@@ -12,6 +12,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.teamcaffeine.hotswap.R;
 import com.teamcaffeine.hotswap.activity.HomeActivity;
+import com.teamcaffeine.hotswap.activity.navigation.NavigationActivity;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -56,7 +57,7 @@ public class AddUserDetailsActivity extends AppCompatActivity {
         boolean addedDetails = true;
         String uid = user.getUid();
         String email = user.getEmail();
-        DateFormat dateFormat = new SimpleDateFormat("MMMM d, yyyy");
+        DateFormat dateFormat = new SimpleDateFormat("MMMM, yyyy");
         Date memberSince = new Date();
         User userData = new User(addedDetails,uid,firstName_string, lastName_string,email,dateFormat.format(memberSince),phoneNumber_string);
 
@@ -65,7 +66,7 @@ public class AddUserDetailsActivity extends AppCompatActivity {
 
         users.updateChildren(userUpdate);
 
-        Intent i = new Intent(getApplicationContext(), HomeActivity.class);
+        Intent i = new Intent(AddUserDetailsActivity.this, NavigationActivity.class);
         startActivity(i);
     }
 }

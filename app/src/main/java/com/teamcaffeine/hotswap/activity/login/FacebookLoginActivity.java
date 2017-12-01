@@ -150,7 +150,7 @@ public class FacebookLoginActivity extends BaseLoginActivity {
                     User currentUser = dataSnapshot.getValue(User.class);
                     String fullName = currentUser.getFirstName() + " " + currentUser.getLastName();
                     i.putExtra("fullName", fullName);
-                    i.putExtra("dateCreated", currentUser.getDateCreated());
+                    i.putExtra("dateCreated", currentUser.getMemberSince());
                     i.putExtra("loginType", "EmailPassword");
                 }
 

@@ -88,7 +88,7 @@
             <TextView
                 android:id="@+id/txtPhoneNumber"
                 android:layout_width="match_parent"
-                android:layout_height="0"
+                android:layout_height="0dp"
                 android:layout_weight="1"
                 android:text="Phone Number" />
         </LinearLayout>
@@ -127,7 +127,7 @@
                 android:id="@+id/txtAddAddress"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="+ Add Address" />
+                android:text="+ Add Address"/>
 
         </LinearLayout>
 
@@ -150,7 +150,7 @@
         <LinearLayout
             android:id="@+id/layout_PaymentOptionsAndAdd"
             android:layout_width="0dp"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_weight="3"
             android:orientation="vertical">
 
@@ -185,7 +185,7 @@
         <LinearLayout
             android:id="@+id/layout_ItemsAndAdd"
             android:layout_width="0dp"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_weight="3"
             android:orientation="vertical">
 
@@ -230,8 +230,7 @@
     <LinearLayout
         android:id="@+id/layout_CurrentlyLending"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
+        android:layout_height="wrap_content"
         android:orientation="horizontal">
 
         <TextView

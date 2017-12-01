@@ -3,6 +3,8 @@ package com.teamcaffeine.hotswap.activity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.Paint;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.PersistableBundle;
@@ -35,6 +37,9 @@ public class ProfileFragment extends Fragment {
     private Button inviteFriends;
     private TextView email;
     private TextView phoneNumber;
+    private TextView addAddress;
+    private TextView addPayment;
+    private TextView addItem;
 
     //TODO: figure out how to connect to Firebase to get logout functionality
 //    private FirebaseUser currentUser = getCurrentUser();
@@ -53,6 +58,24 @@ public class ProfileFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate (R.layout.activity_profile, container,false);
+
+        // format the "Add" textviews to look like hyper links
+        // first set the text color to blue
+        // then underline the text
+        // [START] format "add" textviews
+        addAddress = view.findViewById(R.id.txtAddAddress);
+        addAddress.setTextColor(Color.BLUE);
+        addAddress.setPaintFlags(addAddress.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+
+        addPayment = view.findViewById(R.id.txtAddPayment);
+        addPayment.setTextColor(Color.BLUE);
+        addPayment.setPaintFlags(addPayment.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+
+        addItem = view.findViewById(R.id.txtAddItem);
+        addItem.setTextColor(Color.BLUE);
+        addItem.setPaintFlags(addItem.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+        // [END] format "add" textviews
+
         return view;
     }
 
@@ -131,8 +154,8 @@ public class ProfileFragment extends Fragment {
                 sendEmail.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        Intent sendIntent = new Intent(Intent.ACTION_SEND);
-                        sendIntent.setType("text/plain");
+                        Intent sendIntent = new Intent(Intent.ACTION_SENDTO);
+                        sendIntent.setData(Uri.parse("mailto:")); // only email apps should handle this
                         String subject = "Join HotSwap!";
                         sendIntent.putExtra(Intent.EXTRA_SUBJECT, subject);
                         String message = "Hey I've been using HotSwap to rent items that I need but don't want to buy! Check it out!";
