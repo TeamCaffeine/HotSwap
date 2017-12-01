@@ -3,6 +3,7 @@ package com.teamcaffeine.hotswap.activity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.PersistableBundle;
 import android.support.annotation.Nullable;
@@ -17,6 +18,8 @@ import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.facebook.share.model.ShareLinkContent;
+import com.facebook.share.widget.ShareDialog;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.teamcaffeine.hotswap.R;
@@ -30,6 +33,8 @@ public class ProfileFragment extends Fragment {
     private TextView memberSince;
     private Button logout;
     private Button inviteFriends;
+    private TextView email;
+    private TextView phoneNumber;
 
     //TODO: figure out how to connect to Firebase to get logout functionality
 //    private FirebaseUser currentUser = getCurrentUser();
@@ -95,10 +100,12 @@ public class ProfileFragment extends Fragment {
                 View popupView = LayoutInflater.from(getActivity()).inflate(R.layout.profile_invite_popup, null);
                 final PopupWindow popupWindow = new PopupWindow(popupView, 800, 800);
 
-                // define your view here that found in popup_layout
-                // for example let consider you have a button
+                // define view buttons
 
                 Button closePopUp = (Button) popupView.findViewById(R.id.btnClose);
+                Button sendText = (Button) popupView.findViewById(R.id.btnSendText);
+                Button sendEmail = (Button) popupView.findViewById(R.id.btnSendEmail);
+                Button postToFacebook = (Button) popupView.findViewById(R.id.btnPostToFacebook);
 
                 // finally show up your popwindow
                 popupWindow.showAsDropDown(popupView, 100, 300);
@@ -107,6 +114,42 @@ public class ProfileFragment extends Fragment {
                     @Override
                     public void onClick(View view) {
                         popupWindow.dismiss();
+                    }
+                });
+
+                sendText.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Intent sendIntent = new Intent(Intent.ACTION_VIEW);
+                        sendIntent.setData(Uri.parse("sms:"));
+                        String message = "Hey I've been using HotSwap to rent items that I need but don't want to buy! Check it out!";
+                        sendIntent.putExtra("sms_body", message);
+                        startActivity(sendIntent);
+                    }
+                });
+
+                sendEmail.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Intent sendIntent = new Intent(Intent.ACTION_SEND);
+                        sendIntent.setType("text/plain");
+                        String subject = "Join HotSwap!";
+                        sendIntent.putExtra(Intent.EXTRA_SUBJECT, subject);
+                        String message = "Hey I've been using HotSwap to rent items that I need but don't want to buy! Check it out!";
+                        sendIntent.putExtra(Intent.EXTRA_TEXT, message);
+                        startActivity(sendIntent);
+                    }
+                });
+
+                final ShareDialog shareDialog = new ShareDialog(getActivity());
+                postToFacebook.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        ShareLinkContent content = new ShareLinkContent.Builder()
+                                .setContentUrl(Uri.parse("https://developers.facebook.com"))
+                                .setQuote("Hey I've been using HotSwap to rent items that I need but don't want to buy! Check it out!")
+                                .build();
+                        shareDialog.show(content);
                     }
                 });
             }
