@@ -15,6 +15,7 @@ public class User {
     private String email;
     private String memberSince;
     private String phoneNumber;
+    //TODO: figure out how to store an image
 
     User() {
     }
