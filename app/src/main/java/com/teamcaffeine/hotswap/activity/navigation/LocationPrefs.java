@@ -27,12 +27,16 @@ import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.squareup.okhttp.Callback;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.Response;
 import com.teamcaffeine.hotswap.R;
+
+import org.json.JSONArray;
 
 import java.io.IOException;
 
@@ -130,19 +134,39 @@ public class LocationPrefs extends AppCompatActivity
                             String jsonData = response.body().string();
                             Gson gson = new Gson();
                             JsonObject jsonObject = gson.fromJson(jsonData, JsonObject.class);
-                            final String zipcode = jsonObject.getAsJsonArray("results").get(0)
-                                    .getAsJsonObject().getAsJsonArray("address_components").get(7)
-                                    .getAsJsonObject().get("long_name")
-                                    .getAsString();
-                            final String city = jsonObject.getAsJsonArray("results").get(0)
-                                    .getAsJsonObject().getAsJsonArray("address_components").get(3)
-                                    .getAsJsonObject().get("long_name")
-                                    .getAsString();
+
+                            JsonArray jsonArray = jsonObject.getAsJsonArray("results").get(0)
+                                    .getAsJsonObject().getAsJsonArray("address_components");
+                            String zipcode = "";
+                            String city = "";
+                            for (int i = 0; i < jsonArray.size(); i++) {
+                                if (jsonArray.get(i).getAsJsonObject().get("types").getAsJsonArray().get(0).getAsString().equals("postal_code")){
+                                    zipcode = jsonArray.get(i).getAsJsonObject().get("long_name").getAsString();
+                                    System.out.println(zipcode);
+                              //      zip.setText(zipcode);
+                                }
+                                if (jsonArray.get(i).getAsJsonObject().get("types").getAsJsonArray().get(0).getAsString().equals("locality")){
+                                    city = jsonArray.get(i).getAsJsonObject().get("long_name").getAsString();
+                                    System.out.println(city);
+                                 //   result.setText(city);
+                                }
+                            }
+//
+//                            final String zipcode = jsonObject.getAsJsonArray("results").get(0)
+//                                    .getAsJsonObject().getAsJsonArray("address_components").get(7)
+//                                    .getAsJsonObject().get("long_name")
+//                                    .getAsString();
+//                            final String city = jsonObject.getAsJsonArray("results").get(0)
+//                                    .getAsJsonObject().getAsJsonArray("address_components").get(3)
+//                                    .getAsJsonObject().get("long_name")
+//                                    .getAsString();
+                            final String finalZipcode = zipcode;
+                            final String finalCity = city;
                             LocationPrefs.this.runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
-                                    zip.setText(zipcode);
-                                    result.setText(city);
+                                    zip.setText(finalZipcode);
+                                    result.setText(finalCity);
                                 }
                             });
                         }
@@ -153,7 +177,7 @@ public class LocationPrefs extends AppCompatActivity
 
         TextWatcher inputTextWatcher = new TextWatcher() {
             public void afterTextChanged(Editable s) {
-                if (s.length() > 0) {
+                if (s.length() == 5) {
                     String area = zip.getText().toString();
                     String key = "https://maps.googleapis.com/maps/api/geocode/json?address=";
                     String api = "&key=AIzaSyCdD6V_pMev1dl8LAsoJ6PLG5JLnR-OiUc";
