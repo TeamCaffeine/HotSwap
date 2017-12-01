@@ -5,7 +5,8 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
 import com.google.firebase.auth.FirebaseAuth;
-import com.teamcaffeine.hotswap.activity.login.LoginActivity;
+import com.teamcaffeine.hotswap.activity.login2.LoginActivity;
+import com.teamcaffeine.hotswap.activity.navigation.NavigationActivity;
 
 public class SplashActivity extends AppCompatActivity {
 
@@ -17,7 +18,7 @@ public class SplashActivity extends AppCompatActivity {
         // if not, send them to the login activity
         Intent appEntry;
         if (FirebaseAuth.getInstance().getCurrentUser() != null) {
-            appEntry = new Intent(this, HomeActivity.class);
+            appEntry = new Intent(this, NavigationActivity.class);
         } else {
             appEntry = new Intent(this, LoginActivity.class);
         }

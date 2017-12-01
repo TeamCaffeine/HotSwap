@@ -24,6 +24,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 import com.teamcaffeine.hotswap.activity.HomeActivity;
 import com.teamcaffeine.hotswap.R;
+import com.teamcaffeine.hotswap.activity.navigation.NavigationActivity;
 
 /**
  * Firebase Authentication using a Google ID Token.
@@ -129,7 +130,7 @@ public class GoogleSignInActivity extends BaseLoginActivity {
                         if (task.isSuccessful()) {
                             // Sign in success, send user to app home page
                             Log.d(TAG, "signInWithCredential:success");
-                            Intent home = new Intent(getApplicationContext(), HomeActivity.class);
+                            Intent home = new Intent(getApplicationContext(), NavigationActivity.class);
                             startActivity(home);
                             finish();
                         } else {
