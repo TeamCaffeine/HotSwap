@@ -1,4 +1,4 @@
-package com.teamcaffeine.hotswap.activity.navigation;
+package com.teamcaffeine.hotswap.navigation;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -10,18 +10,24 @@ import android.util.Log;
 import android.view.MenuItem;
 
 import com.teamcaffeine.hotswap.R;
-import com.teamcaffeine.hotswap.activity.ProfileFragment;
-import com.teamcaffeine.hotswap.activity.messaging.InboxFragment;
+import com.teamcaffeine.hotswap.utility.SessionHandler;
 
-public class NavigationActivity extends AppCompatActivity implements InboxFragment.InboxFragmentListener, ProfileFragment.ProfileFragmentListener {
+public class NavigationActivity extends AppCompatActivity implements
+        InboxFragment.InboxFragmentListener,
+        ProfileFragment.ProfileFragmentListener,
+        ListItemFragment.ListItemFragmentListener,
+        SearchFragment.SearchFragmentListener {
 
     private final String TAG = "NavigationActivity";
 
     public BottomNavigationView navigation;
 
     //TODO set your private fragments here
+    private ListItemFragment listItemFragment;
     private InboxFragment inboxFragment;
     private ProfileFragment profileFragment;
+    private SearchFragment searchFragment;
+
     final FragmentManager fragmentManager = getSupportFragmentManager();
     FragmentTransaction ft;
 
@@ -35,13 +41,13 @@ public class NavigationActivity extends AppCompatActivity implements InboxFragme
                 case R.id.navigation_home:
                     Log.i(TAG, "nav home: ");
                     ft = fragmentManager.beginTransaction();
-//                    ft.replace(R.id.dynamicContent, blankFragment2);
+                    ft.replace(R.id.dynamicContent, listItemFragment);
                     ft.commit();
                     return true;
                 case R.id.navigation_search:
                     Log.i(TAG, "nav search: ");
                     ft = fragmentManager.beginTransaction();
-//                    ft.replace(R.id.dynamicContent, blankFragment2);
+                    ft.replace(R.id.dynamicContent, searchFragment);
                     ft.commit();
                     return true;
                 case R.id.navigation_inbox:
@@ -63,6 +69,8 @@ public class NavigationActivity extends AppCompatActivity implements InboxFragme
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        SessionHandler.shouldLogIn(this);
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_navigation);
 
@@ -70,7 +78,19 @@ public class NavigationActivity extends AppCompatActivity implements InboxFragme
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
         //TODO replace these with your fragments
+        listItemFragment = new ListItemFragment();
         inboxFragment = new InboxFragment();
         profileFragment = new ProfileFragment();
+        searchFragment = new SearchFragment();
+
+        int intentFragment = getIntent().getExtras().getInt("frgToLoad");
+        switch (intentFragment) {
+            case 1:
+                ft = fragmentManager.beginTransaction();
+                ft.replace(R.id.dynamicContent, searchFragment);
+                ft.commit();
+        }
+
+        navigation.setSelectedItemId(R.id.navigation_home);
     }
 }

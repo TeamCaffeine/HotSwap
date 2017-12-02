@@ -1,4 +1,4 @@
-package com.teamcaffeine.hotswap.activity;
+package com.teamcaffeine.hotswap.navigation;
 
 
 import android.content.Context;
@@ -7,14 +7,12 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.PersistableBundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.PopupWindow;
 import android.widget.TextView;
@@ -22,11 +20,15 @@ import android.widget.Toast;
 
 import com.facebook.share.model.ShareLinkContent;
 import com.facebook.share.widget.ShareDialog;
+import com.firebase.ui.auth.AuthUI;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.teamcaffeine.hotswap.R;
+import com.teamcaffeine.hotswap.login.LoginActivity;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -34,7 +36,6 @@ import com.teamcaffeine.hotswap.R;
 public class ProfileFragment extends Fragment {
 
     // create objects for Firebase references
-    private FirebaseAuth mAuth;
     private FirebaseUser user;
     private FirebaseDatabase database;
     private DatabaseReference users;
@@ -90,8 +91,7 @@ public class ProfileFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         //TODO: figure out how to get login information into the Profile Fragment, like you would with bundles between activities
-        mAuth = FirebaseAuth.getInstance();
-        user = mAuth.getCurrentUser();
+        user = FirebaseAuth.getInstance().getCurrentUser();
 
         // get the bundle from the intent
         //****keeping these lines commented out for now, we will need them when we implement the fragment with login
@@ -196,7 +196,20 @@ public class ProfileFragment extends Fragment {
     }
 
     public void signOut() {
-        mAuth.signOut();
+        AuthUI.getInstance()
+                .signOut(getActivity())
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()) {
+                            Intent logout = new Intent(getActivity(), LoginActivity.class);
+                            startActivity(logout);
+                            getActivity().finish();
+                        } else {
+                            // TODO: Handle unsuccessful sign out
+                        }
+                    }
+                });
         Toast.makeText(getActivity(), R.string.successfully_signed_out,
                 Toast.LENGTH_LONG).show();
     }

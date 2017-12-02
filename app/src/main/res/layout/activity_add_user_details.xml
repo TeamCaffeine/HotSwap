@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.teamcaffeine.hotswap.activity.login.AddUserDetailsActivity">
+    tools:context=".login.AddUserDetailsActivity">
 
     <ImageView
         android:id="@+id/imgProfilePhoto"

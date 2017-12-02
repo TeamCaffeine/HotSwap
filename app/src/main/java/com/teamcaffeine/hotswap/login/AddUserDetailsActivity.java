@@ -1,4 +1,4 @@
-package com.teamcaffeine.hotswap.activity.login;
+package com.teamcaffeine.hotswap.login;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -13,8 +13,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.teamcaffeine.hotswap.R;
-import com.teamcaffeine.hotswap.activity.HomeActivity;
-import com.teamcaffeine.hotswap.activity.navigation.NavigationActivity;
+import com.teamcaffeine.hotswap.navigation.NavigationActivity;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -26,7 +25,6 @@ import java.util.Map;
 public class AddUserDetailsActivity extends AppCompatActivity {
 
     // create objects for Firebase references
-    private FirebaseAuth mAuth;
     private FirebaseUser user;
     private FirebaseDatabase database;
     private DatabaseReference users;
@@ -45,10 +43,8 @@ public class AddUserDetailsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_add_user_details);
 
         // get an instance of the Firebase and get the reference to the current user
-        mAuth = FirebaseAuth.getInstance();
-        user = mAuth.getCurrentUser();
+        user = FirebaseAuth.getInstance().getCurrentUser();
 
-        // get references to all views
         firstName = findViewById(R.id.edtFirstName);
         lastName = findViewById(R.id.edtLastName);
         phoneNumber = findViewById(R.id.edtPhoneNumber);
@@ -56,11 +52,11 @@ public class AddUserDetailsActivity extends AppCompatActivity {
         btnAddPayment = findViewById(R.id.btnPayment);
         btnSubmit = findViewById(R.id.btnSubmit);
 
+
         // get an instance of the database
         database = FirebaseDatabase.getInstance();
         // get a reference to the Users table
         users = database.getReference().child("Users");
-
         // set the functionality of the "Submit" button
         // see the "submit()" method below
         btnSubmit.setOnClickListener(new View.OnClickListener() {

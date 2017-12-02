@@ -10,6 +10,7 @@ android {
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         resConfigs "auto"
+        multiDexEnabled true
     }
     buildTypes {
         release {
@@ -52,6 +53,17 @@ dependencies {
     compile 'com.android.support:design:26.1.0'
     compile 'com.firebase:firebase-client-android:2.5.2+'
     compile 'com.facebook.android:facebook-android-sdk:[4,5)'
+
+    // Calendar dependency
+    compile 'com.squareup:android-times-square:1.5.0@aar'
+
+    // Maps dependencies
+    compile 'com.google.android.gms:play-services-maps:11.6.0'
+    compile 'com.google.android.gms:play-services-location:11.6.0'
+    compile 'com.loopj.android:android-async-http:1.4.9'
+    compile 'com.squareup.okhttp:okhttp:2.4.0'
+    compile 'com.google.code.gson:gson:2.8.1'
 }
+
 
 apply plugin: 'com.google.gms.google-services'

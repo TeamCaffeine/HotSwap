@@ -1,8 +1,6 @@
-package com.teamcaffeine.hotswap.activity.login;
+package com.teamcaffeine.hotswap.login;
 
-import java.text.DateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
