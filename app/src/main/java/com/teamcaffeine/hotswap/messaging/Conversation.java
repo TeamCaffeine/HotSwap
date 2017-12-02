@@ -1,4 +1,4 @@
-package com.teamcaffeine.hotswap.activity.messaging;
+package com.teamcaffeine.hotswap.messaging;
 
 /**
  * Created by william on 26/11/2017.

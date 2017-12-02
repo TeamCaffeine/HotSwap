@@ -14,8 +14,8 @@ import com.firebase.jobdispatcher.GooglePlayDriver;
 import com.firebase.jobdispatcher.Job;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
-import com.teamcaffeine.hotswap.activity.HomeActivity;
 import com.teamcaffeine.hotswap.R;
+import com.teamcaffeine.hotswap.navigation.NavigationActivity;
 
 public class HSFirebaseMessagingService extends FirebaseMessagingService {
 
@@ -94,7 +94,7 @@ public class HSFirebaseMessagingService extends FirebaseMessagingService {
      * @param messageBody FCM message body received.
      */
     private void sendNotification(String messageBody) {
-        Intent intent = new Intent(this, HomeActivity.class);
+        Intent intent = new Intent(this, NavigationActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0 /* Request code */, intent,
                 PendingIntent.FLAG_ONE_SHOT);

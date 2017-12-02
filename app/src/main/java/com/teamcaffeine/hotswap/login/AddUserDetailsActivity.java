@@ -1,15 +1,17 @@
-package com.teamcaffeine.hotswap.activity.login;
+package com.teamcaffeine.hotswap.login;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.teamcaffeine.hotswap.R;
-import com.teamcaffeine.hotswap.activity.HomeActivity;
+import com.teamcaffeine.hotswap.navigation.NavigationActivity;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -18,7 +20,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-public class AddUserDetailsActivity extends BaseLoginActivity {
+public class AddUserDetailsActivity extends AppCompatActivity {
 
     private FirebaseUser user;
     private EditText firstName;
@@ -34,12 +36,12 @@ public class AddUserDetailsActivity extends BaseLoginActivity {
         lastName = findViewById(R.id.edtLastName);
         submit = findViewById(R.id.btnSubmit);
 
-        user = getCurrentUser();
+        user = FirebaseAuth.getInstance().getCurrentUser();
 
         String firstName_string = firstName.getText().toString();
         String lastName_string = lastName.getText().toString();
 
-        Intent i = new Intent(getApplicationContext(), HomeActivity.class);
+        Intent i = new Intent(getApplicationContext(), NavigationActivity.class);
 
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference users = database.getReference().child("Users");

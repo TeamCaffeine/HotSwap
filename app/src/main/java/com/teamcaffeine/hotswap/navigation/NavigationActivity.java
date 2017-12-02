@@ -1,4 +1,4 @@
-package com.teamcaffeine.hotswap.activity.navigation;
+package com.teamcaffeine.hotswap.navigation;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -10,9 +10,6 @@ import android.util.Log;
 import android.view.MenuItem;
 
 import com.teamcaffeine.hotswap.R;
-import com.teamcaffeine.hotswap.activity.ListItemFragment;
-import com.teamcaffeine.hotswap.activity.ProfileFragment;
-import com.teamcaffeine.hotswap.activity.messaging.InboxFragment;
 
 public class NavigationActivity extends AppCompatActivity implements
         InboxFragment.InboxFragmentListener,
