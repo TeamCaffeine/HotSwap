@@ -25,17 +25,19 @@ import java.util.Map;
 
 public class AddUserDetailsActivity extends AppCompatActivity {
 
+    // create objects for Firebase references
     private FirebaseAuth mAuth;
     private FirebaseUser user;
+    private FirebaseDatabase database;
+    private DatabaseReference users;
+
+    // create objects to hold views
     private EditText firstName;
     private EditText lastName;
     private EditText phoneNumber;
     private Button btnAddAddress;
     private Button btnAddPayment;
     private Button btnSubmit;
-
-    private FirebaseDatabase database;
-    private DatabaseReference users;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,7 +88,7 @@ public class AddUserDetailsActivity extends AppCompatActivity {
     }
 
     // Submit method
-    // When the user clicks "submit," their full user account is created
+    // When the user clicks "submit," their full user account is created in Firebase
     public void submit() {
         // get the strings in each of the Edit Texts
         String firstName_string = firstName.getText().toString();
