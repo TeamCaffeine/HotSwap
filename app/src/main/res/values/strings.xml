@@ -135,6 +135,10 @@
     <string name="past_transactions">View Past Transactions</string>
     <string name="invite_friends">Invite Friends</string>
     <string name="logout">Logout</string>
+    <string name="placeholder_name">Name</string>
+    <string name="placeholder_member_since">Member Since:</string>
+    <string name="placeholder_email">Email</string>
+    <string name="placeholder_phone_number">Phone Number</string>
 
 
 </resources>

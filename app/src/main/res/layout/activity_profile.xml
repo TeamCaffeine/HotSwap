@@ -33,7 +33,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1"
-                android:text="Name"
+                android:text="@string/placeholder_name"
                 android:textAlignment="center"
                 android:textSize="24sp"
                 android:textStyle="bold" />
@@ -43,7 +43,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1"
-                android:text="Member Since:"
+                android:text="@string/placeholder_member_since"
                 android:textAlignment="center" />
         </LinearLayout>
 
@@ -81,15 +81,15 @@
                 android:id="@+id/txtEmail"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:text="Email"
-                android:layout_weight="1"/>
+                android:layout_weight="1"
+                android:text="@string/placeholder_email" />
 
             <TextView
                 android:id="@+id/txtPhoneNumber"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1"
-                android:text="Phone Number" />
+                android:text="@string/placeholder_phone_number" />
         </LinearLayout>
     </LinearLayout>
 
