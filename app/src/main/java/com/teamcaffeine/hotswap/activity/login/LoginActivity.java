@@ -7,6 +7,7 @@ import android.widget.Button;
 
 import com.facebook.login.widget.LoginButton;
 import com.google.android.gms.common.SignInButton;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.teamcaffeine.hotswap.R;
 import com.teamcaffeine.hotswap.activity.HomeActivity;
@@ -16,10 +17,12 @@ public class LoginActivity extends BaseLoginActivity {
     SignInButton btnGoogleSignIn;
     LoginButton btnFacebookLogin;
     Button btnEmailLogin;
+    private FirebaseAuth mAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        FirebaseUser currentUser = getCurrentUser();
+        mAuth = FirebaseAuth.getInstance();
+        FirebaseUser currentUser = mAuth.getCurrentUser();
         if (currentUser != null) {
             Intent i = new Intent(this, HomeActivity.class);
             startActivity(i);
