@@ -1,4 +1,4 @@
-package com.teamcaffeine.hotswap.messaging;
+package com.teamcaffeine.hotswap.navigation;
 
 /*
  Copyright (C) 2017 : Rohit Agrawal
@@ -20,6 +20,7 @@ package com.teamcaffeine.hotswap.messaging;
 */
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -43,6 +44,7 @@ import com.stfalcon.chatkit.dialogs.DialogsList;
 import com.stfalcon.chatkit.dialogs.DialogsListAdapter;
 import com.stfalcon.chatkit.utils.DateFormatter;
 import com.teamcaffeine.hotswap.R;
+import com.teamcaffeine.hotswap.messaging.StyledMessagesActivity;
 import com.teamcaffeine.hotswap.messaging.holder.dialogs.CustomDialogViewHolder;
 import com.teamcaffeine.hotswap.messaging.models.Channel;
 import com.teamcaffeine.hotswap.messaging.models.Dialog;
@@ -70,6 +72,7 @@ public class ChatFragment extends Fragment implements DialogsListAdapter.OnDialo
     private DatabaseReference userRef;
     private Handler mHandler;
     private DialogsList dialogsList;
+    private ChatFragmentListener CFL;
 
     @Nullable
     @Override
@@ -474,5 +477,14 @@ public class ChatFragment extends Fragment implements DialogsListAdapter.OnDialo
                 /* Do Nothing */
             }
         });
+    }
+
+    public interface ChatFragmentListener {
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        CFL = (ChatFragment.ChatFragmentListener) context;
     }
 }
