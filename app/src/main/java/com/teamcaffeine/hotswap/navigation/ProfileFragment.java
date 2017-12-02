@@ -15,8 +15,10 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Adapter;
 import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -61,6 +63,9 @@ public class ProfileFragment extends Fragment {
     private TextView txtAddPayment;
     private TextView txtAddItem;
     private TextView txtPastTransactions;
+    private ListView lvAddresses;
+    private ListView lvPayment;
+    private ListAdapter lvAdapter;
 
     public ProgressDialog mProgressDialog;
 
@@ -144,6 +149,14 @@ public class ProfileFragment extends Fragment {
         txtMemberSince.setText("Member Since: " + memberSince);
         txtEmail.setText(email);
         txtPhoneNumber.setText(phoneNumber);
+
+        lvAdapter = new ListAdapter(getContext(), user);  //instead of passing the boring default string adapter, let's pass our own, see class MyCustomAdapter below!
+
+        lvAddresses = (ListView) view.findViewById(R.id.listviewAddresses);
+        lvAddresses.setAdapter(lvAdapter);
+
+        lvPayment = (ListView) view.findViewById(R.id.listviewPayment);
+        lvPayment.setAdapter(lvAdapter);
 
         // Set logout functionality of the Logout button
         btnLogout.setOnClickListener(new View.OnClickListener() {
@@ -251,6 +264,13 @@ public class ProfileFragment extends Fragment {
 }
 
 class ListAdapter extends BaseAdapter {
+    private String cardType;
+    private String cardNumber;
+
+    public ListAdapter(Context context, User user) {
+        cardType = "X";
+        cardNumber = "Y";
+    }
 
     @Override
     public int getCount() {
