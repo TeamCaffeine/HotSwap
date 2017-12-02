@@ -39,9 +39,12 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+import com.stripe.android.model.Card;
+import com.stripe.android.view.CardMultilineWidget;
 import com.teamcaffeine.hotswap.R;
 import com.teamcaffeine.hotswap.login.LoginActivity;
 import com.teamcaffeine.hotswap.login.User;
+
 
 import java.util.Iterator;
 import java.util.List;
@@ -320,6 +323,30 @@ public class ProfileFragment extends Fragment {
         final PopupWindow popupWindow = new PopupWindow(popupView, 800, 800, true);
         popupWindow.setOutsideTouchable(true);
         popupWindow.setAnimationStyle(R.style.PopupAnimation);
+
+        final CardMultilineWidget mCardMultilineWidget = popupView.findViewById(R.id.card_multiline_widget);
+
+        Button btnAddCard = (Button) popupView.findViewById(R.id.btnAddCard);
+        btnAddCard.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Card cardToSave = mCardMultilineWidget.getCard();
+                if (cardToSave == null) {
+                    // error dialog from Strip documentation
+//            mErrorDialogHandler.showError("Invalid Card Data");
+                    //TODO: enable error dialog handler
+                    // for now: close popup and show Toast
+                    popupWindow.dismiss();
+                    Toast.makeText(getContext(), "Invalid Card Data", Toast.LENGTH_LONG).show();
+                } else {
+                    //TODO: add info to Stripe database
+                    // for now: just close the popup and show a toast
+                    popupWindow.dismiss();
+                    Toast.makeText(getContext(), "Card Added", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
 
         // define view buttons
         Button btnClosePopUp = (Button) popupView.findViewById(R.id.btnClose);
