@@ -127,9 +127,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/add_address_to_profile"
-                android:textColor="@color/blue"
-                android:textStyle="" />
-
+                android:textColor="@color/blue" />
         </LinearLayout>
 
     </LinearLayout>
