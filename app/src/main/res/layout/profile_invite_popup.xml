@@ -22,19 +22,19 @@
             android:id="@+id/btnSendText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Send Text" />
+            android:text="@string/send_text" />
 
         <Button
             android:id="@+id/btnSendEmail"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Send Email" />
+            android:text="@string/send_email" />
 
         <Button
             android:id="@+id/btnPostToFacebook"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Post To Facebook" />
+            android:text="@string/post_to_facebook" />
 
     </LinearLayout>
 
