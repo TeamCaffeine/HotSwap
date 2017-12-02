@@ -40,7 +40,7 @@ import com.teamcaffeine.hotswap.messaging.holder.messages.CustomIncomingTextMess
 import com.teamcaffeine.hotswap.messaging.holder.messages.CustomOutcomingTextMessageViewHolder;
 import com.teamcaffeine.hotswap.messaging.models.Message;
 import com.teamcaffeine.hotswap.messaging.models.SimpleMessage;
-import com.teamcaffeine.hotswap.messaging.models.User;
+import com.teamcaffeine.hotswap.login.User;
 
 import java.util.Date;
 

@@ -1,6 +1,7 @@
 package com.teamcaffeine.hotswap.messaging.models;
 
 import com.stfalcon.chatkit.commons.models.IMessage;
+import com.teamcaffeine.hotswap.login.User;
 
 import java.util.Date;
 

@@ -51,7 +51,7 @@ import com.teamcaffeine.hotswap.messaging.models.Dialog;
 import com.teamcaffeine.hotswap.messaging.models.Message;
 import com.teamcaffeine.hotswap.messaging.models.SimpleMessage;
 import com.teamcaffeine.hotswap.messaging.models.Subscriptions;
-import com.teamcaffeine.hotswap.messaging.models.User;
+import com.teamcaffeine.hotswap.login.User;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -157,7 +157,7 @@ public class ChatFragment extends Fragment implements DialogsListAdapter.OnDialo
         protected Void doInBackground(Void... voids) {
             for (int i = 0; i < dialogs.size(); i++) {
                 final Dialog dialog = dialogs.get(i);
-                FirebaseDatabase.getInstance().getReference().child("presence").child(dialog.getUsers().get(0).getId().replace(".", "|")).addListenerForSingleValueEvent(new ValueEventListener() {
+                FirebaseDatabase.getInstance().getReference().child("presence").child(dialog.getUsers().get(0).getEmail().replace(".", "|")).addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         if (dataSnapshot.exists()) {
@@ -165,7 +165,7 @@ public class ChatFragment extends Fragment implements DialogsListAdapter.OnDialo
                         } else {
                             dialog.getUsers().get(0).setOnline(false);
                         }
-                        getDialog(dialog.getUsers().get(0).getId(), dialog);
+                        getDialog(dialog.getUsers().get(0).getEmail(), dialog);
                     }
 
                     @Override
@@ -196,7 +196,7 @@ public class ChatFragment extends Fragment implements DialogsListAdapter.OnDialo
     public void onDialogClick(Dialog dialog) {
         Intent intent = new Intent(getActivity().getApplicationContext(), StyledMessagesActivity.class);
         intent.putExtra("channel", FirebaseAuth.getInstance().getCurrentUser().getEmail());
-        intent.putExtra("subscription", dialog.getUsers().get(0).getId());
+        intent.putExtra("subscription", dialog.getUsers().get(0).getEmail());
         startActivity(intent);
     }
 
@@ -264,14 +264,13 @@ public class ChatFragment extends Fragment implements DialogsListAdapter.OnDialo
      */
     private void getDialog(final String subscriptionChannel, final Dialog originalDialog) {
         FirebaseDatabase.getInstance()
-                .getReference().child("users").orderByChild("id").equalTo(subscriptionChannel)
+                .getReference().child("Users").orderByChild("email").equalTo(subscriptionChannel)
                 .limitToLast(1).addListenerForSingleValueEvent(new ValueEventListener()
         {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
                     final User currUser = postSnapshot.getValue(User.class);
-                    String testingSomething = FirebaseAuth.getInstance().getCurrentUser().getEmail();
                     FirebaseDatabase.getInstance()
                             .getReference().child("chats").child("active").child(subscriptionChannel.replace(".", "|")).child(FirebaseAuth.getInstance().getCurrentUser().getEmail().replace(".", "|"))
                             .orderByChild("timestamp").addListenerForSingleValueEvent(new ValueEventListener() {
@@ -292,7 +291,7 @@ public class ChatFragment extends Fragment implements DialogsListAdapter.OnDialo
                                 Dialog dialog;
                                 if (null == originalDialog) {
                                     dialog = new Dialog(
-                                            currentUser.getId(),
+                                            currentUser.getEmail(),
                                             currentUser.getName(),
                                             currentUser.getAvatar(),
                                             new ArrayList<>(Arrays.asList(currentUser)),
@@ -327,7 +326,7 @@ public class ChatFragment extends Fragment implements DialogsListAdapter.OnDialo
                                             Dialog dialog;
                                             if (null == originalDialog) {
                                                 dialog = new Dialog(
-                                                        currentUser.getId(),
+                                                        currentUser.getEmail(),
                                                         currentUser.getName(),
                                                         currentUser.getAvatar(),
                                                         new ArrayList<>(Arrays.asList(currentUser)),
@@ -369,7 +368,7 @@ public class ChatFragment extends Fragment implements DialogsListAdapter.OnDialo
                                                                         String lastMessage = "No History";
                                                                         Date lastMessageDate = new Date(0);
                                                                         Dialog dialog = new Dialog(
-                                                                                currentUser.getId(),
+                                                                                currentUser.getEmail(),
                                                                                 currentUser.getName(),
                                                                                 currentUser.getAvatar(),
                                                                                 new ArrayList<>(Arrays.asList(currentUser)),
@@ -453,7 +452,7 @@ public class ChatFragment extends Fragment implements DialogsListAdapter.OnDialo
                     Dialog dialog;
                     if (null == originalDialog) {
                         dialog = new Dialog(
-                                currentUser.getId(),
+                                currentUser.getEmail(),
                                 currentUser.getName(),
                                 currentUser.getAvatar(),
                                 new ArrayList<>(Arrays.asList(currentUser)),

@@ -109,7 +109,8 @@ public class AddUserDetailsActivity extends AppCompatActivity {
             Date memberSince = new Date();
 
             // create a new User object will all user details
-            User userData = new User(addedDetails, uid, firstName, lastName, email, dateFormat.format(memberSince), phoneNumber);
+            User userData = new User(addedDetails, uid, firstName, lastName, email, dateFormat.format(memberSince), phoneNumber,
+                    "https://www.vccircle.com/wp-content/uploads/2017/03/default-profile.png");
 
             // create a hashmap object
             // this will be used to enter the data into firebase
