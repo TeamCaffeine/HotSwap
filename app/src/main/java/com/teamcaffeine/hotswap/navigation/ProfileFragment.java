@@ -81,26 +81,10 @@ public class ProfileFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate (R.layout.activity_profile, container,false);
-
-        // format the "Add" textviews to look like hyper links
-        // first set the text color to blue
-        // then underline the text
+        View view = inflater.inflate(R.layout.activity_profile, container, false);
         txtAddAddress = view.findViewById(R.id.txtAddAddress);
-        txtAddAddress.setTextColor(Color.BLUE);
-        txtAddAddress.setPaintFlags(txtAddAddress.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
-
         txtAddPayment = view.findViewById(R.id.txtAddPayment);
-        txtAddPayment.setTextColor(Color.BLUE);
-        txtAddPayment.setPaintFlags(txtAddPayment.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
-
-        txtAddItem = view.findViewById(R.id.txtAddItem);
-        txtAddItem.setTextColor(Color.BLUE);
-        txtAddItem.setPaintFlags(txtAddItem.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
-
         txtPastTransactions = view.findViewById(R.id.txtPastTransactions);
-        txtPastTransactions.setTextColor(Color.BLUE);
-        txtPastTransactions.setPaintFlags(txtPastTransactions.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
 
         return view;
     }
@@ -212,7 +196,7 @@ public class ProfileFragment extends Fragment {
         PFL = (ProfileFragment.ProfileFragmentListener) context;
     }
 
-    public void signOut() {
+    private void signOut() {
 
         showProgressDialog();
 
