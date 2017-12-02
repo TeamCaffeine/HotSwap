@@ -123,8 +123,8 @@ public class AddUserDetailsActivity extends AppCompatActivity {
                 }
             });
         } else {
-            // if the user did not enter all of their details, show a toast to instruct them to enter all details
-            Toast.makeText(AddUserDetailsActivity.this, "@string/enter_all_details",
+            // if the user did not enter all of their details, show a toast to instruct them to enter all detals
+            Toast.makeText(AddUserDetailsActivity.this, R.string.enter_all_details,
                     Toast.LENGTH_LONG).show();
         }
     }

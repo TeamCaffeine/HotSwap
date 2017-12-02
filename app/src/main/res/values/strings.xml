@@ -63,6 +63,7 @@
     <string name="email_fmt">Email: %s</string>
     <string name="authentication_failed">Authentication failed.</string>
     <string name="successfully_signed_out">You have been successfully signed out.</string>
+    <string name="unsuccessfully_signed_out">Unable to sign you out.</string>
     <string name="verification_sent_to">Verification email sent to</string>
     <string name="failed_to_send_verification_email">Failed to send verification email.</string>
 
@@ -139,6 +140,7 @@
     <string name="placeholder_member_since">Member Since:</string>
     <string name="placeholder_email">Email</string>
     <string name="placeholder_phone_number">Phone Number</string>
+    <string name="base_package_name">com.teamcaffeine.hotswap</string>
 
 
 </resources>
