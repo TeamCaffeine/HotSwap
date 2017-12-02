@@ -41,6 +41,10 @@ import com.teamcaffeine.hotswap.R;
 import com.teamcaffeine.hotswap.login.LoginActivity;
 import com.teamcaffeine.hotswap.login.User;
 
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+
 /**
  * A simple {@link Fragment} subclass.
  */
@@ -266,12 +270,10 @@ public class ProfileFragment extends Fragment {
 }
 
 class AddressesListAdapter extends BaseAdapter {
-    private String placeName;
     private String address;
 
     public AddressesListAdapter(Context context, User user) {
-        placeName = "X";
-        address = "Y";
+        address = "random address";
     }
 
     @Override
