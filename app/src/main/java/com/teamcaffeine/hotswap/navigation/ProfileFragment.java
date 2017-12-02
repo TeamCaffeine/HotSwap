@@ -146,59 +146,7 @@ public class ProfileFragment extends Fragment {
         btnInviteFriends.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                View popupView = LayoutInflater.from(getActivity()).inflate(R.layout.profile_invite_popup, null);
-                final PopupWindow popupWindow = new PopupWindow(popupView, 800, 800);
-
-                // define view buttons
-
-                Button btnClosePopUp = (Button) popupView.findViewById(R.id.btnClose);
-                Button btnSendText = (Button) popupView.findViewById(R.id.btnSendText);
-                Button btnSendEmail = (Button) popupView.findViewById(R.id.btnSendEmail);
-                Button btnPostToFacebook = (Button) popupView.findViewById(R.id.btnPostToFacebook);
-
-                // finally show up your popwindow
-                popupWindow.showAsDropDown(popupView, 100, 300);
-
-                btnClosePopUp.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        popupWindow.dismiss();
-                    }
-                });
-
-                btnSendText.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        Intent sendIntent = new Intent(Intent.ACTION_VIEW);
-                        sendIntent.setData(Uri.parse("sms:"));
-                        String key = "sms_body";
-                        sendIntent.putExtra(key, getString(R.string.invite_message));
-                        startActivity(sendIntent);
-                    }
-                });
-
-                btnSendEmail.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        Intent sendIntent = new Intent(Intent.ACTION_SENDTO);
-                        sendIntent.setData(Uri.parse("mailto:")); // only email apps should handle this
-                        sendIntent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.invite_email_subject));
-                        sendIntent.putExtra(Intent.EXTRA_TEXT, getString(R.string.invite_message));
-                        startActivity(sendIntent);
-                    }
-                });
-
-                final ShareDialog shareDialog = new ShareDialog(getActivity());
-                btnPostToFacebook.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        ShareLinkContent content = new ShareLinkContent.Builder()
-                                .setContentUrl(Uri.parse(getString(R.string.post_to_FB_url)))
-                                .setQuote(getString(R.string.invite_message))
-                                .build();
-                        shareDialog.show(content);
-                    }
-                });
+                inviteFriendsPopup();
             }
         });
     }
@@ -232,5 +180,61 @@ public class ProfileFragment extends Fragment {
                         hideProgressDialog();
                     }
                 });
+    }
+
+    public void inviteFriendsPopup() {
+        View popupView = LayoutInflater.from(getActivity()).inflate(R.layout.profile_invite_popup, null);
+        final PopupWindow popupWindow = new PopupWindow(popupView, 800, 800);
+
+        // define view buttons
+
+        Button btnClosePopUp = (Button) popupView.findViewById(R.id.btnClose);
+        Button btnSendText = (Button) popupView.findViewById(R.id.btnSendText);
+        Button btnSendEmail = (Button) popupView.findViewById(R.id.btnSendEmail);
+        Button btnPostToFacebook = (Button) popupView.findViewById(R.id.btnPostToFacebook);
+
+        // finally show up your popwindow
+        popupWindow.showAsDropDown(popupView, 100, 300);
+
+        btnClosePopUp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                popupWindow.dismiss();
+            }
+        });
+
+        btnSendText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent sendIntent = new Intent(Intent.ACTION_VIEW);
+                sendIntent.setData(Uri.parse("sms:"));
+                String key = "sms_body";
+                sendIntent.putExtra(key, getString(R.string.invite_message));
+                startActivity(sendIntent);
+            }
+        });
+
+        btnSendEmail.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent sendIntent = new Intent(Intent.ACTION_SENDTO);
+                sendIntent.setData(Uri.parse("mailto:")); // only email apps should handle this
+                sendIntent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.invite_email_subject));
+                sendIntent.putExtra(Intent.EXTRA_TEXT, getString(R.string.invite_message));
+                startActivity(sendIntent);
+            }
+        });
+
+        final ShareDialog shareDialog = new ShareDialog(getActivity());
+        btnPostToFacebook.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ShareLinkContent content = new ShareLinkContent.Builder()
+                        .setContentUrl(Uri.parse(getString(R.string.post_to_FB_url)))
+                        .setQuote(getString(R.string.invite_message))
+                        .build();
+                shareDialog.show(content);
+            }
+        });
     }
 }
