@@ -34,6 +34,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.GoogleAuthProvider;
 import com.teamcaffeine.hotswap.R;
 import com.teamcaffeine.hotswap.navigation.NavigationActivity;
+import com.teamcaffeine.hotswap.utility.SessionHandler;
 
 public class LoginActivity extends AppCompatActivity {
     EditText editEmail;
@@ -72,6 +73,9 @@ public class LoginActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        // Move us out of this activity if we're already logged in
+        SessionHandler.alreadyLoggedIn(this);
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
