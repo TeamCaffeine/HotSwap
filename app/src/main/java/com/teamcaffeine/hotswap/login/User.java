@@ -1,54 +1,53 @@
 package com.teamcaffeine.hotswap.login;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseReference;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
 
 public class User {
-    private boolean addedDetails;
-    private String Uid;
-    private String firstName;
-    private String lastName;
-    private String email;
-    private String memberSince;
-    private String phoneNumber;
-    //TODO: figure out how to store an image
+    // Force empty initialization of default table fields
+    private String Uid = "";
+    private String firstName = "";
+    private String lastName = "";
+    private String email = "";
+    private String memberSince = "";
+    private String phoneNumber = "";
+    private String profilePicture = "";
+    private boolean online = false;
 
-    User() {
-    }
-
-    public User(boolean addedDetails, String Uid, String firstName, String lastName,
-                String email, String memberSince, String phoneNumber) {
-        this.addedDetails = addedDetails;
-        this.Uid = Uid;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.email = email;
-        this.memberSince = memberSince;
-        this.phoneNumber = phoneNumber;
-    }
+    User() {}
 
     public User(String Uid, String email) {
-        this.addedDetails = false;
         this.Uid = Uid;
         this.email = email;
+    }
+
+    public User(User user) {
+        this.Uid = user.getUid();
+        this.firstName = user.getFirstName();
+        this.lastName = user.getLastName();
+        this.email = user.getEmail();
+        this.memberSince = user.getMemberSince();
+        this.phoneNumber = user.getPhoneNumber();
+        this.profilePicture = user.getProfilePicture();
+        this.online = user.getOnline();
     }
 
     public Map<String, Object> toMap() {
         HashMap<String, Object> result = new HashMap<>();
-        result.put("addedDetails", addedDetails);
         result.put("Uid", Uid);
         result.put("firstName", firstName);
         result.put("lastName", lastName);
         result.put("email", email);
         result.put("memberSince", memberSince);
         result.put("phoneNumber", phoneNumber);
+        result.put("profilePicture", profilePicture);
+        result.put("online", online);
         return result;
-    }
-
-    public void setAddedDetails(boolean addedDetails) {
-        this.addedDetails = addedDetails;
     }
 
     public void setUid(String uid) {
@@ -75,13 +74,13 @@ public class User {
         this.phoneNumber = phoneNumber;
     }
 
-    public boolean getAddedDetails() {
-        return addedDetails;
+    public void setProfilePicture(String profilePicture) {
+        this.profilePicture = profilePicture;
     }
 
-    public String getUid() {
-        return Uid;
-    }
+    public void setOnline(boolean online) { this.online = online; }
+
+    public String getUid() { return Uid; }
 
     public String getFirstName() {
         return firstName;
@@ -102,4 +101,8 @@ public class User {
     public String getPhoneNumber() {
         return phoneNumber;
     }
+
+    public String getProfilePicture() { return profilePicture; }
+
+    public boolean getOnline() { return online; }
 }
