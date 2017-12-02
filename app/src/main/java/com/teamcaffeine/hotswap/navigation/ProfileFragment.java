@@ -1,6 +1,7 @@
 package com.teamcaffeine.hotswap.navigation;
 
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
@@ -52,8 +53,25 @@ public class ProfileFragment extends Fragment {
     private TextView txtAddItem;
     private TextView txtPastTransactions;
 
-    ProfileFragmentListener PFL;
+    public ProgressDialog mProgressDialog;
 
+    public void showProgressDialog() {
+        if (mProgressDialog == null) {
+            mProgressDialog = new ProgressDialog(getContext());
+            mProgressDialog.setMessage(getString(R.string.loading));
+            mProgressDialog.setIndeterminate(true);
+        }
+
+        mProgressDialog.show();
+    }
+
+    public void hideProgressDialog() {
+        if (mProgressDialog != null && mProgressDialog.isShowing()) {
+            mProgressDialog.dismiss();
+        }
+    }
+
+    ProfileFragmentListener PFL;
 
     public ProfileFragment() {
         // Required empty public constructor
@@ -195,6 +213,9 @@ public class ProfileFragment extends Fragment {
     }
 
     public void signOut() {
+
+        showProgressDialog();
+
         AuthUI.getInstance()
                 .signOut(getActivity())
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
@@ -205,11 +226,11 @@ public class ProfileFragment extends Fragment {
                             startActivity(logout);
                             getActivity().finish();
                         } else {
-                            // TODO: Handle unsuccessful sign out
+                            Toast.makeText(getActivity(), R.string.unsuccessfully_signed_out,
+                                    Toast.LENGTH_LONG).show();
                         }
+                        hideProgressDialog();
                     }
                 });
-        Toast.makeText(getActivity(), R.string.successfully_signed_out,
-                Toast.LENGTH_LONG).show();
     }
 }
