@@ -2,7 +2,9 @@ package com.teamcaffeine.hotswap.navigation;
 
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -13,8 +15,12 @@ import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.firebase.ui.auth.AuthUI;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.teamcaffeine.hotswap.R;
+import com.teamcaffeine.hotswap.login.LoginActivity;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -118,7 +124,20 @@ public class ProfileFragment extends Fragment {
     }
 
     public void signOut() {
-        mAuth.signOut();
+        AuthUI.getInstance()
+                .signOut(getActivity())
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()) {
+                            Intent logout = new Intent(getActivity(), LoginActivity.class);
+                            startActivity(logout);
+                            getActivity().finish();
+                        } else {
+                            // TODO: Handle unsuccessful sign out
+                        }
+                    }
+                });
         Toast.makeText(getActivity(), R.string.successfully_signed_out,
                 Toast.LENGTH_LONG).show();
     }

@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.MenuItem;
 
 import com.teamcaffeine.hotswap.R;
+import com.teamcaffeine.hotswap.utility.SessionHandler;
 
 public class NavigationActivity extends AppCompatActivity implements
         InboxFragment.InboxFragmentListener,
@@ -68,6 +69,8 @@ public class NavigationActivity extends AppCompatActivity implements
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        SessionHandler.shouldLogIn(this);
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_navigation);
 
