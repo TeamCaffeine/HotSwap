@@ -95,4 +95,50 @@
         <item>My vacuum does have a headphone jack</item>
         <item>My vacuum does not have a headphone jack</item>
     </string-array>
+
+    <!--Invite Friends popup strings-->
+    <string name="send_text">Send Text</string>
+    <string name="send_email">Send Email</string>
+    <string name="post_to_facebook">Post To Facebook</string>
+
+    <!--Invite friends strings-->
+    <string name="invite_message">Hey I\'ve been using HotSwap to rent items that I need but don\'t want to buy! Check it out!</string>
+    <string name="post_to_FB_url">https://developers.facebook.com</string>
+    <string name="invite_email_subject">Join HotSwap!</string>
+
+    <!--add details string-->
+    <string name="enter_all_details">Please enter all details</string>
+
+    <!--Add User Details UI strings-->
+    <string name="first_name_label">First Name:</string>
+    <string name="first_name_hint">Enter First Name</string>
+    <string name="last_name_label">Last Name:</string>
+    <string name="last_name_hint">Enter Last Name</string>
+    <string name="phone_number_label">Phone Number:</string>
+    <string name="phone_number_hint">Enter Phone Number</string>
+    <string name="add_address">Add Address</string>
+    <string name="add_payment">Add Payment Method</string>
+    <string name="submit">Submit</string>
+
+    <!--Profile UI strings-->
+    <string name="contact_info_label">Contact Info</string>
+    <string name="addresses_label">Addresses</string>
+    <string name="add_address_to_profile">+ Add Address</string>
+    <string name="payment_label">Payment Methods</string>
+    <string name="add_payment_to_profile">+ Add Payment Method</string>
+    <string name="items_label">Your Items</string>
+    <string name="add_item_to_profile">+ Add Item</string>
+    <string name="renting_label">Currently Renting</string>
+    <string name="not_renting_message">You are not currently renting anything</string>
+    <string name="lending_label">Currently Lending</string>
+    <string name="not_lending_label">You are not currently lending any items</string>
+    <string name="past_transactions">View Past Transactions</string>
+    <string name="invite_friends">Invite Friends</string>
+    <string name="logout">Logout</string>
+    <string name="placeholder_name">Name</string>
+    <string name="placeholder_member_since">Member Since:</string>
+    <string name="placeholder_email">Email</string>
+    <string name="placeholder_phone_number">Phone Number</string>
+
+
 </resources>

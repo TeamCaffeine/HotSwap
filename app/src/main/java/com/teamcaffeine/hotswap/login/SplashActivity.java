@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
 import com.google.firebase.auth.FirebaseAuth;
-import com.teamcaffeine.hotswap.login.LoginActivity;
 import com.teamcaffeine.hotswap.navigation.NavigationActivity;
 
 public class SplashActivity extends AppCompatActivity {

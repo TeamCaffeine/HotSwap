@@ -1,4 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent">
+
 <LinearLayout
     android:id="@+id/layout_Main"
     xmlns:android="http://schemas.android.com/apk/res/android"
@@ -28,7 +33,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1"
-                android:text="Name"
+                android:text="@string/placeholder_name"
                 android:textAlignment="center"
                 android:textSize="24sp"
                 android:textStyle="bold" />
@@ -38,7 +43,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1"
-                android:text="Member Since:"
+                android:text="@string/placeholder_member_since"
                 android:textAlignment="center" />
         </LinearLayout>
 
@@ -49,27 +54,204 @@
             android:layout_weight="1"
             app:srcCompat="@drawable/com_facebook_profile_picture_blank_square" />
 
-        <!--app:srcCompat="@drawable/com_facebook_profile_picture_blank_square" />-->
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/layout_ContactInfo"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:orientation="horizontal"
+        android:layout_weight="1">
+
+        <TextView
+            android:id="@+id/txtContactLabel"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="@string/contact_info_label" />
+
+        <LinearLayout
+            android:id="@+id/layout_EmailAndPhone"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="3"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/txtEmail"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:text="@string/placeholder_email" />
+
+            <TextView
+                android:id="@+id/txtPhoneNumber"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:text="@string/placeholder_phone_number" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/layout_Adresses"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:orientation="horizontal"
+        android:layout_weight="1">
+
+        <TextView
+            android:id="@+id/txtAddressesLabel"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="@string/addresses_label" />
+
+        <LinearLayout
+            android:id="@+id/layout_AddressesAndAdd"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="3"
+            android:orientation="vertical">
+
+            <ListView
+                android:id="@+id/listviewAddresses"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1">
+
+            </ListView>
+
+            <TextView
+                android:id="@+id/txtAddAddress"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/add_address_to_profile"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/layout_Payment"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/txtPaymentLabel"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="@string/payment_label" />
+
+        <LinearLayout
+            android:id="@+id/layout_PaymentOptionsAndAdd"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="3"
+            android:orientation="vertical">
+
+            <ListView
+                android:id="@+id/listviewPayment"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1" />
+
+            <TextView
+                android:id="@+id/txtAddPayment"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/add_payment_to_profile" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/layout_Items"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/txtItemsLabel"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="@string/items_label" />
+
+        <LinearLayout
+            android:id="@+id/layout_ItemsAndAdd"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="3"
+            android:orientation="vertical">
+
+            <ListView
+                android:id="@+id/listviewItems"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1" />
+
+            <TextView
+                android:id="@+id/txtAddItem"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/add_item_to_profile" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/layout_CurrentlyRenting"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingBottom="20dp"
+        android:paddingTop="20dp">
+
+        <TextView
+            android:id="@+id/txtRentingLabel"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/renting_label" />
+
+        <TextView
+            android:id="@+id/txtRentedItem"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="3" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/layout_CurrentlyLending"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/txtLendingLabel"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="@string/lending_label" />
+
+        <ListView
+            android:id="@+id/listviewLending"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="3" />
     </LinearLayout>
 
     <TextView
         android:id="@+id/txtPastTransactions"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:text="Past Transactions" />
-    <TextView
-        android:id="@+id/txtNotifications"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:text="Notifications" />
-    <TextView
-        android:id="@+id/txtPayment"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:text="Payment" />
+        android:layout_height="wrap_content"
+        android:paddingBottom="20dp"
+        android:paddingTop="20dp"
+        android:text="@string/past_transactions" />
 
     <Button
         android:id="@+id/btnInviteFriends"
@@ -78,14 +260,17 @@
         android:layout_gravity="center"
         android:layout_margin="10dp"
         android:layout_weight="0.75"
-        android:text="Invite Friends" />
+        android:text="@string/invite_friends" />
+
     <Button
         android:id="@+id/btnLogout"
         android:layout_width="300dp"
         android:layout_height="0dp"
-        android:layout_weight="0.75"
         android:layout_gravity="center"
         android:layout_marginBottom="20dp"
-        android:text="LOGOUT" />
+        android:layout_weight="0.75"
+        android:text="@string/logout" />
 
 </LinearLayout>
+
+</ScrollView>

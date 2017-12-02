@@ -2,7 +2,12 @@ package com.teamcaffeine.hotswap.navigation;
 
 
 import android.content.Context;
+import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -13,23 +18,39 @@ import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.facebook.share.model.ShareLinkContent;
+import com.facebook.share.widget.ShareDialog;
+import com.firebase.ui.auth.AuthUI;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.teamcaffeine.hotswap.R;
+import com.teamcaffeine.hotswap.login.LoginActivity;
 
 /**
  * A simple {@link Fragment} subclass.
  */
 public class ProfileFragment extends Fragment {
+
+    // create objects for Firebase references
+    private FirebaseUser user;
+    private FirebaseDatabase database;
+    private DatabaseReference users;
+
     // create objects to reference layout objects
     private TextView name;
     private TextView memberSince;
     private Button logout;
     private Button inviteFriends;
-
-    //TODO: figure out how to connect to Firebase to get logout functionality
-//    private FirebaseUser currentUser = getCurrentUser();
-
-    private FirebaseAuth mAuth;
+    private TextView email;
+    private TextView phoneNumber;
+    private TextView addAddress;
+    private TextView addPayment;
+    private TextView addItem;
+    private TextView txtPastTransactions;
 
     ProfileFragmentListener PFL;
 
@@ -43,6 +64,26 @@ public class ProfileFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate (R.layout.activity_profile, container,false);
+
+        // format the "Add" textviews to look like hyper links
+        // first set the text color to blue
+        // then underline the text
+        addAddress = view.findViewById(R.id.txtAddAddress);
+        addAddress.setTextColor(Color.BLUE);
+        addAddress.setPaintFlags(addAddress.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+
+        addPayment = view.findViewById(R.id.txtAddPayment);
+        addPayment.setTextColor(Color.BLUE);
+        addPayment.setPaintFlags(addPayment.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+
+        addItem = view.findViewById(R.id.txtAddItem);
+        addItem.setTextColor(Color.BLUE);
+        addItem.setPaintFlags(addItem.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+
+        txtPastTransactions = view.findViewById(R.id.txtPastTransactions);
+        txtPastTransactions.setTextColor(Color.BLUE);
+        txtPastTransactions.setPaintFlags(txtPastTransactions.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+
         return view;
     }
 
@@ -51,7 +92,7 @@ public class ProfileFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         //TODO: figure out how to get login information into the Profile Fragment, like you would with bundles between activities
-        mAuth = FirebaseAuth.getInstance();
+        user = FirebaseAuth.getInstance().getCurrentUser();
 
         // get the bundle from the intent
         //****keeping these lines commented out for now, we will need them when we implement the fragment with login
@@ -90,10 +131,12 @@ public class ProfileFragment extends Fragment {
                 View popupView = LayoutInflater.from(getActivity()).inflate(R.layout.profile_invite_popup, null);
                 final PopupWindow popupWindow = new PopupWindow(popupView, 800, 800);
 
-                // define your view here that found in popup_layout
-                // for example let consider you have a button
+                // define view buttons
 
                 Button closePopUp = (Button) popupView.findViewById(R.id.btnClose);
+                Button sendText = (Button) popupView.findViewById(R.id.btnSendText);
+                Button sendEmail = (Button) popupView.findViewById(R.id.btnSendEmail);
+                Button postToFacebook = (Button) popupView.findViewById(R.id.btnPostToFacebook);
 
                 // finally show up your popwindow
                 popupWindow.showAsDropDown(popupView, 100, 300);
@@ -102,6 +145,41 @@ public class ProfileFragment extends Fragment {
                     @Override
                     public void onClick(View view) {
                         popupWindow.dismiss();
+                    }
+                });
+
+                sendText.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Intent sendIntent = new Intent(Intent.ACTION_VIEW);
+                        sendIntent.setData(Uri.parse("sms:"));
+                        String key = "sms_body";
+                        sendIntent.putExtra(key, "@string/invite_message");
+                        startActivity(sendIntent);
+                    }
+                });
+
+                sendEmail.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Intent sendIntent = new Intent(Intent.ACTION_SENDTO);
+                        sendIntent.setData(Uri.parse("mailto:")); // only email apps should handle this
+                        String subject = "@string/invite_email_subject";
+                        sendIntent.putExtra(Intent.EXTRA_SUBJECT, subject);
+                        sendIntent.putExtra(Intent.EXTRA_TEXT, "@string/invite_message");
+                        startActivity(sendIntent);
+                    }
+                });
+
+                final ShareDialog shareDialog = new ShareDialog(getActivity());
+                postToFacebook.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        ShareLinkContent content = new ShareLinkContent.Builder()
+                                .setContentUrl(Uri.parse("@string/post_to_FB_url"))
+                                .setQuote("@string/invite_message")
+                                .build();
+                        shareDialog.show(content);
                     }
                 });
             }
@@ -118,7 +196,20 @@ public class ProfileFragment extends Fragment {
     }
 
     public void signOut() {
-        mAuth.signOut();
+        AuthUI.getInstance()
+                .signOut(getActivity())
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()) {
+                            Intent logout = new Intent(getActivity(), LoginActivity.class);
+                            startActivity(logout);
+                            getActivity().finish();
+                        } else {
+                            // TODO: Handle unsuccessful sign out
+                        }
+                    }
+                });
         Toast.makeText(getActivity(), R.string.successfully_signed_out,
                 Toast.LENGTH_LONG).show();
     }
