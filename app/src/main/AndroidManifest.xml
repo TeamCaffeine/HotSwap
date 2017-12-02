@@ -25,6 +25,7 @@
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
+
         <activity
             android:name=".login.SplashActivity"
             android:theme="@style/SplashTheme">
@@ -42,7 +43,9 @@
             </intent-filter>
         </activity>
         <activity android:name=".login.AddUserDetailsActivity" />
-        <activity android:name=".navigation.NavigationActivity">
+        <activity
+            android:name=".navigation.NavigationActivity"
+            android:windowSoftInputMode="adjustPan">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
