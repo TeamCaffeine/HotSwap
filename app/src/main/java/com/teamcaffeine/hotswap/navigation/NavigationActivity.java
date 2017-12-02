@@ -1,11 +1,14 @@
 package com.teamcaffeine.hotswap.navigation;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.internal.BottomNavigationItemView;
 import android.support.design.internal.BottomNavigationMenuView;
 import android.support.design.widget.BottomNavigationView;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
@@ -32,6 +35,9 @@ public class NavigationActivity extends AppCompatActivity implements
     private ProfileFragment profileFragment;
     private SearchFragment searchFragment;
 
+    SharedPreferences prefs;
+    private String navigationIndexKey;
+
     final FragmentManager fragmentManager = getSupportFragmentManager();
     FragmentTransaction ft;
 
@@ -40,35 +46,40 @@ public class NavigationActivity extends AppCompatActivity implements
 
         @Override
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-            switch (item.getItemId()) {
-                case R.id.navigation_home:
-                    Log.i(TAG, "nav home: ");
-                    ft = fragmentManager.beginTransaction();
-                    ft.replace(R.id.dynamicContent, listItemFragment);
-                    ft.commit();
-                    return true;
-                case R.id.navigation_search:
-                    Log.i(TAG, "nav search: ");
-                    ft = fragmentManager.beginTransaction();
-                    ft.replace(R.id.dynamicContent, searchFragment);
-                    ft.commit();
-                    return true;
-                case R.id.navigation_inbox:
-                    Log.i(TAG, "nav inbox: ");
-                    ft = fragmentManager.beginTransaction();
-                    ft.replace(R.id.dynamicContent, inboxFragment);
-                    ft.commit();
-                    return true;
-                case R.id.navigation_profile:
-                    Log.i(TAG, "nav profile: ");
-                    ft = fragmentManager.beginTransaction();
-                    ft.replace(R.id.dynamicContent, profileFragment);
-                    ft.commit();
-                    return true;
-            }
-            return false;
+            return selectNavigationItem(item);
         }
     };
+
+    private boolean selectNavigationItem(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.navigation_home:
+                Log.i(TAG, "nav home");
+                inflateFragment(listItemFragment, 0);
+                return true;
+            case R.id.navigation_search:
+                Log.i(TAG, "nav search");
+                inflateFragment(searchFragment, 1);
+                return true;
+            case R.id.navigation_inbox:
+                Log.i(TAG, "nav inbox");
+                inflateFragment(inboxFragment, 2);
+                return true;
+            case R.id.navigation_profile:
+                Log.i(TAG, "nav profile");
+                inflateFragment(profileFragment, 3);
+                return true;
+            default:
+                Log.e(TAG, "Unable to locate fragment to launch with id: " + item.getItemId());
+        }
+        return false;
+    }
+
+    private void inflateFragment(Fragment fragment, int index) {
+        prefs.edit().putInt(navigationIndexKey, index).apply();
+        ft = fragmentManager.beginTransaction();
+        ft.replace(R.id.dynamicContent, fragment);
+        ft.commit();
+    }
 
     @SuppressLint("RestrictedApi")
     @Override
@@ -77,6 +88,10 @@ public class NavigationActivity extends AppCompatActivity implements
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_navigation);
+
+        prefs = this.getSharedPreferences(
+                getString(R.string.base_package_name), Context.MODE_PRIVATE);
+        navigationIndexKey = getString(R.string.base_package_name) + "navigation.index";
 
         navigation = findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
@@ -107,14 +122,6 @@ public class NavigationActivity extends AppCompatActivity implements
         profileFragment = new ProfileFragment();
         searchFragment = new SearchFragment();
 
-        int intentFragment = getIntent().getExtras().getInt("frgToLoad");
-        switch (intentFragment) {
-            case 1:
-                ft = fragmentManager.beginTransaction();
-                ft.replace(R.id.dynamicContent, searchFragment);
-                ft.commit();
-        }
-
-        navigation.setSelectedItemId(R.id.navigation_home);
+        navigation.setSelectedItemId(navigation.getMenu().getItem(prefs.getInt(navigationIndexKey, 0)).getItemId());
     }
 }
