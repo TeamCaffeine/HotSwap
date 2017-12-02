@@ -27,9 +27,8 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1.25"
-            android:gravity="center_vertical"
+            android:gravity="right|center_vertical"
             android:text="@string/first_name_label"
-            android:textAlignment="viewEnd"
             android:textSize="18sp" />
 
         <EditText
@@ -55,9 +54,8 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1.25"
-            android:gravity="center_vertical"
+            android:gravity="right|center_vertical"
             android:text="@string/last_name_label"
-            android:textAlignment="viewEnd"
             android:textSize="18sp" />
 
         <EditText
@@ -84,9 +82,8 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1.25"
-            android:gravity="center_vertical"
+            android:gravity="right|center_vertical"
             android:text="@string/phone_number_label"
-            android:textAlignment="viewEnd"
             android:textSize="18sp" />
 
         <EditText
@@ -102,14 +99,14 @@
     </LinearLayout>
 
     <Button
-        android:id="@+id/txtAddAddress"
+        android:id="@+id/btnAddress"
         android:layout_width="200dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:text="@string/add_address" />
 
     <Button
-        android:id="@+id/txtAddPayment"
+        android:id="@+id/btnPayment"
         android:layout_width="200dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
