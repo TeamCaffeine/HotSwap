@@ -51,8 +51,6 @@ public class ProfileFragment extends Fragment {
     private TextView addPayment;
     private TextView addItem;
 
-    //TODO: figure out how to connect to Firebase to get logout functionality
-
     ProfileFragmentListener PFL;
 
 
