@@ -140,6 +140,7 @@
     <string name="placeholder_member_since">Member Since:</string>
     <string name="placeholder_email">Email</string>
     <string name="placeholder_phone_number">Phone Number</string>
+    <string name="base_package_name">com.teamcaffeine.hotswap</string>
 
 
 </resources>
