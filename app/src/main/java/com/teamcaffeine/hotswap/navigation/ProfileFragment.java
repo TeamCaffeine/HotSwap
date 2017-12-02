@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,10 +27,15 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 import com.teamcaffeine.hotswap.R;
 import com.teamcaffeine.hotswap.login.LoginActivity;
+import com.teamcaffeine.hotswap.login.User;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -37,9 +43,11 @@ import com.teamcaffeine.hotswap.login.LoginActivity;
 public class ProfileFragment extends Fragment {
 
     // create objects for Firebase references
-    private FirebaseUser user;
+    private FirebaseUser currentUser;
     private FirebaseDatabase database;
     private DatabaseReference users;
+    private String userTable = "Users";
+    private User user;
 
     // create objects to reference layout objects
     private TextView txtName;
@@ -93,16 +101,33 @@ public class ProfileFragment extends Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        //TODO: figure out how to get login information into the Profile Fragment, like you would with bundles between activities
-        user = FirebaseAuth.getInstance().getCurrentUser();
+        currentUser = FirebaseAuth.getInstance().getCurrentUser();
+        database = FirebaseDatabase.getInstance();
+        users = database.getReference().child(userTable);
 
-        // get the bundle from the intent
-        //****keeping these lines commented out for now, we will need them when we implement the fragment with login
-//        Bundle bundle = getIntent().getExtras();
-//        String fullName = bundle.getString("fullName");
-//        String dateCreated = bundle.getString("dateCreated");
-        String fullName = "Joe Smith";
-        String dateCreated = "October 31, 2017";
+        Query userQuery = users.equalTo(currentUser.getUid());
+        userQuery.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for(DataSnapshot singleSnapshot : dataSnapshot.getChildren()){
+                    user = singleSnapshot.getValue(User.class);
+                }
+            }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Toast.makeText(getActivity(), databaseError.toException().toString(), Toast.LENGTH_LONG).show();
+            }
+        });
+
+        // get the user info
+//        String fullName = user.getFirstName() + " " + user.getLastName();
+//        String memberSince = user.getMemberSince();
+//        String email = user.getEmail();
+//        String phoneNumber = user.getPhoneNumber();
+        String fullName = "Megan";
+        String memberSince = "November 2017";
+        String email = "megan@test.com";
+        String phoneNumber = "555";
 
 
         // set references to layout objects
@@ -110,14 +135,14 @@ public class ProfileFragment extends Fragment {
         txtMemberSince = view.findViewById(R.id.txtMemberSince);
         btnLogout = view.findViewById(R.id.btnLogout);
         btnInviteFriends = view.findViewById(R.id.btnInviteFriends);
+        txtEmail = view.findViewById(R.id.txtEmail);
+        txtPhoneNumber = view.findViewById(R.id.txtPhoneNumber);
 
-        // get the user's name from the bundle
-        // and set it in the layout
+        // set display
         txtName.setText(fullName);
-
-        // get the date the user created their account from the bundle
-        // set "Member Since" equal to the date the user created their account
-        txtMemberSince.setText("Member Since: " + dateCreated);
+        txtMemberSince.setText("Member Since: " + memberSince);
+        txtEmail.setText(email);
+        txtPhoneNumber.setText(phoneNumber);
 
         // Set logout functionality of the Logout button
         btnLogout.setOnClickListener(new View.OnClickListener() {
@@ -130,59 +155,7 @@ public class ProfileFragment extends Fragment {
         btnInviteFriends.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                View popupView = LayoutInflater.from(getActivity()).inflate(R.layout.profile_invite_popup, null);
-                final PopupWindow popupWindow = new PopupWindow(popupView, 800, 800);
-
-                // define view buttons
-
-                Button btnClosePopUp = (Button) popupView.findViewById(R.id.btnClose);
-                Button btnSendText = (Button) popupView.findViewById(R.id.btnSendText);
-                Button btnSendEmail = (Button) popupView.findViewById(R.id.btnSendEmail);
-                Button btnPostToFacebook = (Button) popupView.findViewById(R.id.btnPostToFacebook);
-
-                // finally show up your popwindow
-                popupWindow.showAsDropDown(popupView, 100, 300);
-
-                btnClosePopUp.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        popupWindow.dismiss();
-                    }
-                });
-
-                btnSendText.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        Intent sendIntent = new Intent(Intent.ACTION_VIEW);
-                        sendIntent.setData(Uri.parse("sms:"));
-                        String key = "sms_body";
-                        sendIntent.putExtra(key, getString(R.string.invite_message));
-                        startActivity(sendIntent);
-                    }
-                });
-
-                btnSendEmail.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        Intent sendIntent = new Intent(Intent.ACTION_SENDTO);
-                        sendIntent.setData(Uri.parse("mailto:")); // only email apps should handle this
-                        sendIntent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.invite_email_subject));
-                        sendIntent.putExtra(Intent.EXTRA_TEXT, getString(R.string.invite_message));
-                        startActivity(sendIntent);
-                    }
-                });
-
-                final ShareDialog shareDialog = new ShareDialog(getActivity());
-                btnPostToFacebook.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        ShareLinkContent content = new ShareLinkContent.Builder()
-                                .setContentUrl(Uri.parse(getString(R.string.post_to_FB_url)))
-                                .setQuote(getString(R.string.invite_message))
-                                .build();
-                        shareDialog.show(content);
-                    }
-                });
+                inviteFriendsPopup();
             }
         });
     }
@@ -217,4 +190,61 @@ public class ProfileFragment extends Fragment {
                     }
                 });
     }
+
+    public void inviteFriendsPopup() {
+        View popupView = LayoutInflater.from(getActivity()).inflate(R.layout.profile_invite_popup, null);
+        final PopupWindow popupWindow = new PopupWindow(popupView, 800, 800);
+
+        // define view buttons
+
+        Button btnClosePopUp = (Button) popupView.findViewById(R.id.btnClose);
+        Button btnSendText = (Button) popupView.findViewById(R.id.btnSendText);
+        Button btnSendEmail = (Button) popupView.findViewById(R.id.btnSendEmail);
+        Button btnPostToFacebook = (Button) popupView.findViewById(R.id.btnPostToFacebook);
+
+        // finally show up your popwindow
+        popupWindow.showAsDropDown(popupView, 100, 300);
+
+        btnClosePopUp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                popupWindow.dismiss();
+            }
+        });
+
+        btnSendText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent sendIntent = new Intent(Intent.ACTION_VIEW);
+                sendIntent.setData(Uri.parse("sms:"));
+                String key = "sms_body";
+                sendIntent.putExtra(key, getString(R.string.invite_message));
+                startActivity(sendIntent);
+            }
+        });
+
+        btnSendEmail.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent sendIntent = new Intent(Intent.ACTION_SENDTO);
+                sendIntent.setData(Uri.parse("mailto:")); // only email apps should handle this
+                sendIntent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.invite_email_subject));
+                sendIntent.putExtra(Intent.EXTRA_TEXT, getString(R.string.invite_message));
+                startActivity(sendIntent);
+            }
+        });
+
+        final ShareDialog shareDialog = new ShareDialog(getActivity());
+        btnPostToFacebook.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ShareLinkContent content = new ShareLinkContent.Builder()
+                        .setContentUrl(Uri.parse(getString(R.string.post_to_FB_url)))
+                        .setQuote(getString(R.string.invite_message))
+                        .build();
+                shareDialog.show(content);
+            }
+        });
+    }
+
 }
