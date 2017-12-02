@@ -124,7 +124,7 @@
     <!--Profile UI strings-->
     <string name="contact_info_label">Contact Info</string>
     <string name="addresses_label">Addresses</string>
-    <string name="add_address_to_profile"><u>+ Add Address</u></string>
+    <string name="add_address_to_profile">+ Add Address</string>
     <string name="payment_label">Payment Methods</string>
     <string name="add_payment_to_profile"><u>+ Add Payment Method</u></string>
     <string name="items_label">Your Items</string>

@@ -4,14 +4,13 @@ package com.teamcaffeine.hotswap.navigation;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.Paint;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,6 +26,9 @@ import android.widget.Toast;
 import com.facebook.share.model.ShareLinkContent;
 import com.facebook.share.widget.ShareDialog;
 import com.firebase.ui.auth.AuthUI;
+import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
+import com.google.android.gms.common.GooglePlayServicesRepairableException;
+import com.google.android.gms.location.places.ui.PlaceAutocomplete;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -49,6 +51,8 @@ import java.util.Map;
  * A simple {@link Fragment} subclass.
  */
 public class ProfileFragment extends Fragment {
+
+    private String TAG = "ProfileFragment";
 
     // create objects for Firebase references
     private FirebaseUser currentUser;
@@ -102,8 +106,33 @@ public class ProfileFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.activity_profile, container, false);
+
+        final int PLACE_AUTOCOMPLETE_REQUEST_CODE = 1;
         txtAddAddress = view.findViewById(R.id.txtAddAddress);
+        txtAddAddress.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                try {
+                    Intent intent =
+                            new PlaceAutocomplete.IntentBuilder(PlaceAutocomplete.MODE_FULLSCREEN)
+                                    .build(getActivity());
+                    startActivityForResult(intent, PLACE_AUTOCOMPLETE_REQUEST_CODE);
+                } catch (GooglePlayServicesRepairableException e) {
+                    Log.e(TAG, "google places error 1", e);
+                } catch (GooglePlayServicesNotAvailableException e) {
+                    Log.e(TAG, "google places error 2", e);
+                }
+
+            }
+        });
+
         txtAddPayment = view.findViewById(R.id.txtAddPayment);
+        txtAddPayment.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                addPaymentPopup();
+            }
+        });
         txtPastTransactions = view.findViewById(R.id.txtPastTransactions);
 
         return view;
@@ -189,6 +218,23 @@ public class ProfileFragment extends Fragment {
         PFL = (ProfileFragment.ProfileFragmentListener) context;
     }
 
+//    @Override
+//    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+//        if (requestCode == PLACE_AUTOCOMPLETE_REQUEST_CODE) {
+//            if (resultCode == RESULT_OK) {
+//                Place place = PlaceAutocomplete.getPlace(this, data);
+//                Log.i(TAG, "Place: " + place.getName());
+//            } else if (resultCode == PlaceAutocomplete.RESULT_ERROR) {
+//                Status status = PlaceAutocomplete.getStatus(this, data);
+//                // TODO: Handle the error.
+//                Log.i(TAG, status.getStatusMessage());
+//
+//            } else if (resultCode == RESULT_CANCELED) {
+//                // The user canceled the operation.
+//            }
+//        }
+//    }
+
     private void signOut() {
 
         showProgressDialog();
@@ -211,9 +257,11 @@ public class ProfileFragment extends Fragment {
                 });
     }
 
-    public void inviteFriendsPopup() {
+    private void inviteFriendsPopup() {
         View popupView = LayoutInflater.from(getActivity()).inflate(R.layout.profile_invite_popup, null);
-        final PopupWindow popupWindow = new PopupWindow(popupView, 800, 800);
+        final PopupWindow popupWindow = new PopupWindow(popupView, 800, 800, true);
+        popupWindow.setOutsideTouchable(true);
+        popupWindow.setAnimationStyle(R.style.PopupAnimation);
 
         // define view buttons
 
@@ -221,9 +269,6 @@ public class ProfileFragment extends Fragment {
         Button btnSendText = (Button) popupView.findViewById(R.id.btnSendText);
         Button btnSendEmail = (Button) popupView.findViewById(R.id.btnSendEmail);
         Button btnPostToFacebook = (Button) popupView.findViewById(R.id.btnPostToFacebook);
-
-        // finally show up your popwindow
-        popupWindow.showAsDropDown(popupView, 100, 300);
 
         btnClosePopUp.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -265,7 +310,30 @@ public class ProfileFragment extends Fragment {
                 shareDialog.show(content);
             }
         });
+
+        // finally show up your popup window
+        popupWindow.showAtLocation(popupView, Gravity.CENTER, 0, 0);
     }
+
+    private void addPaymentPopup() {
+        View popupView = LayoutInflater.from(getActivity()).inflate(R.layout.add_payment_popup, null);
+        final PopupWindow popupWindow = new PopupWindow(popupView, 800, 800, true);
+        popupWindow.setOutsideTouchable(true);
+        popupWindow.setAnimationStyle(R.style.PopupAnimation);
+
+        // define view buttons
+        Button btnClosePopUp = (Button) popupView.findViewById(R.id.btnClose);
+        btnClosePopUp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                popupWindow.dismiss();
+            }
+        });
+
+        // finally show up your popup window
+        popupWindow.showAtLocation(popupView, Gravity.CENTER, 0, 0);
+    }
+
 
 }
 
