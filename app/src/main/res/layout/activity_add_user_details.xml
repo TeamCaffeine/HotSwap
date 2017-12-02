@@ -102,14 +102,14 @@
     </LinearLayout>
 
     <Button
-        android:id="@+id/txtAddAddress"
+        android:id="@+id/btnAddress"
         android:layout_width="200dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:text="@string/add_address" />
 
     <Button
-        android:id="@+id/txtAddPayment"
+        android:id="@+id/btnPayment"
         android:layout_width="200dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
