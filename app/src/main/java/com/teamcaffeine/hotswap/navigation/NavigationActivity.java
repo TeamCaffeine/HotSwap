@@ -96,9 +96,9 @@ public class NavigationActivity extends AppCompatActivity implements
                 item.setChecked(item.getItemData().isChecked());
             }
         } catch (NoSuchFieldException e) {
-            Log.e("BNVHelper", "Unable to get shift mode field", e);
+            Log.e(TAG, "Unable to get shift mode field", e);
         } catch (IllegalAccessException e) {
-            Log.e("BNVHelper", "Unable to change value of shift mode", e);
+            Log.e(TAG, "Unable to change value of shift mode", e);
         }
 
 
