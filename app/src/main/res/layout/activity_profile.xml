@@ -54,7 +54,6 @@
             android:layout_weight="1"
             app:srcCompat="@drawable/com_facebook_profile_picture_blank_square" />
 
-        <!--app:srcCompat="@drawable/com_facebook_profile_picture_blank_square" />-->
     </LinearLayout>
 
     <LinearLayout
@@ -69,7 +68,7 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:text="Contact Info" />
+            android:text="@string/contact_info_label" />
 
         <LinearLayout
             android:id="@+id/layout_EmailAndPhone"
@@ -106,7 +105,7 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:text="Addresses" />
+            android:text="@string/addresses_label" />
 
         <LinearLayout
             android:id="@+id/layout_AddressesAndAdd"
@@ -127,7 +126,7 @@
                 android:id="@+id/txtAddAddress"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="+ Add Address"/>
+                android:text="@string/add_address_to_profile"/>
 
         </LinearLayout>
 
@@ -145,7 +144,7 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:text="Payment Options" />
+            android:text="@string/payment_label" />
 
         <LinearLayout
             android:id="@+id/layout_PaymentOptionsAndAdd"
@@ -164,7 +163,7 @@
                 android:id="@+id/txtAddPayment"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="+ Add Payment Option" />
+                android:text="@string/add_payment_to_profile" />
         </LinearLayout>
     </LinearLayout>
 
@@ -180,7 +179,7 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:text="Your Items" />
+            android:text="@string/items_label" />
 
         <LinearLayout
             android:id="@+id/layout_ItemsAndAdd"
@@ -199,7 +198,7 @@
                 android:id="@+id/txtAddItem"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="+ Add Item" />
+                android:text="@string/add_item_to_profile" />
         </LinearLayout>
     </LinearLayout>
 
@@ -216,14 +215,13 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Currently Renting" />
+            android:text="@string/renting_label" />
 
         <TextView
             android:id="@+id/txtRentedItem"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="3"
-            android:text="Rented Item" />
+            android:layout_weight="3" />
 
     </LinearLayout>
 
@@ -238,7 +236,7 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:text="Currently Lending" />
+            android:text="@string/lending_label" />
 
         <ListView
             android:id="@+id/listviewLending"
@@ -253,7 +251,7 @@
         android:layout_height="wrap_content"
         android:paddingBottom="20dp"
         android:paddingTop="20dp"
-        android:text="View Past Transactions" />
+        android:text="@string/past_transactions" />
 
     <Button
         android:id="@+id/btnInviteFriends"
@@ -262,7 +260,7 @@
         android:layout_gravity="center"
         android:layout_margin="10dp"
         android:layout_weight="0.75"
-        android:text="Invite Friends" />
+        android:text="@string/invite_friends" />
 
     <Button
         android:id="@+id/btnLogout"
@@ -271,7 +269,7 @@
         android:layout_gravity="center"
         android:layout_marginBottom="20dp"
         android:layout_weight="0.75"
-        android:text="LOGOUT" />
+        android:text="@string/logout" />
 
 </LinearLayout>
 

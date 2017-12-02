@@ -28,7 +28,7 @@
             android:layout_height="match_parent"
             android:layout_weight="1.25"
             android:gravity="center_vertical"
-            android:text="First Name:"
+            android:text="@string/first_name_label"
             android:textAlignment="viewEnd"
             android:textSize="18sp" />
 
@@ -40,7 +40,7 @@
             android:layout_marginRight="10dp"
             android:layout_weight="2"
             android:paddingLeft="15dp"
-            android:text="Enter First Name" />
+            android:text="@string/first_name_hint" />
     </LinearLayout>
 
     <LinearLayout
@@ -56,7 +56,7 @@
             android:layout_height="match_parent"
             android:layout_weight="1.25"
             android:gravity="center_vertical"
-            android:text="Last Name:"
+            android:text="@string/last_name_label"
             android:textAlignment="viewEnd"
             android:textSize="18sp" />
 
@@ -68,7 +68,7 @@
             android:layout_marginRight="10dp"
             android:layout_weight="2"
             android:paddingLeft="15dp"
-            android:text="Enter Last Name" />
+            android:text="@string/last_name_hint" />
 
     </LinearLayout>
 
@@ -85,7 +85,7 @@
             android:layout_height="match_parent"
             android:layout_weight="1.25"
             android:gravity="center_vertical"
-            android:text="Phone Number:"
+            android:text="@string/phone_number_label"
             android:textAlignment="viewEnd"
             android:textSize="18sp" />
 
@@ -97,28 +97,28 @@
             android:layout_marginRight="10dp"
             android:layout_weight="2"
             android:paddingLeft="15dp"
-            android:text="Enter Phone Number" />
+            android:text="@string/phone_number_hint" />
 
     </LinearLayout>
 
     <Button
-        android:id="@+id/btnAddress"
+        android:id="@+id/txtAddAddress"
         android:layout_width="200dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:text="Add Addrress" />
+        android:text="@string/add_address" />
 
     <Button
-        android:id="@+id/btnPayment"
+        android:id="@+id/txtAddPayment"
         android:layout_width="200dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:text="Add Payment Method" />
+        android:text="@string/add_payment" />
 
     <Button
         android:id="@+id/btnSubmit"
         android:layout_width="200dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:text="Submit" />
+        android:text="@string/submit" />
 </LinearLayout>

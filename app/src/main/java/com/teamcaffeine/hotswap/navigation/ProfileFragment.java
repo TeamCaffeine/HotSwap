@@ -50,6 +50,7 @@ public class ProfileFragment extends Fragment {
     private TextView addAddress;
     private TextView addPayment;
     private TextView addItem;
+    private TextView txtPastTransactions;
 
     ProfileFragmentListener PFL;
 
@@ -67,7 +68,6 @@ public class ProfileFragment extends Fragment {
         // format the "Add" textviews to look like hyper links
         // first set the text color to blue
         // then underline the text
-        // [START] format "add" textviews
         addAddress = view.findViewById(R.id.txtAddAddress);
         addAddress.setTextColor(Color.BLUE);
         addAddress.setPaintFlags(addAddress.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
@@ -79,7 +79,10 @@ public class ProfileFragment extends Fragment {
         addItem = view.findViewById(R.id.txtAddItem);
         addItem.setTextColor(Color.BLUE);
         addItem.setPaintFlags(addItem.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
-        // [END] format "add" textviews
+
+        txtPastTransactions = view.findViewById(R.id.txtPastTransactions);
+        txtPastTransactions.setTextColor(Color.BLUE);
+        txtPastTransactions.setPaintFlags(txtPastTransactions.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
 
         return view;
     }
@@ -150,8 +153,8 @@ public class ProfileFragment extends Fragment {
                     public void onClick(View view) {
                         Intent sendIntent = new Intent(Intent.ACTION_VIEW);
                         sendIntent.setData(Uri.parse("sms:"));
-                        String message = "Hey I've been using HotSwap to rent items that I need but don't want to buy! Check it out!";
-                        sendIntent.putExtra("sms_body", message);
+                        String key = "sms_body";
+                        sendIntent.putExtra(key, "@string/invite_message");
                         startActivity(sendIntent);
                     }
                 });
@@ -161,10 +164,9 @@ public class ProfileFragment extends Fragment {
                     public void onClick(View view) {
                         Intent sendIntent = new Intent(Intent.ACTION_SENDTO);
                         sendIntent.setData(Uri.parse("mailto:")); // only email apps should handle this
-                        String subject = "Join HotSwap!";
+                        String subject = "@string/invite_email_subject";
                         sendIntent.putExtra(Intent.EXTRA_SUBJECT, subject);
-                        String message = "Hey I've been using HotSwap to rent items that I need but don't want to buy! Check it out!";
-                        sendIntent.putExtra(Intent.EXTRA_TEXT, message);
+                        sendIntent.putExtra(Intent.EXTRA_TEXT, "@string/invite_message");
                         startActivity(sendIntent);
                     }
                 });
@@ -174,8 +176,8 @@ public class ProfileFragment extends Fragment {
                     @Override
                     public void onClick(View view) {
                         ShareLinkContent content = new ShareLinkContent.Builder()
-                                .setContentUrl(Uri.parse("https://developers.facebook.com"))
-                                .setQuote("Hey I've been using HotSwap to rent items that I need but don't want to buy! Check it out!")
+                                .setContentUrl(Uri.parse("@string/post_to_FB_url"))
+                                .setQuote("@string/invite_message")
                                 .build();
                         shareDialog.show(content);
                     }

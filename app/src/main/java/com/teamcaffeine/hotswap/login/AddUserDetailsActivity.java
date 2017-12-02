@@ -28,11 +28,12 @@ public class AddUserDetailsActivity extends AppCompatActivity {
     private FirebaseUser user;
     private FirebaseDatabase database;
     private DatabaseReference users;
+    private String userTable = "Users";
 
     // create objects to hold views
-    private EditText firstName;
-    private EditText lastName;
-    private EditText phoneNumber;
+    private EditText edtFirstName;
+    private EditText edtLastName;
+    private EditText edtPhoneNumber;
     private Button btnAddAddress;
     private Button btnAddPayment;
     private Button btnSubmit;
@@ -45,9 +46,9 @@ public class AddUserDetailsActivity extends AppCompatActivity {
         // get an instance of the Firebase and get the reference to the current user
         user = FirebaseAuth.getInstance().getCurrentUser();
 
-        firstName = findViewById(R.id.edtFirstName);
-        lastName = findViewById(R.id.edtLastName);
-        phoneNumber = findViewById(R.id.edtPhoneNumber);
+        edtFirstName = findViewById(R.id.edtFirstName);
+        edtLastName = findViewById(R.id.edtLastName);
+        edtPhoneNumber = findViewById(R.id.edtPhoneNumber);
         btnAddAddress = findViewById(R.id.btnAddress);
         btnAddPayment = findViewById(R.id.btnPayment);
         btnSubmit = findViewById(R.id.btnSubmit);
@@ -56,7 +57,7 @@ public class AddUserDetailsActivity extends AppCompatActivity {
         // get an instance of the database
         database = FirebaseDatabase.getInstance();
         // get a reference to the Users table
-        users = database.getReference().child("Users");
+        users = database.getReference().child(userTable);
         // set the functionality of the "Submit" button
         // see the "submit()" method below
         btnSubmit.setOnClickListener(new View.OnClickListener() {
@@ -87,12 +88,12 @@ public class AddUserDetailsActivity extends AppCompatActivity {
     // When the user clicks "submit," their full user account is created in Firebase
     public void submit() {
         // get the strings in each of the Edit Texts
-        String firstName_string = firstName.getText().toString();
-        String lastName_string = lastName.getText().toString();
-        String phoneNumber_string = phoneNumber.getText().toString();
+        String firstName = edtFirstName.getText().toString();
+        String lastName = edtLastName.getText().toString();
+        String phoneNumber = edtPhoneNumber.getText().toString();
 
         // only allow the user to move forward through login if they have entered a name and phone number
-        if (firstName_string != "" && lastName_string != "" && phoneNumber_string != "") {
+        if (firstName.isEmpty() && lastName.isEmpty() && phoneNumber.isEmpty()) {
 
             // now that their details have been added, we set the addDetails flag to true
             // this flag will be used on login in the future to indicate that the user does not need to
@@ -108,7 +109,7 @@ public class AddUserDetailsActivity extends AppCompatActivity {
             Date memberSince = new Date();
 
             // create a new User object will all user details
-            User userData = new User(addedDetails, uid, firstName_string, lastName_string, email, dateFormat.format(memberSince), phoneNumber_string);
+            User userData = new User(addedDetails, uid, firstName, lastName, email, dateFormat.format(memberSince), phoneNumber);
 
             // create a hashmap object
             // this will be used to enter the data into firebase
@@ -124,7 +125,7 @@ public class AddUserDetailsActivity extends AppCompatActivity {
             startActivity(i);
         } else {
             // if the user did not enter all of their details, show a toast to instruct them to enter all detals
-            Toast.makeText(AddUserDetailsActivity.this, "Please enter all details",
+            Toast.makeText(AddUserDetailsActivity.this, "@string/enter_all_details",
                     Toast.LENGTH_LONG).show();
         }
     }
