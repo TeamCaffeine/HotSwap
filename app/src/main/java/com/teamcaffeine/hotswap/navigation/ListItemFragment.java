@@ -1,4 +1,4 @@
-package com.teamcaffeine.hotswap.activity;
+package com.teamcaffeine.hotswap.navigation;
 
 import android.content.Context;
 import android.os.Bundle;

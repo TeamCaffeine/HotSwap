@@ -5,7 +5,7 @@ import android.content.Intent;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
-import com.teamcaffeine.hotswap.activity.login.LoginActivity;
+import com.teamcaffeine.hotswap.login.LoginActivity;
 
 /**
  * Safety class to route users away from activities if their login status is incorrect

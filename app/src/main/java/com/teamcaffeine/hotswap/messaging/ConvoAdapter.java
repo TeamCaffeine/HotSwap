@@ -1,4 +1,4 @@
-package com.teamcaffeine.hotswap.activity.messaging;
+package com.teamcaffeine.hotswap.messaging;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -17,7 +17,7 @@ import java.util.ArrayList;
  * Created by william on 27/11/2017.
  */
 
-class ConvoAdapter extends BaseAdapter {
+public class ConvoAdapter extends BaseAdapter {
     private ArrayList<Conversation> conversationList;
     private Context context;
 
