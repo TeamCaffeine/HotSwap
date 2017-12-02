@@ -41,15 +41,15 @@ public class ProfileFragment extends Fragment {
     private DatabaseReference users;
 
     // create objects to reference layout objects
-    private TextView name;
-    private TextView memberSince;
-    private Button logout;
-    private Button inviteFriends;
-    private TextView email;
-    private TextView phoneNumber;
-    private TextView addAddress;
-    private TextView addPayment;
-    private TextView addItem;
+    private TextView txtName;
+    private TextView txtMemberSince;
+    private Button btnLogout;
+    private Button btnInviteFriends;
+    private TextView txtEmail;
+    private TextView txtPhoneNumber;
+    private TextView txtAddAddress;
+    private TextView txtAddPayment;
+    private TextView txtAddItem;
     private TextView txtPastTransactions;
 
     ProfileFragmentListener PFL;
@@ -68,17 +68,17 @@ public class ProfileFragment extends Fragment {
         // format the "Add" textviews to look like hyper links
         // first set the text color to blue
         // then underline the text
-        addAddress = view.findViewById(R.id.txtAddAddress);
-        addAddress.setTextColor(Color.BLUE);
-        addAddress.setPaintFlags(addAddress.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+        txtAddAddress = view.findViewById(R.id.txtAddAddress);
+        txtAddAddress.setTextColor(Color.BLUE);
+        txtAddAddress.setPaintFlags(txtAddAddress.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
 
-        addPayment = view.findViewById(R.id.txtAddPayment);
-        addPayment.setTextColor(Color.BLUE);
-        addPayment.setPaintFlags(addPayment.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+        txtAddPayment = view.findViewById(R.id.txtAddPayment);
+        txtAddPayment.setTextColor(Color.BLUE);
+        txtAddPayment.setPaintFlags(txtAddPayment.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
 
-        addItem = view.findViewById(R.id.txtAddItem);
-        addItem.setTextColor(Color.BLUE);
-        addItem.setPaintFlags(addItem.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+        txtAddItem = view.findViewById(R.id.txtAddItem);
+        txtAddItem.setTextColor(Color.BLUE);
+        txtAddItem.setPaintFlags(txtAddItem.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
 
         txtPastTransactions = view.findViewById(R.id.txtPastTransactions);
         txtPastTransactions.setTextColor(Color.BLUE);
@@ -104,28 +104,28 @@ public class ProfileFragment extends Fragment {
 
 
         // set references to layout objects
-        name = view.findViewById(R.id.txtName);
-        memberSince = view.findViewById(R.id.txtMemberSince);
-        logout = view.findViewById(R.id.btnLogout);
-        inviteFriends = view.findViewById(R.id.btnInviteFriends);
+        txtName = view.findViewById(R.id.txtName);
+        txtMemberSince = view.findViewById(R.id.txtMemberSince);
+        btnLogout = view.findViewById(R.id.btnLogout);
+        btnInviteFriends = view.findViewById(R.id.btnInviteFriends);
 
         // get the user's name from the bundle
         // and set it in the layout
-        name.setText(fullName);
+        txtName.setText(fullName);
 
         // get the date the user created their account from the bundle
         // set "Member Since" equal to the date the user created their account
-        memberSince.setText("Member Since: " + dateCreated);
+        txtMemberSince.setText("Member Since: " + dateCreated);
 
         // Set logout functionality of the Logout button
-        logout.setOnClickListener(new View.OnClickListener() {
+        btnLogout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 signOut();
             }
         });
 
-        inviteFriends.setOnClickListener(new View.OnClickListener() {
+        btnInviteFriends.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 View popupView = LayoutInflater.from(getActivity()).inflate(R.layout.profile_invite_popup, null);
@@ -133,51 +133,50 @@ public class ProfileFragment extends Fragment {
 
                 // define view buttons
 
-                Button closePopUp = (Button) popupView.findViewById(R.id.btnClose);
-                Button sendText = (Button) popupView.findViewById(R.id.btnSendText);
-                Button sendEmail = (Button) popupView.findViewById(R.id.btnSendEmail);
-                Button postToFacebook = (Button) popupView.findViewById(R.id.btnPostToFacebook);
+                Button btnClosePopUp = (Button) popupView.findViewById(R.id.btnClose);
+                Button btnSendText = (Button) popupView.findViewById(R.id.btnSendText);
+                Button btnSendEmail = (Button) popupView.findViewById(R.id.btnSendEmail);
+                Button btnPostToFacebook = (Button) popupView.findViewById(R.id.btnPostToFacebook);
 
                 // finally show up your popwindow
                 popupWindow.showAsDropDown(popupView, 100, 300);
 
-                closePopUp.setOnClickListener(new View.OnClickListener() {
+                btnClosePopUp.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         popupWindow.dismiss();
                     }
                 });
 
-                sendText.setOnClickListener(new View.OnClickListener() {
+                btnSendText.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         Intent sendIntent = new Intent(Intent.ACTION_VIEW);
                         sendIntent.setData(Uri.parse("sms:"));
                         String key = "sms_body";
-                        sendIntent.putExtra(key, "@string/invite_message");
+                        sendIntent.putExtra(key, R.string.invite_message);
                         startActivity(sendIntent);
                     }
                 });
 
-                sendEmail.setOnClickListener(new View.OnClickListener() {
+                btnSendEmail.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         Intent sendIntent = new Intent(Intent.ACTION_SENDTO);
                         sendIntent.setData(Uri.parse("mailto:")); // only email apps should handle this
-                        String subject = "@string/invite_email_subject";
-                        sendIntent.putExtra(Intent.EXTRA_SUBJECT, subject);
-                        sendIntent.putExtra(Intent.EXTRA_TEXT, "@string/invite_message");
+                        sendIntent.putExtra(Intent.EXTRA_SUBJECT, R.string.invite_email_subject);
+                        sendIntent.putExtra(Intent.EXTRA_TEXT, R.string.invite_message);
                         startActivity(sendIntent);
                     }
                 });
 
                 final ShareDialog shareDialog = new ShareDialog(getActivity());
-                postToFacebook.setOnClickListener(new View.OnClickListener() {
+                btnPostToFacebook.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         ShareLinkContent content = new ShareLinkContent.Builder()
-                                .setContentUrl(Uri.parse("@string/post_to_FB_url"))
-                                .setQuote("@string/invite_message")
+                                .setContentUrl(Uri.parse(String.valueOf(R.string.post_to_FB_url)))
+                                .setQuote(String.valueOf(R.string.invite_message))
                                 .build();
                         shareDialog.show(content);
                     }
