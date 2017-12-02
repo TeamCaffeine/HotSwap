@@ -69,6 +69,8 @@ dependencies {
     compile 'com.github.stfalcon:chatkit:0.2.2'
     compile 'de.hdodenhof:circleimageview:2.2.0'
 
+    // Geofire Dependencies
+    compile 'com.firebase:geofire-java:2.1.3'
 
 }
 
