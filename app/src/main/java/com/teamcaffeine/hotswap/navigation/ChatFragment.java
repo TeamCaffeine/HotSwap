@@ -81,9 +81,9 @@ public class ChatFragment extends Fragment implements DialogsListAdapter.OnDialo
         dialogsList = (DialogsList) view.findViewById(R.id.dialogsList);
 
       /* Load Animation */
-//        progressDialog = new ProgressDialog(getActivity().getApplicationContext());
-//        progressDialog.setMessage("Loading Chat(s)...");
-//        progressDialog.show();
+        progressDialog = new ProgressDialog(getActivity());
+        progressDialog.setMessage("Loading Chat(s)...");
+        progressDialog.show();
 
         /* Load Image */
         imageLoader = new ImageLoader() {
@@ -157,7 +157,7 @@ public class ChatFragment extends Fragment implements DialogsListAdapter.OnDialo
         protected Void doInBackground(Void... voids) {
             for (int i = 0; i < dialogs.size(); i++) {
                 final Dialog dialog = dialogs.get(i);
-                FirebaseDatabase.getInstance().getReference().child("presence").child(dialog.getUsers().get(0).getEmail().replace(".", "|")).addListenerForSingleValueEvent(new ValueEventListener() {
+                FirebaseDatabase.getInstance().getReference().child("presence").child(dialog.getUsers().get(0).getEmail().replace('.','|')).addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         if (dataSnapshot.exists()) {
@@ -246,7 +246,7 @@ public class ChatFragment extends Fragment implements DialogsListAdapter.OnDialo
                     mStatusChecker.run();
 
                     /* Dismiss Progress Dialog */
-//                    progressDialog.dismiss();
+                    progressDialog.dismiss();
                 }
             }
 

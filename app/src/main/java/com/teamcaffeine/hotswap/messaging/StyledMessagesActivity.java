@@ -289,14 +289,14 @@ public class StyledMessagesActivity extends MessagesActivity implements MessageI
      */
     private void getUser(final String channel, final String subscription) {
         FirebaseDatabase.getInstance()
-                .getReference().child("users").orderByChild("id").equalTo(channel.replace("|", "."))
+                .getReference().child("Users").orderByChild("email").equalTo(channel.replace("|", "."))
                 .addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
                             users.put(channel, postSnapshot.getValue(User.class));
                             FirebaseDatabase.getInstance()
-                                    .getReference().child("users").orderByChild("id").equalTo(subscription.replace("|", "."))
+                                    .getReference().child("Users").orderByChild("email").equalTo(subscription.replace("|", "."))
                                     .addListenerForSingleValueEvent(new ValueEventListener() {
                                         @Override
                                         public void onDataChange(DataSnapshot dataSnapshot) {
