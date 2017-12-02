@@ -18,6 +18,7 @@ import android.view.ViewGroup;
 import android.widget.Adapter;
 import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
@@ -65,7 +66,8 @@ public class ProfileFragment extends Fragment {
     private TextView txtPastTransactions;
     private ListView lvAddresses;
     private ListView lvPayment;
-    private ListAdapter lvAdapter;
+    private ListAdapter addressesAdapter;
+    private ListAdapter paymentAdapter;
 
     public ProgressDialog mProgressDialog;
 
@@ -150,13 +152,13 @@ public class ProfileFragment extends Fragment {
         txtEmail.setText(email);
         txtPhoneNumber.setText(phoneNumber);
 
-        lvAdapter = new ListAdapter(getContext(), user);  //instead of passing the boring default string adapter, let's pass our own, see class MyCustomAdapter below!
-
         lvAddresses = (ListView) view.findViewById(R.id.listviewAddresses);
-        lvAddresses.setAdapter(lvAdapter);
+        addressesAdapter = new AddressesListAdapter(getContext(), user);  //instead of passing the boring default string adapter, let's pass our own, see class MyCustomAdapter below!
+        lvAddresses.setAdapter(addressesAdapter);
 
         lvPayment = (ListView) view.findViewById(R.id.listviewPayment);
-        lvPayment.setAdapter(lvAdapter);
+        paymentAdapter = new PaymentListAdapter(getContext(), user);  //instead of passing the boring default string adapter, let's pass our own, see class MyCustomAdapter below!
+        lvPayment.setAdapter(paymentAdapter);
 
         // Set logout functionality of the Logout button
         btnLogout.setOnClickListener(new View.OnClickListener() {
@@ -263,11 +265,41 @@ public class ProfileFragment extends Fragment {
 
 }
 
-class ListAdapter extends BaseAdapter {
+class AddressesListAdapter extends BaseAdapter {
+    private String placeName;
+    private String address;
+
+    public AddressesListAdapter(Context context, User user) {
+        placeName = "X";
+        address = "Y";
+    }
+
+    @Override
+    public int getCount() {
+        return 0;
+    }
+
+    @Override
+    public Object getItem(int i) {
+        return null;
+    }
+
+    @Override
+    public long getItemId(int i) {
+        return 0;
+    }
+
+    @Override
+    public View getView(int i, View view, ViewGroup viewGroup) {
+        return null;
+    }
+}
+
+class PaymentListAdapter extends BaseAdapter {
     private String cardType;
     private String cardNumber;
 
-    public ListAdapter(Context context, User user) {
+    public PaymentListAdapter(Context context, User user) {
         cardType = "X";
         cardNumber = "Y";
     }
