@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent">
@@ -119,15 +119,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1">
-
             </ListView>
 
             <TextView
                 android:id="@+id/txtAddAddress"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/add_address_to_profile"/>
-
+                android:text="@string/add_address_to_profile"
+                android:textColor="@color/blue" />
         </LinearLayout>
 
     </LinearLayout>
@@ -163,86 +162,9 @@
                 android:id="@+id/txtAddPayment"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/add_payment_to_profile" />
+                android:text="@string/add_payment_to_profile"
+                android:textColor="@color/blue" />
         </LinearLayout>
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/layout_Items"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:orientation="horizontal">
-
-        <TextView
-            android:id="@+id/txtItemsLabel"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:text="@string/items_label" />
-
-        <LinearLayout
-            android:id="@+id/layout_ItemsAndAdd"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="3"
-            android:orientation="vertical">
-
-            <ListView
-                android:id="@+id/listviewItems"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1" />
-
-            <TextView
-                android:id="@+id/txtAddItem"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/add_item_to_profile" />
-        </LinearLayout>
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/layout_CurrentlyRenting"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:paddingBottom="20dp"
-        android:paddingTop="20dp">
-
-        <TextView
-            android:id="@+id/txtRentingLabel"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/renting_label" />
-
-        <TextView
-            android:id="@+id/txtRentedItem"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="3" />
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/layout_CurrentlyLending"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <TextView
-            android:id="@+id/txtLendingLabel"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:text="@string/lending_label" />
-
-        <ListView
-            android:id="@+id/listviewLending"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="3" />
     </LinearLayout>
 
     <TextView
@@ -251,7 +173,8 @@
         android:layout_height="wrap_content"
         android:paddingBottom="20dp"
         android:paddingTop="20dp"
-        android:text="@string/past_transactions" />
+        android:text="@string/past_transactions"
+        android:textColor="@color/blue" />
 
     <Button
         android:id="@+id/btnInviteFriends"
@@ -273,4 +196,4 @@
 
 </LinearLayout>
 
-</ScrollView>
+</LinearLayout>

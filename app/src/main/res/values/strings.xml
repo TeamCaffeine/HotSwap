@@ -126,14 +126,9 @@
     <string name="addresses_label">Addresses</string>
     <string name="add_address_to_profile">+ Add Address</string>
     <string name="payment_label">Payment Methods</string>
-    <string name="add_payment_to_profile">+ Add Payment Method</string>
+    <string name="add_payment_to_profile"><u>+ Add Payment Method</u></string>
     <string name="items_label">Your Items</string>
-    <string name="add_item_to_profile">+ Add Item</string>
-    <string name="renting_label">Currently Renting</string>
-    <string name="not_renting_message">You are not currently renting anything</string>
-    <string name="lending_label">Currently Lending</string>
-    <string name="not_lending_label">You are not currently lending any items</string>
-    <string name="past_transactions">View Past Transactions</string>
+    <string name="past_transactions"><u>View Past Transactions</u></string>
     <string name="invite_friends">Invite Friends</string>
     <string name="logout">Logout</string>
     <string name="placeholder_name">Name</string>
@@ -141,6 +136,7 @@
     <string name="placeholder_email">Email</string>
     <string name="placeholder_phone_number">Phone Number</string>
     <string name="base_package_name">com.teamcaffeine.hotswap</string>
+    <string name="unable_to_add_address">Unable to add your address. Please try again.</string>
 
 
 </resources>
