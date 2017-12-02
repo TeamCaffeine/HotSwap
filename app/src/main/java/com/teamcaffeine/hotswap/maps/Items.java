@@ -1,4 +1,4 @@
-package com.teamcaffeine.hotswap.activity.navigation;
+package com.teamcaffeine.hotswap.maps;
 
 import android.content.Context;
 import android.view.LayoutInflater;

@@ -1,4 +1,4 @@
-package com.teamcaffeine.hotswap.activity.navigation;
+package com.teamcaffeine.hotswap.navigation;
 
 
 import android.Manifest;
@@ -52,6 +52,8 @@ import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.Response;
 import com.teamcaffeine.hotswap.R;
+import com.teamcaffeine.hotswap.maps.Items;
+import com.teamcaffeine.hotswap.maps.LocationPrefs;
 
 import java.io.IOException;
 

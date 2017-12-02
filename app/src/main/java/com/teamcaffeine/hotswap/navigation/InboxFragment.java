@@ -1,4 +1,4 @@
-package com.teamcaffeine.hotswap.activity.messaging;
+package com.teamcaffeine.hotswap.navigation;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -10,6 +10,7 @@ import android.widget.ListAdapter;
 import android.widget.ListView;
 
 import com.teamcaffeine.hotswap.R;
+import com.teamcaffeine.hotswap.messaging.ConvoAdapter;
 
 public class InboxFragment extends Fragment {
     private ListView conversations;

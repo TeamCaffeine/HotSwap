@@ -1,7 +1,10 @@
-package com.teamcaffeine.hotswap.activity.navigation;
+package com.teamcaffeine.hotswap.navigation;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.internal.BottomNavigationItemView;
+import android.support.design.internal.BottomNavigationMenuView;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -17,9 +20,12 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.FirebaseDatabase;
 import com.teamcaffeine.hotswap.R;
-import com.teamcaffeine.hotswap.activity.ListItemFragment;
-import com.teamcaffeine.hotswap.activity.ProfileFragment;
-import com.teamcaffeine.hotswap.activity.messaging.InboxFragment;
+import com.teamcaffeine.hotswap.utility.SessionHandler;
+
+import java.lang.reflect.Field;
+import com.teamcaffeine.hotswap.navigation.ListItemFragment;
+import com.teamcaffeine.hotswap.navigation.ProfileFragment;
+import com.teamcaffeine.hotswap.navigation.InboxFragment;
 import com.teamcaffeine.hotswap.messaging.ChatFragment;
 
 public class NavigationActivity extends AppCompatActivity implements
@@ -32,7 +38,6 @@ public class NavigationActivity extends AppCompatActivity implements
 
     public BottomNavigationView navigation;
 
-    //TODO set your private fragments here
     private ListItemFragment listItemFragment;
     private InboxFragment inboxFragment;
     private ProfileFragment profileFragment;
@@ -48,7 +53,6 @@ public class NavigationActivity extends AppCompatActivity implements
         @Override
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
             switch (item.getItemId()) {
-                //TODO add a case for your fragment
                 case R.id.navigation_home:
                     Log.i(TAG, "nav home: ");
                     ft = fragmentManager.beginTransaction();
@@ -78,8 +82,11 @@ public class NavigationActivity extends AppCompatActivity implements
         }
     };
 
+    @SuppressLint("RestrictedApi")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        SessionHandler.shouldLogIn(this);
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_navigation);
 
@@ -118,7 +125,27 @@ public class NavigationActivity extends AppCompatActivity implements
         navigation = findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
-        //TODO replace these with your fragments
+        BottomNavigationMenuView menuView = (BottomNavigationMenuView) navigation.getChildAt(0);
+        try {
+            Field shiftingMode = menuView.getClass().getDeclaredField("mShiftingMode");
+            shiftingMode.setAccessible(true);
+            shiftingMode.setBoolean(menuView, false);
+            shiftingMode.setAccessible(false);
+            for (int i = 0; i < menuView.getChildCount(); i++) {
+                BottomNavigationItemView item = (BottomNavigationItemView) menuView.getChildAt(i);
+                //noinspection RestrictedApi
+                item.setShiftingMode(false);
+                // set once again checked value, so view will be updated
+                //noinspection RestrictedApi
+                item.setChecked(item.getItemData().isChecked());
+            }
+        } catch (NoSuchFieldException e) {
+            Log.e(TAG, "Unable to get shift mode field", e);
+        } catch (IllegalAccessException e) {
+            Log.e(TAG, "Unable to change value of shift mode", e);
+        }
+
+
         listItemFragment = new ListItemFragment();
         inboxFragment = new InboxFragment();
         profileFragment = new ProfileFragment();
