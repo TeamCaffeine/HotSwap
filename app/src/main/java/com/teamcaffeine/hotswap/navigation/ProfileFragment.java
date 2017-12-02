@@ -227,7 +227,7 @@ public class ProfileFragment extends Fragment {
                             getActivity().finish();
                         } else {
                             Toast.makeText(getActivity(), R.string.unsuccessfully_signed_out,
-                                    Toast.LENGTH_SHORT).show();
+                                    Toast.LENGTH_LONG).show();
                         }
                         hideProgressDialog();
                     }
