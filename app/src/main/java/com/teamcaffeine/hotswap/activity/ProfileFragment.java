@@ -24,12 +24,21 @@ import com.facebook.share.model.ShareLinkContent;
 import com.facebook.share.widget.ShareDialog;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.teamcaffeine.hotswap.R;
 
 /**
  * A simple {@link Fragment} subclass.
  */
 public class ProfileFragment extends Fragment {
+
+    // create objects for Firebase references
+    private FirebaseAuth mAuth;
+    private FirebaseUser user;
+    private FirebaseDatabase database;
+    private DatabaseReference users;
+
     // create objects to reference layout objects
     private TextView name;
     private TextView memberSince;
@@ -42,9 +51,6 @@ public class ProfileFragment extends Fragment {
     private TextView addItem;
 
     //TODO: figure out how to connect to Firebase to get logout functionality
-//    private FirebaseUser currentUser = getCurrentUser();
-
-    private FirebaseAuth mAuth;
 
     ProfileFragmentListener PFL;
 
@@ -85,6 +91,7 @@ public class ProfileFragment extends Fragment {
 
         //TODO: figure out how to get login information into the Profile Fragment, like you would with bundles between activities
         mAuth = FirebaseAuth.getInstance();
+        user = mAuth.getCurrentUser();
 
         // get the bundle from the intent
         //****keeping these lines commented out for now, we will need them when we implement the fragment with login
