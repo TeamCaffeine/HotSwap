@@ -4,14 +4,12 @@ package com.teamcaffeine.hotswap.navigation;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.Paint;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -91,7 +89,19 @@ public class ProfileFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.activity_profile, container, false);
         txtAddAddress = view.findViewById(R.id.txtAddAddress);
+        txtAddAddress.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                addAddressPopup();
+            }
+        });
         txtAddPayment = view.findViewById(R.id.txtAddPayment);
+        txtAddPayment.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                addPaymentPopup();
+            }
+        });
         txtPastTransactions = view.findViewById(R.id.txtPastTransactions);
 
         return view;
@@ -191,9 +201,11 @@ public class ProfileFragment extends Fragment {
                 });
     }
 
-    public void inviteFriendsPopup() {
+    private void inviteFriendsPopup() {
         View popupView = LayoutInflater.from(getActivity()).inflate(R.layout.profile_invite_popup, null);
-        final PopupWindow popupWindow = new PopupWindow(popupView, 800, 800);
+        final PopupWindow popupWindow = new PopupWindow(popupView, 800, 800, true);
+        popupWindow.setOutsideTouchable(true);
+        popupWindow.setAnimationStyle(R.style.PopupAnimation);
 
         // define view buttons
 
@@ -201,9 +213,6 @@ public class ProfileFragment extends Fragment {
         Button btnSendText = (Button) popupView.findViewById(R.id.btnSendText);
         Button btnSendEmail = (Button) popupView.findViewById(R.id.btnSendEmail);
         Button btnPostToFacebook = (Button) popupView.findViewById(R.id.btnPostToFacebook);
-
-        // finally show up your popwindow
-        popupWindow.showAsDropDown(popupView, 100, 300);
 
         btnClosePopUp.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -245,6 +254,48 @@ public class ProfileFragment extends Fragment {
                 shareDialog.show(content);
             }
         });
+
+        // finally show up your popwindow
+        popupWindow.showAtLocation(popupView, Gravity.CENTER, 0, 0);
     }
+
+    private void addAddressPopup() {
+        View popupView = LayoutInflater.from(getActivity()).inflate(R.layout.add_address_popup, null);
+        final PopupWindow popupWindow = new PopupWindow(popupView, 800, 800, true);
+        popupWindow.setOutsideTouchable(true);
+        popupWindow.setAnimationStyle(R.style.PopupAnimation);
+
+        // define view buttons
+        Button btnClosePopUp = (Button) popupView.findViewById(R.id.btnClose);
+        btnClosePopUp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                popupWindow.dismiss();
+            }
+        });
+
+        // finally show up your popwindow
+        popupWindow.showAtLocation(popupView, Gravity.CENTER, 0, 0);
+    }
+
+    private void addPaymentPopup() {
+        View popupView = LayoutInflater.from(getActivity()).inflate(R.layout.add_payment_popup, null);
+        final PopupWindow popupWindow = new PopupWindow(popupView, 800, 800, true);
+        popupWindow.setOutsideTouchable(true);
+        popupWindow.setAnimationStyle(R.style.PopupAnimation);
+
+                // define view buttons
+        Button btnClosePopUp = (Button) popupView.findViewById(R.id.btnClose);
+        btnClosePopUp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                popupWindow.dismiss();
+            }
+        });
+
+        // finally show up your popwindow
+        popupWindow.showAtLocation(popupView, Gravity.CENTER, 0, 0);
+    }
+
 
 }
