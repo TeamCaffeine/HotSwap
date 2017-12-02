@@ -1,4 +1,4 @@
-package com.teamcaffeine.hotswap.activity.navigation;
+package com.teamcaffeine.hotswap.maps;
 
 import android.Manifest;
 import android.content.Intent;
@@ -28,15 +28,13 @@ import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.squareup.okhttp.Callback;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.Response;
 import com.teamcaffeine.hotswap.R;
-
-import org.json.JSONArray;
+import com.teamcaffeine.hotswap.navigation.NavigationActivity;
 
 import java.io.IOException;
 

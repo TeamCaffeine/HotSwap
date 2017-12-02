@@ -1,12 +1,12 @@
-package com.teamcaffeine.hotswap.activity;
+package com.teamcaffeine.hotswap.login;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
 import com.google.firebase.auth.FirebaseAuth;
-import com.teamcaffeine.hotswap.activity.login2.LoginActivity;
-import com.teamcaffeine.hotswap.activity.navigation.NavigationActivity;
+import com.teamcaffeine.hotswap.login.LoginActivity;
+import com.teamcaffeine.hotswap.navigation.NavigationActivity;
 
 public class SplashActivity extends AppCompatActivity {
 
