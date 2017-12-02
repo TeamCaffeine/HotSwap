@@ -154,7 +154,7 @@ public class ProfileFragment extends Fragment {
                         Intent sendIntent = new Intent(Intent.ACTION_VIEW);
                         sendIntent.setData(Uri.parse("sms:"));
                         String key = "sms_body";
-                        sendIntent.putExtra(key, R.string.invite_message);
+                        sendIntent.putExtra(key, getString(R.string.invite_message));
                         startActivity(sendIntent);
                     }
                 });
@@ -164,8 +164,8 @@ public class ProfileFragment extends Fragment {
                     public void onClick(View view) {
                         Intent sendIntent = new Intent(Intent.ACTION_SENDTO);
                         sendIntent.setData(Uri.parse("mailto:")); // only email apps should handle this
-                        sendIntent.putExtra(Intent.EXTRA_SUBJECT, R.string.invite_email_subject);
-                        sendIntent.putExtra(Intent.EXTRA_TEXT, R.string.invite_message);
+                        sendIntent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.invite_email_subject));
+                        sendIntent.putExtra(Intent.EXTRA_TEXT, getString(R.string.invite_message));
                         startActivity(sendIntent);
                     }
                 });
@@ -175,8 +175,8 @@ public class ProfileFragment extends Fragment {
                     @Override
                     public void onClick(View view) {
                         ShareLinkContent content = new ShareLinkContent.Builder()
-                                .setContentUrl(Uri.parse(String.valueOf(R.string.post_to_FB_url)))
-                                .setQuote(String.valueOf(R.string.invite_message))
+                                .setContentUrl(Uri.parse(getString(R.string.post_to_FB_url)))
+                                .setQuote(getString(R.string.invite_message))
                                 .build();
                         shareDialog.show(content);
                     }
