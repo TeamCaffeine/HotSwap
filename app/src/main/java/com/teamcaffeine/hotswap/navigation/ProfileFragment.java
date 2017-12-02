@@ -14,7 +14,9 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -24,6 +26,8 @@ import com.facebook.share.widget.ShareDialog;
 import com.firebase.ui.auth.AuthUI;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
+import com.google.android.gms.common.api.Status;
+import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlaceAutocomplete;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -39,12 +43,22 @@ import com.teamcaffeine.hotswap.R;
 import com.teamcaffeine.hotswap.login.LoginActivity;
 import com.teamcaffeine.hotswap.login.User;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+import static android.app.Activity.RESULT_CANCELED;
+import static android.app.Activity.RESULT_OK;
+
 /**
  * A simple {@link Fragment} subclass.
  */
 public class ProfileFragment extends Fragment {
 
     private String TAG = "ProfileFragment";
+
+    // Place codes
+    final int PLACE_AUTOCOMPLETE_REQUEST_CODE = 1;
 
     // create objects for Firebase references
     private FirebaseUser currentUser;
@@ -61,8 +75,10 @@ public class ProfileFragment extends Fragment {
     private TextView txtEmail;
     private TextView txtPhoneNumber;
     private TextView txtAddAddress;
+    private ListView listviewAddresses;
+    private List<String> addressElementsList;
+    private ArrayAdapter<String> addressAdapter;
     private TextView txtAddPayment;
-    private TextView txtAddItem;
     private TextView txtPastTransactions;
 
     public ProgressDialog mProgressDialog;
@@ -95,7 +111,6 @@ public class ProfileFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.activity_profile, container, false);
 
-        final int PLACE_AUTOCOMPLETE_REQUEST_CODE = 1;
         txtAddAddress = view.findViewById(R.id.txtAddAddress);
         txtAddAddress.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -105,14 +120,17 @@ public class ProfileFragment extends Fragment {
                             new PlaceAutocomplete.IntentBuilder(PlaceAutocomplete.MODE_FULLSCREEN)
                                     .build(getActivity());
                     startActivityForResult(intent, PLACE_AUTOCOMPLETE_REQUEST_CODE);
-                } catch (GooglePlayServicesRepairableException e) {
-                    Log.e(TAG, "google places error 1", e);
-                } catch (GooglePlayServicesNotAvailableException e) {
-                    Log.e(TAG, "google places error 2", e);
+                } catch (GooglePlayServicesRepairableException | GooglePlayServicesNotAvailableException e) {
+                    Log.e(TAG, "Google Places Error", e);
                 }
-
             }
         });
+
+        listviewAddresses = view.findViewById(R.id.listviewAddresses);
+        addressElementsList = new ArrayList<String>();
+        addressAdapter = new ArrayAdapter<String>
+                (getContext(), android.R.layout.simple_list_item_1, addressElementsList);
+        listviewAddresses.setAdapter(addressAdapter);
 
         txtAddPayment = view.findViewById(R.id.txtAddPayment);
         txtAddPayment.setOnClickListener(new View.OnClickListener() {
@@ -127,6 +145,24 @@ public class ProfileFragment extends Fragment {
     }
 
     @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == PLACE_AUTOCOMPLETE_REQUEST_CODE) {
+            if (resultCode == RESULT_OK) {
+                Place place = PlaceAutocomplete.getPlace(getActivity(), data);
+                // TODO add the new address to the user's data in firebase
+                addressElementsList.add(place.getAddress().toString());
+                addressAdapter.notifyDataSetChanged();
+            } else if (resultCode == PlaceAutocomplete.RESULT_ERROR) {
+                Status status = PlaceAutocomplete.getStatus(getActivity(), data);
+                Log.i(TAG, status.getStatusMessage());
+                Toast.makeText(getContext(), R.string.unable_to_add_address, Toast.LENGTH_SHORT).show();
+            } else if (resultCode == RESULT_CANCELED) {
+                // The user canceled the operation.
+            }
+        }
+    }
+
+    @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
@@ -138,10 +174,11 @@ public class ProfileFragment extends Fragment {
         userQuery.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                for(DataSnapshot singleSnapshot : dataSnapshot.getChildren()){
+                for (DataSnapshot singleSnapshot : dataSnapshot.getChildren()) {
                     user = singleSnapshot.getValue(User.class);
                 }
             }
+
             @Override
             public void onCancelled(DatabaseError databaseError) {
                 Toast.makeText(getActivity(), databaseError.toException().toString(), Toast.LENGTH_LONG).show();
@@ -197,23 +234,6 @@ public class ProfileFragment extends Fragment {
         super.onAttach(context);
         PFL = (ProfileFragment.ProfileFragmentListener) context;
     }
-
-//    @Override
-//    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-//        if (requestCode == PLACE_AUTOCOMPLETE_REQUEST_CODE) {
-//            if (resultCode == RESULT_OK) {
-//                Place place = PlaceAutocomplete.getPlace(this, data);
-//                Log.i(TAG, "Place: " + place.getName());
-//            } else if (resultCode == PlaceAutocomplete.RESULT_ERROR) {
-//                Status status = PlaceAutocomplete.getStatus(this, data);
-//                // TODO: Handle the error.
-//                Log.i(TAG, status.getStatusMessage());
-//
-//            } else if (resultCode == RESULT_CANCELED) {
-//                // The user canceled the operation.
-//            }
-//        }
-//    }
 
     private void signOut() {
 
