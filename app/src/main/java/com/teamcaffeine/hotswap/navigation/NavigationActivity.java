@@ -21,7 +21,7 @@ import com.teamcaffeine.hotswap.utility.SessionHandler;
 import java.lang.reflect.Field;
 
 public class NavigationActivity extends AppCompatActivity implements
-        InboxFragment.InboxFragmentListener,
+        ChatFragment.ChatFragmentListener,
         ProfileFragment.ProfileFragmentListener,
         ListItemFragment.ListItemFragmentListener,
         SearchFragment.SearchFragmentListener {
@@ -31,9 +31,9 @@ public class NavigationActivity extends AppCompatActivity implements
     public BottomNavigationView navigation;
 
     private ListItemFragment listItemFragment;
-    private InboxFragment inboxFragment;
     private ProfileFragment profileFragment;
     private SearchFragment searchFragment;
+    private ChatFragment chatFragment;
 
     SharedPreferences prefs;
     private String navigationIndexKey;
@@ -61,8 +61,8 @@ public class NavigationActivity extends AppCompatActivity implements
                 inflateFragment(searchFragment, 1);
                 return true;
             case R.id.navigation_inbox:
-                Log.i(TAG, "nav inbox");
-                inflateFragment(inboxFragment, 2);
+                Log.i(TAG, "nav chat");
+                inflateFragment(chatFragment, 2);
                 return true;
             case R.id.navigation_profile:
                 Log.i(TAG, "nav profile");
@@ -118,9 +118,9 @@ public class NavigationActivity extends AppCompatActivity implements
 
 
         listItemFragment = new ListItemFragment();
-        inboxFragment = new InboxFragment();
         profileFragment = new ProfileFragment();
         searchFragment = new SearchFragment();
+        chatFragment = new ChatFragment();
 
         navigation.setSelectedItemId(navigation.getMenu().getItem(prefs.getInt(navigationIndexKey, 0)).getItemId());
     }
