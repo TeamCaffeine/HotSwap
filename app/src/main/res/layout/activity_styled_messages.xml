@@ -1,0 +1,47 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white">
+
+    <com.stfalcon.chatkit.messages.MessagesList
+        android:id="@+id/messagesList"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/input"
+        app:incomingAvatarHeight="56dp"
+        app:incomingAvatarWidth="56dp"
+        app:incomingDefaultBubbleColor="@color/ivory"
+        app:incomingDefaultBubblePressedColor="@color/gray_light"
+        app:incomingDefaultBubbleSelectedColor="@color/gray_dark_transparent"
+        app:incomingTextColor="#000000"
+        app:incomingTimeTextColor="@color/dark_gray"
+        app:outcomingDefaultBubbleColor="@color/colorPrimary"
+        app:outcomingDefaultBubblePressedColor="@color/gray_light"
+        app:outcomingDefaultBubbleSelectedColor="@color/gray_dark_transparent"
+        app:outcomingTextColor="@color/white"
+        app:outcomingTimeTextColor="@color/dark_gray" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_above="@+id/input"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:background="@color/gray_light" />
+
+    <com.stfalcon.chatkit.messages.MessageInput
+        android:id="@+id/input"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        app:attachmentButtonDefaultBgColor="@color/colorPrimary"
+        app:attachmentButtonDefaultBgPressedColor="@color/colorPrimaryDark"
+        app:attachmentButtonDefaultIconColor="@color/white"
+        app:attachmentButtonDefaultIconPressedColor="@color/white"
+        app:inputButtonDefaultBgColor="@color/colorPrimary"
+        app:inputButtonDefaultBgPressedColor="@color/colorPrimaryDark"
+        app:inputCursorDrawable="@drawable/shape_custom_cursor"
+        app:inputHint="Enter a message..."
+        app:showAttachmentButton="true" />
+</RelativeLayout>
