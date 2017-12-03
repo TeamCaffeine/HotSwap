@@ -39,6 +39,7 @@
             android:layout_marginRight="10dp"
             android:layout_weight="2"
             android:hint="@string/first_name_hint"
+            android:inputType="textPersonName"
             android:paddingLeft="15dp" />
     </LinearLayout>
 
@@ -66,6 +67,7 @@
             android:layout_marginRight="10dp"
             android:layout_weight="2"
             android:hint="@string/last_name_hint"
+            android:inputType="textPersonName"
             android:paddingLeft="15dp" />
 
     </LinearLayout>
@@ -94,6 +96,7 @@
             android:layout_marginRight="10dp"
             android:layout_weight="2"
             android:hint="@string/phone_number_hint"
+            android:inputType="phone"
             android:paddingLeft="15dp" />
 
     </LinearLayout>
