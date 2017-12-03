@@ -124,7 +124,7 @@
     <!--Profile UI strings-->
     <string name="contact_info_label">Contact Info</string>
     <string name="addresses_label">Addresses</string>
-    <string name="payment_label">Payment Methods</string>
+    <string name="payment_label">Payment \nMethods</string>
     <string name="add_payment_to_profile"><u>+ Add Payment Method</u></string>
     <string name="items_label">Your Items</string>
     <string name="past_transactions"><u>View Past Transactions</u></string>
@@ -140,6 +140,7 @@
     <string name="delete">Delete</string>
     <string name="delete_address_question">Are you sure you want to delete this address?</string>
     <string name="cancel">Cancel</string>
+    <string name="validationErrors">Validation Errors</string>
 
 
 </resources>

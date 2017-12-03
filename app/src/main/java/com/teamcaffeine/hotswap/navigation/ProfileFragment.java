@@ -10,7 +10,9 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -28,6 +30,7 @@ import android.widget.Toast;
 import com.facebook.share.model.ShareLinkContent;
 import com.facebook.share.widget.ShareDialog;
 import com.firebase.ui.auth.AuthUI;
+import com.google.android.gms.common.ErrorDialogFragment;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.common.api.Status;
@@ -85,7 +88,6 @@ public class ProfileFragment extends Fragment {
     private ListView listviewAddresses;
     private List<String> addressElementsList;
     private ArrayAdapter<String> addressAdapter;
-    private TextView txtAddPayment;
     private Button btnAddPayment;
     private ListView listviewPayment;
     private List<String> paymentElementsList;
@@ -173,8 +175,10 @@ public class ProfileFragment extends Fragment {
                 (getContext(), android.R.layout.simple_list_item_1, addressElementsList);
         listviewAddresses.setAdapter(addressAdapter);
 
-        txtAddPayment = view.findViewById(R.id.txtAddPayment);
-        txtAddPayment.setOnClickListener(new View.OnClickListener() {
+
+
+        btnAddPayment = view.findViewById(R.id.btnAddPayment);
+        btnAddPayment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 addPaymentPopup();
@@ -182,6 +186,7 @@ public class ProfileFragment extends Fragment {
         });
 
         paymentElementsList = new ArrayList<String>();
+        listviewPayment = view.findViewById(R.id.listviewPayment);
         paymentAdapter = new ArrayAdapter<String>
                 (getContext(), android.R.layout.simple_list_item_1, paymentElementsList);
         listviewPayment.setAdapter(paymentAdapter);
@@ -384,15 +389,17 @@ public class ProfileFragment extends Fragment {
             public void onClick(View view) {
                 Card cardToSave = mCardMultilineWidget.getCard();
                 if (cardToSave == null) {
-                    // error dialog from Strip documentation
-//            mErrorDialogHandler.showError("Invalid Card Data");
-                    //TODO: enable error dialog handler
-                    // for now: close popup and show Toast
-                    popupWindow.dismiss();
-                    Toast.makeText(getContext(), "Invalid Card Data", Toast.LENGTH_LONG).show();
+                    FragmentManager mFragmentManager = getFragmentManager();
+                    String errorMessage = "Invalid Card Data";
+                    DialogFragment fragment = new DialogFragment();
+                    Bundle args = new Bundle();
+                    args.putInt("titleId", R.string.validationErrors);
+                    args.putString("message", errorMessage);
+                    fragment.setArguments(args);
+                    fragment.show(mFragmentManager, "error");
                 } else {
                     //TODO: add info to Stripe database
-                    // for now: just close the popup and show a toast
+                    // for now: just close the popup, show a toast, add to listview
                     popupWindow.dismiss();
                     Toast.makeText(getContext(), "Card Added", Toast.LENGTH_SHORT).show();
                 }
