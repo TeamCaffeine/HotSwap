@@ -1,5 +1,6 @@
 package com.teamcaffeine.hotswap.navigation;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -25,6 +26,7 @@ public class ListItemFragment extends Fragment {
         return root;
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     public void onViewCreated(View view, Bundle savedInstanceState) {
         Calendar nextYear = Calendar.getInstance();
         nextYear.add(Calendar.YEAR, 1);

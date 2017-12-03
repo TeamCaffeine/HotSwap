@@ -243,10 +243,10 @@ public class LoginActivity extends AppCompatActivity {
                             Log.w(GoogleLogTag, "signInWithCredential:failure", task.getException());
                             if (task.getException() != null) {
                                 Toast.makeText(LoginActivity.this, task.getException().getMessage(),
-                                        Toast.LENGTH_SHORT).show();
+                                        Toast.LENGTH_LONG).show();
                             } else {
                                 Toast.makeText(LoginActivity.this, R.string.authentication_failed,
-                                        Toast.LENGTH_SHORT).show();
+                                        Toast.LENGTH_LONG).show();
                             }
                         }
 
@@ -279,10 +279,10 @@ public class LoginActivity extends AppCompatActivity {
                             Log.w(FacebookLogTag, "signInWithCredential:failure", task.getException());
                             if (task.getException() != null) {
                                 Toast.makeText(LoginActivity.this, task.getException().getMessage(),
-                                        Toast.LENGTH_SHORT).show();
+                                        Toast.LENGTH_LONG).show();
                             } else {
                                 Toast.makeText(LoginActivity.this, R.string.authentication_failed,
-                                        Toast.LENGTH_SHORT).show();
+                                        Toast.LENGTH_LONG).show();
                             }
                             LoginManager.getInstance().logOut();
                         }
@@ -318,10 +318,10 @@ public class LoginActivity extends AppCompatActivity {
                             Log.w(EPLogTag, "createUserWithEmail:failure", task.getException());
                             if (task.getException() != null) {
                                 Toast.makeText(LoginActivity.this, task.getException().getMessage(),
-                                        Toast.LENGTH_SHORT).show();
+                                        Toast.LENGTH_LONG).show();
                             } else {
                                 Toast.makeText(LoginActivity.this, R.string.authentication_failed,
-                                        Toast.LENGTH_SHORT).show();
+                                        Toast.LENGTH_LONG).show();
                             }
                         }
 
@@ -357,10 +357,10 @@ public class LoginActivity extends AppCompatActivity {
                             Log.w(EPLogTag, "signInWithEmail:failure", task.getException());
                             if (task.getException() != null) {
                                 Toast.makeText(LoginActivity.this, task.getException().getMessage(),
-                                        Toast.LENGTH_SHORT).show();
+                                        Toast.LENGTH_LONG).show();
                             } else {
                                 Toast.makeText(LoginActivity.this, R.string.authentication_failed,
-                                        Toast.LENGTH_SHORT).show();
+                                        Toast.LENGTH_LONG).show();
                             }
                         }
 
