@@ -20,11 +20,12 @@ public class Item {
 
     Item() {}
 
-    public Item(String name, String ownerID, String description, ArrayList<String> tags, String headerPicture,
-                ArrayList<Date> availableDates) {
+    public Item(String name, String ownerID, String description, String rentPrice, ArrayList<String> tags,
+                String headerPicture, ArrayList<Date> availableDates) {
         this.name = name;
         this.ownerID = ownerID;
         this.description = description;
+        this.rentPrice = rentPrice;
         this.tags = tags;
         this.headerPicture = headerPicture;
         this.availableDates = availableDates;
@@ -35,6 +36,7 @@ public class Item {
         this.ownerID = item.getOwnerID();
         this.renteeID = item.getRenteeID();
         this.description = item.getDescription();
+        this.rentPrice = rentPrice;
         this.tags = item.getTags();
         this.headerPicture = item.getHeaderPicture();
         this.additionalPictures = item.getAdditionalPictures();
@@ -48,6 +50,7 @@ public class Item {
         result.put("ownerID", ownerID);
         result.put("renteeID", renteeID);
         result.put("description", description);
+        result.put("rentPrice", rentPrice);
         result.put("tags", tags);
         result.put("headerPicture", headerPicture);
         result.put("additionalPictures", additionalPictures);
@@ -69,6 +72,10 @@ public class Item {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public void setRentPrice(String rentPrice) {
+        this.rentPrice = rentPrice;
     }
 
     public boolean addTag(String tag) {
@@ -121,6 +128,10 @@ public class Item {
 
     public String getDescription() {
         return description;
+    }
+
+    public String getRentPrice() {
+        return rentPrice;
     }
 
     public ArrayList<String> getTags() {
