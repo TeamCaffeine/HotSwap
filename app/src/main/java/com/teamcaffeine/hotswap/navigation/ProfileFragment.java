@@ -42,6 +42,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.database.ValueEventListener;
 import com.teamcaffeine.hotswap.R;
 import com.teamcaffeine.hotswap.login.LoginActivity;
 import com.teamcaffeine.hotswap.login.User;
@@ -51,6 +52,7 @@ import java.util.List;
 
 import static android.app.Activity.RESULT_CANCELED;
 import static android.app.Activity.RESULT_OK;
+import com.teamcaffeine.hotswap.login.User;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -198,30 +200,11 @@ public class ProfileFragment extends Fragment {
         database = FirebaseDatabase.getInstance();
         users = database.getReference().child(userTable);
 
-        Query userQuery = users.equalTo(currentUser.getUid());
-        userQuery.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                for (DataSnapshot singleSnapshot : dataSnapshot.getChildren()) {
-                    user = singleSnapshot.getValue(User.class);
-                }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                Toast.makeText(getActivity(), databaseError.toException().toString(), Toast.LENGTH_LONG).show();
-            }
-        });
-
-        // get the user info
-//        String fullName = user.getFirstName() + " " + user.getLastName();
-//        String memberSince = user.getMemberSince();
-//        String email = user.getEmail();
-//        String phoneNumber = user.getPhoneNumber();
-        String fullName = "Megan";
-        String memberSince = "November 2017";
-        String email = "megan@test.com";
-        String phoneNumber = "555";
+        // get the bundle from the intent
+        //****keeping these lines commented out for now, we will need them when we implement the fragment with login
+//        Bundle bundle = getIntent().getExtras();
+//        String fullName = bundle.getString("fullName");
+//        String dateCreated = bundle.getString("dateCreated");
 
 
         // set references to layout objects
@@ -232,11 +215,37 @@ public class ProfileFragment extends Fragment {
         txtEmail = view.findViewById(R.id.txtEmail);
         txtPhoneNumber = view.findViewById(R.id.txtPhoneNumber);
 
-        // set display
-        txtName.setText(fullName);
-        txtMemberSince.setText("Member Since: " + memberSince);
-        txtEmail.setText(email);
-        txtPhoneNumber.setText(phoneNumber);
+        // Get a reference to our posts
+        FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+        final FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference ref = database.getReference().child("users").child(firebaseUser.getUid());
+
+        // Attach a listener to read the data at our posts reference
+        ref.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                User user = dataSnapshot.getValue(User.class);
+                txtName.setText(user.getFirstName()+ " " + user.getLastName());
+
+                // get the date the user created their account from the Firebase
+                // set "Member Since" equal to the date the user created their account
+                txtMemberSince.setText("Member Since: " + user.getMemberSince());
+
+                txtEmail.setText(user.getEmail());
+                txtPhoneNumber.setText(user.getPhoneNumber());
+
+
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                System.out.println("The read failed: " + databaseError.getCode());
+            }
+        });
+
+
+
 
         // Set logout functionality of the Logout button
         btnLogout.setOnClickListener(new View.OnClickListener() {
