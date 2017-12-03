@@ -26,10 +26,14 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.teamcaffeine.hotswap.R;
 import com.teamcaffeine.hotswap.login.LoginActivity;
+import com.teamcaffeine.hotswap.login.User;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -127,9 +131,25 @@ public class ProfileFragment extends Fragment {
         btnLogout = view.findViewById(R.id.btnLogout);
         btnInviteFriends = view.findViewById(R.id.btnInviteFriends);
 
-        // get the user's name from the bundle
-        // and set it in the layout
-        txtName.setText(fullName);
+        // Get a reference to our posts
+        FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+        final FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference ref = database.getReference().child("users").child(firebaseUser.getUid());
+
+        // Attach a listener to read the data at our posts reference
+        ref.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                User user = dataSnapshot.getValue(User.class);
+                txtName.setText(user.getFirstName());
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                System.out.println("The read failed: " + databaseError.getCode());
+            }
+        });
+
 
         // get the date the user created their account from the bundle
         // set "Member Since" equal to the date the user created their account
