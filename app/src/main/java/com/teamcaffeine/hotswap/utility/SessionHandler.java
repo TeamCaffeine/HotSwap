@@ -1,5 +1,6 @@
 package com.teamcaffeine.hotswap.utility;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
@@ -24,15 +25,17 @@ public final class SessionHandler {
 
     private static final String userTable = "users";
 
-    public static void shouldLogIn(final Context context) {
+    public static boolean shouldLogIn(final Context context) {
         if (FirebaseAuth.getInstance().getCurrentUser() == null) {
             Intent login = new Intent(context, LoginActivity.class);
-            login.setFlags(login.getFlags() | Intent.FLAG_ACTIVITY_NO_HISTORY);
             context.startActivity(login);
+            ((Activity) context).finish();
+            return true;
         }
+        return false;
     }
 
-    public static void alreadyLoggedIn(final Context context) {
+    public static boolean alreadyLoggedIn(final Context context) {
         FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         if (FirebaseAuth.getInstance().getCurrentUser() != null) {
             final FirebaseDatabase database = FirebaseDatabase.getInstance();
@@ -46,13 +49,13 @@ public final class SessionHandler {
                     if (!user.getMemberSince().isEmpty()) {
                         // We've already filled out basic user data, go straight to nav
                         Intent appEntry = new Intent(context, NavigationActivity.class);
-                        appEntry.setFlags(appEntry.getFlags() | Intent.FLAG_ACTIVITY_NO_HISTORY);
                         context.startActivity(appEntry);
+                        ((Activity) context).finish();
                     } else {
                         // We still need to fill out basic user data, go to add user details activity
                         Intent appEntry = new Intent(context, AddUserDetailsActivity.class);
-                        appEntry.setFlags(appEntry.getFlags() | Intent.FLAG_ACTIVITY_NO_HISTORY);
                         context.startActivity(appEntry);
+                        ((Activity) context).finish();
                     }
                 }
 
@@ -61,6 +64,9 @@ public final class SessionHandler {
                     Log.d("SessionHandler", "The read failed: " + databaseError.getCode());
                 }
             });
+
+            return true;
         }
+        return false;
     }
 }
