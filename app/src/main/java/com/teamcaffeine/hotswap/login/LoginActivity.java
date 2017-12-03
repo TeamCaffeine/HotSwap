@@ -203,12 +203,10 @@ public class LoginActivity extends AppCompatActivity {
                     addUserEntry();
 
                     Intent addUserDetails = new Intent(LoginActivity.this, AddUserDetailsActivity.class);
-                    addUserDetails.setFlags(addUserDetails.getFlags() | Intent.FLAG_ACTIVITY_NO_HISTORY);
                     startActivity(addUserDetails);
                     finish();
                 } else if (dataSnapshot.child(firebaseUser.getUid()).getValue(User.class).getMemberSince().isEmpty()) {
                     Intent addUserDetails = new Intent(LoginActivity.this, AddUserDetailsActivity.class);
-                    addUserDetails.setFlags(addUserDetails.getFlags() | Intent.FLAG_ACTIVITY_NO_HISTORY);
                     startActivity(addUserDetails);
                     finish();
                 }
@@ -238,7 +236,6 @@ public class LoginActivity extends AppCompatActivity {
                             handleFirstTimeUser();
 
                             Intent nav = new Intent(LoginActivity.this, NavigationActivity.class);
-                            nav.setFlags(nav.getFlags() | Intent.FLAG_ACTIVITY_NO_HISTORY);
                             startActivity(nav);
                             finish();
                         } else {
@@ -275,7 +272,6 @@ public class LoginActivity extends AppCompatActivity {
                             handleFirstTimeUser();
 
                             Intent nav = new Intent(LoginActivity.this, NavigationActivity.class);
-                            nav.setFlags(nav.getFlags() | Intent.FLAG_ACTIVITY_NO_HISTORY);
                             startActivity(nav);
                             finish();
                         } else {
@@ -315,7 +311,6 @@ public class LoginActivity extends AppCompatActivity {
                             handleFirstTimeUser();
 
                             Intent nav = new Intent(getApplicationContext(), NavigationActivity.class);
-                            nav.setFlags(nav.getFlags() | Intent.FLAG_ACTIVITY_NO_HISTORY);
                             startActivity(nav);
                             finish();
                         } else {
@@ -355,7 +350,6 @@ public class LoginActivity extends AppCompatActivity {
                             handleFirstTimeUser();
 
                             Intent nav = new Intent(getApplicationContext(), NavigationActivity.class);
-                            nav.setFlags(nav.getFlags() | Intent.FLAG_ACTIVITY_NO_HISTORY);
                             startActivity(nav);
                             finish();
                         } else {
