@@ -1,12 +1,7 @@
 package com.teamcaffeine.hotswap.login;
 
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseReference;
-
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-
 
 public class User {
     // Force empty initialization of default table fields
@@ -78,9 +73,13 @@ public class User {
         this.profilePicture = profilePicture;
     }
 
-    public void setOnline(boolean online) { this.online = online; }
+    public void setOnline(boolean online) {
+        this.online = online;
+    }
 
-    public String getUid() { return Uid; }
+    public String getUid() {
+        return Uid;
+    }
 
     public String getFirstName() {
         return firstName;
@@ -102,7 +101,11 @@ public class User {
         return phoneNumber;
     }
 
-    public String getProfilePicture() { return profilePicture; }
+    public String getProfilePicture() {
+        return profilePicture;
+    }
 
-    public boolean getOnline() { return online; }
+    public boolean getOnline() {
+        return online;
+    }
 }
