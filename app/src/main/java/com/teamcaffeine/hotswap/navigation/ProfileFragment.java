@@ -1,8 +1,10 @@
 package com.teamcaffeine.hotswap.navigation;
 
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -14,6 +16,7 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
@@ -126,6 +129,32 @@ public class ProfileFragment extends Fragment {
         });
 
         listviewAddresses = view.findViewById(R.id.listviewAddresses);
+        listviewAddresses.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
+                AlertDialog myQuittingDialogBox = new AlertDialog.Builder(getContext())
+                        //set message, title, and icon
+                        .setTitle(R.string.delete)
+                        .setMessage(R.string.delete_address_question)
+                        .setPositiveButton(R.string.delete, new DialogInterface.OnClickListener() {
+
+                            public void onClick(DialogInterface dialog, int whichButton) {
+                                addressElementsList.remove(position);
+                                addressAdapter.notifyDataSetChanged();
+                                //TODO delete the address from the database as well.
+                                dialog.dismiss();
+                            }
+                        })
+                        .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        })
+                        .create();
+                myQuittingDialogBox.show();
+            }
+        });
+
         addressElementsList = new ArrayList<String>();
         addressAdapter = new ArrayAdapter<String>
                 (getContext(), android.R.layout.simple_list_item_1, addressElementsList);
