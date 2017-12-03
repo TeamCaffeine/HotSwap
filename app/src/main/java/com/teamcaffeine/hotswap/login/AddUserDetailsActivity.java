@@ -115,6 +115,7 @@ public class AddUserDetailsActivity extends AppCompatActivity {
 
                     Intent i = new Intent(AddUserDetailsActivity.this, NavigationActivity.class);
                     startActivity(i);
+                    finish();
                 }
 
                 @Override

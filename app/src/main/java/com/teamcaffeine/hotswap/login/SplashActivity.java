@@ -14,7 +14,8 @@ public class SplashActivity extends AppCompatActivity {
 
         // Check if the user is logged in - if they are, send them to their home page,
         // if not, send them to the login activity
-        SessionHandler.shouldLogIn(this);
-        SessionHandler.alreadyLoggedIn(this);
+        if (!SessionHandler.shouldLogIn(this)) {
+            SessionHandler.alreadyLoggedIn(this);
+        }
     }
 }
