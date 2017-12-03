@@ -8,7 +8,13 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
+import com.firebase.geofire.GeoFire;
+import com.firebase.geofire.GeoLocation;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.squareup.timessquare.CalendarPickerView;
 import com.teamcaffeine.hotswap.R;
 
@@ -18,6 +24,10 @@ import java.util.Date;
 public class ListItemFragment extends Fragment {
 
     private CalendarPickerView calendar;
+    Button list;
+    private DatabaseReference database;
+    private GeoFire geoFire;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -36,6 +46,21 @@ public class ListItemFragment extends Fragment {
         calendar.init(today, nextYear.getTime())
                 .withSelectedDate(today)
                 .inMode(CalendarPickerView.SelectionMode.MULTIPLE);
+
+        list = (Button) getView().findViewById(R.id.listItemButton);
+        list.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Set up Firebase with Geofire and respective user
+                database = FirebaseDatabase.getInstance().getReference("Items");
+                String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+                DatabaseReference ref = FirebaseDatabase.getInstance().getReference("ItemIDHere");
+               // geoFire = new GeoFire(database.child("geofire"));
+                geoFire = new GeoFire(database);
+                geoFire.setLocation("Item1", new GeoLocation(42.365014, -71.102660));
+            }
+        });
+
 
         calendar.setOnTouchListener(new View.OnTouchListener() {
 
