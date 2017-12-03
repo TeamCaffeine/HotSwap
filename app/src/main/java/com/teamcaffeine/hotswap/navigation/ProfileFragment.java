@@ -121,8 +121,6 @@ public class ProfileFragment extends Fragment {
 //        Bundle bundle = getIntent().getExtras();
 //        String fullName = bundle.getString("fullName");
 //        String dateCreated = bundle.getString("dateCreated");
-        String fullName = "Joe Smith";
-        String dateCreated = "October 31, 2017";
 
 
         // set references to layout objects
@@ -130,6 +128,8 @@ public class ProfileFragment extends Fragment {
         txtMemberSince = view.findViewById(R.id.txtMemberSince);
         btnLogout = view.findViewById(R.id.btnLogout);
         btnInviteFriends = view.findViewById(R.id.btnInviteFriends);
+        txtEmail = view.findViewById(R.id.txtEmail);
+        txtPhoneNumber = view.findViewById(R.id.txtPhoneNumber);
 
         // Get a reference to our posts
         FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
@@ -141,7 +141,17 @@ public class ProfileFragment extends Fragment {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 User user = dataSnapshot.getValue(User.class);
-                txtName.setText(user.getFirstName());
+                txtName.setText(user.getFirstName()+ " " + user.getLastName());
+
+                // get the date the user created their account from the Firebase
+                // set "Member Since" equal to the date the user created their account
+                txtMemberSince.setText("Member Since: " + user.getMemberSince());
+
+                txtEmail.setText(user.getEmail());
+                txtPhoneNumber.setText(user.getPhoneNumber());
+
+
+
             }
 
             @Override
@@ -151,9 +161,7 @@ public class ProfileFragment extends Fragment {
         });
 
 
-        // get the date the user created their account from the bundle
-        // set "Member Since" equal to the date the user created their account
-        txtMemberSince.setText("Member Since: " + dateCreated);
+
 
         // Set logout functionality of the Logout button
         btnLogout.setOnClickListener(new View.OnClickListener() {
