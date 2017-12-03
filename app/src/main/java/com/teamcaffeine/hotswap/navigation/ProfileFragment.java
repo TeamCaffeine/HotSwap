@@ -44,7 +44,6 @@ import com.teamcaffeine.hotswap.login.LoginActivity;
 import com.teamcaffeine.hotswap.login.User;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import static android.app.Activity.RESULT_CANCELED;
@@ -74,7 +73,7 @@ public class ProfileFragment extends Fragment {
     private Button btnInviteFriends;
     private TextView txtEmail;
     private TextView txtPhoneNumber;
-    private TextView txtAddAddress;
+    private Button btnAddAddress;
     private ListView listviewAddresses;
     private List<String> addressElementsList;
     private ArrayAdapter<String> addressAdapter;
@@ -111,8 +110,8 @@ public class ProfileFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.activity_profile, container, false);
 
-        txtAddAddress = view.findViewById(R.id.txtAddAddress);
-        txtAddAddress.setOnClickListener(new View.OnClickListener() {
+        btnAddAddress = view.findViewById(R.id.txtAddAddress);
+        btnAddAddress.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 try {

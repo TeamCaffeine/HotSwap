@@ -124,7 +124,6 @@
     <!--Profile UI strings-->
     <string name="contact_info_label">Contact Info</string>
     <string name="addresses_label">Addresses</string>
-    <string name="add_address_to_profile">+ Add Address</string>
     <string name="payment_label">Payment Methods</string>
     <string name="add_payment_to_profile"><u>+ Add Payment Method</u></string>
     <string name="items_label">Your Items</string>
@@ -137,6 +136,7 @@
     <string name="placeholder_phone_number">Phone Number</string>
     <string name="base_package_name">com.teamcaffeine.hotswap</string>
     <string name="unable_to_add_address">Unable to add your address. Please try again.</string>
+    <string name="plus">+</string>
 
 
 </resources>
