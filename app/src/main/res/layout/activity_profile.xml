@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent">
@@ -96,16 +96,29 @@
     <LinearLayout
         android:id="@+id/layout_Adresses"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:orientation="horizontal"
-        android:layout_weight="1">
+        android:layout_height="50dp"
+        android:layout_weight="1"
+        android:orientation="horizontal">
 
-        <TextView
-            android:id="@+id/txtAddressesLabel"
-            android:layout_width="0dp"
+        <LinearLayout
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:text="@string/addresses_label" />
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/txtAddressesLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/addresses_label" />
+
+            <Button
+                android:id="@+id/btnAddAddress"
+                style="@android:style/Widget.Material.Light.Button.Small"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/plus"
+                android:textColor="@color/blue" />
+        </LinearLayout>
 
         <LinearLayout
             android:id="@+id/layout_AddressesAndAdd"
@@ -118,16 +131,8 @@
                 android:id="@+id/listviewAddresses"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight="1">
+                android:layout_weight="1"></ListView>
 
-            </ListView>
-
-            <TextView
-                android:id="@+id/txtAddAddress"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/add_address_to_profile"
-                android:textColor="@color/blue" />
         </LinearLayout>
 
     </LinearLayout>
@@ -197,4 +202,4 @@
 
 </LinearLayout>
 
-</ScrollView>
+</LinearLayout>

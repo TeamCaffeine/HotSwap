@@ -1,8 +1,10 @@
 package com.teamcaffeine.hotswap.navigation;
 
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -14,10 +16,10 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Adapter;
 import android.widget.BaseAdapter;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
@@ -28,6 +30,8 @@ import com.facebook.share.widget.ShareDialog;
 import com.firebase.ui.auth.AuthUI;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
+import com.google.android.gms.common.api.Status;
+import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlaceAutocomplete;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -46,9 +50,12 @@ import com.teamcaffeine.hotswap.login.LoginActivity;
 import com.teamcaffeine.hotswap.login.User;
 
 
-import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
+
+import java.util.ArrayList;
+
+import static android.app.Activity.RESULT_CANCELED;
+import static android.app.Activity.RESULT_OK;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -56,6 +63,9 @@ import java.util.Map;
 public class ProfileFragment extends Fragment {
 
     private String TAG = "ProfileFragment";
+
+    // Place codes
+    final int PLACE_AUTOCOMPLETE_REQUEST_CODE = 1;
 
     // create objects for Firebase references
     private FirebaseUser currentUser;
@@ -71,14 +81,20 @@ public class ProfileFragment extends Fragment {
     private Button btnInviteFriends;
     private TextView txtEmail;
     private TextView txtPhoneNumber;
-    private TextView txtAddAddress;
+    private Button btnAddAddress;
+    private ListView listviewAddresses;
+    private List<String> addressElementsList;
+    private ArrayAdapter<String> addressAdapter;
     private TextView txtAddPayment;
-    private TextView txtAddItem;
+    private Button btnAddPayment;
+    private ListView listviewPayment;
+    private List<String> paymentElementsList;
+    private ArrayAdapter<String> paymentAdapter;
     private TextView txtPastTransactions;
     private ListView lvAddresses;
     private ListView lvPayment;
-    private ListAdapter addressesAdapter;
-    private ListAdapter paymentAdapter;
+//    private ListAdapter addressesAdapter;
+//    private ListAdapter paymentAdapter;
 
     public ProgressDialog mProgressDialog;
 
@@ -110,9 +126,8 @@ public class ProfileFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.activity_profile, container, false);
 
-        final int PLACE_AUTOCOMPLETE_REQUEST_CODE = 1;
-        txtAddAddress = view.findViewById(R.id.txtAddAddress);
-        txtAddAddress.setOnClickListener(new View.OnClickListener() {
+        btnAddAddress = view.findViewById(R.id.btnAddAddress);
+        btnAddAddress.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 try {
@@ -120,14 +135,43 @@ public class ProfileFragment extends Fragment {
                             new PlaceAutocomplete.IntentBuilder(PlaceAutocomplete.MODE_FULLSCREEN)
                                     .build(getActivity());
                     startActivityForResult(intent, PLACE_AUTOCOMPLETE_REQUEST_CODE);
-                } catch (GooglePlayServicesRepairableException e) {
-                    Log.e(TAG, "google places error 1", e);
-                } catch (GooglePlayServicesNotAvailableException e) {
-                    Log.e(TAG, "google places error 2", e);
+                } catch (GooglePlayServicesRepairableException | GooglePlayServicesNotAvailableException e) {
+                    Log.e(TAG, "Google Places Error", e);
                 }
-
             }
         });
+
+        listviewAddresses = view.findViewById(R.id.listviewAddresses);
+        listviewAddresses.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
+                AlertDialog myQuittingDialogBox = new AlertDialog.Builder(getContext())
+                        //set message, title, and icon
+                        .setTitle(R.string.delete)
+                        .setMessage(R.string.delete_address_question)
+                        .setPositiveButton(R.string.delete, new DialogInterface.OnClickListener() {
+
+                            public void onClick(DialogInterface dialog, int whichButton) {
+                                addressElementsList.remove(position);
+                                addressAdapter.notifyDataSetChanged();
+                                //TODO delete the address from the database as well.
+                                dialog.dismiss();
+                            }
+                        })
+                        .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        })
+                        .create();
+                myQuittingDialogBox.show();
+            }
+        });
+
+        addressElementsList = new ArrayList<String>();
+        addressAdapter = new ArrayAdapter<String>
+                (getContext(), android.R.layout.simple_list_item_1, addressElementsList);
+        listviewAddresses.setAdapter(addressAdapter);
 
         txtAddPayment = view.findViewById(R.id.txtAddPayment);
         txtAddPayment.setOnClickListener(new View.OnClickListener() {
@@ -136,9 +180,33 @@ public class ProfileFragment extends Fragment {
                 addPaymentPopup();
             }
         });
+
+        paymentElementsList = new ArrayList<String>();
+        paymentAdapter = new ArrayAdapter<String>
+                (getContext(), android.R.layout.simple_list_item_1, paymentElementsList);
+        listviewPayment.setAdapter(paymentAdapter);
+
         txtPastTransactions = view.findViewById(R.id.txtPastTransactions);
 
         return view;
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == PLACE_AUTOCOMPLETE_REQUEST_CODE) {
+            if (resultCode == RESULT_OK) {
+                Place place = PlaceAutocomplete.getPlace(getActivity(), data);
+                // TODO add the new address to the user's data in firebase
+                addressElementsList.add(place.getAddress().toString());
+                addressAdapter.notifyDataSetChanged();
+            } else if (resultCode == PlaceAutocomplete.RESULT_ERROR) {
+                Status status = PlaceAutocomplete.getStatus(getActivity(), data);
+                Log.i(TAG, status.getStatusMessage());
+                Toast.makeText(getContext(), R.string.unable_to_add_address, Toast.LENGTH_SHORT).show();
+            } else if (resultCode == RESULT_CANCELED) {
+                // The user canceled the operation.
+            }
+        }
     }
 
     @Override
@@ -153,10 +221,11 @@ public class ProfileFragment extends Fragment {
         userQuery.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                for(DataSnapshot singleSnapshot : dataSnapshot.getChildren()){
+                for (DataSnapshot singleSnapshot : dataSnapshot.getChildren()) {
                     user = singleSnapshot.getValue(User.class);
                 }
             }
+
             @Override
             public void onCancelled(DatabaseError databaseError) {
                 Toast.makeText(getActivity(), databaseError.toException().toString(), Toast.LENGTH_LONG).show();
@@ -188,13 +257,13 @@ public class ProfileFragment extends Fragment {
         txtEmail.setText(email);
         txtPhoneNumber.setText(phoneNumber);
 
-        lvAddresses = (ListView) view.findViewById(R.id.listviewAddresses);
-        addressesAdapter = new AddressesListAdapter(getContext(), user);  //instead of passing the boring default string adapter, let's pass our own, see class MyCustomAdapter below!
-        lvAddresses.setAdapter(addressesAdapter);
-
-        lvPayment = (ListView) view.findViewById(R.id.listviewPayment);
-        paymentAdapter = new PaymentListAdapter(getContext(), user);  //instead of passing the boring default string adapter, let's pass our own, see class MyCustomAdapter below!
-        lvPayment.setAdapter(paymentAdapter);
+//        lvAddresses = (ListView) view.findViewById(R.id.listviewAddresses);
+//        addressesAdapter = new AddressesListAdapter(getContext(), user);  //instead of passing the boring default string adapter, let's pass our own, see class MyCustomAdapter below!
+//        lvAddresses.setAdapter(addressesAdapter);
+//
+//        lvPayment = (ListView) view.findViewById(R.id.listviewPayment);
+//        paymentAdapter = new PaymentListAdapter(getContext(), user);  //instead of passing the boring default string adapter, let's pass our own, see class MyCustomAdapter below!
+//        lvPayment.setAdapter(paymentAdapter);
 
         // Set logout functionality of the Logout button
         btnLogout.setOnClickListener(new View.OnClickListener() {
@@ -220,23 +289,6 @@ public class ProfileFragment extends Fragment {
         super.onAttach(context);
         PFL = (ProfileFragment.ProfileFragmentListener) context;
     }
-
-//    @Override
-//    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-//        if (requestCode == PLACE_AUTOCOMPLETE_REQUEST_CODE) {
-//            if (resultCode == RESULT_OK) {
-//                Place place = PlaceAutocomplete.getPlace(this, data);
-//                Log.i(TAG, "Place: " + place.getName());
-//            } else if (resultCode == PlaceAutocomplete.RESULT_ERROR) {
-//                Status status = PlaceAutocomplete.getStatus(this, data);
-//                // TODO: Handle the error.
-//                Log.i(TAG, status.getStatusMessage());
-//
-//            } else if (resultCode == RESULT_CANCELED) {
-//                // The user canceled the operation.
-//            }
-//        }
-//    }
 
     private void signOut() {
 
