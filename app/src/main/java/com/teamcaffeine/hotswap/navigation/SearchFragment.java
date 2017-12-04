@@ -45,6 +45,9 @@ import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.squareup.okhttp.Callback;
@@ -55,7 +58,18 @@ import com.teamcaffeine.hotswap.R;
 import com.teamcaffeine.hotswap.maps.Items;
 import com.teamcaffeine.hotswap.maps.LocationPrefs;
 
+import com.firebase.client.Firebase;
+import com.firebase.client.FirebaseError;
+import com.firebase.geofire.GeoFire;
+import com.firebase.geofire.GeoLocation;
+import com.firebase.geofire.GeoQuery;
+import com.firebase.geofire.GeoQueryEventListener;
+import com.firebase.geofire.LocationCallback;
+
 import java.io.IOException;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -66,7 +80,6 @@ public class SearchFragment extends Fragment implements OnMapReadyCallback, Goog
     private GoogleMap mMap;
     private GoogleApiClient client;
     private LocationRequest locationRequest;
-    private Location lastLocation;
     private Marker currentLocationMarker;
     private Circle circle;
     public static final int REQUEST_LOCATION_CODE = 99;
@@ -79,6 +92,14 @@ public class SearchFragment extends Fragment implements OnMapReadyCallback, Goog
     SeekBar progress;
     CircleOptions circleOptions;
     Marker stopMarker;
+    private DatabaseReference database;
+    private GeoFire geoFire;
+    private GeoQuery geoQuery;
+    private Map<String,Marker> markers;
+    private Set<GeoQuery> geoQueries = new HashSet<>();
+
+
+
 
     SearchFragment.SearchFragmentListener SFL;
 
@@ -130,7 +151,7 @@ public class SearchFragment extends Fragment implements OnMapReadyCallback, Goog
 //                }
             }
         });
-
+        // Underlines locale and filters
       //  locale = (Button)view.findViewById(R.id.setLocaleButton);
         locale = (TextView)view.findViewById(R.id.setLocaleFilters);
         SpannableString content = new SpannableString(locale.getText());
@@ -153,7 +174,6 @@ public class SearchFragment extends Fragment implements OnMapReadyCallback, Goog
         String city = intent.getStringExtra("city");
         progress = (SeekBar)view.findViewById(R.id.circleFilter);
 
-        // Underlines "Cancel"
 
 
         if (city==null) {
@@ -194,6 +214,7 @@ public class SearchFragment extends Fragment implements OnMapReadyCallback, Goog
         SupportMapFragment mapFragment = (SupportMapFragment)getChildFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+
 
     }
     @Override
@@ -239,10 +260,52 @@ public class SearchFragment extends Fragment implements OnMapReadyCallback, Goog
         LocationManager locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
         Criteria criteria = new Criteria();
 
-        // TODO: get rid of Tony's filthy hacks
-        Location location = locationManager.getLastKnownLocation(locationManager.NETWORK_PROVIDER);
+
+
+
+        MarkerOptions options = new MarkerOptions();
+        LatLng vacuumX = new LatLng(42.365014, -71.102660); // hmart coords
+        options.position(vacuumX);
+        options.title("VacuumX");
+        mMap.addMarker(options);
+
+    }
+
+    protected synchronized void buildGoogleApiClient(){
+        client = new GoogleApiClient.Builder(getActivity().getApplicationContext())
+                .addConnectionCallbacks(this)
+                .addOnConnectionFailedListener(this)
+                .addApi(LocationServices.API).build();
+        client.connect();
+    }
+
+    @Override
+    public void onConnected(@Nullable Bundle bundle) {
+        locationRequest = new LocationRequest();
+        locationRequest.setInterval(1000);
+        locationRequest.setFastestInterval(1000);
+        locationRequest.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
+        if (ContextCompat.checkSelfPermission(getActivity().getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            LocationServices.FusedLocationApi.requestLocationUpdates(client,locationRequest,this);
+        }
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {}
+
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {}
+
+    @Override
+    public void onLocationChanged(Location location) {
+
+        if(currentLocationMarker != null){
+            currentLocationMarker.remove();
+        }
+
         // how the map zooms into current location
         // if preferences exist
+        // TODO: have it handle if intent is null
         Intent intent = getActivity().getIntent();
         Bundle extras = intent.getExtras();
         if (extras.containsKey("zip")) { // if there is location prefs
@@ -323,11 +386,11 @@ public class SearchFragment extends Fragment implements OnMapReadyCallback, Goog
 
                             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latlng, 15.5f));
 
-                            }
-                        });
-                    }
-                });
-            }
+                        }
+                    });
+                }
+            });
+        }
 
         // if preferences do not exist
         else {
@@ -371,48 +434,26 @@ public class SearchFragment extends Fragment implements OnMapReadyCallback, Goog
             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(location.getLatitude(), location.getLongitude()), 15.5f));
         }
 
-
-        MarkerOptions options = new MarkerOptions();
-        LatLng vacuumX = new LatLng(42.365014, -71.102660); // hmart coords
-        options.position(vacuumX);
-        options.title("VacuumX");
-        mMap.addMarker(options);
-
-    }
-
-    protected synchronized void buildGoogleApiClient(){
-        client = new GoogleApiClient.Builder(getActivity().getApplicationContext())
-                .addConnectionCallbacks(this)
-                .addOnConnectionFailedListener(this)
-                .addApi(LocationServices.API).build();
-        client.connect();
-    }
-
-    @Override
-    public void onConnected(@Nullable Bundle bundle) {
-        locationRequest = new LocationRequest();
-        locationRequest.setInterval(1000);
-        locationRequest.setFastestInterval(1000);
-        locationRequest.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
-        if (ContextCompat.checkSelfPermission(getActivity().getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-            LocationServices.FusedLocationApi.requestLocationUpdates(client,locationRequest,this);
-        }
-    }
-
-    @Override
-    public void onConnectionSuspended(int i) {}
-
-    @Override
-    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {}
-
-    @Override
-    public void onLocationChanged(Location location) {
-        lastLocation = location;
-
-        if(currentLocationMarker != null){
-            currentLocationMarker.remove();
-        }
         LatLng latlng = new LatLng(location.getLatitude(), location.getLongitude());
+
+
+        // Set up Firebase with Geofire and respective user
+        database = FirebaseDatabase.getInstance().getReference();
+        String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference("ItemIdHere");
+        geoFire = new GeoFire(database.child("geofire"));
+
+        /*
+        // setup GeoFire
+        this.geoFire = new GeoFire(new Firebase(GEO_FIRE_REF));
+        // radius in km
+        this.geoQuery = this.geoFire.queryAtLocation(INITIAL_CENTER, 1);
+
+        // setup markers
+        this.markers = new HashMap<String, Marker>();
+        */
+
+
 
         MarkerOptions markerOptions = new MarkerOptions();
 
@@ -424,6 +465,8 @@ public class SearchFragment extends Fragment implements OnMapReadyCallback, Goog
         if(client != null){
             LocationServices.FusedLocationApi.removeLocationUpdates(client, this);
         }
+
+
 //        stopMarker = mMap.addMarker(new MarkerOptions()
 //                .draggable(true)
 //                .position(new LatLng(location.getLatitude(), location.getLongitude()))
@@ -462,6 +505,7 @@ public class SearchFragment extends Fragment implements OnMapReadyCallback, Goog
             public void onStopTrackingTouch(final SeekBar seekBar) {
             }
         });
+
 
 
 //        SeekBar progress = (SeekBar)findViewById(R.id.circleFilter);
