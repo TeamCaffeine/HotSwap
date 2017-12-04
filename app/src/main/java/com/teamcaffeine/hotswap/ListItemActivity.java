@@ -20,6 +20,7 @@ public class ListItemActivity extends AppCompatActivity {
 
     private CalendarPickerView calendar;
 
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
