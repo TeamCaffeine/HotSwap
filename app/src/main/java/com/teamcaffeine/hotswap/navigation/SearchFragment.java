@@ -326,10 +326,6 @@ public class SearchFragment extends Fragment implements OnMapReadyCallback, Goog
 
         // how the map zooms into current location
         // if preferences exist
-        // TODO: have it handle if intent is null
-        // TODO: currently crashes it if no intent exists; can get around by setting location
-        // Intent intent = getActivity().getIntent();
-        //Bundle extras = intent.getExtras();
         if (prefs.contains("zip")) {
             // if (extras.containsKey("zip")) { // if there is location prefs
             String postalcode = prefs.getString("zip", "02215");

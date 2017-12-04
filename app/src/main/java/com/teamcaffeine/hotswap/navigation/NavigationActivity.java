@@ -116,7 +116,6 @@ public class NavigationActivity extends AppCompatActivity implements
             Log.e(TAG, "Unable to change value of shift mode", e);
         }
 
-
         listItemFragment = new ListItemFragment();
         profileFragment = new ProfileFragment();
         searchFragment = new SearchFragment();

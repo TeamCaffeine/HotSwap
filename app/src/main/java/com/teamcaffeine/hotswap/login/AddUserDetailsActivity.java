@@ -50,8 +50,6 @@ public class AddUserDetailsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_user_details);
 
-        firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
-
         edtFirstName = findViewById(R.id.edtFirstName);
         edtLastName = findViewById(R.id.edtLastName);
         edtPhoneNumber = findViewById(R.id.edtPhoneNumber);
@@ -59,6 +57,7 @@ public class AddUserDetailsActivity extends AppCompatActivity {
         btnAddPayment = findViewById(R.id.btnPayment);
         btnSubmit = findViewById(R.id.btnSubmit);
 
+        firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         database = FirebaseDatabase.getInstance();
         users = database.getReference().child(userTable);
 

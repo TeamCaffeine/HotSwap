@@ -2,10 +2,13 @@ package com.teamcaffeine.hotswap.login;
 
 import com.stfalcon.chatkit.commons.models.IUser;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
-public class User implements IUser {
+
+public class User implements IUser{
     // Force empty initialization of default table fields
     private String Uid = "";
     private String firstName = "";
@@ -15,6 +18,7 @@ public class User implements IUser {
     private String phoneNumber = "";
     private String avatar = "";
     private boolean online = false;
+    private List<String> addresses = new ArrayList<>();
 
     User() {
     }
@@ -33,6 +37,7 @@ public class User implements IUser {
         this.phoneNumber = user.getPhoneNumber();
         this.avatar = user.getAvatar();
         this.online = user.getOnline();
+        this.addresses = user.getAddresses();
     }
 
     public Map<String, Object> toMap() {
@@ -45,6 +50,7 @@ public class User implements IUser {
         result.put("phoneNumber", phoneNumber);
         result.put("avatar", avatar);
         result.put("online", online);
+        result.put("addresses", addresses);
         return result;
     }
 
@@ -110,6 +116,23 @@ public class User implements IUser {
 
     public boolean getOnline() {
         return online;
+    }
+
+    public List<String> getAddresses() {
+        return addresses;
+    }
+
+    public boolean removeAddress(String s) {
+        return addresses.remove(s);
+    }
+
+    public boolean addAddress(String s) {
+        if (!addresses.contains(s)) {
+            addresses.add(s);
+            return true;
+        } else {
+            return false;
+        }
     }
 
     // Methods that need to be implemented for the IUser class for chatkit
