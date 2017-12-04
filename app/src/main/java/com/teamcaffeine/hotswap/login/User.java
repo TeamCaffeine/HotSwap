@@ -16,6 +16,7 @@ public class User {
     private String profilePicture = "";
     private List<String> addresses = new ArrayList<>();
     private boolean online = false;
+    private List<String> payments = new ArrayList<>();
 
     User() {
     }
@@ -35,6 +36,7 @@ public class User {
         this.profilePicture = user.getProfilePicture();
         this.addresses = user.getAddresses();
         this.online = user.getOnline();
+        this.payments = user.getPayments();
     }
 
     public Map<String, Object> toMap() {
@@ -48,6 +50,7 @@ public class User {
         result.put("profilePicture", profilePicture);
         result.put("online", online);
         result.put("addresses", addresses);
+        result.put("payments", payments);
         return result;
     }
 
@@ -126,6 +129,23 @@ public class User {
     public boolean addAddress(String s) {
         if (!addresses.contains(s)) {
             addresses.add(s);
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public List<String> getPayments() {
+        return payments;
+    }
+
+    public boolean removePayment(String p) {
+        return payments.remove(p);
+    }
+
+    public boolean addPayment(String p) {
+        if (!payments.contains(p)) {
+            payments.add(p);
             return true;
         } else {
             return false;

@@ -256,6 +256,56 @@ public class ProfileFragment extends Fragment {
 
         paymentElementsList = new ArrayList<String>();
         listviewPayment = view.findViewById(R.id.listviewPayment);
+        listviewPayment.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
+                AlertDialog myQuittingDialogBox = new AlertDialog.Builder(getContext())
+                        //set message, title, and icon
+                        .setTitle(R.string.delete)
+                        .setMessage(R.string.delete_payment_question)
+                        .setPositiveButton(R.string.delete, new DialogInterface.OnClickListener() {
+
+                            public void onClick(DialogInterface dialog, int whichButton) {
+                                DatabaseReference ref = users.child(firebaseUser.getUid());
+                                ref.addListenerForSingleValueEvent(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(DataSnapshot dataSnapshot) {
+                                        User user = dataSnapshot.getValue(User.class);
+
+                                        boolean didRemove = user.removePayment(listviewPayment.getItemAtPosition(position).toString());
+                                        if (didRemove) {
+                                            // Update database
+                                            Map<String, Object> userUpdate = new HashMap<>();
+                                            userUpdate.put(firebaseUser.getUid(), user.toMap());
+                                            users.updateChildren(userUpdate);
+
+                                            // Update UI
+                                            paymentElementsList.remove(position);
+                                            paymentAdapter.notifyDataSetChanged();
+                                        } else {
+                                            Log.i(TAG, "User attempted to delete a nonexistent payment method");
+                                        }
+                                    }
+
+                                    @Override
+                                    public void onCancelled(DatabaseError databaseError) {
+                                        Log.e(TAG, "Payment update failed", databaseError.toException());
+                                    }
+                                });
+                                dialog.dismiss();
+                            }
+                        })
+                        .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        })
+                        .create();
+                myQuittingDialogBox.show();
+            }
+        });
+
+
         paymentAdapter = new ArrayAdapter<String>
                 (getContext(), android.R.layout.simple_list_item_1, paymentElementsList);
         listviewPayment.setAdapter(paymentAdapter);
@@ -292,6 +342,12 @@ public class ProfileFragment extends Fragment {
                         (getContext(), android.R.layout.simple_list_item_1, addressElementsList);
                 listviewAddresses.setAdapter(addressAdapter);
                 addressAdapter.notifyDataSetChanged();
+
+                paymentElementsList = user.getPayments();
+                paymentAdapter = new ArrayAdapter<String>
+                        (getContext(), android.R.layout.simple_list_item_1, paymentElementsList);
+                listviewPayment.setAdapter(paymentAdapter);
+                paymentAdapter.notifyDataSetChanged();
             }
 
             @Override
@@ -418,24 +474,42 @@ public class ProfileFragment extends Fragment {
         btnAddCard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Card cardToSave = mCardMultilineWidget.getCard();
+                final Card cardToSave = mCardMultilineWidget.getCard();
                 if (cardToSave == null) {
-                    FragmentManager mFragmentManager = getFragmentManager();
-                    String errorMessage = "Invalid Card Data";
-                    DialogFragment fragment = new DialogFragment();
-                    Bundle args = new Bundle();
-                    args.putInt("titleId", R.string.validationErrors);
-                    args.putString("message", errorMessage);
-                    fragment.setArguments(args);
-                    fragment.show(mFragmentManager, "error");
+                    Log.i(TAG, "User attempted to add an invalid payment");
                 } else {
+
+                    DatabaseReference ref = users.child(firebaseUser.getUid());
+                    ref.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            User user = dataSnapshot.getValue(User.class);
+
+                            boolean didAdd = user.addPayment(cardToSave.getNumber());
+                            if (didAdd) {
+                                // Update database
+                                Map<String, Object> userUpdate = new HashMap<>();
+                                userUpdate.put(firebaseUser.getUid(), user.toMap());
+                                users.updateChildren(userUpdate);
+
+                                // Update UI
+                                paymentElementsList.add(cardToSave.getNumber());
+                                paymentAdapter.notifyDataSetChanged();
+                                Toast.makeText(getContext(), "Card Added", Toast.LENGTH_SHORT).show();
+                                popupWindow.dismiss();
+
+                            } else {
+                                Log.i(TAG, "User attempted to add a duplicate payment");
+                                Toast.makeText(getContext(), "Cannot add a duplicate card", Toast.LENGTH_LONG).show();
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+                            Log.e(TAG, "Payments update failed", databaseError.toException());
+                        }
+                    });
                     //TODO: add info to Stripe database
-                    // for now: just close the popup, show a toast, add test string to listview
-                    String testString = "some added number ";
-                    paymentElementsList.add(testString);
-                    paymentAdapter.notifyDataSetChanged();
-                    popupWindow.dismiss();
-                    Toast.makeText(getContext(), "Card Added", Toast.LENGTH_SHORT).show();
                 }
             }
         });
