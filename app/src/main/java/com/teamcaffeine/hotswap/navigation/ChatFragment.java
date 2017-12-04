@@ -89,7 +89,12 @@ public class ChatFragment extends Fragment implements DialogsListAdapter.OnDialo
         imageLoader = new ImageLoader() {
             @Override
             public void loadImage(ImageView imageView, String url) {
-                Picasso.with(getActivity().getApplicationContext()).load(url).into(imageView);
+                // Set the url to a default picture if none exists //TODO: Decide how we wanna handle the default case, just doing so no crashes
+                if (url != "") {
+                    Picasso.with(getActivity().getApplicationContext()).load(url).into(imageView);
+                } else {
+                    Picasso.with(getActivity().getApplicationContext()).load("https://www.vccircle.com/wp-content/uploads/2017/03/default-profile.png").into(imageView);
+                }
             }
         };
 
@@ -264,7 +269,7 @@ public class ChatFragment extends Fragment implements DialogsListAdapter.OnDialo
      */
     private void getDialog(final String subscriptionChannel, final Dialog originalDialog) {
         FirebaseDatabase.getInstance()
-                .getReference().child("Users").orderByChild("email").equalTo(subscriptionChannel)
+                .getReference().child("users").orderByChild("email").equalTo(subscriptionChannel)
                 .limitToLast(1).addListenerForSingleValueEvent(new ValueEventListener()
         {
             @Override

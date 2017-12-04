@@ -1,14 +1,11 @@
 package com.teamcaffeine.hotswap.login;
 
 import com.stfalcon.chatkit.commons.models.IUser;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseReference;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public class User implements IUser{
+public class User implements IUser {
     // Force empty initialization of default table fields
     private String Uid = "";
     private String firstName = "";
@@ -16,10 +13,11 @@ public class User implements IUser{
     private String email = "";
     private String memberSince = "";
     private String phoneNumber = "";
-    private String profilePicture = "";
+    private String avatar = "";
     private boolean online = false;
 
-    User() {}
+    User() {
+    }
 
     public User(String Uid, String email) {
         this.Uid = Uid;
@@ -33,7 +31,7 @@ public class User implements IUser{
         this.email = user.getEmail();
         this.memberSince = user.getMemberSince();
         this.phoneNumber = user.getPhoneNumber();
-        this.profilePicture = user.getProfilePicture();
+        this.avatar = user.getAvatar();
         this.online = user.getOnline();
     }
 
@@ -45,7 +43,7 @@ public class User implements IUser{
         result.put("email", email);
         result.put("memberSince", memberSince);
         result.put("phoneNumber", phoneNumber);
-        result.put("profilePicture", profilePicture);
+        result.put("avatar", avatar);
         result.put("online", online);
         return result;
     }
@@ -74,13 +72,17 @@ public class User implements IUser{
         this.phoneNumber = phoneNumber;
     }
 
-    public void setProfilePicture(String profilePicture) {
-        this.profilePicture = profilePicture;
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
     }
 
-    public void setOnline(boolean online) { this.online = online; }
+    public void setOnline(boolean online) {
+        this.online = online;
+    }
 
-    public String getUid() { return Uid; }
+    public String getUid() {
+        return Uid;
+    }
 
     public String getFirstName() {
         return firstName;
@@ -102,9 +104,13 @@ public class User implements IUser{
         return phoneNumber;
     }
 
-    public String getProfilePicture() { return profilePicture; }
+    public String getAvatar() {
+        return avatar;
+    }
 
-    public boolean getOnline() { return online; }
+    public boolean getOnline() {
+        return online;
+    }
 
     // Methods that need to be implemented for the IUser class for chatkit
     @Override
@@ -119,4 +125,6 @@ public class User implements IUser{
 
     public void setId(String newEmail) {
         this.email = newEmail;
+    }
+
 }

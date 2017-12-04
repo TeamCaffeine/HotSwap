@@ -215,9 +215,9 @@ public class StyledMessagesActivity extends MessagesActivity implements MessageI
     public boolean onSubmit(CharSequence input) {
         storeMessage(input.toString());
         final Message message = new Message(String.valueOf(new Date().getTime()), users.get(this.channel), input.toString());
-        message.setStatus(users.get(StyledMessagesActivity.this.subscription).isOnline() ? "Read" : "Sent");
+        message.setStatus(users.get(StyledMessagesActivity.this.subscription).getOnline() ? "Read" : "Sent");
         message.getUser().setId("0");
-        if (!users.get(StyledMessagesActivity.this.subscription).isOnline()) {
+        if (!users.get(StyledMessagesActivity.this.subscription).getOnline()) {
             activeMessagesList.add(message);
         }
         messagesAdapter.addToStart(message, true);
@@ -289,14 +289,14 @@ public class StyledMessagesActivity extends MessagesActivity implements MessageI
      */
     private void getUser(final String channel, final String subscription) {
         FirebaseDatabase.getInstance()
-                .getReference().child("Users").orderByChild("email").equalTo(channel.replace("|", "."))
+                .getReference().child("users").orderByChild("email").equalTo(channel.replace("|", "."))
                 .addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
                             users.put(channel, postSnapshot.getValue(User.class));
                             FirebaseDatabase.getInstance()
-                                    .getReference().child("Users").orderByChild("email").equalTo(subscription.replace("|", "."))
+                                    .getReference().child("users").orderByChild("email").equalTo(subscription.replace("|", "."))
                                     .addListenerForSingleValueEvent(new ValueEventListener() {
                                         @Override
                                         public void onDataChange(DataSnapshot dataSnapshot) {
