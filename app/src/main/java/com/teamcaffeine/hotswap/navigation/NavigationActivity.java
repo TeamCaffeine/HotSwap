@@ -27,7 +27,6 @@ import java.lang.reflect.Field;
 public class NavigationActivity extends AppCompatActivity implements
         ChatFragment.ChatFragmentListener,
         ProfileFragment.ProfileFragmentListener,
-        ListItemFragment.ListItemFragmentListener,
         SearchFragment.SearchFragmentListener,
         HomeFragment.HomeFragmentListener {
 
@@ -35,7 +34,6 @@ public class NavigationActivity extends AppCompatActivity implements
 
     public BottomNavigationView navigation;
 
-    private ListItemFragment listItemFragment;
     private ProfileFragment profileFragment;
     private SearchFragment searchFragment;
     private ChatFragment chatFragment;
@@ -123,7 +121,6 @@ public class NavigationActivity extends AppCompatActivity implements
         }
 
 
-        listItemFragment = new ListItemFragment();
         profileFragment = new ProfileFragment();
         searchFragment = new SearchFragment();
         chatFragment = new ChatFragment();
