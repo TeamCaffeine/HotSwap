@@ -11,7 +11,7 @@
         <TextView
             android:id="@+id/textView"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
+            android:layout_height="35dp"
             android:layout_weight="0.5"
             android:text="@string/list_item_title"
             android:textAlignment="center"
@@ -20,7 +20,7 @@
         <EditText
             android:id="@+id/editItemName"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
+            android:layout_height="50dp"
             android:layout_weight="0.5"
             android:ems="10"
             android:hint="Item Name"
@@ -30,32 +30,47 @@
         <EditText
             android:id="@+id/editTags"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
+            android:layout_height="50dp"
             android:layout_weight="0.5"
             android:ems="10"
             android:hint="Item Tags (separated by commas)"
+            android:textSize="18sp" />
+
+        <EditText
+            android:id="@+id/editDescription"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_weight="0.5"
+            android:ems="10"
+            android:hint="Item Description"
+            android:inputType="textLongMessage"
+            android:textSize="18sp" />
+
+        <EditText
+            android:id="@+id/editAddress"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_weight="0.5"
+            android:ems="10"
+            android:hint="Address"
             android:inputType="textPersonName"
             android:textSize="18sp" />
 
         <EditText
-            android:id="@+id/editAddressLine1"
+            android:id="@+id/editPrice"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
+            android:layout_height="50dp"
             android:layout_weight="0.5"
             android:ems="10"
-            android:hint="Address Line 1"
-            android:inputType="textPersonName"
+            android:hint="Price"
+            android:inputType="number|numberDecimal"
             android:textSize="18sp" />
 
-        <EditText
-            android:id="@+id/editAddressLine2"
+        <com.squareup.timessquare.CalendarPickerView
+            android:id="@+id/calendarView"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="0.5"
-            android:ems="10"
-            android:hint="Address Line 2"
-            android:inputType="textPersonName"
-            android:textSize="18sp" />
+            android:layout_alignParentTop="true" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -63,49 +78,17 @@
             android:layout_weight="0.5"
             android:orientation="horizontal">
 
-            <EditText
-                android:id="@+id/editCity"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="3"
-                android:ems="10"
-                android:hint="City"
-                android:inputType="textPersonName"
-                android:textSize="18sp" />
-
-            <EditText
-                android:id="@+id/editState"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="2"
-                android:ems="10"
-                android:hint="State"
-                android:inputType="textPersonName"
-                android:textSize="18sp" />
-
-            <EditText
-                android:id="@+id/editZIP"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="2"
-                android:ems="10"
-                android:hint="ZIP"
-                android:inputType="number"
-                android:textSize="18sp" />
-
         </LinearLayout>
 
-        <com.squareup.timessquare.CalendarPickerView
-            android:id="@+id/calendar_view"
+        <Space
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_alignParentTop="true"
-            android:layout_weight="3" />
+            android:layout_height="20dp"
+            android:layout_weight="1" />
 
         <Button
             android:id="@+id/listItemButton"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
+            android:layout_height="65dp"
             android:layout_weight="0.5"
             android:gravity="center"
             android:text="List Item"

@@ -5,7 +5,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-
 public class User {
     // Force empty initialization of default table fields
     private String Uid = "";
@@ -18,7 +17,8 @@ public class User {
     private List<String> addresses = new ArrayList<>();
     private boolean online = false;
 
-    User() {}
+    User() {
+    }
 
     public User(String Uid, String email) {
         this.Uid = Uid;
@@ -79,9 +79,13 @@ public class User {
         this.profilePicture = profilePicture;
     }
 
-    public void setOnline(boolean online) { this.online = online; }
+    public void setOnline(boolean online) {
+        this.online = online;
+    }
 
-    public String getUid() { return Uid; }
+    public String getUid() {
+        return Uid;
+    }
 
     public String getFirstName() {
         return firstName;
@@ -103,9 +107,13 @@ public class User {
         return phoneNumber;
     }
 
-    public String getProfilePicture() { return profilePicture; }
+    public String getProfilePicture() {
+        return profilePicture;
+    }
 
-    public boolean getOnline() { return online; }
+    public boolean getOnline() {
+        return online;
+    }
 
     public List<String> getAddresses() {
         return addresses;
