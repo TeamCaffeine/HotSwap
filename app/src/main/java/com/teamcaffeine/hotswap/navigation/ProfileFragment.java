@@ -399,7 +399,10 @@ public class ProfileFragment extends Fragment {
                     fragment.show(mFragmentManager, "error");
                 } else {
                     //TODO: add info to Stripe database
-                    // for now: just close the popup, show a toast, add to listview
+                    // for now: just close the popup, show a toast, add test string to listview
+                    String testString = "some added number ";
+                    paymentElementsList.add(testString);
+                    paymentAdapter.notifyDataSetChanged();
                     popupWindow.dismiss();
                     Toast.makeText(getContext(), "Card Added", Toast.LENGTH_SHORT).show();
                 }
