@@ -70,7 +70,6 @@ public class HomeFragment extends Fragment {
     private FirebaseUser firebaseUser;
     private FirebaseDatabase database;
     private DatabaseReference users;
-    private DatabaseReference items;
     private String userTable = "users";
     private String itemTable = "items";
 
@@ -100,6 +99,7 @@ public class HomeFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        Log.i(TAG, "onCreateView");
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_home, container, false);
         return view;
@@ -108,6 +108,7 @@ public class HomeFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        Log.i(TAG, "onViewCreated");
 
         btnListItem = view.findViewById(R.id.btnListItem);
         listviewAllItems = view.findViewById(R.id.listviewAllItems);
@@ -118,7 +119,6 @@ public class HomeFragment extends Fragment {
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         database = FirebaseDatabase.getInstance();
         users = database.getReference().child(userTable);
-        items = database.getReference().child(itemTable);
 
         itemsElementsList = new ArrayList<String>();
 
@@ -134,23 +134,25 @@ public class HomeFragment extends Fragment {
                             public void onClick(DialogInterface dialog, int whichButton) {
                                 //This call works, BUT it will delete all items with the same name and the chosen item to delete
                                 // i.e. we need data validation where a user can't enter items with same name
-                                Query ref = items.orderByChild("ownerID").equalTo(firebaseUser.getUid());
-                                ref.addListenerForSingleValueEvent(new ValueEventListener() {
+                                final String itemToRemove = listviewAllItems.getItemAtPosition(position).toString();
+                                DatabaseReference items = database.getReference().child(itemTable);
+                                items.addListenerForSingleValueEvent(new ValueEventListener() {
                                     @Override
                                     public void onDataChange(DataSnapshot dataSnapshot) {
                                         for (DataSnapshot i: dataSnapshot.getChildren()) {
                                             Item item = i.getValue(Item.class);
-                                            String iteratingItem = item.getName();
-                                            String itemToRemove = listviewAllItems.getItemAtPosition(position).toString();
-                                            if (iteratingItem.equalsIgnoreCase(itemToRemove)){
-                                                boolean didRemove = itemsElementsList.remove(listviewAllItems.getItemAtPosition(position).toString());
-                                                if (didRemove) {
-                                                    itemsAdapter.notifyDataSetChanged();
+                                            if (item.getOwnerID().equals(firebaseUser.getUid())){
+                                                String iteratingItem = item.getName();
+                                                if (iteratingItem.equalsIgnoreCase(itemToRemove)){
+                                                    boolean didRemove = itemsElementsList.remove(listviewAllItems.getItemAtPosition(position).toString());
+                                                    if (didRemove) {
+                                                        itemsAdapter.notifyDataSetChanged();
 
-                                                    // Update database
-                                                    i.getRef().removeValue();
-                                                } else {
-                                                    Log.i(TAG, "User attempted to delete a nonexistent item");
+                                                        // Update database
+                                                        i.getRef().removeValue();
+                                                    } else {
+                                                        Log.i(TAG, "User attempted to delete a nonexistent item");
+                                                    }
                                                 }
                                             }
                                         }
@@ -174,21 +176,26 @@ public class HomeFragment extends Fragment {
             }
         });
 
-        itemsAdapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_list_item_1, itemsElementsList);
-        listviewAllItems.setAdapter(itemsAdapter);
 
-        // Query for all items listed by the user
-        Query allUserItems = items.orderByChild("ownerID").equalTo(firebaseUser.getUid());
+
+//        // Query for all items listed by the user
+//        Query allUserItems = items.orderByChild("ownerID").equalTo(firebaseUser.getUid());
 
         // Add listener for Firebase response on the query
-        allUserItems.addValueEventListener( new ValueEventListener(){
+
+        DatabaseReference items = database.getReference().child(itemTable);
+        items.addListenerForSingleValueEvent( new ValueEventListener(){
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for(DataSnapshot i : dataSnapshot.getChildren() ){
                     Item item = i.getValue(Item.class);
-                    itemsElementsList.add(item.getName());
-                    itemsAdapter.notifyDataSetChanged();
+                    if (item.getOwnerID().equals(firebaseUser.getUid())){
+                        itemsElementsList.add(item.getName());
+                    }
                 }
+                itemsAdapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_list_item_1, itemsElementsList);
+                listviewAllItems.setAdapter(itemsAdapter);
+                itemsAdapter.notifyDataSetChanged();
             }
 
             @Override
@@ -216,16 +223,40 @@ public class HomeFragment extends Fragment {
         HFL = (HomeFragment.HomeFragmentListener) context;  //context is a handle to the main activity, let's bind it to our interface.
     }
 
-    //TODO: Figure out why the list of items gets repeated
+    //TODO: Figure out why the list of items doesn't get updated after adding a new item, but
+    // shows all items, including added ones, when the Home Fragment is built in onCreate
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        Log.i(TAG, "onActivityResult called");
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == LIST_ITEM_REQUEST_CODE) {
+            Log.i(TAG, "request code = List Item Request Code");
             if (resultCode == RESULT_OK) {
-                final String itemName = data.getStringExtra("itemName");
-                // Update UI
-                itemsElementsList.add(itemName);
-                itemsAdapter.notifyDataSetChanged();
+                Log.i(TAG, "result OK");
+                // Add listener for Firebase response on the query
+                DatabaseReference items = database.getReference().child(itemTable);
+                Log.i(TAG, "items table reference created");
+                items.addListenerForSingleValueEvent( new ValueEventListener(){
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        Log.i(TAG, "onDataChange called");
+                        for(DataSnapshot i : dataSnapshot.getChildren() ){
+                            Item item = i.getValue(Item.class);
+                            if (item.getOwnerID().equals(firebaseUser.getUid())){
+                                itemsElementsList.add(item.getName());
+                            }
+                        }
+                        itemsAdapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_list_item_1, itemsElementsList);
+                        listviewAllItems.setAdapter(itemsAdapter);
+                        itemsAdapter.notifyDataSetChanged();
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+                        System.out.println("The read failed: " + databaseError.getCode());
+                    }
+                });
+                Toast.makeText(getContext(), "New item added", Toast.LENGTH_LONG).show();
 
             } else if (resultCode == RESULT_ERROR) {
                 Log.i(TAG, "item not added");
