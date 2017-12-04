@@ -141,7 +141,9 @@ public class ChatFragment extends Fragment implements DialogsListAdapter.OnDialo
      */
     private void killSilently() {
         /* Remove Callbacks */
-        mHandler.removeCallbacks(mStatusChecker);
+        if (mHandler != null) {
+            mHandler.removeCallbacks(mStatusChecker);
+        }
 
         /* Online Status */
         if (null != userRef) {
@@ -250,9 +252,10 @@ public class ChatFragment extends Fragment implements DialogsListAdapter.OnDialo
                     mHandler = new Handler();
                     mStatusChecker.run();
 
-                    /* Dismiss Progress Dialog */
-                    progressDialog.dismiss();
                 }
+
+                /* Dismiss Progress Dialog */
+                progressDialog.dismiss();
             }
 
             @Override
