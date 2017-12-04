@@ -239,7 +239,7 @@ public class ProfileFragment extends Fragment {
         txtEmail = view.findViewById(R.id.txtEmail);
         txtPhoneNumber = view.findViewById(R.id.txtPhoneNumber);
 
-        // Get a reference to our posts
+        // Get a reference to the user
         FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         final FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference ref = database.getReference().child("users").child(firebaseUser.getUid());

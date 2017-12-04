@@ -13,6 +13,11 @@
         android:layout_height="wrap_content"
         android:text="All Items" />
 
+    <ListView
+        android:id="@+id/listviewAllItems"
+        android:layout_width="match_parent"
+        android:layout_height="100dp" />
+
     <TextView
         android:id="@+id/txtRentingLabel"
         android:layout_width="match_parent"
@@ -20,10 +25,22 @@
         android:text="Currently Renting" />
 
     <TextView
+        android:id="@+id/txtCurrentlyRenting"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="30dp"
+        android:text="Renting 1 Item" />
+
+    <TextView
         android:id="@+id/txtLendingLabel"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Currently Lending" />
+
+    <ListView
+        android:id="@+id/listviewLending"
+        android:layout_width="match_parent"
+        android:layout_height="100dp" />
 
     <Button
         android:id="@+id/btnListItem"
