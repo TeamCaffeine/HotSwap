@@ -113,9 +113,7 @@ public class SearchFragment extends Fragment implements OnMapReadyCallback, Goog
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_search, container, false);
-
         return view;
-
 
     }
     @Override
@@ -298,7 +296,6 @@ public class SearchFragment extends Fragment implements OnMapReadyCallback, Goog
 
     @Override
     public void onLocationChanged(Location location) {
-
         if(currentLocationMarker != null){
             currentLocationMarker.remove();
         }

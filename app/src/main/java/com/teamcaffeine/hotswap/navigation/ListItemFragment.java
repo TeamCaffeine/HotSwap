@@ -13,6 +13,7 @@ import android.widget.Button;
 import com.firebase.geofire.GeoFire;
 import com.firebase.geofire.GeoLocation;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.squareup.timessquare.CalendarPickerView;
@@ -52,12 +53,21 @@ public class ListItemFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 // Set up Firebase with Geofire and respective user
-                database = FirebaseDatabase.getInstance().getReference("Items");
+                database = FirebaseDatabase.getInstance().getReference("items_location");
                 String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
                 DatabaseReference ref = FirebaseDatabase.getInstance().getReference("ItemIDHere");
                // geoFire = new GeoFire(database.child("geofire"));
-                geoFire = new GeoFire(database);
-                geoFire.setLocation("Item1", new GeoLocation(42.365014, -71.102660));
+                geoFire = new GeoFire(database.child(userId));
+                geoFire.setLocation("Item example", new GeoLocation(42.365014, -71.102660), new GeoFire.CompletionListener() {
+                    @Override
+                    public void onComplete(String key, DatabaseError error) {
+                        if (error != null) {
+                            System.err.println("There was an error saving the location to GeoFire: " + error);
+                        } else {
+                            System.out.println("Location saved on server successfully!");
+                        }
+                    }
+                });
             }
         });
 
