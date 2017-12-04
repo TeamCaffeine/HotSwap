@@ -149,5 +149,6 @@
     <string name="currently_renting">Currently Renting</string>
     <string name="currently_lending">Currently Lending</string>
     <string name="list_item_button">List Item</string>
+    <string name="duplicate_item">You already have an item with that name. Choose another name.</string>
 
 </resources>

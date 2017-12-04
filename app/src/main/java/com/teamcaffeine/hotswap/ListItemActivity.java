@@ -96,7 +96,8 @@ public class ListItemActivity extends AppCompatActivity {
 
                 Intent i = new Intent();
 
-                // get item name
+
+                // get item name to send back to Home Fragment
                 String itemName = editItemName.getText().toString();
                 i.putExtra("itemName", itemName);
 
@@ -112,18 +113,18 @@ public class ListItemActivity extends AppCompatActivity {
         items.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+                String itemID = items.push().getKey();
                 String itemName = editItemName.getText().toString();
                 String itemAddress = editAddress.getText().toString();
                 String itemPrice = editPrice.getText().toString();
                 String itemDescription = editDescription.getText().toString();
 
-                Item item = new Item(itemName, firebaseUser.getUid(), itemDescription, itemPrice, itemAddress);
-
-                String key = items.push().getKey();
+                Item item = new Item(itemID, itemName, firebaseUser.getUid(), itemDescription, itemPrice, itemAddress);
 
                 Map<String, Object> itemUpdate = new HashMap<>();
-                itemUpdate.put(key, item.toMap());
+                itemUpdate.put(itemID, item.toMap());
 
+                //TODO: Add data validation so a user cannot enter an item with the same name as another item they have entered
                 items.updateChildren(itemUpdate);
 
                 resultCode[0] = RESULT_OK;

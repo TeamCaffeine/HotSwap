@@ -140,9 +140,9 @@ public class HomeFragment extends Fragment {
                                     public void onDataChange(DataSnapshot dataSnapshot) {
                                         for (DataSnapshot i: dataSnapshot.getChildren()) {
                                             Item item = i.getValue(Item.class);
-                                            String itertingItem = item.getName();
+                                            String iteratingItem = item.getName();
                                             String itemToRemove = listviewAllItems.getItemAtPosition(position).toString();
-                                            if (itertingItem.equalsIgnoreCase(itemToRemove)){
+                                            if (iteratingItem.equalsIgnoreCase(itemToRemove)){
                                                 boolean didRemove = itemsElementsList.remove(listviewAllItems.getItemAtPosition(position).toString());
                                                 if (didRemove) {
                                                     itemsAdapter.notifyDataSetChanged();
@@ -177,10 +177,10 @@ public class HomeFragment extends Fragment {
         itemsAdapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_list_item_1, itemsElementsList);
         listviewAllItems.setAdapter(itemsAdapter);
 
-        // Query for all entries with a certain child with value equal to something
+        // Query for all items listed by the user
         Query allUserItems = items.orderByChild("ownerID").equalTo(firebaseUser.getUid());
 
-        // Add listener for Firebase response on said query
+        // Add listener for Firebase response on the query
         allUserItems.addValueEventListener( new ValueEventListener(){
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -216,6 +216,7 @@ public class HomeFragment extends Fragment {
         HFL = (HomeFragment.HomeFragmentListener) context;  //context is a handle to the main activity, let's bind it to our interface.
     }
 
+    //TODO: Figure out why the list of items gets repeated
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
