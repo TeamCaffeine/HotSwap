@@ -1,15 +1,12 @@
 package com.teamcaffeine.hotswap;
 
 import android.annotation.SuppressLint;
-import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 
@@ -21,7 +18,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.timessquare.CalendarPickerView;
-import com.teamcaffeine.hotswap.R;
 import com.teamcaffeine.hotswap.swap.Item;
 
 import java.util.Calendar;
@@ -43,6 +39,8 @@ public class ListItemActivity extends AppCompatActivity {
     private EditText editAddress;
     private Button listItemButton;
     private CalendarPickerView calendar;
+
+    private int RESULT_ERROR = 88;
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
@@ -94,12 +92,23 @@ public class ListItemActivity extends AppCompatActivity {
         listItemButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                submit();
+                int[] submitStatus = submit();
+
+                Intent i = new Intent();
+
+                // get item name
+                String itemName = editItemName.getText().toString();
+                i.putExtra("itemName", itemName);
+
+                // Set the result with this data, and finish the activity
+                setResult(submitStatus[0], i);
+                finish();
             }
         });
     }
 
-    private void submit() {
+    private int[] submit() {
+        final int[] resultCode = new int[1];
         items.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -116,12 +125,17 @@ public class ListItemActivity extends AppCompatActivity {
                 itemUpdate.put(key, item.toMap());
 
                 items.updateChildren(itemUpdate);
+
+                resultCode[0] = RESULT_OK;
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
                 Log.d("ListItemFragment", "The read failed: " + databaseError.getCode());
+                resultCode[0] = RESULT_ERROR;
             }
         });
+
+        return resultCode;
     }
 }
