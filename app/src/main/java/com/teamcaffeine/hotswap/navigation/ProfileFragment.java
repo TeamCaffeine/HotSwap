@@ -40,22 +40,17 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
-import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.database.ValueEventListener;
 import com.teamcaffeine.hotswap.R;
 import com.teamcaffeine.hotswap.login.LoginActivity;
 import com.teamcaffeine.hotswap.login.User;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import static android.app.Activity.RESULT_CANCELED;
 import static android.app.Activity.RESULT_OK;
-
-import com.teamcaffeine.hotswap.login.User;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -142,6 +137,7 @@ public class ProfileFragment extends Fragment {
 
                             // Update UI
                             addressElementsList.add(place.getAddress().toString());
+                            addressAdapter.notifyDataSetChanged();
                         } else {
                             Log.i(TAG, "User attempted to add a duplicate address");
                         }
@@ -192,7 +188,6 @@ public class ProfileFragment extends Fragment {
                         .setPositiveButton(R.string.delete, new DialogInterface.OnClickListener() {
 
                             public void onClick(DialogInterface dialog, int whichButton) {
-
                                 DatabaseReference ref = users.child(firebaseUser.getUid());
                                 ref.addListenerForSingleValueEvent(new ValueEventListener() {
                                     @Override
@@ -232,10 +227,6 @@ public class ProfileFragment extends Fragment {
             }
         });
 
-        addressElementsList = new ArrayList<String>();
-        addressAdapter = new ArrayAdapter<String>
-                (getContext(), android.R.layout.simple_list_item_1, addressElementsList);
-        listviewAddresses.setAdapter(addressAdapter);
 
         txtAddPayment = view.findViewById(R.id.txtAddPayment);
         txtAddPayment.setOnClickListener(new View.OnClickListener() {
@@ -245,13 +236,6 @@ public class ProfileFragment extends Fragment {
             }
         });
         txtPastTransactions = view.findViewById(R.id.txtPastTransactions);
-
-        // get the bundle from the intent
-        //****keeping these lines commented out for now, we will need them when we implement the fragment with login
-//        Bundle bundle = getIntent().getExtras();
-//        String fullName = bundle.getString("fullName");
-//        String dateCreated = bundle.getString("dateCreated");
-
         txtName = view.findViewById(R.id.txtName);
         txtMemberSince = view.findViewById(R.id.txtMemberSince);
         btnLogout = view.findViewById(R.id.btnLogout);
@@ -265,7 +249,7 @@ public class ProfileFragment extends Fragment {
         users = database.getReference().child(userTable);
 
         DatabaseReference ref = users.child(firebaseUser.getUid());
-        ref.addValueEventListener(new ValueEventListener() {
+        ref.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 User user = dataSnapshot.getValue(User.class);
@@ -279,6 +263,9 @@ public class ProfileFragment extends Fragment {
                 txtPhoneNumber.setText(user.getPhoneNumber());
 
                 addressElementsList = user.getAddresses();
+                addressAdapter = new ArrayAdapter<String>
+                        (getContext(), android.R.layout.simple_list_item_1, addressElementsList);
+                listviewAddresses.setAdapter(addressAdapter);
                 addressAdapter.notifyDataSetChanged();
             }
 
