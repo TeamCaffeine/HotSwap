@@ -3,6 +3,7 @@ package com.teamcaffeine.hotswap.swap;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class Item {
@@ -12,23 +13,20 @@ public class Item {
     private String renteeID = "";
     private String description = "";
     private String rentPrice = "";
-    private ArrayList<String> tags = new ArrayList<String>();
+    private List<String> tags = new ArrayList<String>();
     private String headerPicture = "";
-    private ArrayList<String> additionalPictures = new ArrayList<String>();
-    private ArrayList<Date> availableDates = new ArrayList<Date>();
+    private List<String> additionalPictures = new ArrayList<String>();
+    private List<Date> availableDates = new ArrayList<Date>();
     private String address = "";
 
     Item() {}
 
-    public Item(String name, String ownerID, String description, String rentPrice, ArrayList<String> tags,
-                String headerPicture, ArrayList<Date> availableDates) {
+    public Item(String name, String ownerID, String description, String rentPrice, String address) {
         this.name = name;
         this.ownerID = ownerID;
         this.description = description;
         this.rentPrice = rentPrice;
-        this.tags = tags;
-        this.headerPicture = headerPicture;
-        this.availableDates = availableDates;
+        this.address = address;
     }
 
     public Item(Item item) {
@@ -106,7 +104,7 @@ public class Item {
         return this.additionalPictures.remove(picture);
     }
 
-    public void setAvailableDates(ArrayList<Date> availableDates) {
+    public void setAvailableDates(List<Date> availableDates) {
         this.availableDates = availableDates;
     }
 
@@ -134,7 +132,7 @@ public class Item {
         return rentPrice;
     }
 
-    public ArrayList<String> getTags() {
+    public List<String> getTags() {
         return tags;
     }
 
@@ -142,11 +140,11 @@ public class Item {
         return headerPicture;
     }
 
-    public ArrayList<String> getAdditionalPictures() {
+    public List<String> getAdditionalPictures() {
         return additionalPictures;
     }
 
-    public ArrayList<Date> getAvailableDates() {
+    public List<Date> getAvailableDates() {
         return availableDates;
     }
 
