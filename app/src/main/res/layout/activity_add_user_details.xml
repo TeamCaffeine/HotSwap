@@ -38,8 +38,9 @@
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
             android:layout_weight="2"
-            android:paddingLeft="15dp"
-            android:text="@string/first_name_hint" />
+            android:hint="@string/first_name_hint"
+            android:inputType="textPersonName"
+            android:paddingLeft="15dp" />
     </LinearLayout>
 
     <LinearLayout
@@ -65,8 +66,9 @@
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
             android:layout_weight="2"
-            android:paddingLeft="15dp"
-            android:text="@string/last_name_hint" />
+            android:hint="@string/last_name_hint"
+            android:inputType="textPersonName"
+            android:paddingLeft="15dp" />
 
     </LinearLayout>
 
@@ -93,8 +95,9 @@
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
             android:layout_weight="2"
-            android:paddingLeft="15dp"
-            android:text="@string/phone_number_hint" />
+            android:hint="@string/phone_number_hint"
+            android:inputType="phone"
+            android:paddingLeft="15dp" />
 
     </LinearLayout>
 

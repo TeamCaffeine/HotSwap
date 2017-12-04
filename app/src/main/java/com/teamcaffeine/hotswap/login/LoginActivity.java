@@ -31,10 +31,19 @@ import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.teamcaffeine.hotswap.R;
 import com.teamcaffeine.hotswap.navigation.NavigationActivity;
 import com.teamcaffeine.hotswap.utility.SessionHandler;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class LoginActivity extends AppCompatActivity {
     EditText editEmail;
@@ -43,6 +52,12 @@ public class LoginActivity extends AppCompatActivity {
     Button buttonCreateAccount;
     SignInButton googleSignInButton;
     LoginButton facebookLoginButton;
+
+    private String userTable = "users";
+    private FirebaseUser firebaseUser;
+    final FirebaseDatabase database = FirebaseDatabase.getInstance();
+    final DatabaseReference users = database.getReference().child(userTable);
+
 
     private GoogleSignInClient mGoogleSignInClient;
     private CallbackManager mCallbackManager;
@@ -168,6 +183,42 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
+    private void addUserEntry() {
+        firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+        User user = new User(firebaseUser.getUid(), firebaseUser.getEmail());
+
+        Map<String, Object> userUpdate = new HashMap<>();
+        userUpdate.put(firebaseUser.getUid(), user.toMap());
+
+        users.updateChildren(userUpdate);
+    }
+
+    private void handleFirstTimeUser() {
+        // Add the user to the database if they do not already exist
+        users.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+                if (!dataSnapshot.hasChild(firebaseUser.getUid())) {
+                    addUserEntry();
+
+                    Intent addUserDetails = new Intent(LoginActivity.this, AddUserDetailsActivity.class);
+                    startActivity(addUserDetails);
+                    finish();
+                } else if (dataSnapshot.child(firebaseUser.getUid()).getValue(User.class).getMemberSince().isEmpty()) {
+                    Intent addUserDetails = new Intent(LoginActivity.this, AddUserDetailsActivity.class);
+                    startActivity(addUserDetails);
+                    finish();
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Log.d("LoginActivity", "The read failed: " + databaseError.getCode());
+            }
+        });
+    }
+
     private void firebaseAuthWithGoogle(GoogleSignInAccount acct) {
         Log.d(GoogleLogTag, "firebaseAuthWithGoogle:" + acct.getId());
 
@@ -181,6 +232,9 @@ public class LoginActivity extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             // Sign in success, send user to app home page
                             Log.d(GoogleLogTag, "signInWithCredential:success");
+
+                            handleFirstTimeUser();
+
                             Intent nav = new Intent(LoginActivity.this, NavigationActivity.class);
                             startActivity(nav);
                             finish();
@@ -189,10 +243,10 @@ public class LoginActivity extends AppCompatActivity {
                             Log.w(GoogleLogTag, "signInWithCredential:failure", task.getException());
                             if (task.getException() != null) {
                                 Toast.makeText(LoginActivity.this, task.getException().getMessage(),
-                                        Toast.LENGTH_SHORT).show();
+                                        Toast.LENGTH_LONG).show();
                             } else {
                                 Toast.makeText(LoginActivity.this, R.string.authentication_failed,
-                                        Toast.LENGTH_SHORT).show();
+                                        Toast.LENGTH_LONG).show();
                             }
                         }
 
@@ -214,7 +268,9 @@ public class LoginActivity extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             // Sign in success, send user to app home page
                             Log.d(FacebookLogTag, "signInWithCredential:success");
-                            //TODO: write method to check if user still needs to add user details
+
+                            handleFirstTimeUser();
+
                             Intent nav = new Intent(LoginActivity.this, NavigationActivity.class);
                             startActivity(nav);
                             finish();
@@ -223,10 +279,10 @@ public class LoginActivity extends AppCompatActivity {
                             Log.w(FacebookLogTag, "signInWithCredential:failure", task.getException());
                             if (task.getException() != null) {
                                 Toast.makeText(LoginActivity.this, task.getException().getMessage(),
-                                        Toast.LENGTH_SHORT).show();
+                                        Toast.LENGTH_LONG).show();
                             } else {
                                 Toast.makeText(LoginActivity.this, R.string.authentication_failed,
-                                        Toast.LENGTH_SHORT).show();
+                                        Toast.LENGTH_LONG).show();
                             }
                             LoginManager.getInstance().logOut();
                         }
@@ -251,6 +307,9 @@ public class LoginActivity extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(EPLogTag, "createUserWithEmail:success");
+
+                            handleFirstTimeUser();
+
                             Intent nav = new Intent(getApplicationContext(), NavigationActivity.class);
                             startActivity(nav);
                             finish();
@@ -259,10 +318,10 @@ public class LoginActivity extends AppCompatActivity {
                             Log.w(EPLogTag, "createUserWithEmail:failure", task.getException());
                             if (task.getException() != null) {
                                 Toast.makeText(LoginActivity.this, task.getException().getMessage(),
-                                        Toast.LENGTH_SHORT).show();
+                                        Toast.LENGTH_LONG).show();
                             } else {
                                 Toast.makeText(LoginActivity.this, R.string.authentication_failed,
-                                        Toast.LENGTH_SHORT).show();
+                                        Toast.LENGTH_LONG).show();
                             }
                         }
 
@@ -285,7 +344,11 @@ public class LoginActivity extends AppCompatActivity {
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             // Sign in success, send user to app home page
+
                             Log.d(EPLogTag, "signInWithEmail:success");
+
+                            handleFirstTimeUser();
+
                             Intent nav = new Intent(getApplicationContext(), NavigationActivity.class);
                             startActivity(nav);
                             finish();
@@ -294,10 +357,10 @@ public class LoginActivity extends AppCompatActivity {
                             Log.w(EPLogTag, "signInWithEmail:failure", task.getException());
                             if (task.getException() != null) {
                                 Toast.makeText(LoginActivity.this, task.getException().getMessage(),
-                                        Toast.LENGTH_SHORT).show();
+                                        Toast.LENGTH_LONG).show();
                             } else {
                                 Toast.makeText(LoginActivity.this, R.string.authentication_failed,
-                                        Toast.LENGTH_SHORT).show();
+                                        Toast.LENGTH_LONG).show();
                             }
                         }
 
