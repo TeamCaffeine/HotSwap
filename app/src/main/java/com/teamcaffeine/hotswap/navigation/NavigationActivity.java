@@ -28,7 +28,8 @@ public class NavigationActivity extends AppCompatActivity implements
         ChatFragment.ChatFragmentListener,
         ProfileFragment.ProfileFragmentListener,
         ListItemFragment.ListItemFragmentListener,
-        SearchFragment.SearchFragmentListener {
+        SearchFragment.SearchFragmentListener,
+        HomeFragment.HomeFragmentListener {
 
     private final String TAG = "NavigationActivity";
 
@@ -38,6 +39,7 @@ public class NavigationActivity extends AppCompatActivity implements
     private ProfileFragment profileFragment;
     private SearchFragment searchFragment;
     private ChatFragment chatFragment;
+    private HomeFragment homeFragment;
 
     SharedPreferences prefs;
     private String navigationIndexKey;
@@ -58,7 +60,7 @@ public class NavigationActivity extends AppCompatActivity implements
         switch (item.getItemId()) {
             case R.id.navigation_home:
                 Log.i(TAG, "nav home");
-                inflateFragment(listItemFragment, 0);
+                inflateFragment(homeFragment, 0);
                 return true;
             case R.id.navigation_search:
                 Log.i(TAG, "nav search");
@@ -125,6 +127,7 @@ public class NavigationActivity extends AppCompatActivity implements
         profileFragment = new ProfileFragment();
         searchFragment = new SearchFragment();
         chatFragment = new ChatFragment();
+        homeFragment = new HomeFragment();
 
         navigation.setSelectedItemId(navigation.getMenu().getItem(prefs.getInt(navigationIndexKey, 0)).getItemId());
     }

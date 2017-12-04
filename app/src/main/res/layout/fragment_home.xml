@@ -1,13 +1,33 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context="com.teamcaffeine.hotswap.navigation.HomeFragment">
 
     <!-- TODO: Update blank fragment layout -->
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
 
-</FrameLayout>
+    <TextView
+        android:id="@+id/txtItemsLabel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="All Items" />
+
+    <TextView
+        android:id="@+id/txtRentingLabel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Currently Renting" />
+
+    <TextView
+        android:id="@+id/txtLendingLabel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Currently Lending" />
+
+    <Button
+        android:id="@+id/btnListItem"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="List Item" />
+</LinearLayout>
