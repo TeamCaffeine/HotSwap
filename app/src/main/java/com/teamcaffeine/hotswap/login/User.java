@@ -1,6 +1,8 @@
 package com.teamcaffeine.hotswap.login;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class User {
@@ -12,9 +14,11 @@ public class User {
     private String memberSince = "";
     private String phoneNumber = "";
     private String profilePicture = "";
+    private List<String> addresses = new ArrayList<>();
     private boolean online = false;
 
-    User() {}
+    User() {
+    }
 
     public User(String Uid, String email) {
         this.Uid = Uid;
@@ -29,6 +33,7 @@ public class User {
         this.memberSince = user.getMemberSince();
         this.phoneNumber = user.getPhoneNumber();
         this.profilePicture = user.getProfilePicture();
+        this.addresses = user.getAddresses();
         this.online = user.getOnline();
     }
 
@@ -42,6 +47,7 @@ public class User {
         result.put("phoneNumber", phoneNumber);
         result.put("profilePicture", profilePicture);
         result.put("online", online);
+        result.put("addresses", addresses);
         return result;
     }
 
@@ -107,5 +113,22 @@ public class User {
 
     public boolean getOnline() {
         return online;
+    }
+
+    public List<String> getAddresses() {
+        return addresses;
+    }
+
+    public boolean removeAddress(String s) {
+        return addresses.remove(s);
+    }
+
+    public boolean addAddress(String s) {
+        if (!addresses.contains(s)) {
+            addresses.add(s);
+            return true;
+        } else {
+            return false;
+        }
     }
 }
