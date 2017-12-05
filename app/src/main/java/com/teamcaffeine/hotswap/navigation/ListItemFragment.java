@@ -2,6 +2,8 @@ package com.teamcaffeine.hotswap.navigation;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.location.Address;
+import android.location.Geocoder;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -11,7 +13,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
+import com.firebase.geofire.GeoFire;
+import com.firebase.geofire.GeoLocation;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -23,9 +33,11 @@ import com.squareup.timessquare.CalendarPickerView;
 import com.teamcaffeine.hotswap.R;
 import com.teamcaffeine.hotswap.swap.Item;
 
+import java.io.IOException;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class ListItemFragment extends Fragment {
@@ -33,7 +45,9 @@ public class ListItemFragment extends Fragment {
     private FirebaseUser firebaseUser;
     private FirebaseDatabase database;
     private DatabaseReference items;
+    private DatabaseReference geoFireRef;
     private String itemTable = "items";
+    private String geoFireTable = "items_location";
 
     private EditText editItemName;
     private EditText editTags;
@@ -55,6 +69,7 @@ public class ListItemFragment extends Fragment {
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         database = FirebaseDatabase.getInstance();
         items = database.getReference(itemTable);
+        geoFireRef = database.getReference(geoFireTable);
 
         editItemName = (EditText) getView().findViewById(R.id.editItemName);
         editTags = (EditText) getView().findViewById(R.id.editTags);
@@ -112,6 +127,33 @@ public class ListItemFragment extends Fragment {
         LIFL = (ListItemFragment.ListItemFragmentListener) context;  //context is a handle to the main activity, let's bind it to our interface.
     }
 
+    public LatLng getLocationFromAddress(String strAddress)
+    {
+        //Create coder with Activity context - this
+        Geocoder coder = new Geocoder(getActivity());
+        List<Address> address;
+
+        try {
+            //Get latLng from String
+            address = coder.getFromLocationName(strAddress,5);
+
+            //check for null
+            if (address == null) {
+                return null;
+            }
+
+            //Lets take first possibility from the all possibilities.
+            Address location=address.get(0);
+            LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
+
+            return latLng;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
     private void submit() {
         items.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -128,7 +170,15 @@ public class ListItemFragment extends Fragment {
                 Map<String, Object> itemUpdate = new HashMap<>();
                 itemUpdate.put(key, item.toMap());
 
-                items.updateChildren(itemUpdate);
+                GeoFire geoFire = new GeoFire(geoFireRef);
+                LatLng itemLatLng = getLocationFromAddress(itemAddress);
+                if (itemLatLng != null) {
+                    items.updateChildren(itemUpdate);
+                    geoFire.setLocation(key, new GeoLocation(itemLatLng.latitude, itemLatLng.longitude));
+                } else {
+                    // TODO: handle invalid address / location data more gracefully - likely when we put the address fragment here
+                    Toast.makeText(getContext(), R.string.unable_to_add_address, Toast.LENGTH_SHORT).show();
+                }
             }
 
             @Override
