@@ -51,6 +51,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.gson.Gson;
@@ -100,12 +101,16 @@ public class SearchFragment extends Fragment implements OnMapReadyCallback, Goog
     SeekBar progress;
     CircleOptions circleOptions;
     Marker stopMarker;
-    private DatabaseReference database;
+//    private DatabaseReference database;
     private GeoFire geoFire;
     private GeoQuery geoQuery;
     private Map<String, Marker> markers;
     private Set<GeoQuery> geoQueries = new HashSet<>();
     private SharedPreferences prefs;
+
+    private FirebaseDatabase database;
+    private DatabaseReference geoFireRef;
+    private String geoFireTable = "items_location";
 
     private int SET_LOCATION_REQUEST_CODE = 1730;
 
@@ -319,7 +324,7 @@ public class SearchFragment extends Fragment implements OnMapReadyCallback, Goog
 
     @Override
     public void onLocationChanged(Location location) {
-
+        mMap.clear();
         if (currentLocationMarker != null) {
             currentLocationMarker.remove();
         }
@@ -361,7 +366,44 @@ public class SearchFragment extends Fragment implements OnMapReadyCallback, Goog
                         @Override
                         public void run() {
                             // change map camera view
+                            database = FirebaseDatabase.getInstance();
+                            geoFireRef = database.getReference(geoFireTable);
+                            GeoFire geoFire = new GeoFire(geoFireRef);
                             LatLng latlng = new LatLng(lat, lng);
+                            GeoQuery geoQuery = geoFire.queryAtLocation(new GeoLocation(latlng.latitude, latlng.longitude), 0.5);
+                            geoQuery.addGeoQueryEventListener(new GeoQueryEventListener() {
+                                @Override
+                                public void onKeyEntered(String key, GeoLocation location) {
+                                    System.out.println(String.format("Key %s entered the search area at [%f,%f]", key, location.latitude, location.longitude));
+                                    mMap.addMarker(new MarkerOptions()
+                                            .draggable(true)
+                                            .position(new LatLng(location.latitude, location.longitude))
+                                            .title("Item"));
+                                }
+
+                                @Override
+                                public void onKeyExited(String key) {
+                                    System.out.println(String.format("Key %s is no longer in the search area", key));
+
+                                }
+
+                                @Override
+                                public void onKeyMoved(String key, GeoLocation location) {
+                                    System.out.println(String.format("Key %s moved within the search area to [%f,%f]", key, location.latitude, location.longitude));
+
+                                }
+
+                                @Override
+                                public void onGeoQueryReady() {
+                                    System.out.println("All initial data has been loaded and events have been fired!");
+                                }
+
+                                @Override
+                                public void onGeoQueryError(DatabaseError error) {
+                                    System.err.println("There was an error with this query: " + error);
+                                }
+                            });
+
 
                             Marker stopMarker = mMap.addMarker(new MarkerOptions()
                                     .draggable(true)
@@ -383,15 +425,15 @@ public class SearchFragment extends Fragment implements OnMapReadyCallback, Goog
                                 public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                                     // progress = progress*10;
                                     circle.setRadius(progress);
-                                    float[] distance = new float[2];
-                                    Location.distanceBetween(42.365014, -71.102660,
-                                            circle.getCenter().latitude, circle.getCenter().longitude, distance);
-
-                                    if (distance[0] > circle.getRadius()) {
-                                        Toast.makeText(getActivity(), "iVacuum X is Outside the circle", Toast.LENGTH_SHORT).show();
-                                    } else {
-                                        Toast.makeText(getActivity(), "iVacuum X is Inside the circle", Toast.LENGTH_SHORT).show();
-                                    }
+//                                    float[] distance = new float[2];
+//                                    Location.distanceBetween(42.365014, -71.102660,
+//                                            circle.getCenter().latitude, circle.getCenter().longitude, distance);
+//
+//                                    if (distance[0] > circle.getRadius()) {
+//                                        Toast.makeText(getActivity(), "iVacuum X is Outside the circle", Toast.LENGTH_SHORT).show();
+//                                    } else {
+//                                        Toast.makeText(getActivity(), "iVacuum X is Inside the circle", Toast.LENGTH_SHORT).show();
+//                                    }
                                 }
 
                                 @Override
@@ -459,10 +501,13 @@ public class SearchFragment extends Fragment implements OnMapReadyCallback, Goog
 
 
         // Set up Firebase with Geofire and respective user
-        database = FirebaseDatabase.getInstance().getReference();
-        String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
-        DatabaseReference ref = FirebaseDatabase.getInstance().getReference("ItemIdHere");
-        geoFire = new GeoFire(database.child("geofire"));
+//        database = FirebaseDatabase.getInstance().getReference();
+//        String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+//        DatabaseReference ref = FirebaseDatabase.getInstance().getReference("ItemIdHere");
+//        geoFire = new GeoFire(database.child("geofire"));
+//
+//
+//
 
         /*
         // setup GeoFire
