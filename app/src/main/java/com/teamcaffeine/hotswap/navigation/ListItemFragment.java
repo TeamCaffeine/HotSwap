@@ -44,7 +44,7 @@ public class ListItemFragment extends Fragment {
     private EditText editAddress;
     private Button listItemButton;
     private CalendarPickerView calendar;
-    private DatabaseReference databaseF;
+    private DatabaseReference geofireDatabase;
     private GeoFire geoFire;
 
     @Override
@@ -105,23 +105,6 @@ public class ListItemFragment extends Fragment {
         });
 
 
-        databaseF = FirebaseDatabase.getInstance().getReference("items_location");
-        String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
-        DatabaseReference ref = FirebaseDatabase.getInstance().getReference("ItemIDHere");
-        geoFire = new GeoFire(databaseF.child(userId));
-
-        geoFire.setLocation("Item example", new GeoLocation(42.365014, -71.102660), new GeoFire.CompletionListener()
-
-        {
-            @Override
-            public void onComplete (String key, DatabaseError error){
-                if (error != null) {
-                    System.err.println("There was an error saving the location to GeoFire: " + error);
-                } else {
-                    System.out.println("Location saved on server successfully!");
-                }
-            }
-        });
 
     }
 
@@ -144,6 +127,20 @@ public class ListItemFragment extends Fragment {
                 String itemAddress = editAddress.getText().toString();
                 String itemPrice = editPrice.getText().toString();
                 String itemDescription = editDescription.getText().toString();
+                geofireDatabase = FirebaseDatabase.getInstance().getReference("items_location");
+                geoFire = new GeoFire(geofireDatabase);
+                geoFire.setLocation(items.push().getKey(), new GeoLocation(32.365014, -71.102660)
+                        ,new GeoFire.CompletionListener()
+                        {
+                            @Override
+                            public void onComplete (String key, DatabaseError error){
+                                if (error != null) {
+                                    System.err.println("There was an error saving the location to GeoFire: " + error);
+                                } else {
+                                    System.out.println("Location saved on server successfully!");
+                                }
+                            }
+                        });
 
                 Item item = new Item(itemName, firebaseUser.getUid(), itemDescription, itemPrice, itemAddress);
 

@@ -36,7 +36,7 @@ import com.stfalcon.chatkit.messages.MessagesListAdapter;
 import com.teamcaffeine.hotswap.R;
 import com.teamcaffeine.hotswap.messaging.models.Message;
 import com.teamcaffeine.hotswap.messaging.models.SimpleMessage;
-import com.teamcaffeine.hotswap.messaging.models.User;
+import com.teamcaffeine.hotswap.login.User;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
