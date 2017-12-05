@@ -12,8 +12,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 
-import com.firebase.geofire.GeoFire;
-import com.firebase.geofire.GeoLocation;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -44,8 +42,6 @@ public class ListItemFragment extends Fragment {
     private EditText editAddress;
     private Button listItemButton;
     private CalendarPickerView calendar;
-    private DatabaseReference geofireDatabase;
-    private GeoFire geoFire;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -103,9 +99,6 @@ public class ListItemFragment extends Fragment {
                 submit();
             }
         });
-
-
-
     }
 
     ListItemFragment.ListItemFragmentListener LIFL;
@@ -127,20 +120,6 @@ public class ListItemFragment extends Fragment {
                 String itemAddress = editAddress.getText().toString();
                 String itemPrice = editPrice.getText().toString();
                 String itemDescription = editDescription.getText().toString();
-                geofireDatabase = FirebaseDatabase.getInstance().getReference("items_location");
-                geoFire = new GeoFire(geofireDatabase);
-                geoFire.setLocation(items.push().getKey(), new GeoLocation(32.365014, -71.102660)
-                        ,new GeoFire.CompletionListener()
-                        {
-                            @Override
-                            public void onComplete (String key, DatabaseError error){
-                                if (error != null) {
-                                    System.err.println("There was an error saving the location to GeoFire: " + error);
-                                } else {
-                                    System.out.println("Location saved on server successfully!");
-                                }
-                            }
-                        });
 
                 Item item = new Item(itemName, firebaseUser.getUid(), itemDescription, itemPrice, itemAddress);
 
