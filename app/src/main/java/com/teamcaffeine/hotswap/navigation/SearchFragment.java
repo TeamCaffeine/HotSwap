@@ -4,6 +4,7 @@ package com.teamcaffeine.hotswap.navigation;
 import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.location.Criteria;
@@ -18,6 +19,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.text.SpannableString;
 import android.text.style.UnderlineSpan;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,9 +34,12 @@ import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.location.places.Place;
+import com.google.android.gms.location.places.ui.PlaceAutocomplete;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -71,11 +76,14 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import static android.app.Activity.RESULT_CANCELED;
+import static android.app.Activity.RESULT_OK;
+
 /**
  * A simple {@link Fragment} subclass.
  */
 public class SearchFragment extends Fragment implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks,
-        GoogleApiClient.OnConnectionFailedListener, LocationListener, GoogleMap.OnMarkerDragListener{
+        GoogleApiClient.OnConnectionFailedListener, LocationListener, GoogleMap.OnMarkerDragListener {
 
     private GoogleMap mMap;
     private GoogleApiClient client;
@@ -95,11 +103,11 @@ public class SearchFragment extends Fragment implements OnMapReadyCallback, Goog
     private DatabaseReference database;
     private GeoFire geoFire;
     private GeoQuery geoQuery;
-    private Map<String,Marker> markers;
+    private Map<String, Marker> markers;
     private Set<GeoQuery> geoQueries = new HashSet<>();
+    private SharedPreferences prefs;
 
-
-
+    private int SET_LOCATION_REQUEST_CODE = 1730;
 
     SearchFragment.SearchFragmentListener SFL;
 
@@ -114,15 +122,19 @@ public class SearchFragment extends Fragment implements OnMapReadyCallback, Goog
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_search, container, false);
 
+        // Get shared preferences
+        prefs = getActivity().getSharedPreferences(getString(R.string.base_package_name), Context.MODE_PRIVATE);
+
         return view;
 
 
     }
+
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        bSearch = (Button)view.findViewById(R.id.bSearch);
-        lvItems = (ListView)view.findViewById(R.id.itemLists);
+        bSearch = (Button) view.findViewById(R.id.bSearch);
+        lvItems = (ListView) view.findViewById(R.id.itemLists);
         lvAdapter = new Items(getActivity());
         lvItems.setAdapter(lvAdapter);
         lvItems.setVisibility(View.INVISIBLE);
@@ -130,7 +142,7 @@ public class SearchFragment extends Fragment implements OnMapReadyCallback, Goog
         lvItems.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                String value = (String)adapterView.getItemAtPosition(i);
+                String value = (String) adapterView.getItemAtPosition(i);
             }
         });
 
@@ -138,27 +150,27 @@ public class SearchFragment extends Fragment implements OnMapReadyCallback, Goog
             @Override
             public void onClick(View view) {
                 // Show results
-                EditText tfLocation = (EditText)view.findViewById(R.id.tfLocation);
-               // String location = tfLocation.getText().toString();
+                EditText tfLocation = (EditText) view.findViewById(R.id.tfLocation);
+                // String location = tfLocation.getText().toString();
                 //if(! location.equals("")) {
-                    // checks if user entered anything or not "empty string"
-                 //   if (location.equals("Vacuum")) {
-                        lvItems.setVisibility(View.VISIBLE);
-                 //   }
-               // }
+                // checks if user entered anything or not "empty string"
+                //   if (location.equals("Vacuum")) {
+                lvItems.setVisibility(View.VISIBLE);
+                //   }
+                // }
 //                else{
 //                    Toast.makeText(getActivity(), "No Items", Toast.LENGTH_SHORT).show();
 //                }
             }
         });
         // Underlines locale and filters
-      //  locale = (Button)view.findViewById(R.id.setLocaleButton);
-        locale = (TextView)view.findViewById(R.id.setLocaleFilters);
+        //  locale = (Button)view.findViewById(R.id.setLocaleButton);
+        locale = (TextView) view.findViewById(R.id.setLocaleFilters);
         SpannableString content = new SpannableString(locale.getText());
         content.setSpan(new UnderlineSpan(), 0, content.length(), 0);
         locale.setText(content);
 
-        filters = (TextView)view.findViewById(R.id.setItemFilters);
+        filters = (TextView) view.findViewById(R.id.setItemFilters);
         SpannableString itemcontent = new SpannableString(filters.getText());
         itemcontent.setSpan(new UnderlineSpan(), 0, itemcontent.length(), 0);
         filters.setText(itemcontent);
@@ -169,24 +181,24 @@ public class SearchFragment extends Fragment implements OnMapReadyCallback, Goog
                 Toast.makeText(getActivity(), "Filter Button Pressed", Toast.LENGTH_SHORT).show();
             }
         });
-        localeMsg = (TextView)view.findViewById(R.id.setLocaleMsg);
+        localeMsg = (TextView) view.findViewById(R.id.setLocaleMsg);
         Intent intent = getActivity().getIntent();
-        String city = intent.getStringExtra("city");
-        progress = (SeekBar)view.findViewById(R.id.circleFilter);
+        String city = prefs.getString("city", "");
+        progress = (SeekBar) view.findViewById(R.id.circleFilter);
 
 
-
-        if (city==null) {
+        if (city == "") {
             localeMsg.setText("");
-        }
-        else {
+        } else {
             localeMsg.setText("Items near " + city);
         }
         locale.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent i2 = new Intent(getActivity(), LocationPrefs.class);
-                startActivity(i2);
+//                startActivity(i2);
+                startActivityForResult(i2, SET_LOCATION_REQUEST_CODE);
+                localeMsg.setText(prefs.getString("city", ""));
             }
 
         });
@@ -196,7 +208,7 @@ public class SearchFragment extends Fragment implements OnMapReadyCallback, Goog
         lvItems.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                String value = (String)adapterView.getItemAtPosition(i);
+                String value = (String) adapterView.getItemAtPosition(i);
 
 //                i.putExtra("rank", rank);
 //                i.putExtra("country", country);
@@ -208,15 +220,25 @@ public class SearchFragment extends Fragment implements OnMapReadyCallback, Goog
         });
 
 
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){ // marshmellow
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) { // marshmellow
             checkLocationPermission();
         }
-        SupportMapFragment mapFragment = (SupportMapFragment)getChildFragmentManager()
+        SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
-
     }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == SET_LOCATION_REQUEST_CODE) {
+            if (resultCode == 0) {
+                localeMsg.setText(prefs.getString("city", ""));
+                onLocationChanged(null);
+            }
+        }
+    }
+
     @Override
     public void onPause() {
         super.onPause();
@@ -231,21 +253,20 @@ public class SearchFragment extends Fragment implements OnMapReadyCallback, Goog
         getActivity().overridePendingTransition(R.anim.slide_in_down, R.anim.slide_out_down);
     }
 
-    public boolean checkLocationPermission(){
-        if(ContextCompat.checkSelfPermission(getActivity().getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED){
-            if(ActivityCompat.shouldShowRequestPermissionRationale(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION)){
+    public boolean checkLocationPermission() {
+        if (ContextCompat.checkSelfPermission(getActivity().getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            if (ActivityCompat.shouldShowRequestPermissionRationale(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION)) {
                 ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_LOCATION_CODE);
-            }
-            else{
+            } else {
                 ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_LOCATION_CODE);
             }
             return false;
-        }
-        else{
+        } else {
             return true;
         }
 
     }
+
     @Override
     public void onMapReady(GoogleMap googleMap) { // should automatically be at current location
         mMap = googleMap;
@@ -261,8 +282,6 @@ public class SearchFragment extends Fragment implements OnMapReadyCallback, Goog
         Criteria criteria = new Criteria();
 
 
-
-
         MarkerOptions options = new MarkerOptions();
         LatLng vacuumX = new LatLng(42.365014, -71.102660); // hmart coords
         options.position(vacuumX);
@@ -271,7 +290,7 @@ public class SearchFragment extends Fragment implements OnMapReadyCallback, Goog
 
     }
 
-    protected synchronized void buildGoogleApiClient(){
+    protected synchronized void buildGoogleApiClient() {
         client = new GoogleApiClient.Builder(getActivity().getApplicationContext())
                 .addConnectionCallbacks(this)
                 .addOnConnectionFailedListener(this)
@@ -286,30 +305,30 @@ public class SearchFragment extends Fragment implements OnMapReadyCallback, Goog
         locationRequest.setFastestInterval(1000);
         locationRequest.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
         if (ContextCompat.checkSelfPermission(getActivity().getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-            LocationServices.FusedLocationApi.requestLocationUpdates(client,locationRequest,this);
+            LocationServices.FusedLocationApi.requestLocationUpdates(client, locationRequest, this);
         }
     }
 
     @Override
-    public void onConnectionSuspended(int i) {}
+    public void onConnectionSuspended(int i) {
+    }
 
     @Override
-    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {}
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+    }
 
     @Override
     public void onLocationChanged(Location location) {
 
-        if(currentLocationMarker != null){
+        if (currentLocationMarker != null) {
             currentLocationMarker.remove();
         }
 
         // how the map zooms into current location
         // if preferences exist
-        // TODO: have it handle if intent is null
-        Intent intent = getActivity().getIntent();
-        Bundle extras = intent.getExtras();
-        if (extras.containsKey("zip")) { // if there is location prefs
-            String postalcode = intent.getStringExtra("zip");
+        if (prefs.contains("zip")) {
+            // if (extras.containsKey("zip")) { // if there is location prefs
+            String postalcode = prefs.getString("zip", "02215");
             String key = "https://maps.googleapis.com/maps/api/geocode/json?address=";
             String api = "&key=AIzaSyCdD6V_pMev1dl8LAsoJ6PLG5JLnR-OiUc";
             String stringUrl = key + postalcode + api;
@@ -350,7 +369,6 @@ public class SearchFragment extends Fragment implements OnMapReadyCallback, Goog
                                     .title("Current Location"));
 
 
-
                             CircleOptions circleOptions = new CircleOptions()
                                     .center(stopMarker.getPosition()).radius(500).strokeWidth(5.0f)
                                     .strokeColor(Color.parseColor("#00BFFF"))
@@ -369,12 +387,13 @@ public class SearchFragment extends Fragment implements OnMapReadyCallback, Goog
                                     Location.distanceBetween(42.365014, -71.102660,
                                             circle.getCenter().latitude, circle.getCenter().longitude, distance);
 
-                                    if( distance[0] > circle.getRadius()  ){
+                                    if (distance[0] > circle.getRadius()) {
                                         Toast.makeText(getActivity(), "iVacuum X is Outside the circle", Toast.LENGTH_SHORT).show();
                                     } else {
                                         Toast.makeText(getActivity(), "iVacuum X is Inside the circle", Toast.LENGTH_SHORT).show();
                                     }
                                 }
+
                                 @Override
                                 public void onStartTrackingTouch(final SeekBar seekBar) {
                                 }
@@ -417,12 +436,13 @@ public class SearchFragment extends Fragment implements OnMapReadyCallback, Goog
                     Location.distanceBetween(42.365014, -71.102660,
                             circle.getCenter().latitude, circle.getCenter().longitude, distance);
 
-                    if( distance[0] > circle.getRadius()  ){
+                    if (distance[0] > circle.getRadius()) {
                         Toast.makeText(getActivity(), "iVacuum X is Outside the circle", Toast.LENGTH_SHORT).show();
                     } else {
                         Toast.makeText(getActivity(), "iVacuum X is Inside the circle", Toast.LENGTH_SHORT).show();
                     }
                 }
+
                 @Override
                 public void onStartTrackingTouch(final SeekBar seekBar) {
                 }
@@ -434,7 +454,8 @@ public class SearchFragment extends Fragment implements OnMapReadyCallback, Goog
             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(location.getLatitude(), location.getLongitude()), 15.5f));
         }
 
-        LatLng latlng = new LatLng(location.getLatitude(), location.getLongitude());
+        // TODO: RECOMMENT?
+//        LatLng latlng = new LatLng(location.getLatitude(), location.getLongitude());
 
 
         // Set up Firebase with Geofire and respective user
@@ -453,16 +474,15 @@ public class SearchFragment extends Fragment implements OnMapReadyCallback, Goog
         this.markers = new HashMap<String, Marker>();
         */
 
+// TODO: RECOMMENT?
+//        MarkerOptions markerOptions = new MarkerOptions();
+//
+//        markerOptions.position(latlng);
+//        markerOptions.title("Current Location");
+//        markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE));
 
 
-        MarkerOptions markerOptions = new MarkerOptions();
-
-        markerOptions.position(latlng);
-        markerOptions.title("Current Location");
-        markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE));
-
-
-        if(client != null){
+        if (client != null) {
             LocationServices.FusedLocationApi.removeLocationUpdates(client, this);
         }
 
@@ -490,7 +510,7 @@ public class SearchFragment extends Fragment implements OnMapReadyCallback, Goog
                 Location.distanceBetween(42.365014, -71.102660,
                         circle.getCenter().latitude, circle.getCenter().longitude, distance);
 
-                if( distance[0] > circle.getRadius()  ){
+                if (distance[0] > circle.getRadius()) {
                     Toast.makeText(getActivity(), "iVacuum X is Outside the circle", Toast.LENGTH_SHORT).show();
                 } else {
                     Toast.makeText(getActivity(), "iVacuum X is Inside the circle", Toast.LENGTH_SHORT).show();
@@ -505,7 +525,6 @@ public class SearchFragment extends Fragment implements OnMapReadyCallback, Goog
             public void onStopTrackingTouch(final SeekBar seekBar) {
             }
         });
-
 
 
 //        SeekBar progress = (SeekBar)findViewById(R.id.circleFilter);
@@ -532,7 +551,7 @@ public class SearchFragment extends Fragment implements OnMapReadyCallback, Goog
 //            public void onStopTrackingTouch(final SeekBar seekBar) {
 //            }
 
-        }
+    }
 
     @Override
     public void onMarkerDragStart(Marker marker) {
@@ -552,7 +571,7 @@ public class SearchFragment extends Fragment implements OnMapReadyCallback, Goog
 
 
         mMap.clear();
-        LatLng vacuumX = new LatLng(42.365014,-71.102660); // hmart coords
+        LatLng vacuumX = new LatLng(42.365014, -71.102660); // hmart coords
         MarkerOptions options = new MarkerOptions();
         options.position(vacuumX);
         options.title("VacuumX");
@@ -581,7 +600,7 @@ public class SearchFragment extends Fragment implements OnMapReadyCallback, Goog
                 Location.distanceBetween(42.365014, -71.102660,
                         circle.getCenter().latitude, circle.getCenter().longitude, distance);
 
-                if( distance[0] > circle.getRadius()  ){
+                if (distance[0] > circle.getRadius()) {
                     Toast.makeText(getActivity(), "iVacuum X is Outside the circle", Toast.LENGTH_SHORT).show();
                 } else {
                     Toast.makeText(getActivity(), "iVacuum X is Inside the circle", Toast.LENGTH_SHORT).show();

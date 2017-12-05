@@ -1,11 +1,14 @@
 package com.teamcaffeine.hotswap.login;
 
+import com.stfalcon.chatkit.commons.models.IUser;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class User {
+
+public class User implements IUser{
     // Force empty initialization of default table fields
     private String Uid = "";
     private String firstName = "";
@@ -13,9 +16,9 @@ public class User {
     private String email = "";
     private String memberSince = "";
     private String phoneNumber = "";
-    private String profilePicture = "";
-    private List<String> addresses = new ArrayList<>();
+    private String avatar = "";
     private boolean online = false;
+    private List<String> addresses = new ArrayList<>();
 
     User() {
     }
@@ -32,9 +35,9 @@ public class User {
         this.email = user.getEmail();
         this.memberSince = user.getMemberSince();
         this.phoneNumber = user.getPhoneNumber();
-        this.profilePicture = user.getProfilePicture();
-        this.addresses = user.getAddresses();
+        this.avatar = user.getAvatar();
         this.online = user.getOnline();
+        this.addresses = user.getAddresses();
     }
 
     public Map<String, Object> toMap() {
@@ -45,7 +48,7 @@ public class User {
         result.put("email", email);
         result.put("memberSince", memberSince);
         result.put("phoneNumber", phoneNumber);
-        result.put("profilePicture", profilePicture);
+        result.put("avatar", avatar);
         result.put("online", online);
         result.put("addresses", addresses);
         return result;
@@ -75,8 +78,8 @@ public class User {
         this.phoneNumber = phoneNumber;
     }
 
-    public void setProfilePicture(String profilePicture) {
-        this.profilePicture = profilePicture;
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
     }
 
     public void setOnline(boolean online) {
@@ -107,8 +110,8 @@ public class User {
         return phoneNumber;
     }
 
-    public String getProfilePicture() {
-        return profilePicture;
+    public String getAvatar() {
+        return avatar;
     }
 
     public boolean getOnline() {
@@ -131,4 +134,20 @@ public class User {
             return false;
         }
     }
+
+    // Methods that need to be implemented for the IUser class for chatkit
+    @Override
+    public String getId() {
+        return email;
+    }
+
+    @Override
+    public String getName() {
+        return firstName + " " + lastName;
+    }
+
+    public void setId(String newEmail) {
+        this.email = newEmail;
+    }
+
 }

@@ -1,7 +1,9 @@
 package com.teamcaffeine.hotswap.maps;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
@@ -54,8 +56,7 @@ public class LocationPrefs extends AppCompatActivity
     private GoogleApiClient client;
     private LocationRequest locationRequest;
     private Location lastLocation;
-
-
+    private SharedPreferences prefs;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,6 +75,9 @@ public class LocationPrefs extends AppCompatActivity
         content.setSpan(new UnderlineSpan(), 0, content.length(), 0);
         cancel.setText(content);
 
+
+        // Get shared preferences
+        prefs = this.getSharedPreferences(getString(R.string.base_package_name), Context.MODE_PRIVATE);
 
         zip.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
@@ -222,21 +226,17 @@ public class LocationPrefs extends AppCompatActivity
             @Override
             public void onClick(View view) {
                 // sends location preferences back to search page
-                Intent goHome = new Intent(LocationPrefs.this, NavigationActivity.class);
-                goHome.putExtra("city", result.getText().toString());
-                goHome.putExtra("zip", zip.getText().toString());
-                goHome.putExtra("frgToLoad", 1);
-                startActivity(goHome);
-
+                prefs.edit().putString("city", result.getText().toString()).apply();
+                prefs.edit().putString("zip", zip.getText().toString()).apply();
+                finishActivity(-1);
+                finish();
             }
         });
 
         cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent goHome = new Intent(LocationPrefs.this, NavigationActivity.class);
-                goHome.putExtra("frgToLoad", 1);
-                startActivity(goHome);
+                finish();
             }
         });
 
