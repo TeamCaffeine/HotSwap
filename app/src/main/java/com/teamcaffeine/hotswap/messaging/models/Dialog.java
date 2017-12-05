@@ -3,6 +3,7 @@ package com.teamcaffeine.hotswap.messaging.models;
 import com.stfalcon.chatkit.commons.models.IDialog;
 
 import java.util.ArrayList;
+import com.teamcaffeine.hotswap.login.User;
 
 /**
  * @author agrawroh
