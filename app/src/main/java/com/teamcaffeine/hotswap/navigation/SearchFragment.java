@@ -366,51 +366,13 @@ public class SearchFragment extends Fragment implements OnMapReadyCallback, Goog
                         @Override
                         public void run() {
                             // change map camera view
-                            database = FirebaseDatabase.getInstance();
-                            geoFireRef = database.getReference(geoFireTable);
-                            GeoFire geoFire = new GeoFire(geoFireRef);
-                            LatLng latlng = new LatLng(lat, lng);
-                            GeoQuery geoQuery = geoFire.queryAtLocation(new GeoLocation(latlng.latitude, latlng.longitude), 0.5);
-                            geoQuery.addGeoQueryEventListener(new GeoQueryEventListener() {
-                                @Override
-                                public void onKeyEntered(String key, GeoLocation location) {
-                                    System.out.println(String.format("Key %s entered the search area at [%f,%f]", key, location.latitude, location.longitude));
-                                    mMap.addMarker(new MarkerOptions()
-                                            .draggable(true)
-                                            .position(new LatLng(location.latitude, location.longitude))
-                                            .title("Item"));
-                                }
-
-                                @Override
-                                public void onKeyExited(String key) {
-                                    System.out.println(String.format("Key %s is no longer in the search area", key));
-
-                                }
-
-                                @Override
-                                public void onKeyMoved(String key, GeoLocation location) {
-                                    System.out.println(String.format("Key %s moved within the search area to [%f,%f]", key, location.latitude, location.longitude));
-
-                                }
-
-                                @Override
-                                public void onGeoQueryReady() {
-                                    System.out.println("All initial data has been loaded and events have been fired!");
-                                }
-
-                                @Override
-                                public void onGeoQueryError(DatabaseError error) {
-                                    System.err.println("There was an error with this query: " + error);
-                                }
-                            });
+                            final LatLng latlng = new LatLng(lat, lng);
 
 
                             Marker stopMarker = mMap.addMarker(new MarkerOptions()
                                     .draggable(true)
                                     .position(latlng)
                                     .title("Current Location"));
-
-
                             CircleOptions circleOptions = new CircleOptions()
                                     .center(stopMarker.getPosition()).radius(500).strokeWidth(5.0f)
                                     .strokeColor(Color.parseColor("#00BFFF"))
@@ -425,6 +387,43 @@ public class SearchFragment extends Fragment implements OnMapReadyCallback, Goog
                                 public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                                     // progress = progress*10;
                                     circle.setRadius(progress);
+                                    database = FirebaseDatabase.getInstance();
+                                    geoFireRef = database.getReference(geoFireTable);
+                                    GeoFire geoFire = new GeoFire(geoFireRef);
+
+                                    GeoQuery geoQuery = geoFire.queryAtLocation(new GeoLocation(latlng.latitude, latlng.longitude), progress/1000.0);
+                                    geoQuery.addGeoQueryEventListener(new GeoQueryEventListener() {
+                                        @Override
+                                        public void onKeyEntered(String key, GeoLocation location) {
+                                            System.out.println(String.format("Key %s entered the search area at [%f,%f]", key, location.latitude, location.longitude));
+                                            mMap.addMarker(new MarkerOptions()
+                                                    .draggable(true)
+                                                    .position(new LatLng(location.latitude, location.longitude))
+                                                    .title("Item"));
+                                        }
+
+                                        @Override
+                                        public void onKeyExited(String key) {
+                                            System.out.println(String.format("Key %s is no longer in the search area", key));
+
+                                        }
+
+                                        @Override
+                                        public void onKeyMoved(String key, GeoLocation location) {
+                                            System.out.println(String.format("Key %s moved within the search area to [%f,%f]", key, location.latitude, location.longitude));
+
+                                        }
+
+                                        @Override
+                                        public void onGeoQueryReady() {
+                                            System.out.println("All initial data has been loaded and events have been fired!");
+                                        }
+
+                                        @Override
+                                        public void onGeoQueryError(DatabaseError error) {
+                                            System.err.println("There was an error with this query: " + error);
+                                        }
+                                    });
 //                                    float[] distance = new float[2];
 //                                    Location.distanceBetween(42.365014, -71.102660,
 //                                            circle.getCenter().latitude, circle.getCenter().longitude, distance);
