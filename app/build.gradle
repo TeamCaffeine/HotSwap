@@ -70,7 +70,7 @@ dependencies {
     compile 'de.hdodenhof:circleimageview:2.2.0'
 
     // Geofire Dependencies
-    compile 'com.firebase:geofire-java:2.1.3'
+    compile 'com.firebase:geofire-android:2.1.3'
     // Profile get address dependency
     compile 'com.google.android.gms:play-services-places:11.6.0'
 
