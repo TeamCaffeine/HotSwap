@@ -36,24 +36,21 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
-import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.database.ValueEventListener;
 import com.teamcaffeine.hotswap.R;
 import com.teamcaffeine.hotswap.login.LoginActivity;
 import com.teamcaffeine.hotswap.login.User;
 
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static android.app.Activity.RESULT_CANCELED;
 import static android.app.Activity.RESULT_OK;
-import com.teamcaffeine.hotswap.login.User;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -64,13 +61,6 @@ public class ProfileFragment extends Fragment {
 
     // Place codes
     final int PLACE_AUTOCOMPLETE_REQUEST_CODE = 1;
-
-    // create objects for Firebase references
-    private FirebaseUser currentUser;
-    private FirebaseDatabase database;
-    private DatabaseReference users;
-    private String userTable = "Users";
-    private User user;
 
     // create objects to reference layout objects
     private TextView txtName;
@@ -87,6 +77,13 @@ public class ProfileFragment extends Fragment {
     private TextView txtPastTransactions;
 
     public ProgressDialog mProgressDialog;
+
+    // Database reference fields
+    private FirebaseUser firebaseUser;
+    private FirebaseDatabase database;
+    private DatabaseReference users;
+    private String userTable = "users";
+
 
     public void showProgressDialog() {
         if (mProgressDialog == null) {
@@ -115,6 +112,55 @@ public class ProfileFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.activity_profile, container, false);
+        return view;
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == PLACE_AUTOCOMPLETE_REQUEST_CODE) {
+            if (resultCode == RESULT_OK) {
+                final Place place = PlaceAutocomplete.getPlace(getActivity(), data);
+
+                DatabaseReference ref = users.child(firebaseUser.getUid());
+                ref.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        User user = dataSnapshot.getValue(User.class);
+
+                        boolean didAdd = user.addAddress(place.getAddress().toString());
+                        if (didAdd) {
+                            // Update database
+                            Map<String, Object> userUpdate = new HashMap<>();
+                            userUpdate.put(firebaseUser.getUid(), user.toMap());
+                            users.updateChildren(userUpdate);
+
+                            // Update UI
+                            addressElementsList.add(place.getAddress().toString());
+                            addressAdapter.notifyDataSetChanged();
+                        } else {
+                            Log.i(TAG, "User attempted to add a duplicate address");
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+                        Log.e(TAG, "Address update failed", databaseError.toException());
+                    }
+                });
+            } else if (resultCode == PlaceAutocomplete.RESULT_ERROR) {
+                Status status = PlaceAutocomplete.getStatus(getActivity(), data);
+                Log.i(TAG, status.getStatusMessage());
+                Toast.makeText(getContext(), R.string.unable_to_add_address, Toast.LENGTH_SHORT).show();
+            } else if (resultCode == RESULT_CANCELED) {
+                // The user canceled the operation.
+            }
+        }
+    }
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
 
         btnAddAddress = view.findViewById(R.id.txtAddAddress);
         btnAddAddress.setOnClickListener(new View.OnClickListener() {
@@ -142,9 +188,32 @@ public class ProfileFragment extends Fragment {
                         .setPositiveButton(R.string.delete, new DialogInterface.OnClickListener() {
 
                             public void onClick(DialogInterface dialog, int whichButton) {
-                                addressElementsList.remove(position);
-                                addressAdapter.notifyDataSetChanged();
-                                //TODO delete the address from the database as well.
+                                DatabaseReference ref = users.child(firebaseUser.getUid());
+                                ref.addListenerForSingleValueEvent(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(DataSnapshot dataSnapshot) {
+                                        User user = dataSnapshot.getValue(User.class);
+
+                                        boolean didRemove = user.removeAddress(listviewAddresses.getItemAtPosition(position).toString());
+                                        if (didRemove) {
+                                            // Update database
+                                            Map<String, Object> userUpdate = new HashMap<>();
+                                            userUpdate.put(firebaseUser.getUid(), user.toMap());
+                                            users.updateChildren(userUpdate);
+
+                                            // Update UI
+                                            addressElementsList.remove(position);
+                                            addressAdapter.notifyDataSetChanged();
+                                        } else {
+                                            Log.i(TAG, "User attempted to delete a nonexistent address");
+                                        }
+                                    }
+
+                                    @Override
+                                    public void onCancelled(DatabaseError databaseError) {
+                                        Log.e(TAG, "Address update failed", databaseError.toException());
+                                    }
+                                });
                                 dialog.dismiss();
                             }
                         })
@@ -158,10 +227,6 @@ public class ProfileFragment extends Fragment {
             }
         });
 
-        addressElementsList = new ArrayList<String>();
-        addressAdapter = new ArrayAdapter<String>
-                (getContext(), android.R.layout.simple_list_item_1, addressElementsList);
-        listviewAddresses.setAdapter(addressAdapter);
 
         txtAddPayment = view.findViewById(R.id.txtAddPayment);
         txtAddPayment.setOnClickListener(new View.OnClickListener() {
@@ -171,44 +236,6 @@ public class ProfileFragment extends Fragment {
             }
         });
         txtPastTransactions = view.findViewById(R.id.txtPastTransactions);
-
-        return view;
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == PLACE_AUTOCOMPLETE_REQUEST_CODE) {
-            if (resultCode == RESULT_OK) {
-                Place place = PlaceAutocomplete.getPlace(getActivity(), data);
-                // TODO add the new address to the user's data in firebase
-                addressElementsList.add(place.getAddress().toString());
-                addressAdapter.notifyDataSetChanged();
-            } else if (resultCode == PlaceAutocomplete.RESULT_ERROR) {
-                Status status = PlaceAutocomplete.getStatus(getActivity(), data);
-                Log.i(TAG, status.getStatusMessage());
-                Toast.makeText(getContext(), R.string.unable_to_add_address, Toast.LENGTH_SHORT).show();
-            } else if (resultCode == RESULT_CANCELED) {
-                // The user canceled the operation.
-            }
-        }
-    }
-
-    @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-
-        currentUser = FirebaseAuth.getInstance().getCurrentUser();
-        database = FirebaseDatabase.getInstance();
-        users = database.getReference().child(userTable);
-
-        // get the bundle from the intent
-        //****keeping these lines commented out for now, we will need them when we implement the fragment with login
-//        Bundle bundle = getIntent().getExtras();
-//        String fullName = bundle.getString("fullName");
-//        String dateCreated = bundle.getString("dateCreated");
-
-
-        // set references to layout objects
         txtName = view.findViewById(R.id.txtName);
         txtMemberSince = view.findViewById(R.id.txtMemberSince);
         btnLogout = view.findViewById(R.id.btnLogout);
@@ -216,19 +243,17 @@ public class ProfileFragment extends Fragment {
         txtEmail = view.findViewById(R.id.txtEmail);
         txtPhoneNumber = view.findViewById(R.id.txtPhoneNumber);
 
-        // Get a reference to our posts
-        FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
-        final FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference ref = database.getReference().child("users").child(firebaseUser.getUid());
+        // Get a reference to our user
+        firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+        database = FirebaseDatabase.getInstance();
+        users = database.getReference().child(userTable);
 
-
-
-        // Attach a listener to read the data at our posts reference
-        ref.addValueEventListener((new ValueEventListener() {
+        DatabaseReference ref = users.child(firebaseUser.getUid());
+        ref.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 User user = dataSnapshot.getValue(User.class);
-                txtName.setText(user.getFirstName()+ " " + user.getLastName());
+                txtName.setText(user.getFirstName() + " " + user.getLastName());
 
                 // get the date the user created their account from the Firebase
                 // set "Member Since" equal to the date the user created their account
@@ -237,15 +262,18 @@ public class ProfileFragment extends Fragment {
                 txtEmail.setText(user.getEmail());
                 txtPhoneNumber.setText(user.getPhoneNumber());
 
+                addressElementsList = user.getAddresses();
+                addressAdapter = new ArrayAdapter<String>
+                        (getContext(), android.R.layout.simple_list_item_1, addressElementsList);
+                listviewAddresses.setAdapter(addressAdapter);
+                addressAdapter.notifyDataSetChanged();
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
                 System.out.println("The read failed: " + databaseError.getCode());
             }
-        }));
-
-
+        });
 
 
         // Set logout functionality of the Logout button

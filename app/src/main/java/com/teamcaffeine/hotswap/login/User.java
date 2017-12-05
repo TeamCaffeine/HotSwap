@@ -1,12 +1,9 @@
 package com.teamcaffeine.hotswap.login;
 
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseReference;
-
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
-
 
 public class User {
     // Force empty initialization of default table fields
@@ -17,9 +14,11 @@ public class User {
     private String memberSince = "";
     private String phoneNumber = "";
     private String profilePicture = "";
+    private List<String> addresses = new ArrayList<>();
     private boolean online = false;
 
-    User() {}
+    User() {
+    }
 
     public User(String Uid, String email) {
         this.Uid = Uid;
@@ -34,6 +33,7 @@ public class User {
         this.memberSince = user.getMemberSince();
         this.phoneNumber = user.getPhoneNumber();
         this.profilePicture = user.getProfilePicture();
+        this.addresses = user.getAddresses();
         this.online = user.getOnline();
     }
 
@@ -47,6 +47,7 @@ public class User {
         result.put("phoneNumber", phoneNumber);
         result.put("profilePicture", profilePicture);
         result.put("online", online);
+        result.put("addresses", addresses);
         return result;
     }
 
@@ -78,9 +79,13 @@ public class User {
         this.profilePicture = profilePicture;
     }
 
-    public void setOnline(boolean online) { this.online = online; }
+    public void setOnline(boolean online) {
+        this.online = online;
+    }
 
-    public String getUid() { return Uid; }
+    public String getUid() {
+        return Uid;
+    }
 
     public String getFirstName() {
         return firstName;
@@ -102,7 +107,28 @@ public class User {
         return phoneNumber;
     }
 
-    public String getProfilePicture() { return profilePicture; }
+    public String getProfilePicture() {
+        return profilePicture;
+    }
 
-    public boolean getOnline() { return online; }
+    public boolean getOnline() {
+        return online;
+    }
+
+    public List<String> getAddresses() {
+        return addresses;
+    }
+
+    public boolean removeAddress(String s) {
+        return addresses.remove(s);
+    }
+
+    public boolean addAddress(String s) {
+        if (!addresses.contains(s)) {
+            addresses.add(s);
+            return true;
+        } else {
+            return false;
+        }
+    }
 }
