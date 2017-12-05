@@ -30,10 +30,11 @@ import com.teamcaffeine.hotswap.R;
 import com.teamcaffeine.hotswap.swap.Item;
 
 import java.io.IOException;
+import java.util.List;
+
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class ListItemFragment extends Fragment {
