@@ -99,7 +99,7 @@ public class AddUserDetailsActivity extends AppCompatActivity {
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     User user = dataSnapshot.getValue(User.class);
 
-                    DateFormat dateFormat = new SimpleDateFormat("MMMM, yyyy");
+                    DateFormat dateFormat = new SimpleDateFormat("MMMM yyyy");
                     Date memberSince = new Date();
 
                     user.setFirstName(firstName);

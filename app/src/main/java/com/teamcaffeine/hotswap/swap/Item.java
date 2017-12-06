@@ -8,6 +8,7 @@ import java.util.Map;
 
 public class Item {
     // Force empty initialization of default table fields
+    private String itemID ="";
     private String name = "";
     private String ownerID = "";
     private String renteeID = "";
@@ -21,7 +22,8 @@ public class Item {
 
     Item() {}
 
-    public Item(String name, String ownerID, String description, String rentPrice, String address) {
+    public Item(String itemID, String name, String ownerID, String description, String rentPrice, String address) {
+        this.itemID = itemID;
         this.name = name;
         this.ownerID = ownerID;
         this.description = description;
@@ -30,6 +32,7 @@ public class Item {
     }
 
     public Item(Item item) {
+        this.itemID = item.getItemID();
         this.name = item.getName();
         this.ownerID = item.getOwnerID();
         this.renteeID = item.getRenteeID();
@@ -44,6 +47,7 @@ public class Item {
 
     public Map<String, Object> toMap() {
         HashMap<String, Object> result = new HashMap<>();
+        result.put("itemID", itemID);
         result.put("name", name);
         result.put("ownerID", ownerID);
         result.put("renteeID", renteeID);
@@ -110,6 +114,10 @@ public class Item {
 
     public void setAddress(String address) {
         this.address = address;
+    }
+
+    public String getItemID() {
+        return itemID;
     }
 
     public String getName() {

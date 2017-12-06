@@ -10,12 +10,15 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.BaseAdapter;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -27,6 +30,7 @@ import android.widget.Toast;
 import com.facebook.share.model.ShareLinkContent;
 import com.facebook.share.widget.ShareDialog;
 import com.firebase.ui.auth.AuthUI;
+import com.google.android.gms.common.ErrorDialogFragment;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.common.api.Status;
@@ -41,13 +45,18 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.stripe.android.model.Card;
+import com.stripe.android.view.CardMultilineWidget;
 import com.teamcaffeine.hotswap.R;
 import com.teamcaffeine.hotswap.login.LoginActivity;
 import com.teamcaffeine.hotswap.login.User;
 
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import java.util.ArrayList;
 
 import static android.app.Activity.RESULT_CANCELED;
 import static android.app.Activity.RESULT_OK;
@@ -73,8 +82,15 @@ public class ProfileFragment extends Fragment {
     private ListView listviewAddresses;
     private List<String> addressElementsList;
     private ArrayAdapter<String> addressAdapter;
-    private TextView txtAddPayment;
+    private Button btnAddPayment;
+    private ListView listviewPayment;
+    private List<String> paymentElementsList;
+    private ArrayAdapter<String> paymentAdapter;
     private TextView txtPastTransactions;
+    private ListView lvAddresses;
+    private ListView lvPayment;
+//    private ListAdapter addressesAdapter;
+//    private ListAdapter paymentAdapter;
 
     public ProgressDialog mProgressDialog;
 
@@ -162,7 +178,7 @@ public class ProfileFragment extends Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        btnAddAddress = view.findViewById(R.id.txtAddAddress);
+        btnAddAddress = view.findViewById(R.id.btnAddAddress);
         btnAddAddress.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -228,13 +244,72 @@ public class ProfileFragment extends Fragment {
         });
 
 
-        txtAddPayment = view.findViewById(R.id.txtAddPayment);
-        txtAddPayment.setOnClickListener(new View.OnClickListener() {
+
+
+        btnAddPayment = view.findViewById(R.id.btnAddPayment);
+        btnAddPayment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 addPaymentPopup();
             }
         });
+
+        paymentElementsList = new ArrayList<String>();
+        listviewPayment = view.findViewById(R.id.listviewPayment);
+        listviewPayment.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
+                AlertDialog myQuittingDialogBox = new AlertDialog.Builder(getContext())
+                        //set message, title, and icon
+                        .setTitle(R.string.delete)
+                        .setMessage(R.string.delete_payment_question)
+                        .setPositiveButton(R.string.delete, new DialogInterface.OnClickListener() {
+
+                            public void onClick(DialogInterface dialog, int whichButton) {
+                                DatabaseReference ref = users.child(firebaseUser.getUid());
+                                ref.addListenerForSingleValueEvent(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(DataSnapshot dataSnapshot) {
+                                        User user = dataSnapshot.getValue(User.class);
+
+                                        boolean didRemove = user.removePayment(listviewPayment.getItemAtPosition(position).toString());
+                                        if (didRemove) {
+                                            // Update database
+                                            Map<String, Object> userUpdate = new HashMap<>();
+                                            userUpdate.put(firebaseUser.getUid(), user.toMap());
+                                            users.updateChildren(userUpdate);
+
+                                            // Update UI
+                                            paymentElementsList.remove(position);
+                                            paymentAdapter.notifyDataSetChanged();
+                                        } else {
+                                            Log.i(TAG, "User attempted to delete a nonexistent payment method");
+                                        }
+                                    }
+
+                                    @Override
+                                    public void onCancelled(DatabaseError databaseError) {
+                                        Log.e(TAG, "Payment update failed", databaseError.toException());
+                                    }
+                                });
+                                dialog.dismiss();
+                            }
+                        })
+                        .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        })
+                        .create();
+                myQuittingDialogBox.show();
+            }
+        });
+
+
+        paymentAdapter = new ArrayAdapter<String>
+                (getContext(), android.R.layout.simple_list_item_1, paymentElementsList);
+        listviewPayment.setAdapter(paymentAdapter);
+
         txtPastTransactions = view.findViewById(R.id.txtPastTransactions);
         txtName = view.findViewById(R.id.txtName);
         txtMemberSince = view.findViewById(R.id.txtMemberSince);
@@ -267,6 +342,12 @@ public class ProfileFragment extends Fragment {
                         (getContext(), android.R.layout.simple_list_item_1, addressElementsList);
                 listviewAddresses.setAdapter(addressAdapter);
                 addressAdapter.notifyDataSetChanged();
+
+                paymentElementsList = user.getPayments();
+                paymentAdapter = new ArrayAdapter<String>
+                        (getContext(), android.R.layout.simple_list_item_1, paymentElementsList);
+                listviewPayment.setAdapter(paymentAdapter);
+                paymentAdapter.notifyDataSetChanged();
             }
 
             @Override
@@ -386,6 +467,53 @@ public class ProfileFragment extends Fragment {
         final PopupWindow popupWindow = new PopupWindow(popupView, 800, 800, true);
         popupWindow.setOutsideTouchable(true);
         popupWindow.setAnimationStyle(R.style.PopupAnimation);
+
+        final CardMultilineWidget mCardMultilineWidget = popupView.findViewById(R.id.card_multiline_widget);
+
+        Button btnAddCard = (Button) popupView.findViewById(R.id.btnAddCard);
+        btnAddCard.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                final Card cardToSave = mCardMultilineWidget.getCard();
+                if (cardToSave == null) {
+                    Log.i(TAG, "User attempted to add an invalid payment");
+                } else {
+
+                    DatabaseReference ref = users.child(firebaseUser.getUid());
+                    ref.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            User user = dataSnapshot.getValue(User.class);
+
+                            boolean didAdd = user.addPayment(cardToSave.getNumber());
+                            if (didAdd) {
+                                // Update database
+                                Map<String, Object> userUpdate = new HashMap<>();
+                                userUpdate.put(firebaseUser.getUid(), user.toMap());
+                                users.updateChildren(userUpdate);
+
+                                // Update UI
+                                paymentElementsList.add(cardToSave.getNumber());
+                                paymentAdapter.notifyDataSetChanged();
+                                Toast.makeText(getContext(), "Card Added", Toast.LENGTH_SHORT).show();
+                                popupWindow.dismiss();
+
+                            } else {
+                                Log.i(TAG, "User attempted to add a duplicate payment");
+                                Toast.makeText(getContext(), "Cannot add a duplicate card", Toast.LENGTH_LONG).show();
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+                            Log.e(TAG, "Payments update failed", databaseError.toException());
+                        }
+                    });
+                    //TODO: add info to Stripe database
+                }
+            }
+        });
+
 
         // define view buttons
         Button btnClosePopUp = (Button) popupView.findViewById(R.id.btnClose);

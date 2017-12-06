@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        tools:context="com.teamcaffeine.hotswap.navigation.HomeFragment">
+
+        <!-- TODO: Update blank fragment layout -->
+
+        <TextView
+            android:id="@+id/txtItemsLabel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/items_label" />
+
+        <com.teamcaffeine.hotswap.NonScrollListView
+            android:id="@+id/listviewAllItems"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+        </com.teamcaffeine.hotswap.NonScrollListView>
+
+        <TextView
+            android:id="@+id/txtRentingLabel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/currently_renting" />
+
+        <TextView
+            android:id="@+id/txtCurrentlyRenting"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="30dp"/>
+
+        <TextView
+            android:id="@+id/txtLendingLabel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/currently_lending" />
+
+        <com.teamcaffeine.hotswap.NonScrollListView
+            android:id="@+id/listviewLending"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+        </com.teamcaffeine.hotswap.NonScrollListView>
+
+        <Button
+            android:id="@+id/btnListItem"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/list_item_button" />
+    </LinearLayout>
+</ScrollView>

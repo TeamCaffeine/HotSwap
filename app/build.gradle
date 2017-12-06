@@ -74,8 +74,10 @@ dependencies {
     // Profile get address dependency
     compile 'com.google.android.gms:play-services-places:11.6.0'
 
-
+    // Strip (payment) dependencies
+    compile 'com.stripe:stripe-android:6.0.0'
 }
+
 
 
 apply plugin: 'com.google.gms.google-services'
