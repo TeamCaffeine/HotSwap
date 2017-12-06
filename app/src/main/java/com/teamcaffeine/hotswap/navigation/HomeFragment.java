@@ -76,9 +76,7 @@ public class HomeFragment extends Fragment {
     // Database reference fields
     private FirebaseUser firebaseUser;
     private FirebaseDatabase database;
-    private DatabaseReference users;
-    private DatabaseReference items;
-    private String userTable = "users";
+    private DatabaseReference items; // reference to the items table, used for onDataChange listening
     private String itemTable = "items";
 
     // create a value event user
@@ -138,8 +136,12 @@ public class HomeFragment extends Fragment {
 
         // Get a database reference to our user
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+
+        // get a reference to our database
         database = FirebaseDatabase.getInstance();
-        users = database.getReference().child(userTable);
+
+        // get a reference to the items table
+        items = database.getReference().child(itemTable);
 
         // instantiate the list that wil hold all of the user's items
         itemsElementsList = new ArrayList<String>();
@@ -164,8 +166,7 @@ public class HomeFragment extends Fragment {
                             public void onClick(DialogInterface dialog, int whichButton) {
                                 // get the name of the item to be deleted
                                 final String itemToRemove = listviewAllItems.getItemAtPosition(position).toString();
-                                // get a reference to the items table in the database, where the item also needs to be removed
-                                DatabaseReference items = database.getReference().child(itemTable);
+                                // using the reference to the items table,
                                 // add a listener to the items table in the database to delete the item
                                 items.addListenerForSingleValueEvent(new ValueEventListener() {
                                     @Override
@@ -233,14 +234,17 @@ public class HomeFragment extends Fragment {
          * ADDING THE ITEM LIST TO THE UI
          */
 
-        // get a reference to the items table in the database
-        items = database.getReference().child(itemTable);
-
         // Create the event listener to listen to database changes
         itemsEventListener = new ValueEventListener() {
             @Override
             // get a data snapshot of the whole table
             public void onDataChange(DataSnapshot dataSnapshot) {
+                // first clear the itemsElementsList
+                // We clear the list to make sure items in the list are not repeated in the UI,
+                // since this will be implemented with an addValueEventListener. The
+                // addValueEvent listener will reprint all items values it finds as long as it
+                // is listening, so by clearing the list before printing it, we guarantee that
+                // each item will only be listed once in the UI.
                 itemsElementsList.clear();
                 // loop through all of the items in the items table
                 // we need to loop thorugh all of the items become items do not belong to users,
@@ -271,6 +275,7 @@ public class HomeFragment extends Fragment {
             }
         };
 
+        // using the reference to the items table,
         // add the event listener to the items table
         items.addValueEventListener(itemsEventListener);
 
@@ -355,6 +360,7 @@ public class HomeFragment extends Fragment {
     @Override
     public void onPause() {
         super.onPause();
+        // using the reference to the items table, remove the listener
         items.removeEventListener(itemsEventListener);
     }
 
@@ -362,6 +368,7 @@ public class HomeFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
+        // using the reference to the items table, add the listener
         items.addValueEventListener(itemsEventListener);
     }
 }
