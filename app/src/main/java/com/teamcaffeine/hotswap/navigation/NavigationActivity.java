@@ -23,17 +23,17 @@ import java.lang.reflect.Field;
 public class NavigationActivity extends AppCompatActivity implements
         ChatFragment.ChatFragmentListener,
         ProfileFragment.ProfileFragmentListener,
-        ListItemFragment.ListItemFragmentListener,
-        SearchFragment.SearchFragmentListener {
+        SearchFragment.SearchFragmentListener,
+        HomeFragment.HomeFragmentListener {
 
     private final String TAG = "NavigationActivity";
 
     public BottomNavigationView navigation;
 
-    private ListItemFragment listItemFragment;
     private ProfileFragment profileFragment;
     private SearchFragment searchFragment;
     private ChatFragment chatFragment;
+    private HomeFragment homeFragment;
 
     SharedPreferences prefs;
     private String navigationIndexKey;
@@ -54,7 +54,7 @@ public class NavigationActivity extends AppCompatActivity implements
         switch (item.getItemId()) {
             case R.id.navigation_home:
                 Log.i(TAG, "nav home");
-                inflateFragment(listItemFragment, 0);
+                inflateFragment(homeFragment, 0);
                 return true;
             case R.id.navigation_search:
                 Log.i(TAG, "nav search");
@@ -116,10 +116,11 @@ public class NavigationActivity extends AppCompatActivity implements
             Log.e(TAG, "Unable to change value of shift mode", e);
         }
 
-        listItemFragment = new ListItemFragment();
+
         profileFragment = new ProfileFragment();
         searchFragment = new SearchFragment();
         chatFragment = new ChatFragment();
+        homeFragment = new HomeFragment();
 
         navigation.setSelectedItemId(navigation.getMenu().getItem(prefs.getInt(navigationIndexKey, 0)).getItemId());
     }
