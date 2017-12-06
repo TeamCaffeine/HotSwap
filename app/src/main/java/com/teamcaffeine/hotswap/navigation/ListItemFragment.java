@@ -129,7 +129,6 @@ public class ListItemFragment extends Fragment {
         //Create coder with Activity context - this
         Geocoder coder = new Geocoder(getActivity());
         List<Address> address;
-
         try {
             //Get latLng from String
             address = coder.getFromLocationName(strAddress,5);
@@ -142,7 +141,6 @@ public class ListItemFragment extends Fragment {
             //Lets take first possibility from the all possibilities.
             Address location=address.get(0);
             LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
-
             return latLng;
         } catch (IOException e) {
             e.printStackTrace();

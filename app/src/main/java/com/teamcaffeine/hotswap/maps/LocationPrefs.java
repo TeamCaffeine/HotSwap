@@ -153,15 +153,6 @@ public class LocationPrefs extends AppCompatActivity
                                  //   result.setText(city);
                                 }
                             }
-//
-//                            final String zipcode = jsonObject.getAsJsonArray("results").get(0)
-//                                    .getAsJsonObject().getAsJsonArray("address_components").get(7)
-//                                    .getAsJsonObject().get("long_name")
-//                                    .getAsString();
-//                            final String city = jsonObject.getAsJsonArray("results").get(0)
-//                                    .getAsJsonObject().getAsJsonArray("address_components").get(3)
-//                                    .getAsJsonObject().get("long_name")
-//                                    .getAsString();
                             final String finalZipcode = zipcode;
                             final String finalCity = city;
                             LocationPrefs.this.runOnUiThread(new Runnable() {
