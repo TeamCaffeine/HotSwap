@@ -267,7 +267,7 @@ public class HomeFragment extends Fragment {
             // if the read of the items table failed, log the error message
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                System.out.println("The read failed: " + databaseError.getCode());
+                Log.i(TAG, "The read failed: " + databaseError.getCode());
             }
         };
 
