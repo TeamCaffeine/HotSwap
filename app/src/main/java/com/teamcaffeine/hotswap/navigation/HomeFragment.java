@@ -1,6 +1,7 @@
 package com.teamcaffeine.hotswap.navigation;
 
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -188,9 +189,9 @@ public class HomeFragment extends Fragment {
                                                 if (iteratingItem.equalsIgnoreCase(itemToRemove)){
                                                     // first remove it from the item list for the listView in the UI
                                                     // the boolean didRemove will indicate when the item has been successfully
-                                                    // deleted from the list. Only 0nce it has been successfully deleted from
+                                                    // deleted from the list. Only once it has been successfully deleted from
                                                     // the UI, delete it from the database.
-                                                    boolean didRemove = itemsElementsList.remove(listviewAllItems.getItemAtPosition(position).toString());
+                                                    boolean didRemove = itemsElementsList.remove(itemToRemove);
                                                     if (didRemove) {
                                                         // notify the listView adapter that the data has changed so that the UI is updated
                                                         itemsAdapter.notifyDataSetChanged();
@@ -327,26 +328,30 @@ public class HomeFragment extends Fragment {
         // our request code.
         if (requestCode == LIST_ITEM_REQUEST_CODE) {
             Log.i(TAG, "request code = List Item Request Code");
+            Log.i(TAG, "result code = " + resultCode);
             // startActivityForResult also returns a result code, which checks the result of the List Item Activity.
             // Here, RESULT_OK indicates that the item was successfully added to the database. We want to make sure
             // that items are only added to the UI if they are added to the database, and vice versa.
-            if (resultCode == RESULT_OK) {
+            if (resultCode == Activity.RESULT_OK) {
                 Log.i(TAG, "result OK");
                 // get the new item that was added in List Item from the Intent
                 Bundle extras = data.getExtras();
                 String newItem = extras.getString("newItem");
                 // add the new item to the list
                 itemsElementsList.add(newItem);
+                Log.i(TAG, "item added to list");
 
                 // notify the adapter that the dataset has changed so that it updates the UI
                 itemsAdapter.notifyDataSetChanged();
                 // show a toast to notify the user that their item was successfully added
                 Toast.makeText(getContext(), "New item added", Toast.LENGTH_LONG).show();
+                Log.i(TAG, "toast shown");
 
             } else if (resultCode == RESULT_ERROR) {
                 Log.i(TAG, "item not added");
                 Toast.makeText(getContext(), R.string.unable_to_add_item, Toast.LENGTH_SHORT).show();
-            } else if (resultCode == RESULT_CANCELED) {
+            } else if (resultCode == Activity.RESULT_CANCELED) {
+                Log.i(TAG, "request canceled, result code = " + resultCode);
                 // The user canceled the operation.
             }
         }
