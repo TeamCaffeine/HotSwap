@@ -77,10 +77,18 @@ public class HomeFragment extends Fragment {
     private FirebaseUser firebaseUser;
     private FirebaseDatabase database;
     private DatabaseReference users;
+    private DatabaseReference items;
     private String userTable = "users";
     private String itemTable = "items";
+
+    // create a value event user
+    // This event listener will be used to detect changes in the database
+    // and add items to the listview in the UI.
+    // The listener will be added / removed when the user resumes / leaves the activity.
+    // We need to remove the event listener when the user leaves the activity
+    // so the Home Activity does not listen for database changes when it is not open
+    // (if it does keep listening, the app crashes).
     private ValueEventListener itemsEventListener;
-    private DatabaseReference items;
 
     // progress dialog to show page is loading
     public void showProgressDialog() {
@@ -122,7 +130,7 @@ public class HomeFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         Log.i(TAG, "onViewCreated");
 
-        // get the view from the layout
+        // get the views from the layout
         btnListItem = view.findViewById(R.id.btnListItem);
         listviewAllItems = view.findViewById(R.id.listviewAllItems);
         txtCurrentlyRenting = view.findViewById(R.id.txtCurrentlyRenting);
@@ -136,7 +144,10 @@ public class HomeFragment extends Fragment {
         // instantiate the list that wil hold all of the user's items
         itemsElementsList = new ArrayList<String>();
 
-        // DELETE AN ITEM
+        /**
+         * DELETE AN ITEM
+         */
+
         // This onClick listener allows the user the delete an item when they click on it
         // in the list view.
         listviewAllItems.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -151,7 +162,6 @@ public class HomeFragment extends Fragment {
                         .setPositiveButton(R.string.delete, new DialogInterface.OnClickListener() {
                             // if they click the "delete" button, delete the item
                             public void onClick(DialogInterface dialog, int whichButton) {
-                                //TODO: data validation
                                 // get the name of the item to be deleted
                                 final String itemToRemove = listviewAllItems.getItemAtPosition(position).toString();
                                 // get a reference to the items table in the database, where the item also needs to be removed
@@ -219,11 +229,14 @@ public class HomeFragment extends Fragment {
             }
         });
 
+        /**
+         * ADDING THE ITEM LIST TO THE UI
+         */
 
-        // ADDING THE ITEM LIST TO THE UI
         // get a reference to the items table in the database
         items = database.getReference().child(itemTable);
-        // add a listener to the items table
+
+        // Create the event listener to listen to database changes
         itemsEventListener = new ValueEventListener() {
             @Override
             // get a data snapshot of the whole table
@@ -257,9 +270,14 @@ public class HomeFragment extends Fragment {
                 System.out.println("The read failed: " + databaseError.getCode());
             }
         };
+
+        // add the event listener to the items table
         items.addValueEventListener(itemsEventListener);
 
-        // LIST A NEW ITEM
+        /**
+         * LIST A NEW ITEM
+         */
+
         // set an onClick listener for the List Item button
         btnListItem.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -290,8 +308,10 @@ public class HomeFragment extends Fragment {
         HFL = (HomeFragment.HomeFragmentListener) context;  //context is a handle to the main activity, let's bind it to our interface.
     }
 
-    //TODO: Figure out why the list of items doesn't get updated after adding a new item, but shows all items, including added ones, when the Home Fragment is built in onCreate
-    // ADDING A NEW ITEM
+    /**
+     * ADDING A NEW ITEM TO THE LISTVIEW IN THE UI
+     */
+
     // Once the user lists a new item in the List Item Activity, it will be added to their items list
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -307,10 +327,6 @@ public class HomeFragment extends Fragment {
             // that items are only added to the UI if they are added to the database, and vice versa.
             if (resultCode == RESULT_OK) {
                 Log.i(TAG, "result OK");
-//                // set the items list equal to the updated items list that we got in the callback
-//                // from the List Item Activity
-//                 Bundle args = data.getBundleExtra("BUNDLE");
-//                itemsElementsList = (ArrayList<String>) args.getSerializable("updatedItemList");
                 // get the new item that was added in List Item from the Intent
                 Bundle extras = data.getExtras();
                 String newItem = extras.getString("newItem");
@@ -319,33 +335,6 @@ public class HomeFragment extends Fragment {
 
                 // notify the adapter that the dataset has changed so that it updates the UI
                 itemsAdapter.notifyDataSetChanged();
-//                // get a reference to the items table in the database
-//                DatabaseReference items = database.getReference().child(itemTable);
-//                Log.i(TAG, "items table reference created");
-//                // add a listener to the items table
-//                items.addListenerForSingleValueEvent( new ValueEventListener(){
-//                    @Override
-//                    // get a dataSnapshot of all items in the table
-//                    public void onDataChange(DataSnapshot dataSnapshot) {
-//                        Log.i(TAG, "onDataChange called");
-//                        // loop through all items in the table
-//                        for(DataSnapshot i : dataSnapshot.getChildren() ){
-//                            // create an item object to read each item's contents
-//                            Item item = i.getValue(Item.class);
-//                            if (item.getOwnerID().equals(firebaseUser.getUid())){
-//                                itemsElementsList.add(item.getName());
-//                            }
-//                        }
-//                        itemsAdapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_list_item_1, itemsElementsList);
-//                        listviewAllItems.setAdapter(itemsAdapter);
-//                        itemsAdapter.notifyDataSetChanged();
-//                    }
-//
-//                    @Override
-//                    public void onCancelled(DatabaseError databaseError) {
-//                        System.out.println("The read failed: " + databaseError.getCode());
-//                    }
-//                });
                 // show a toast to notify the user that their item was successfully added
                 Toast.makeText(getContext(), "New item added", Toast.LENGTH_LONG).show();
 
@@ -358,12 +347,18 @@ public class HomeFragment extends Fragment {
         }
     }
 
+    /**
+     * REMOVING AND ADDING THE EVENT LISTENER
+     */
+
+    // when the fragment is paused, remove the value event listener
     @Override
     public void onPause() {
         super.onPause();
         items.removeEventListener(itemsEventListener);
     }
 
+    // when the fragment is resumed, add the event listener
     @Override
     public void onResume() {
         super.onResume();
