@@ -79,6 +79,8 @@ public class HomeFragment extends Fragment {
     private DatabaseReference users;
     private String userTable = "users";
     private String itemTable = "items";
+    private ValueEventListener itemsEventListener;
+    private DatabaseReference items;
 
     // progress dialog to show page is loading
     public void showProgressDialog() {
@@ -220,22 +222,23 @@ public class HomeFragment extends Fragment {
 
         // ADDING THE ITEM LIST TO THE UI
         // get a reference to the items table in the database
-        DatabaseReference items = database.getReference().child(itemTable);
+        items = database.getReference().child(itemTable);
         // add a listener to the items table
-        items.addListenerForSingleValueEvent( new ValueEventListener(){
+        itemsEventListener = new ValueEventListener() {
             @Override
             // get a data snapshot of the whole table
             public void onDataChange(DataSnapshot dataSnapshot) {
+                itemsElementsList.clear();
                 // loop through all of the items in the items table
                 // we need to loop thorugh all of the items become items do not belong to users,
                 // each items is in the table and the appropriate user is stored as an attribute.
                 // When we want to retrieve a list of a user's items, we need to loop thorugh all
                 // of them and select the user's items.
-                for(DataSnapshot i : dataSnapshot.getChildren() ){
+                for (DataSnapshot i : dataSnapshot.getChildren()) {
                     // create an item objecct to read each item's contents
                     Item item = i.getValue(Item.class);
                     // if the item belongs to the user, add it to the list of the user's items
-                    if (item.getOwnerID().equals(firebaseUser.getUid())){
+                    if (item.getOwnerID().equals(firebaseUser.getUid())) {
                         itemsElementsList.add(item.getName());
                     }
                 }
@@ -253,7 +256,8 @@ public class HomeFragment extends Fragment {
             public void onCancelled(DatabaseError databaseError) {
                 System.out.println("The read failed: " + databaseError.getCode());
             }
-        });
+        };
+        items.addValueEventListener(itemsEventListener);
 
         // LIST A NEW ITEM
         // set an onClick listener for the List Item button
@@ -352,5 +356,17 @@ public class HomeFragment extends Fragment {
                 // The user canceled the operation.
             }
         }
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        items.removeEventListener(itemsEventListener);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        items.addValueEventListener(itemsEventListener);
     }
 }
