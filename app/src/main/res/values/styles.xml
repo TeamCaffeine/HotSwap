@@ -60,4 +60,13 @@
         <item name="android:windowExitAnimation">@anim/popup_hide</item>
     </style>
 
+    <style name="HotSwapFloatLabelStyle" parent="@android:style/TextAppearance.Small">
+        <item name="android:textColor">@color/colorAccent</item>
+    </style>
+    <style name="HotSwapEditTextStyle" parent="@android:style/Widget.EditText">
+        <item name="android:textColor">@color/textColorPrimary</item>
+        <item name="android:textColorHint">@color/colorAccent</item>
+        <item name="android:backgroundTint">@color/colorAccent</item>
+    </style>
+
 </resources>

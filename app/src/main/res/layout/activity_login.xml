@@ -25,25 +25,37 @@
         android:orientation="vertical"
         tools:context=".login.LoginActivity">
 
-        <EditText
-            android:id="@+id/editEmail"
+        <com.wrapp.floatlabelededittext.FloatLabeledEditText
             android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:ems="10"
-            android:hint="Email Address"
-            android:inputType="textEmailAddress"
-            android:textAlignment="center"
-            android:textSize="18sp" />
+            android:layout_height="wrap_content">
 
-        <EditText
-            android:id="@+id/editPassword"
+            <EditText
+                android:id="@+id/editEmail"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:ems="10"
+                android:hint="Email Address"
+                android:inputType="textEmailAddress"
+                android:textAlignment="textStart"
+                android:textSize="18sp"
+                style="@style/HotSwapEditTextStyle"/>
+        </com.wrapp.floatlabelededittext.FloatLabeledEditText>
+
+        <com.wrapp.floatlabelededittext.FloatLabeledEditText
             android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:ems="10"
-            android:hint="Password"
-            android:inputType="textPassword"
-            android:textAlignment="center"
-            android:textSize="18sp" />
+            android:layout_height="wrap_content">
+
+            <EditText
+                android:id="@+id/editPassword"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:ems="10"
+                android:hint="Password"
+                android:inputType="textPassword"
+                android:textAlignment="textStart"
+                android:textSize="18sp"
+                style="@style/HotSwapEditTextStyle"/>
+        </com.wrapp.floatlabelededittext.FloatLabeledEditText>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -77,6 +89,7 @@
             android:layout_height="35dp"
             android:gravity="center"
             android:text="---------- OR ----------"
+            android:textColor="@color/colorAccent"
             android:textSize="14sp" />
 
         <com.google.android.gms.common.SignInButton

@@ -77,8 +77,9 @@ dependencies {
     // Strip (payment) dependencies
     compile 'com.stripe:stripe-android:6.0.0'
 
-    // Sequent animations
+    // Various UI dependencies
     compile 'com.fujiyuu75:sequent:0.2.1'
+    compile 'com.wrapp.floatlabelededittext:library:0.0.6'
 }
 
 
