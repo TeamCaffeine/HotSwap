@@ -85,9 +85,6 @@ public class SearchFragment extends Fragment implements OnMapReadyCallback, Goog
     private Location lastLocation;
     private LocationRequest locationRequest;
     private int progressSeekbar = 500;
-    private Marker currentLocationMarker;
-    private GeoLocation currentLocation;
-    private Location targetLocation = new Location("");
     private Circle circle;
     public static final int REQUEST_LOCATION_CODE = 99;
     private ListView lvItems; //Reference to the listview GUI component
@@ -96,19 +93,16 @@ public class SearchFragment extends Fragment implements OnMapReadyCallback, Goog
     private Button bSearch;
     TextView locale, filters;
     SeekBar progress;
-    CircleOptions circleOptions;
-    Marker stopMarker;
-    private GeoFire geoFire;
-    private GeoQuery geoQuery;
-    private Map<String, Marker> markers;
-    private Set<GeoQuery> geoQueries = new HashSet<>();
     private SharedPreferences prefs;
     private String TAG = "696969";
 
-    private FirebaseDatabase database;
-    private DatabaseReference geoFireRef;
+
+    private FirebaseDatabase database = FirebaseDatabase.getInstance();
     private String geoFireTable = "items_location";
+    private DatabaseReference geoFireRef = database.getReference(geoFireTable);
     private HashMap<String, String> hashMapMarkerTitle = new HashMap<>();
+    private GeoFire geoFire = new GeoFire(geoFireRef);
+    private GeoLocation currentLocation;
 
     private int SET_LOCATION_REQUEST_CODE = 1730;
 
@@ -166,7 +160,6 @@ public class SearchFragment extends Fragment implements OnMapReadyCallback, Goog
             }
         });
         // Underlines locale and filters
-        //  locale = (Button)view.findViewById(R.id.setLocaleButton);
         locale = (TextView) view.findViewById(R.id.setLocaleFilters);
         SpannableString content = new SpannableString(locale.getText());
         content.setSpan(new UnderlineSpan(), 0, content.length(), 0);
@@ -184,7 +177,6 @@ public class SearchFragment extends Fragment implements OnMapReadyCallback, Goog
             }
         });
         localeMsg = (TextView) view.findViewById(R.id.setLocaleMsg);
-        Intent intent = getActivity().getIntent();
         String city = prefs.getString("city", "");
         progress = (SeekBar) view.findViewById(R.id.circleFilter);
 
@@ -198,7 +190,6 @@ public class SearchFragment extends Fragment implements OnMapReadyCallback, Goog
             @Override
             public void onClick(View view) {
                 Intent i2 = new Intent(getActivity(), LocationPrefs.class);
-//                startActivity(i2);
                 startActivityForResult(i2, SET_LOCATION_REQUEST_CODE);
                 localeMsg.setText("Items near " + prefs.getString("city", ""));
             }
@@ -273,7 +264,7 @@ public class SearchFragment extends Fragment implements OnMapReadyCallback, Goog
 
     @Override
     public void onMapReady(GoogleMap googleMap) { // should automatically be at current location
-        Log.e(TAG, "Calling onMapyReady");
+        Log.e(TAG, "Calling onMapReady");
         mMap = googleMap;
         if (ContextCompat.checkSelfPermission(getActivity().getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION)
                 == PackageManager.PERMISSION_GRANTED) {
@@ -282,11 +273,7 @@ public class SearchFragment extends Fragment implements OnMapReadyCallback, Goog
         }
         mMap.setOnMarkerDragListener(this);
 
-        // Set view on current location
-        LocationManager locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
-        Criteria criteria = new Criteria();
         if (prefs.contains("zip")) {
-            // if (extras.containsKey("zip")) { // if there is location prefs
             String postalcode = prefs.getString("zip", "02215");
             String key = "https://maps.googleapis.com/maps/api/geocode/json?address=";
             String api = "&key=AIzaSyCdD6V_pMev1dl8LAsoJ6PLG5JLnR-OiUc";
@@ -319,7 +306,6 @@ public class SearchFragment extends Fragment implements OnMapReadyCallback, Goog
                     getActivity().runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            // change map camera view
                             final LatLng latlng = new LatLng(lat, lng);
 
                             mMap.clear();
@@ -347,7 +333,6 @@ public class SearchFragment extends Fragment implements OnMapReadyCallback, Goog
                                 public boolean onMarkerClick(Marker marker) {
                                         return false;
                                     }
-
 
                             });
 
@@ -527,9 +512,6 @@ public class SearchFragment extends Fragment implements OnMapReadyCallback, Goog
     @Override
     public void onLocationChanged(Location location) {
         lastLocation = location;
-        if (currentLocationMarker != null) {
-            currentLocationMarker.remove();
-        }
 
         if (client != null) {
             LocationServices.FusedLocationApi.removeLocationUpdates(client, this);
@@ -547,9 +529,6 @@ public class SearchFragment extends Fragment implements OnMapReadyCallback, Goog
     }
 
     public void setQueryinGoogleMaps(final LatLng latlng){
-        database = FirebaseDatabase.getInstance();
-        geoFireRef = database.getReference(geoFireTable);
-        GeoFire geoFire = new GeoFire(geoFireRef);
         currentLocation = new GeoLocation(latlng.latitude, latlng.longitude);
         final GeoQuery geoQuery = geoFire.queryAtLocation(new GeoLocation(latlng.latitude, latlng.longitude), progressSeekbar/1000.0);
         final HashMap<String,MarkerOptions> hashMapMarker = new HashMap<>();
@@ -681,8 +660,6 @@ public class SearchFragment extends Fragment implements OnMapReadyCallback, Goog
         double dragLat = dragPosition.latitude;
         double dragLong = dragPosition.longitude;
         setLocaleArea(dragLat, dragLong);
-      //  localeMsg.setText("Your Location: " + Double.toString(dragLat) + ", " + Double.toString(dragLong));
-        // change map camera view
         final LatLng latlng = new LatLng(dragLat, dragLong);
 
         Marker stopMarker = mMap.addMarker(new MarkerOptions()
