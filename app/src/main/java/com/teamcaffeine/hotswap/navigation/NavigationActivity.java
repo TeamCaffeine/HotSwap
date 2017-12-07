@@ -35,7 +35,7 @@ public class NavigationActivity extends AppCompatActivity implements
 
     private final String TAG = "NavigationActivity";
 
-    public BottomNavigationView navigation;
+    private BottomNavigationView navigation;
 
     private Fragment profileFragment;
     private Fragment searchFragment;
@@ -47,19 +47,6 @@ public class NavigationActivity extends AppCompatActivity implements
     // State maintenance
     private static final String SELECTED_ITEM = "arg_selected_item";
     private int mSelectedItem;
-    private static boolean firstTime = true;
-
-    final FragmentManager fragmentManager = getSupportFragmentManager();
-    FragmentTransaction ft;
-
-    private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
-            = new BottomNavigationView.OnNavigationItemSelectedListener() {
-
-        @Override
-        public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-            return selectNavigationItem(item);
-        }
-    };
 
     @SuppressLint("RestrictedApi")
     @Override
@@ -70,7 +57,12 @@ public class NavigationActivity extends AppCompatActivity implements
         setContentView(R.layout.activity_navigation);
 
         navigation = findViewById(R.id.navigation);
-        navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+        navigation.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                return selectNavigationItem(item);
+            }
+        });
 
         BottomNavigationMenuView menuView = (BottomNavigationMenuView) navigation.getChildAt(0);
         try {
@@ -94,13 +86,19 @@ public class NavigationActivity extends AppCompatActivity implements
 
         MenuItem selectedItem;
         if (savedInstanceState != null) {
+            // Our fragments already exist, fetch their reference by tag
             mSelectedItem = savedInstanceState.getInt(SELECTED_ITEM, 0);
             selectedItem = navigation.getMenu().findItem(mSelectedItem);
-        } else {
-            selectedItem = navigation.getMenu().getItem(0);
-        }
 
-        if (firstTime) {
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            homeFragment = fragmentManager.findFragmentByTag("homeFragment");
+            searchFragment = fragmentManager.findFragmentByTag("searchFragment");
+            chatFragment = fragmentManager.findFragmentByTag("chatFragment");
+            profileFragment = fragmentManager.findFragmentByTag("profileFragment");
+        } else {
+            // No fragments exist yet, instantiate them
+            selectedItem = navigation.getMenu().getItem(0);
+
             homeFragment = new HomeFragment();
             searchFragment = new SearchFragment();
             chatFragment = new ChatFragment();
@@ -113,14 +111,8 @@ public class NavigationActivity extends AppCompatActivity implements
             ft.add(R.id.container, profileFragment, "profileFragment");
 
             ft.commit();
-
-            firstTime = false;
-        } else {
-            homeFragment = fragmentManager.findFragmentByTag("homeFragment");
-            searchFragment = fragmentManager.findFragmentByTag("searchFragment");
-            chatFragment = fragmentManager.findFragmentByTag("chatFragment");
-            profileFragment = fragmentManager.findFragmentByTag("profileFragment");
         }
+
         fragArr = new Fragment[]{homeFragment, searchFragment, chatFragment, profileFragment};
 
         selectNavigationItem(selectedItem);
@@ -130,6 +122,17 @@ public class NavigationActivity extends AppCompatActivity implements
     protected void onSaveInstanceState(Bundle outState) {
         outState.putInt(SELECTED_ITEM, mSelectedItem);
         super.onSaveInstanceState(outState);
+    }
+
+    @Override
+    public void onBackPressed() {
+        MenuItem homeItem = navigation.getMenu().getItem(0);
+        if (mSelectedItem != homeItem.getItemId()) {
+            // Go back home if we're not on the home page
+            selectNavigationItem(homeItem);
+        } else {
+            super.onBackPressed();
+        }
     }
 
     private boolean selectNavigationItem(MenuItem item) {
@@ -159,22 +162,22 @@ public class NavigationActivity extends AppCompatActivity implements
         mSelectedItem = item.getItemId();
 
         if (frag != null) {
-            ft = getSupportFragmentManager().beginTransaction();
+            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
 
             // Build transaction for existing fragments
-            for (int i = 0; i< navigation.getMenu().size(); i++) {
+            for (int i = 0; i < navigation.getMenu().size(); i++) {
                 MenuItem menuItem = navigation.getMenu().getItem(i);
                 if (menuItem.getItemId() == item.getItemId()) {
                     menuItem.setChecked(true);
                     ft.show(fragArr[i]);
                 } else {
-                    menuItem.setChecked(false);
                     ft.hide(fragArr[i]);
                 }
             }
 
             ft.commit();
+            return true;
         }
-        return true;
+        return false;
     }
 }
