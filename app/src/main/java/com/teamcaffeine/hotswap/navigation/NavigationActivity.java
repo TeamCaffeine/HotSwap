@@ -20,6 +20,13 @@ import com.teamcaffeine.hotswap.utility.SessionHandler;
 
 import java.lang.reflect.Field;
 
+/*
+* Thanks to Segun Famisa for reference initialization
+* of persistent BottomNavigationView.
+*
+* https://github.com/segunfamisa/bottom-navigation-demo
+*/
+
 public class NavigationActivity extends AppCompatActivity implements
         ChatFragment.ChatFragmentListener,
         ProfileFragment.ProfileFragmentListener,
@@ -30,13 +37,17 @@ public class NavigationActivity extends AppCompatActivity implements
 
     public BottomNavigationView navigation;
 
-    private ProfileFragment profileFragment;
-    private SearchFragment searchFragment;
-    private ChatFragment chatFragment;
-    private HomeFragment homeFragment;
+    private Fragment profileFragment;
+    private Fragment searchFragment;
+    private Fragment chatFragment;
+    private Fragment homeFragment;
 
-    SharedPreferences prefs;
-    private String navigationIndexKey;
+    private Fragment[] fragArr;
+
+    // State maintenance
+    private static final String SELECTED_ITEM = "arg_selected_item";
+    private int mSelectedItem;
+    private static boolean firstTime = true;
 
     final FragmentManager fragmentManager = getSupportFragmentManager();
     FragmentTransaction ft;
@@ -50,37 +61,6 @@ public class NavigationActivity extends AppCompatActivity implements
         }
     };
 
-    private boolean selectNavigationItem(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.navigation_home:
-                Log.i(TAG, "nav home");
-                inflateFragment(homeFragment, 0);
-                return true;
-            case R.id.navigation_search:
-                Log.i(TAG, "nav search");
-                inflateFragment(searchFragment, 1);
-                return true;
-            case R.id.navigation_inbox:
-                Log.i(TAG, "nav chat");
-                inflateFragment(chatFragment, 2);
-                return true;
-            case R.id.navigation_profile:
-                Log.i(TAG, "nav profile");
-                inflateFragment(profileFragment, 3);
-                return true;
-            default:
-                Log.e(TAG, "Unable to locate fragment to launch with id: " + item.getItemId());
-        }
-        return false;
-    }
-
-    private void inflateFragment(Fragment fragment, int index) {
-        prefs.edit().putInt(navigationIndexKey, index).apply();
-        ft = fragmentManager.beginTransaction();
-        ft.replace(R.id.dynamicContent, fragment);
-        ft.commit();
-    }
-
     @SuppressLint("RestrictedApi")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,10 +68,6 @@ public class NavigationActivity extends AppCompatActivity implements
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_navigation);
-
-        prefs = this.getSharedPreferences(
-                getString(R.string.base_package_name), Context.MODE_PRIVATE);
-        navigationIndexKey = getString(R.string.base_package_name) + "navigation.index";
 
         navigation = findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
@@ -116,12 +92,89 @@ public class NavigationActivity extends AppCompatActivity implements
             Log.e(TAG, "Unable to change value of shift mode", e);
         }
 
+        MenuItem selectedItem;
+        if (savedInstanceState != null) {
+            mSelectedItem = savedInstanceState.getInt(SELECTED_ITEM, 0);
+            selectedItem = navigation.getMenu().findItem(mSelectedItem);
+        } else {
+            selectedItem = navigation.getMenu().getItem(0);
+        }
 
-        profileFragment = new ProfileFragment();
-        searchFragment = new SearchFragment();
-        chatFragment = new ChatFragment();
-        homeFragment = new HomeFragment();
+        if (firstTime) {
+            homeFragment = new HomeFragment();
+            searchFragment = new SearchFragment();
+            chatFragment = new ChatFragment();
+            profileFragment = new ProfileFragment();
 
-        navigation.setSelectedItemId(navigation.getMenu().getItem(prefs.getInt(navigationIndexKey, 0)).getItemId());
+            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+            ft.add(R.id.container, homeFragment, "homeFragment");
+            ft.add(R.id.container, searchFragment, "searchFragment");
+            ft.add(R.id.container, chatFragment, "chatFragment");
+            ft.add(R.id.container, profileFragment, "profileFragment");
+
+            ft.commit();
+
+            firstTime = false;
+        } else {
+            homeFragment = fragmentManager.findFragmentByTag("homeFragment");
+            searchFragment = fragmentManager.findFragmentByTag("searchFragment");
+            chatFragment = fragmentManager.findFragmentByTag("chatFragment");
+            profileFragment = fragmentManager.findFragmentByTag("profileFragment");
+        }
+        fragArr = new Fragment[]{homeFragment, searchFragment, chatFragment, profileFragment};
+
+        selectNavigationItem(selectedItem);
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        outState.putInt(SELECTED_ITEM, mSelectedItem);
+        super.onSaveInstanceState(outState);
+    }
+
+    private boolean selectNavigationItem(MenuItem item) {
+        Fragment frag = null;
+        switch (item.getItemId()) {
+            case R.id.navigation_home:
+                Log.i(TAG, "nav home");
+                frag = homeFragment;
+                break;
+            case R.id.navigation_search:
+                Log.i(TAG, "nav search");
+                frag = searchFragment;
+                break;
+            case R.id.navigation_inbox:
+                Log.i(TAG, "nav chat");
+                frag = chatFragment;
+                break;
+            case R.id.navigation_profile:
+                Log.i(TAG, "nav profile");
+                frag = profileFragment;
+                break;
+            default:
+                Log.e(TAG, "Unable to locate fragment to launch with id: " + item.getItemId());
+                return false;
+        }
+
+        mSelectedItem = item.getItemId();
+
+        if (frag != null) {
+            ft = getSupportFragmentManager().beginTransaction();
+
+            // Build transaction for existing fragments
+            for (int i = 0; i< navigation.getMenu().size(); i++) {
+                MenuItem menuItem = navigation.getMenu().getItem(i);
+                if (menuItem.getItemId() == item.getItemId()) {
+                    menuItem.setChecked(true);
+                    ft.show(fragArr[i]);
+                } else {
+                    menuItem.setChecked(false);
+                    ft.hide(fragArr[i]);
+                }
+            }
+
+            ft.commit();
+        }
+        return true;
     }
 }
