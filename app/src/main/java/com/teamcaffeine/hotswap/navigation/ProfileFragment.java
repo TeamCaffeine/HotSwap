@@ -352,7 +352,7 @@ public class ProfileFragment extends Fragment {
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                System.out.println("The read failed: " + databaseError.getCode());
+                Log.e(TAG, "The read failed:", databaseError.toException());
             }
         });
 
