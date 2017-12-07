@@ -270,6 +270,7 @@ public class SearchFragment extends Fragment implements OnMapReadyCallback, Goog
 
     }
 
+
     @Override
     public void onMapReady(GoogleMap googleMap) { // should automatically be at current location
         Log.e(TAG, "Calling onMapyReady");
@@ -321,16 +322,10 @@ public class SearchFragment extends Fragment implements OnMapReadyCallback, Goog
                             // change map camera view
                             final LatLng latlng = new LatLng(lat, lng);
 
-
-
-
-
                             mMap.clear();
                             double dragLat = latlng.latitude;
                             double dragLong = latlng.longitude;
                             setLocaleArea(dragLat, dragLong);
-                            //  localeMsg.setText("Your Location: " + Double.toString(dragLat) + ", " + Double.toString(dragLong));
-                            // change map camera view
 
                             Marker stopMarker = mMap.addMarker(new MarkerOptions()
                                     .draggable(true)
@@ -345,88 +340,7 @@ public class SearchFragment extends Fragment implements OnMapReadyCallback, Goog
                                             Color.green(Color.BLUE),  //Green component.
                                             Color.blue(Color.BLUE)));  //Blue component.);
                             circle = mMap.addCircle(circleOptions);
-                            database = FirebaseDatabase.getInstance();
-                            geoFireRef = database.getReference(geoFireTable);
-                            GeoFire geoFire = new GeoFire(geoFireRef);
-                            currentLocation = new GeoLocation(latlng.latitude, latlng.longitude);
-                            final GeoQuery geoQuery = geoFire.queryAtLocation(new GeoLocation(latlng.latitude, latlng.longitude), progressSeekbar/1000.0);
-                            final HashMap<String,MarkerOptions> hashMapMarker = new HashMap<>();
-                            geoQuery.addGeoQueryEventListener(new GeoQueryEventListener() {
-                                @Override
-                                public void onKeyEntered(final String key, GeoLocation location) {
-                                    System.out.println(String.format("Key %s entered the search area at [%f,%f]", key, location.latitude, location.longitude));
-                                    final MarkerOptions markerOptions = new MarkerOptions();
-                                    markerOptions.position(new LatLng(location.latitude, location.longitude));
-                                    markerOptions.title("Item");
-                                    markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE));
-                                    hashMapMarker.put(key,markerOptions);
-                                    lvAdapter.nuke();
-                                    mMap.addMarker(markerOptions);
-                                    DatabaseReference ref = database.getReference().child("items").child(key);
-                                    ref.addListenerForSingleValueEvent(new ValueEventListener() {
-                                        @Override
-                                        public void onDataChange(DataSnapshot dataSnapshot) {
-                                            // CURRENT POINT OF INTEREST
-                                            Item item = dataSnapshot.getValue(Item.class);
-                                            lvAdapter.putItem(item);
-                                            String title =  item.getName();
-                                            hashMapMarkerTitle.put(key, title);
-                                            hashMapMarker.get(key).title(title);
-                                            mMap.addMarker(hashMapMarker.get(key));
-                                        }
-
-                                        @Override
-                                        public void onCancelled(DatabaseError databaseError) {
-                                            Log.e(TAG, "Item " + key + "not found.");
-                                        }
-                                    });
-                                }
-                                @Override
-                                public void onKeyExited(String key) {
-                                    System.out.println(String.format("Key %s is no longer in the search area", key));
-
-                                }
-
-                                @Override
-                                public void onKeyMoved(String key, GeoLocation location) {
-                                    System.out.println(String.format("Key %s moved within the search area to [%f,%f]", key, location.latitude, location.longitude));
-
-                                }
-
-                                @Override
-                                public void onGeoQueryReady() {
-                                    System.out.println("All initial data has been loaded and events have been fired!");
-                                    mMap.clear();
-                                    geoQuery.setCenter(currentLocation);
-                                    geoQuery.setRadius(progressSeekbar/1000.0);
-                                    Marker stopMarker = mMap.addMarker(new MarkerOptions()
-                                            .draggable(true)
-                                            .position(latlng)
-                                            .title("Current Location"));
-                                    CircleOptions circleOptions = new CircleOptions()
-                                            .center(stopMarker.getPosition()).radius(progressSeekbar).strokeWidth(5.0f)
-                                            .strokeColor(Color.parseColor("#00BFFF"))
-                                            .fillColor(Color.argb(
-                                                    50, //This is your alpha.  Adjust this to make it more or less translucent
-                                                    Color.red(Color.BLUE), //Red component.
-                                                    Color.green(Color.BLUE),  //Green component.
-                                                    Color.blue(Color.BLUE)));  //Blue component.);
-                                    circle = mMap.addCircle(circleOptions);
-
-//
-
-                                    if(geoQuery != null){
-                                        geoQuery.removeAllListeners();
-                                    }
-
-                                }
-
-                                @Override
-                                public void onGeoQueryError(DatabaseError error) {
-                                    System.err.println("There was an error with this query: " + error);
-                                }
-
-                            });
+                            setQueryinGoogleMaps(latlng);
 
                             mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
                                 @Override
@@ -452,88 +366,7 @@ public class SearchFragment extends Fragment implements OnMapReadyCallback, Goog
                                     progressSeekbar = seekBar.getProgress();
                                     System.out.println(progressSeekbar);
                                     circle.setRadius(progressSeekbar);
-                                    database = FirebaseDatabase.getInstance();
-                                    geoFireRef = database.getReference(geoFireTable);
-                                    GeoFire geoFire = new GeoFire(geoFireRef);
-                                    currentLocation = new GeoLocation(latlng.latitude, latlng.longitude);
-                                    final GeoQuery geoQuery = geoFire.queryAtLocation(new GeoLocation(latlng.latitude, latlng.longitude), progressSeekbar/1000.0);
-                                    final HashMap<String,MarkerOptions> hashMapMarker = new HashMap<>();
-                                    geoQuery.addGeoQueryEventListener(new GeoQueryEventListener() {
-                                        @Override
-                                        public void onKeyEntered(final String key, GeoLocation location) {
-                                            System.out.println(String.format("Key %s entered the search area at [%f,%f]", key, location.latitude, location.longitude));
-                                            final MarkerOptions markerOptions = new MarkerOptions();
-                                            markerOptions.position(new LatLng(location.latitude, location.longitude));
-                                            markerOptions.title("Item");
-                                            markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE));
-                                            hashMapMarker.put(key,markerOptions);
-                                            lvAdapter.nuke();
-                                            mMap.addMarker(markerOptions);
-                                            DatabaseReference ref = database.getReference().child("items").child(key);
-                                            ref.addListenerForSingleValueEvent(new ValueEventListener() {
-                                                @Override
-                                                public void onDataChange(DataSnapshot dataSnapshot) {
-                                                    // CURRENT POINT OF INTEREST
-                                                    Item item = dataSnapshot.getValue(Item.class);
-                                                    lvAdapter.putItem(item);
-                                                    String title =  item.getName();
-                                                    hashMapMarkerTitle.put(key, title);
-                                                    hashMapMarker.get(key).title(title);
-                                                    mMap.addMarker(hashMapMarker.get(key));
-                                                }
-
-                                                @Override
-                                                public void onCancelled(DatabaseError databaseError) {
-                                                    Log.e(TAG, "Item " + key + "not found.");
-                                                }
-                                            });
-                                        }
-                                        @Override
-                                        public void onKeyExited(String key) {
-                                            System.out.println(String.format("Key %s is no longer in the search area", key));
-
-                                        }
-
-                                        @Override
-                                        public void onKeyMoved(String key, GeoLocation location) {
-                                            System.out.println(String.format("Key %s moved within the search area to [%f,%f]", key, location.latitude, location.longitude));
-
-                                        }
-
-                                        @Override
-                                        public void onGeoQueryReady() {
-                                            System.out.println("All initial data has been loaded and events have been fired!");
-                                            mMap.clear();
-                                            geoQuery.setCenter(currentLocation);
-                                            geoQuery.setRadius(progressSeekbar/1000.0);
-                                            Marker stopMarker = mMap.addMarker(new MarkerOptions()
-                                                    .draggable(true)
-                                                    .position(latlng)
-                                                    .title("Current Location"));
-                                            CircleOptions circleOptions = new CircleOptions()
-                                                    .center(stopMarker.getPosition()).radius(progressSeekbar).strokeWidth(5.0f)
-                                                    .strokeColor(Color.parseColor("#00BFFF"))
-                                                    .fillColor(Color.argb(
-                                                            50, //This is your alpha.  Adjust this to make it more or less translucent
-                                                            Color.red(Color.BLUE), //Red component.
-                                                            Color.green(Color.BLUE),  //Green component.
-                                                            Color.blue(Color.BLUE)));  //Blue component.);
-                                            circle = mMap.addCircle(circleOptions);
-
-//
-
-                                            if(geoQuery != null){
-                                                geoQuery.removeAllListeners();
-                                            }
-
-                                        }
-
-                                        @Override
-                                        public void onGeoQueryError(DatabaseError error) {
-                                            System.err.println("There was an error with this query: " + error);
-                                        }
-
-                                    });
+                                    setQueryinGoogleMaps(latlng);
 
 
                                 }
@@ -712,73 +545,8 @@ public class SearchFragment extends Fragment implements OnMapReadyCallback, Goog
     public void onMarkerDrag(Marker marker) {
 
     }
-    public void setLocaleArea(Double lat, Double lng){
-        String key = "https://maps.googleapis.com/maps/api/geocode/json?latlng=";
-        String latitude = Double.toString(lat);
-        String longitude = Double.toString(lng);
-        String api = "&key=AIzaSyCdD6V_pMev1dl8LAsoJ6PLG5JLnR-OiUc";
-        String stringUrl = key+latitude+","+longitude+api;
-        System.out.println(stringUrl);
 
-        OkHttpClient client = new OkHttpClient();
-        Request request = new Request.Builder().url(stringUrl).get().build();
-
-        client.newCall(request).enqueue(new Callback() {
-            @Override
-            public void onFailure(Request request, IOException e) {
-                // do nothing, POC
-            }
-
-            @Override
-            public void onResponse(Response response) throws IOException {
-                String jsonData = response.body().string();
-                Gson gson = new Gson();
-                JsonObject jsonObject = gson.fromJson(jsonData, JsonObject.class);
-
-                JsonArray jsonArray = jsonObject.getAsJsonArray("results").get(0)
-                        .getAsJsonObject().getAsJsonArray("address_components");
-                String city = "";
-                for (int i = 0; i < jsonArray.size(); i++) {
-                    if (jsonArray.get(i).getAsJsonObject().get("types").getAsJsonArray().get(0).getAsString().equals("locality")){
-                        city = jsonArray.get(i).getAsJsonObject().get("long_name").getAsString();
-                        System.out.println(city);
-                        //   result.setText(city);
-                    }
-                }
-                final String finalCity = city;
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        localeMsg.setText("Items near " + finalCity);
-                    }
-                });
-            }
-        });
-    }
-    @Override
-    public void onMarkerDragEnd(Marker marker) {
-        mMap.clear();
-        LatLng dragPosition = marker.getPosition();
-        double dragLat = dragPosition.latitude;
-        double dragLong = dragPosition.longitude;
-        setLocaleArea(dragLat, dragLong);
-      //  localeMsg.setText("Your Location: " + Double.toString(dragLat) + ", " + Double.toString(dragLong));
-        // change map camera view
-        final LatLng latlng = new LatLng(dragLat, dragLong);
-
-        Marker stopMarker = mMap.addMarker(new MarkerOptions()
-                .draggable(true)
-                .position(latlng)
-                .title("Current Location"));
-        CircleOptions circleOptions = new CircleOptions()
-                .center(stopMarker.getPosition()).radius(progressSeekbar).strokeWidth(5.0f)
-                .strokeColor(Color.parseColor("#00BFFF"))
-                .fillColor(Color.argb(
-                        50, //This is your alpha.  Adjust this to make it more or less translucent
-                        Color.red(Color.BLUE), //Red component.
-                        Color.green(Color.BLUE),  //Green component.
-                        Color.blue(Color.BLUE)));  //Blue component.);
-        circle = mMap.addCircle(circleOptions);
+    public void setQueryinGoogleMaps(final LatLng latlng){
         database = FirebaseDatabase.getInstance();
         geoFireRef = database.getReference(geoFireTable);
         GeoFire geoFire = new GeoFire(geoFireRef);
@@ -860,9 +628,80 @@ public class SearchFragment extends Fragment implements OnMapReadyCallback, Goog
 
         });
 
+
+    }
+
+    public void setLocaleArea(Double lat, Double lng){
+        String key = "https://maps.googleapis.com/maps/api/geocode/json?latlng=";
+        String latitude = Double.toString(lat);
+        String longitude = Double.toString(lng);
+        String api = "&key=AIzaSyCdD6V_pMev1dl8LAsoJ6PLG5JLnR-OiUc";
+        String stringUrl = key+latitude+","+longitude+api;
+        System.out.println(stringUrl);
+
+        OkHttpClient client = new OkHttpClient();
+        Request request = new Request.Builder().url(stringUrl).get().build();
+
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Request request, IOException e) {
+                // do nothing, POC
+            }
+
+            @Override
+            public void onResponse(Response response) throws IOException {
+                String jsonData = response.body().string();
+                Gson gson = new Gson();
+                JsonObject jsonObject = gson.fromJson(jsonData, JsonObject.class);
+
+                JsonArray jsonArray = jsonObject.getAsJsonArray("results").get(0)
+                        .getAsJsonObject().getAsJsonArray("address_components");
+                String city = "";
+                for (int i = 0; i < jsonArray.size(); i++) {
+                    if (jsonArray.get(i).getAsJsonObject().get("types").getAsJsonArray().get(0).getAsString().equals("locality")){
+                        city = jsonArray.get(i).getAsJsonObject().get("long_name").getAsString();
+                        System.out.println(city);
+                        //   result.setText(city);
+                    }
+                }
+                final String finalCity = city;
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        localeMsg.setText("Items near " + finalCity);
+                    }
+                });
+            }
+        });
+    }
+    @Override
+    public void onMarkerDragEnd(Marker marker) {
+        mMap.clear();
+        LatLng dragPosition = marker.getPosition();
+        double dragLat = dragPosition.latitude;
+        double dragLong = dragPosition.longitude;
+        setLocaleArea(dragLat, dragLong);
+      //  localeMsg.setText("Your Location: " + Double.toString(dragLat) + ", " + Double.toString(dragLong));
+        // change map camera view
+        final LatLng latlng = new LatLng(dragLat, dragLong);
+
+        Marker stopMarker = mMap.addMarker(new MarkerOptions()
+                .draggable(true)
+                .position(latlng)
+                .title("Current Location"));
+        CircleOptions circleOptions = new CircleOptions()
+                .center(stopMarker.getPosition()).radius(progressSeekbar).strokeWidth(5.0f)
+                .strokeColor(Color.parseColor("#00BFFF"))
+                .fillColor(Color.argb(
+                        50, //This is your alpha.  Adjust this to make it more or less translucent
+                        Color.red(Color.BLUE), //Red component.
+                        Color.green(Color.BLUE),  //Green component.
+                        Color.blue(Color.BLUE)));  //Blue component.);
+        circle = mMap.addCircle(circleOptions);
+        setQueryinGoogleMaps(latlng);
+
         progress.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                // progress = progress*10;
 
             }
 
@@ -875,87 +714,7 @@ public class SearchFragment extends Fragment implements OnMapReadyCallback, Goog
                 progressSeekbar = seekBar.getProgress();
                 System.out.println(progressSeekbar);
                 circle.setRadius(progressSeekbar);
-                database = FirebaseDatabase.getInstance();
-                geoFireRef = database.getReference(geoFireTable);
-                GeoFire geoFire = new GeoFire(geoFireRef);
-                currentLocation = new GeoLocation(latlng.latitude, latlng.longitude);
-                final GeoQuery geoQuery = geoFire.queryAtLocation(new GeoLocation(latlng.latitude, latlng.longitude), progressSeekbar/1000.0);
-                final HashMap<String,MarkerOptions> hashMapMarker = new HashMap<>();
-                geoQuery.addGeoQueryEventListener(new GeoQueryEventListener() {
-                    @Override
-                    public void onKeyEntered(final String key, GeoLocation location) {
-                        System.out.println(String.format("Key %s entered the search area at [%f,%f]", key, location.latitude, location.longitude));
-                        final MarkerOptions markerOptions = new MarkerOptions();
-                        markerOptions.position(new LatLng(location.latitude, location.longitude));
-                        markerOptions.title("Item");
-                        markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE));
-                        hashMapMarker.put(key,markerOptions);
-                        lvAdapter.nuke();
-                        mMap.addMarker(markerOptions);
-                        DatabaseReference ref = database.getReference().child("items").child(key);
-                        ref.addListenerForSingleValueEvent(new ValueEventListener() {
-                            @Override
-                            public void onDataChange(DataSnapshot dataSnapshot) {
-                                // CURRENT POINT OF INTEREST
-                                Item item = dataSnapshot.getValue(Item.class);
-                                lvAdapter.putItem(item);
-                                String title =  item.getName();
-                                hashMapMarkerTitle.put(key, title);
-                                hashMapMarker.get(key).title(title);
-                                mMap.addMarker(hashMapMarker.get(key));
-                            }
-
-                            @Override
-                            public void onCancelled(DatabaseError databaseError) {
-                                Log.e(TAG, "Item " + key + "not found.");
-                            }
-                        });
-                    }
-                    @Override
-                    public void onKeyExited(String key) {
-                        System.out.println(String.format("Key %s is no longer in the search area", key));
-
-                    }
-
-                    @Override
-                    public void onKeyMoved(String key, GeoLocation location) {
-                        System.out.println(String.format("Key %s moved within the search area to [%f,%f]", key, location.latitude, location.longitude));
-
-                    }
-
-                    @Override
-                    public void onGeoQueryReady() {
-                        System.out.println("All initial data has been loaded and events have been fired!");
-                        mMap.clear();
-                        geoQuery.setCenter(currentLocation);
-                        geoQuery.setRadius(progressSeekbar/1000.0);
-                        Marker stopMarker = mMap.addMarker(new MarkerOptions()
-                                .draggable(true)
-                                .position(latlng)
-                                .title("Current Location"));
-                        CircleOptions circleOptions = new CircleOptions()
-                                .center(stopMarker.getPosition()).radius(progressSeekbar).strokeWidth(5.0f)
-                                .strokeColor(Color.parseColor("#00BFFF"))
-                                .fillColor(Color.argb(
-                                        50, //This is your alpha.  Adjust this to make it more or less translucent
-                                        Color.red(Color.BLUE), //Red component.
-                                        Color.green(Color.BLUE),  //Green component.
-                                        Color.blue(Color.BLUE)));  //Blue component.);
-                        circle = mMap.addCircle(circleOptions);
-
-                        if(geoQuery != null){
-                            geoQuery.removeAllListeners();
-                        }
-
-                    }
-
-                    @Override
-                    public void onGeoQueryError(DatabaseError error) {
-                        System.err.println("There was an error with this query: " + error);
-                    }
-
-                });
-
+                setQueryinGoogleMaps(latlng);
             }
 
         });
