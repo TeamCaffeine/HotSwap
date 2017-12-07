@@ -63,6 +63,7 @@ public class ListItemActivity extends AppCompatActivity {
     private List<String> itemList = new ArrayList<String>();
 
     private int RESULT_ERROR = 88;
+    private String TAG = "LIActivity";
 
     @Override
     public void onContentChanged() {
@@ -107,7 +108,7 @@ public class ListItemActivity extends AppCompatActivity {
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                System.out.println("The read failed: " + databaseError.getCode());
+                Log.e(TAG, "The read failed: ", databaseError.toException());
             }
         });
 
