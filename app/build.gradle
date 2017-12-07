@@ -76,6 +76,9 @@ dependencies {
 
     // Strip (payment) dependencies
     compile 'com.stripe:stripe-android:6.0.0'
+
+    // Some nice classes from google
+    compile group: 'com.google.guava', name: 'guava', version: '15.0'
 }
 
 
