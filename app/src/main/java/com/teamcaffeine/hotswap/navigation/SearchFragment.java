@@ -219,6 +219,7 @@ public class SearchFragment extends Fragment implements OnMapReadyCallback, Goog
         SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+
     }
 
     @Override
