@@ -20,66 +20,33 @@ import com.teamcaffeine.hotswap.utility.SessionHandler;
 
 import java.lang.reflect.Field;
 
+/*
+* Thanks to Segun Famisa for reference initialization
+* of persistent BottomNavigationView.
+*
+* https://github.com/segunfamisa/bottom-navigation-demo
+*/
+
 public class NavigationActivity extends AppCompatActivity implements
         ChatFragment.ChatFragmentListener,
         ProfileFragment.ProfileFragmentListener,
-        ListItemFragment.ListItemFragmentListener,
-        SearchFragment.SearchFragmentListener {
+        SearchFragment.SearchFragmentListener,
+        HomeFragment.HomeFragmentListener {
 
     private final String TAG = "NavigationActivity";
 
-    public BottomNavigationView navigation;
+    private BottomNavigationView navigation;
 
-    private ListItemFragment listItemFragment;
-    private ProfileFragment profileFragment;
-    private SearchFragment searchFragment;
-    private ChatFragment chatFragment;
+    private Fragment profileFragment;
+    private Fragment searchFragment;
+    private Fragment chatFragment;
+    private Fragment homeFragment;
 
-    SharedPreferences prefs;
-    private String navigationIndexKey;
+    private Fragment[] fragArr;
 
-    final FragmentManager fragmentManager = getSupportFragmentManager();
-    FragmentTransaction ft;
-
-    private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
-            = new BottomNavigationView.OnNavigationItemSelectedListener() {
-
-        @Override
-        public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-            return selectNavigationItem(item);
-        }
-    };
-
-    private boolean selectNavigationItem(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.navigation_home:
-                Log.i(TAG, "nav home");
-                inflateFragment(listItemFragment, 0);
-                return true;
-            case R.id.navigation_search:
-                Log.i(TAG, "nav search");
-                inflateFragment(searchFragment, 1);
-                return true;
-            case R.id.navigation_inbox:
-                Log.i(TAG, "nav chat");
-                inflateFragment(chatFragment, 2);
-                return true;
-            case R.id.navigation_profile:
-                Log.i(TAG, "nav profile");
-                inflateFragment(profileFragment, 3);
-                return true;
-            default:
-                Log.e(TAG, "Unable to locate fragment to launch with id: " + item.getItemId());
-        }
-        return false;
-    }
-
-    private void inflateFragment(Fragment fragment, int index) {
-        prefs.edit().putInt(navigationIndexKey, index).apply();
-        ft = fragmentManager.beginTransaction();
-        ft.replace(R.id.dynamicContent, fragment);
-        ft.commit();
-    }
+    // State maintenance
+    private static final String SELECTED_ITEM = "arg_selected_item";
+    private int mSelectedItem;
 
     @SuppressLint("RestrictedApi")
     @Override
@@ -89,12 +56,13 @@ public class NavigationActivity extends AppCompatActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_navigation);
 
-        prefs = this.getSharedPreferences(
-                getString(R.string.base_package_name), Context.MODE_PRIVATE);
-        navigationIndexKey = getString(R.string.base_package_name) + "navigation.index";
-
         navigation = findViewById(R.id.navigation);
-        navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+        navigation.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                return selectNavigationItem(item);
+            }
+        });
 
         BottomNavigationMenuView menuView = (BottomNavigationMenuView) navigation.getChildAt(0);
         try {
@@ -116,11 +84,100 @@ public class NavigationActivity extends AppCompatActivity implements
             Log.e(TAG, "Unable to change value of shift mode", e);
         }
 
-        listItemFragment = new ListItemFragment();
-        profileFragment = new ProfileFragment();
-        searchFragment = new SearchFragment();
-        chatFragment = new ChatFragment();
+        MenuItem selectedItem;
+        if (savedInstanceState != null) {
+            // Our fragments already exist, fetch their reference by tag
+            mSelectedItem = savedInstanceState.getInt(SELECTED_ITEM, 0);
+            selectedItem = navigation.getMenu().findItem(mSelectedItem);
 
-        navigation.setSelectedItemId(navigation.getMenu().getItem(prefs.getInt(navigationIndexKey, 0)).getItemId());
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            homeFragment = fragmentManager.findFragmentByTag("homeFragment");
+            searchFragment = fragmentManager.findFragmentByTag("searchFragment");
+            chatFragment = fragmentManager.findFragmentByTag("chatFragment");
+            profileFragment = fragmentManager.findFragmentByTag("profileFragment");
+        } else {
+            // No fragments exist yet, instantiate them
+            selectedItem = navigation.getMenu().getItem(0);
+
+            homeFragment = new HomeFragment();
+            searchFragment = new SearchFragment();
+            chatFragment = new ChatFragment();
+            profileFragment = new ProfileFragment();
+
+            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+            ft.add(R.id.container, homeFragment, "homeFragment");
+            ft.add(R.id.container, searchFragment, "searchFragment");
+            ft.add(R.id.container, chatFragment, "chatFragment");
+            ft.add(R.id.container, profileFragment, "profileFragment");
+
+            ft.commit();
+        }
+
+        fragArr = new Fragment[]{homeFragment, searchFragment, chatFragment, profileFragment};
+
+        selectNavigationItem(selectedItem);
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        outState.putInt(SELECTED_ITEM, mSelectedItem);
+        super.onSaveInstanceState(outState);
+    }
+
+    @Override
+    public void onBackPressed() {
+        MenuItem homeItem = navigation.getMenu().getItem(0);
+        if (mSelectedItem != homeItem.getItemId()) {
+            // Go back home if we're not on the home page
+            selectNavigationItem(homeItem);
+        } else {
+            super.onBackPressed();
+        }
+    }
+
+    private boolean selectNavigationItem(MenuItem item) {
+        Fragment frag = null;
+        switch (item.getItemId()) {
+            case R.id.navigation_home:
+                Log.i(TAG, "nav home");
+                frag = homeFragment;
+                break;
+            case R.id.navigation_search:
+                Log.i(TAG, "nav search");
+                frag = searchFragment;
+                break;
+            case R.id.navigation_inbox:
+                Log.i(TAG, "nav chat");
+                frag = chatFragment;
+                break;
+            case R.id.navigation_profile:
+                Log.i(TAG, "nav profile");
+                frag = profileFragment;
+                break;
+            default:
+                Log.e(TAG, "Unable to locate fragment to launch with id: " + item.getItemId());
+                return false;
+        }
+
+        mSelectedItem = item.getItemId();
+
+        if (frag != null) {
+            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+
+            // Build transaction for existing fragments
+            for (int i = 0; i < navigation.getMenu().size(); i++) {
+                MenuItem menuItem = navigation.getMenu().getItem(i);
+                if (menuItem.getItemId() == item.getItemId()) {
+                    menuItem.setChecked(true);
+                    ft.show(fragArr[i]);
+                } else {
+                    ft.hide(fragArr[i]);
+                }
+            }
+
+            ft.commit();
+            return true;
+        }
+        return false;
     }
 }

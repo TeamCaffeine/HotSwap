@@ -98,11 +98,13 @@
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_weight="1"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:weightSum="5">
 
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="match_parent"
+            android:layout_weight="1"
             android:orientation="vertical">
 
             <TextView
@@ -112,7 +114,7 @@
                 android:text="@string/addresses_label" />
 
             <Button
-                android:id="@+id/txtAddAddress"
+                android:id="@+id/btnAddAddress"
                 style="@android:style/Widget.Material.Light.Button.Small"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -124,7 +126,7 @@
             android:id="@+id/layout_AddressesAndAdd"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="3"
+            android:layout_weight="4"
             android:orientation="vertical">
 
             <ListView
@@ -140,37 +142,47 @@
     <LinearLayout
         android:id="@+id/layout_Payment"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="50dp"
         android:layout_weight="1"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:weightSum="5">
 
-        <TextView
-            android:id="@+id/txtPaymentLabel"
+        <LinearLayout
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:text="@string/payment_label" />
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/txtPaymentLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/payment_label" />
+
+            <Button
+                android:id="@+id/btnAddPayment"
+                style="@android:style/Widget.Material.Light.Button.Small"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/plus"
+                android:textColor="@color/blue" />
+        </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/layout_PaymentOptionsAndAdd"
+            android:id="@+id/layout_PaymentAndAdd"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="3"
+            android:layout_weight="4"
             android:orientation="vertical">
 
             <ListView
                 android:id="@+id/listviewPayment"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight="1" />
+                android:layout_weight="1"></ListView>
 
-            <TextView
-                android:id="@+id/txtAddPayment"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/add_payment_to_profile"
-                android:textColor="@color/blue" />
         </LinearLayout>
+
     </LinearLayout>
 
     <TextView

@@ -78,7 +78,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="2"
             android:max="5000"
-            android:progress="500" />
+            android:progress="500"/>
 
     </LinearLayout>
 

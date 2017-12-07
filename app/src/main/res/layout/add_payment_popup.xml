@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/com_facebook_button_background_color_focused_disabled"
     android:orientation="vertical">
 
@@ -17,7 +18,20 @@
             android:layout_height="wrap_content"
             android:layout_gravity="right"
             android:text="X" />
+
+        <com.stripe.android.view.CardMultilineWidget
+            android:id="@+id/card_multiline_widget"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:shouldShowPostalCode="true"
+            />
         
     </LinearLayout>
+
+    <Button
+        android:id="@+id/btnAddCard"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Add Card" />
 
 </LinearLayout>
