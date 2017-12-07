@@ -151,4 +151,15 @@
     <string name="list_item_button">List Item</string>
     <string name="duplicate_item">You already have an item with that name. Choose another name.</string>
 
+    <!--Item Details Activity Strings-->
+    <string name="item_image">Item image</string>
+    <string name="item_name">Item Name:</string>
+    <string name="item_description">Item Description:</string>
+    <string name="item_tags">Tags:</string>
+    <string name="item_price">Price to Rent:</string>
+    <string name="item_location">Location:</string>
+    <string name="item_available_dates">Available Dates:</string>
+    <string name="request_swap">Request Swap</string>
+    <string name="message_owner">Message Owner</string>
+
 </resources>
