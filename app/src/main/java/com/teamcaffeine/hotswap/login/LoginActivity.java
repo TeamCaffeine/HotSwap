@@ -13,6 +13,7 @@ import android.view.animation.TranslateAnimation;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.facebook.AccessToken;
@@ -22,6 +23,8 @@ import com.facebook.FacebookException;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
+import com.fujiyuu75.sequent.Animation;
+import com.fujiyuu75.sequent.Sequent;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -50,6 +53,7 @@ import java.util.Map;
 
 public class LoginActivity extends AppCompatActivity {
     ImageView hotswapLogo;
+    LinearLayout loginVerticalLayout;
     EditText editEmail;
     EditText editPassword;
     Button buttonSignIn;
@@ -99,6 +103,7 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
 
         hotswapLogo = (ImageView) findViewById(R.id.hotswapLogo);
+        loginVerticalLayout = (LinearLayout) findViewById(R.id.loginVerticalLayout);
 
         // EMAIL-PASSWORD LOGIN UI ELEMENTS
         editEmail = (EditText) findViewById(R.id.editEmail);
@@ -165,12 +170,26 @@ public class LoginActivity extends AppCompatActivity {
         hotswapLogo.post(new Runnable() {
             @Override
             public void run() {
-                TranslateAnimation logoAnim = new TranslateAnimation(0, 0, -100, -500);
+                TranslateAnimation logoAnim = new TranslateAnimation(0, 0, -110, -500);
                 logoAnim.setRepeatMode(0);
                 logoAnim.setDuration(1000);
+                logoAnim.setStartOffset(100);
                 logoAnim.setFillAfter(true);
                 logoAnim.setInterpolator(new FastOutSlowInInterpolator());
                 hotswapLogo.startAnimation(logoAnim);
+            }
+        });
+
+        loginVerticalLayout.post(new Runnable() {
+            @Override
+            public void run() {
+                Sequent
+                        .origin(loginVerticalLayout)
+                        .duration(500)
+                        .delay(0)
+                        .offset(50)
+                        .anim(getApplicationContext(), Animation.FADE_IN_UP)
+                        .start();
             }
         });
     }
