@@ -541,7 +541,6 @@ public class SearchFragment extends Fragment implements OnMapReadyCallback, Goog
                 markerOptions.title("Item");
                 markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE));
                 hashMapMarker.put(key,markerOptions);
-                lvAdapter.nuke();
                 mMap.addMarker(markerOptions);
                 DatabaseReference ref = database.getReference().child("items").child(key);
                 ref.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -578,6 +577,7 @@ public class SearchFragment extends Fragment implements OnMapReadyCallback, Goog
             public void onGeoQueryReady() {
                 System.out.println("All initial data has been loaded and events have been fired!");
                 mMap.clear();
+                lvAdapter.nuke();
                 geoQuery.setCenter(currentLocation);
                 geoQuery.setRadius(progressSeekbar/1000.0);
                 Marker stopMarker = mMap.addMarker(new MarkerOptions()
