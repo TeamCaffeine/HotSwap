@@ -124,10 +124,6 @@ public class AddressesFragment extends Fragment {
                             Map<String, Object> userUpdate = new HashMap<>();
                             userUpdate.put(firebaseUser.getUid(), user.toMap());
                             users.updateChildren(userUpdate);
-
-                            // Update UI
-//                            addressElementsList.remove(listviewAddresses.getCheckedItemPosition());
-//                            addressAdapter.notifyDataSetChanged();
                         } else {
                             Log.i(TAG, "User attempted to delete a nonexistent address");
                         }
@@ -187,10 +183,6 @@ public class AddressesFragment extends Fragment {
                             Map<String, Object> userUpdate = new HashMap<>();
                             userUpdate.put(firebaseUser.getUid(), user.toMap());
                             users.updateChildren(userUpdate);
-
-                            // Update UI
-//                            addressElementsList.add(place.getAddress().toString());
-//                            addressAdapter.notifyDataSetChanged();
                         } else {
                             Log.i(TAG, "User attempted to add a duplicate address");
                         }
