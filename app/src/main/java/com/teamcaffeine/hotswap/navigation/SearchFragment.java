@@ -74,7 +74,7 @@ import java.util.HashMap;
  */
 public class SearchFragment extends Fragment implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener, LocationListener, GoogleMap.OnMarkerDragListener {
-    private float zoomlevel = 13.5f;
+    private float zoomlevel;
     private GoogleMap mMap;
     private GoogleApiClient client;
     private Location lastLocation;
@@ -86,10 +86,12 @@ public class SearchFragment extends Fragment implements OnMapReadyCallback, Goog
     private Items lvAdapter; // //Reference to the Adapter used to populate the listview.
     private TextView localeMsg;
     private Button bSearch;
-    TextView locale, filters;
-    SeekBar progress;
+    private TextView locale, filters;
+    private SeekBar progress;
     private SharedPreferences prefs;
     private String TAG = "696969";
+    private double lat;
+    private double lng;
 
 
     private FirebaseDatabase database = FirebaseDatabase.getInstance();
@@ -98,6 +100,7 @@ public class SearchFragment extends Fragment implements OnMapReadyCallback, Goog
     private HashMap<String, String> hashMapMarkerTitle = new HashMap<>();
     private GeoFire geoFire = new GeoFire(geoFireRef);
     private GeoLocation currentLocation;
+    private DatabaseReference ref;
 
     private int SET_LOCATION_REQUEST_CODE = 1730;
 
@@ -354,9 +357,10 @@ public class SearchFragment extends Fragment implements OnMapReadyCallback, Goog
 
                             });
 
+                            zoomlevel = 13.5f;
+                            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latlng, zoomlevel));
                             zoomlevel=mMap.getCameraPosition().zoom;
 
-                            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latlng, zoomlevel+ 10.5f));
 
                         }
                     });
@@ -538,7 +542,7 @@ public class SearchFragment extends Fragment implements OnMapReadyCallback, Goog
                 markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE));
                 hashMapMarker.put(key,markerOptions);
                 mMap.addMarker(markerOptions);
-                DatabaseReference ref = database.getReference().child("items").child(key);
+                ref = database.getReference().child("items").child(key);
                 ref.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
