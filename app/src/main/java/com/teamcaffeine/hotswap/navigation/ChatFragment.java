@@ -100,8 +100,6 @@ public class ChatFragment extends Fragment implements DialogsListAdapter.OnDialo
             }
         };
 
-        // NEW COMMENT FOR TESTING
-
         /* Set Online */
         userRef = FirebaseDatabase.getInstance().getReference().child("presence")
                 .child(FirebaseAuth.getInstance().getCurrentUser().getEmail().replace(".", "|"));

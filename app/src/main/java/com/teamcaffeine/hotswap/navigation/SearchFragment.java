@@ -179,7 +179,7 @@ public class SearchFragment extends Fragment implements OnMapReadyCallback, Goog
         progress = (SeekBar) view.findViewById(R.id.circleFilter);
 
 
-        if (city == "") {
+        if (city.equals("")) {
             localeMsg.setText("");
         } else {
             localeMsg.setText("Items near " + city);
@@ -368,6 +368,7 @@ public class SearchFragment extends Fragment implements OnMapReadyCallback, Goog
             });
         }
         Log.e(TAG, "MAP IS READY AND LOADED");
+
 //        else{
 //            LatLng currentLocale = new LatLng(lastLocation.getLatitude(), lastLocation.getLongitude());
 //            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocale, zoomlevel));
@@ -544,19 +545,14 @@ public class SearchFragment extends Fragment implements OnMapReadyCallback, Goog
             public void onKeyEntered(final String key, GeoLocation location) {
                 Log.e(TAG, String.format("Key %s entered the search area at [%f,%f]", key, location.latitude, location.longitude));
 
-                String itemName = hashMapMarkerTitle.get(key);
-
                 final MarkerOptions markerOptions = new MarkerOptions();
                 markerOptions.position(new LatLng(location.latitude, location.longitude));
-                markerOptions.title(itemName);
                 markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE));
                 hashMapMarker.put(key,markerOptions);
-                mMap.addMarker(markerOptions);
                 ref = database.getReference().child("items").child(key);
                 ref.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
-                        // CURRENT POINT OF INTEREST
                         Item item = dataSnapshot.getValue(Item.class);
                         lvAdapter.putItem(item);
                         String title =  item.getName();
