@@ -279,6 +279,7 @@ public class ChatFragment extends Fragment implements DialogsListAdapter.OnDialo
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
                     final User currUser = postSnapshot.getValue(User.class);
+
                     FirebaseDatabase.getInstance()
                             .getReference().child("chats").child("active").child(subscriptionChannel.replace(".", "|")).child(FirebaseAuth.getInstance().getCurrentUser().getEmail().replace(".", "|"))
                             .orderByChild("timestamp").addListenerForSingleValueEvent(new ValueEventListener() {

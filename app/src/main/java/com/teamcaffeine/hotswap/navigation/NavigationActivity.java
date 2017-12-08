@@ -95,7 +95,7 @@ public class NavigationActivity extends AppCompatActivity implements
             profileFragment = fragmentManager.findFragmentByTag("profileFragment");
         } else {
             // No fragments exist yet, instantiate them
-            selectedItem = navigation.getMenu().getItem(0);
+            selectedItem = navigation.getMenu().getItem(1);
 
             homeFragment = new HomeFragment();
             searchFragment = new SearchFragment();
@@ -124,7 +124,7 @@ public class NavigationActivity extends AppCompatActivity implements
 
     @Override
     public void onBackPressed() {
-        MenuItem homeItem = navigation.getMenu().getItem(0);
+        MenuItem homeItem = navigation.getMenu().getItem(1);
         if (mSelectedItem != homeItem.getItemId()) {
             // Go back home if we're not on the home page
             selectNavigationItem(homeItem);

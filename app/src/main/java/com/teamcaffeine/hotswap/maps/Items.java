@@ -23,8 +23,8 @@ public class Items extends BaseAdapter {
 
     public Items(Context aContext) {
         context = aContext;  //saving the context we'll need it again (for intents)
-
         items = new ArrayList<Item>();
+
     }
     @Override
     public int getCount() {
@@ -43,7 +43,8 @@ public class Items extends BaseAdapter {
     }
 
     public void nuke() {
-        this.items = new ArrayList<Item>();
+//        this.items = new ArrayList<Item>();
+        items.clear();
     }
 
     @Override
