@@ -135,7 +135,8 @@
     <string name="placeholder_email">Email</string>
     <string name="placeholder_phone_number">Phone Number</string>
     <string name="base_package_name">com.teamcaffeine.hotswap</string>
-    <string name="unable_to_add_address">Unable to add your address. Please try again.</string>
+    <string name="unable_to_add_item_due_to_address">Unable to add your item. The address cannot be found. Please try again.</string>
+    <string name="unable_to_add_address">Unable to add your item. The address cannot be found. Please try again.</string>
     <string name="unable_to_add_item">Unable to add your item. Please try again.</string>
     <string name="plus">+</string>
     <string name="minus">-</string>
