@@ -76,6 +76,10 @@ dependencies {
     // Strip (payment) dependencies
     compile 'com.stripe:stripe-android:6.0.0'
 
+    // Various UI dependencies
+    compile 'com.fujiyuu75:sequent:0.2.1'
+    compile 'com.rengwuxian.materialedittext:library:2.1.4'
+
     // Some nice classes from google
     compile group: 'com.google.guava', name: 'guava', version: '15.0'
 
@@ -83,8 +87,5 @@ dependencies {
     compile 'com.google.maps:google-maps-services:0.2.5'
     compile 'org.slf4j:slf4j-nop:1.7.25'
 }
-
-
-
 
 apply plugin: 'com.google.gms.google-services'

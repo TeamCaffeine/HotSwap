@@ -215,10 +215,17 @@ public class LocationPrefs extends AppCompatActivity
             @Override
             public void onClick(View view) {
                 // sends location preferences back to search page
-                prefs.edit().putString("city", result.getText().toString()).apply();
-                prefs.edit().putString("zip", zip.getText().toString()).apply();
-                finishActivity(-1);
-                finish();
+                // if valid input, send it to search page
+                // else toast and do nothing
+                if (zip.getText().toString().length() == 5) {
+                    prefs.edit().putString("city", result.getText().toString()).apply();
+                    prefs.edit().putString("zip", zip.getText().toString()).apply();
+                    finishActivity(-1);
+                    finish();
+                }
+                else{
+                    Toast.makeText(getBaseContext(), "Please enter valid zipcode", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
