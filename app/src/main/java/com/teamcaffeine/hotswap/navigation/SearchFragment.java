@@ -278,6 +278,7 @@ public class SearchFragment extends Fragment implements OnMapReadyCallback, Goog
             String postalcode = prefs.getString("zip", "02215");
             String key = "https://maps.googleapis.com/maps/api/geocode/json?address=";
             String api = "&key=AIzaSyCdD6V_pMev1dl8LAsoJ6PLG5JLnR-OiUc";
+//            String api = "&key=AIzaSyDVEVPxdS5ZWc-uRiSWZXDAM4ZAhqwOKGM";
             String stringUrl = key + postalcode + api;
 
             OkHttpClient client = new OkHttpClient();
