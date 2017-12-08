@@ -100,6 +100,7 @@ public class SearchFragment extends Fragment implements OnMapReadyCallback, Goog
     private HashMap<String, String> hashMapMarkerTitle = new HashMap<>();
     private GeoFire geoFire = new GeoFire(geoFireRef);
     private GeoLocation currentLocation;
+    private DatabaseReference ref;
 
     private int SET_LOCATION_REQUEST_CODE = 1730;
 
@@ -275,7 +276,6 @@ public class SearchFragment extends Fragment implements OnMapReadyCallback, Goog
             String postalcode = prefs.getString("zip", "02215");
             String key = "https://maps.googleapis.com/maps/api/geocode/json?address=";
             String api = "&key=AIzaSyCdD6V_pMev1dl8LAsoJ6PLG5JLnR-OiUc";
-//            String api = "&key=AIzaSyDVEVPxdS5ZWc-uRiSWZXDAM4ZAhqwOKGM";
             String stringUrl = key + postalcode + api;
 
             OkHttpClient client = new OkHttpClient();
@@ -542,7 +542,7 @@ public class SearchFragment extends Fragment implements OnMapReadyCallback, Goog
                 markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE));
                 hashMapMarker.put(key,markerOptions);
                 mMap.addMarker(markerOptions);
-                final DatabaseReference ref = database.getReference().child("items").child(key);
+                ref = database.getReference().child("items").child(key);
                 ref.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
