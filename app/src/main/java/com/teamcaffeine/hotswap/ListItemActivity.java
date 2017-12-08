@@ -55,8 +55,6 @@ public class ListItemActivity extends FragmentActivity {
     private EditText editPrice;
     private EditText editDescription;
 
-    private FrameLayout addressFrameLayout;
-
     private Button listItemButton;
     private CalendarPickerView calendar;
     private List<String> itemList = new ArrayList<String>();
@@ -79,7 +77,6 @@ public class ListItemActivity extends FragmentActivity {
         editTags = (EditText) findViewById(R.id.editTags);
         editPrice = (EditText) findViewById(R.id.editPrice);
         editDescription = (EditText) findViewById(R.id.editDescription);
-        addressFrameLayout = (FrameLayout) findViewById(R.id.addressContent);
 
         final AddressesFragment addressesFragment = new AddressesFragment();
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
