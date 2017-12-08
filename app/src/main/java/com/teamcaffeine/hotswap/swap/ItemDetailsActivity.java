@@ -7,7 +7,6 @@ import android.widget.TextView;
 
 import com.teamcaffeine.hotswap.R;
 
-import java.util.Date;
 import java.util.List;
 
 public class ItemDetailsActivity extends AppCompatActivity {

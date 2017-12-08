@@ -27,17 +27,9 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.maps.GeoApiContext;
-import com.google.maps.GeocodingApi;
-import com.google.maps.errors.ApiException;
-import com.google.maps.model.GeocodingResult;
-import com.google.maps.model.LatLng;
 import com.teamcaffeine.hotswap.R;
 import com.teamcaffeine.hotswap.login.User;
 
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -120,6 +112,7 @@ public class AddressesFragment extends Fragment {
                 }
 
                 DatabaseReference ref = users.child(firebaseUser.getUid());
+
                 ref.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
@@ -133,8 +126,8 @@ public class AddressesFragment extends Fragment {
                             users.updateChildren(userUpdate);
 
                             // Update UI
-                            addressElementsList.remove(listviewAddresses.getCheckedItemPosition());
-                            addressAdapter.notifyDataSetChanged();
+//                            addressElementsList.remove(listviewAddresses.getCheckedItemPosition());
+//                            addressAdapter.notifyDataSetChanged();
                         } else {
                             Log.i(TAG, "User attempted to delete a nonexistent address");
                         }
@@ -157,7 +150,7 @@ public class AddressesFragment extends Fragment {
         });
 
         DatabaseReference ref = users.child(firebaseUser.getUid());
-        ref.addListenerForSingleValueEvent(new ValueEventListener() {
+        ref.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 User user = dataSnapshot.getValue(User.class);
@@ -196,8 +189,8 @@ public class AddressesFragment extends Fragment {
                             users.updateChildren(userUpdate);
 
                             // Update UI
-                            addressElementsList.add(place.getAddress().toString());
-                            addressAdapter.notifyDataSetChanged();
+//                            addressElementsList.add(place.getAddress().toString());
+//                            addressAdapter.notifyDataSetChanged();
                         } else {
                             Log.i(TAG, "User attempted to add a duplicate address");
                         }
