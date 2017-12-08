@@ -25,41 +25,50 @@
         android:orientation="vertical"
         tools:context=".login.LoginActivity">
 
-        <com.wrapp.floatlabelededittext.FloatLabeledEditText
+        <com.rengwuxian.materialedittext.MaterialEditText
+            android:id="@+id/editEmail"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="55dp"
+            android:layout_marginRight="5dp"
+            android:layout_marginTop="35dp"
+            android:ems="10"
+            android:hint="Email Address"
+            android:inputType="textEmailAddress"
+            android:textAlignment="textStart"
+            android:textSize="18sp"
 
-            <EditText
-                android:id="@+id/editEmail"
-                android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:ems="10"
-                android:hint="Email Address"
-                android:inputType="textEmailAddress"
-                android:textAlignment="textStart"
-                android:textSize="18sp"
-                style="@style/HotSwapEditTextStyle"/>
-        </com.wrapp.floatlabelededittext.FloatLabeledEditText>
+            app:met_baseColor="@color/colorPrimary"
+            app:met_floatingLabel="highlight"
+            app:met_floatingLabelPadding="8dp"
+            app:met_iconLeft="@drawable/ic_email"
+            app:met_iconPadding="4dp"
+            app:met_primaryColor="@color/colorAccent"
+            app:met_textColor="@color/textColorPrimary" />
 
-        <com.wrapp.floatlabelededittext.FloatLabeledEditText
+        <com.rengwuxian.materialedittext.MaterialEditText
+            android:id="@+id/editPassword"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="55dp"
+            android:layout_marginRight="5dp"
+            android:layout_marginTop="8dp"
+            android:ems="10"
+            android:hint="Password"
+            android:inputType="textPassword"
+            android:textAlignment="textStart"
 
-            <EditText
-                android:id="@+id/editPassword"
-                android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:ems="10"
-                android:hint="Password"
-                android:inputType="textPassword"
-                android:textAlignment="textStart"
-                android:textSize="18sp"
-                style="@style/HotSwapEditTextStyle"/>
-        </com.wrapp.floatlabelededittext.FloatLabeledEditText>
+            android:textSize="18sp"
+            app:met_baseColor="@color/colorPrimary"
+            app:met_floatingLabel="highlight"
+            app:met_floatingLabelPadding="8dp"
+            app:met_iconLeft="@drawable/ic_password"
+            app:met_iconPadding="4dp"
+            app:met_primaryColor="@color/colorAccent"
+            app:met_textColor="@color/textColorPrimary" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="50dp"
+            android:layout_marginTop="8dp"
             android:orientation="horizontal">
 
             <Button
@@ -68,9 +77,11 @@
                 android:layout_height="match_parent"
                 android:layout_margin="5dp"
                 android:layout_weight="1"
+                android:background="@drawable/hotswap_button"
                 android:gravity="center"
                 android:text="Sign In"
-                android:textSize="18sp" />
+                android:textColor="@color/textColorPrimary"
+                android:textSize="12sp"></Button>
 
             <Button
                 android:id="@+id/buttonCreateAccount"
@@ -78,27 +89,55 @@
                 android:layout_height="match_parent"
                 android:layout_margin="5dp"
                 android:layout_weight="1"
+                android:background="@drawable/hotswap_button"
                 android:gravity="center"
                 android:text="Create Account"
-                android:textSize="18sp" />
+                android:textColor="@color/textColorPrimary"
+                android:textSize="12sp"></Button>
         </LinearLayout>
 
-        <TextView
-            android:id="@+id/textView2"
+
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="35dp"
-            android:gravity="center"
-            android:text="---------- OR ----------"
-            android:textColor="@color/colorAccent"
-            android:textSize="14sp" />
+            android:layout_marginTop="8dp"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/divider1"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="25dp"
+                android:layout_marginRight="5dp"
+                android:layout_weight="1"
+                app:srcCompat="@drawable/hotswap_divider" />
+
+            <TextView
+                android:id="@+id/textView2"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginTop="0dp"
+                android:gravity="center"
+                android:text="OR"
+                android:textColor="@color/colorPrimary"
+                android:textSize="14sp" />
+
+            <ImageView
+                android:id="@+id/imageView4"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="25dp"
+                android:layout_weight="1"
+                app:srcCompat="@drawable/hotswap_divider" />
+        </LinearLayout>
 
         <com.google.android.gms.common.SignInButton
             android:id="@+id/googleSignInButton"
             android:layout_width="match_parent"
             android:layout_height="35dp"
             android:layout_marginBottom="10dp"
-            android:layout_marginTop="10dp"
-            android:paddingBottom="0dp">
+            android:layout_marginTop="10dp">
 
         </com.google.android.gms.common.SignInButton>
 
@@ -106,6 +145,7 @@
             android:id="@+id/facebookLoginButton"
             android:layout_width="match_parent"
             android:layout_height="50dp"
+            android:layout_margin="4dp"
             android:layout_marginTop="0dp" />
 
 

@@ -173,7 +173,7 @@ public class LoginActivity extends AppCompatActivity {
                 TranslateAnimation logoAnim = new TranslateAnimation(0, 0, -110, -500);
                 logoAnim.setRepeatMode(0);
                 logoAnim.setDuration(1000);
-                logoAnim.setStartOffset(100);
+                logoAnim.setStartOffset(0);
                 logoAnim.setFillAfter(true);
                 logoAnim.setInterpolator(new FastOutSlowInInterpolator());
                 hotswapLogo.startAnimation(logoAnim);
@@ -185,7 +185,7 @@ public class LoginActivity extends AppCompatActivity {
             public void run() {
                 Sequent
                         .origin(loginVerticalLayout)
-                        .duration(500)
+                        .duration(400)
                         .delay(0)
                         .offset(50)
                         .anim(getApplicationContext(), Animation.FADE_IN_UP)
