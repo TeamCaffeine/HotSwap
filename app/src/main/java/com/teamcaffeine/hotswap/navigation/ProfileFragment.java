@@ -65,14 +65,13 @@ public class ProfileFragment extends Fragment {
     private Button btnInviteFriends;
     private TextView txtEmail;
     private TextView txtPhoneNumber;
-
     private Button btnAddPayment;
     private ListView listviewPayment;
     private List<String> paymentElementsList;
     private ArrayAdapter<String> paymentAdapter;
     private TextView txtPastTransactions;
 
-    // Progress dialog
+    // Progress dialog, to show page is loading
     public ProgressDialog mProgressDialog;
 
     // Database reference fields
@@ -81,6 +80,7 @@ public class ProfileFragment extends Fragment {
     private DatabaseReference users;
     private String userTable = "users";
 
+    // progress dialog to show page is loading
     public void showProgressDialog() {
         if (mProgressDialog == null) {
             mProgressDialog = new ProgressDialog(getContext());
@@ -88,15 +88,18 @@ public class ProfileFragment extends Fragment {
             mProgressDialog.setIndeterminate(true);
         }
 
+        // show progress dialog to indicate to user that the page is loading
         mProgressDialog.show();
     }
 
+    // hide progress dialog when page shows
     public void hideProgressDialog() {
         if (mProgressDialog != null && mProgressDialog.isShowing()) {
             mProgressDialog.dismiss();
         }
     }
 
+    // fragment listener for inter-fragment communication
     ProfileFragmentListener PFL;
 
     public ProfileFragment() {
@@ -115,9 +118,14 @@ public class ProfileFragment extends Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        // populate the listview with the user's addresses
+        // step 1: instantiate the Address Fragment
         AddressesFragment addressesFragment = new AddressesFragment();
+        // step 2: begin the fragment transaction
         FragmentTransaction ft = getFragmentManager().beginTransaction();
+        // step 3: add fragment to the activity state
         ft.add(R.id.layout_Addresses, addressesFragment);
+        // stap 4: commit the transaction
         ft.commit();
 
         btnAddPayment = view.findViewById(R.id.btnAddPayment);
