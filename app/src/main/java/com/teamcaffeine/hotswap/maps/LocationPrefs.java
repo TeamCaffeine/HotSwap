@@ -2,7 +2,6 @@ package com.teamcaffeine.hotswap.maps;
 
 import android.Manifest;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Location;
@@ -36,7 +35,6 @@ import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.Response;
 import com.teamcaffeine.hotswap.R;
-import com.teamcaffeine.hotswap.navigation.NavigationActivity;
 
 import java.io.IOException;
 
