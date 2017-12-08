@@ -44,6 +44,7 @@ import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -198,6 +199,8 @@ public class SearchFragment extends Fragment implements OnMapReadyCallback, Goog
                 Intent itemDetailsIntent = new Intent(getActivity(), ItemDetailsActivity.class);
                 itemDetailsIntent.putExtra("item", item);
                 itemDetailsIntent.putExtra("currentCity", city);
+                itemDetailsIntent.putExtra("channel", FirebaseAuth.getInstance().getCurrentUser().getEmail());
+                itemDetailsIntent.putExtra("subscription", item.getRenteeID()); //TODO: Need easy reference to item lender's email
                 startActivity(itemDetailsIntent);
             }
         });
@@ -547,7 +550,7 @@ public class SearchFragment extends Fragment implements OnMapReadyCallback, Goog
                         // In the scenario we try to find an item using an item location where the item
                         // has already been deleted
                         if(item == null) {
-                          return;  
+                          return;
                         }
 
                         lvAdapter.putItem(item);
