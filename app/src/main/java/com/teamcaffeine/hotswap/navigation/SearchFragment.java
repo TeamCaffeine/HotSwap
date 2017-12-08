@@ -539,9 +539,12 @@ public class SearchFragment extends Fragment implements OnMapReadyCallback, Goog
             @Override
             public void onKeyEntered(final String key, GeoLocation location) {
                 Log.e(TAG, String.format("Key %s entered the search area at [%f,%f]", key, location.latitude, location.longitude));
+
+                String itemName = hashMapMarkerTitle.get(key);
+
                 final MarkerOptions markerOptions = new MarkerOptions();
                 markerOptions.position(new LatLng(location.latitude, location.longitude));
-                markerOptions.title("Item");
+                markerOptions.title(itemName);
                 markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE));
                 hashMapMarker.put(key,markerOptions);
                 mMap.addMarker(markerOptions);
