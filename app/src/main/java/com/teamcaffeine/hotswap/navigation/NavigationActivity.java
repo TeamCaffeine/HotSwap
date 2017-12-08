@@ -85,7 +85,7 @@ public class NavigationActivity extends AppCompatActivity implements
         MenuItem selectedItem;
         if (savedInstanceState != null) {
             // Our fragments already exist, fetch their reference by tag
-            mSelectedItem = savedInstanceState.getInt(SELECTED_ITEM, 3);
+            mSelectedItem = savedInstanceState.getInt(SELECTED_ITEM, 0);
             selectedItem = navigation.getMenu().findItem(mSelectedItem);
 
             FragmentManager fragmentManager = getSupportFragmentManager();
@@ -95,7 +95,7 @@ public class NavigationActivity extends AppCompatActivity implements
             profileFragment = fragmentManager.findFragmentByTag("profileFragment");
         } else {
             // No fragments exist yet, instantiate them
-            selectedItem = navigation.getMenu().getItem(3);
+            selectedItem = navigation.getMenu().getItem(0);
 
             homeFragment = new HomeFragment();
             searchFragment = new SearchFragment();
