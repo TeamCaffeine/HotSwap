@@ -1,6 +1,7 @@
 package com.teamcaffeine.hotswap.navigation;
 
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -76,9 +77,7 @@ public class HomeFragment extends Fragment {
     // Database reference fields
     private FirebaseUser firebaseUser;
     private FirebaseDatabase database;
-    private DatabaseReference users;
-    private DatabaseReference items;
-    private String userTable = "users";
+    private DatabaseReference items; // reference to the items table, used for onDataChange listening
     private String itemTable = "items";
 
     // create a value event user
@@ -138,8 +137,12 @@ public class HomeFragment extends Fragment {
 
         // Get a database reference to our user
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+
+        // get a reference to our database
         database = FirebaseDatabase.getInstance();
-        users = database.getReference().child(userTable);
+
+        // get a reference to the items table
+        items = database.getReference().child(itemTable);
 
         // instantiate the list that wil hold all of the user's items
         itemsElementsList = new ArrayList<String>();
@@ -164,8 +167,7 @@ public class HomeFragment extends Fragment {
                             public void onClick(DialogInterface dialog, int whichButton) {
                                 // get the name of the item to be deleted
                                 final String itemToRemove = listviewAllItems.getItemAtPosition(position).toString();
-                                // get a reference to the items table in the database, where the item also needs to be removed
-                                DatabaseReference items = database.getReference().child(itemTable);
+                                // using the reference to the items table,
                                 // add a listener to the items table in the database to delete the item
                                 items.addListenerForSingleValueEvent(new ValueEventListener() {
                                     @Override
@@ -187,9 +189,9 @@ public class HomeFragment extends Fragment {
                                                 if (iteratingItem.equalsIgnoreCase(itemToRemove)){
                                                     // first remove it from the item list for the listView in the UI
                                                     // the boolean didRemove will indicate when the item has been successfully
-                                                    // deleted from the list. Only 0nce it has been successfully deleted from
+                                                    // deleted from the list. Only once it has been successfully deleted from
                                                     // the UI, delete it from the database.
-                                                    boolean didRemove = itemsElementsList.remove(listviewAllItems.getItemAtPosition(position).toString());
+                                                    boolean didRemove = itemsElementsList.remove(itemToRemove);
                                                     if (didRemove) {
                                                         // notify the listView adapter that the data has changed so that the UI is updated
                                                         itemsAdapter.notifyDataSetChanged();
@@ -233,14 +235,17 @@ public class HomeFragment extends Fragment {
          * ADDING THE ITEM LIST TO THE UI
          */
 
-        // get a reference to the items table in the database
-        items = database.getReference().child(itemTable);
-
         // Create the event listener to listen to database changes
         itemsEventListener = new ValueEventListener() {
             @Override
             // get a data snapshot of the whole table
             public void onDataChange(DataSnapshot dataSnapshot) {
+                // first clear the itemsElementsList
+                // We clear the list to make sure items in the list are not repeated in the UI,
+                // since this will be implemented with an addValueEventListener. The
+                // addValueEvent listener will reprint all items values it finds as long as it
+                // is listening, so by clearing the list before printing it, we guarantee that
+                // each item will only be listed once in the UI.
                 itemsElementsList.clear();
                 // loop through all of the items in the items table
                 // we need to loop thorugh all of the items become items do not belong to users,
@@ -267,10 +272,11 @@ public class HomeFragment extends Fragment {
             // if the read of the items table failed, log the error message
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                System.out.println("The read failed: " + databaseError.getCode());
+                Log.i(TAG, "The read failed: " + databaseError.getCode());
             }
         };
 
+        // using the reference to the items table,
         // add the event listener to the items table
         items.addValueEventListener(itemsEventListener);
 
@@ -322,26 +328,30 @@ public class HomeFragment extends Fragment {
         // our request code.
         if (requestCode == LIST_ITEM_REQUEST_CODE) {
             Log.i(TAG, "request code = List Item Request Code");
+            Log.i(TAG, "result code = " + resultCode);
             // startActivityForResult also returns a result code, which checks the result of the List Item Activity.
             // Here, RESULT_OK indicates that the item was successfully added to the database. We want to make sure
             // that items are only added to the UI if they are added to the database, and vice versa.
-            if (resultCode == RESULT_OK) {
+            if (resultCode == Activity.RESULT_OK) {
                 Log.i(TAG, "result OK");
                 // get the new item that was added in List Item from the Intent
                 Bundle extras = data.getExtras();
                 String newItem = extras.getString("newItem");
                 // add the new item to the list
                 itemsElementsList.add(newItem);
+                Log.i(TAG, "item added to list");
 
                 // notify the adapter that the dataset has changed so that it updates the UI
                 itemsAdapter.notifyDataSetChanged();
                 // show a toast to notify the user that their item was successfully added
                 Toast.makeText(getContext(), "New item added", Toast.LENGTH_LONG).show();
+                Log.i(TAG, "toast shown");
 
             } else if (resultCode == RESULT_ERROR) {
                 Log.i(TAG, "item not added");
                 Toast.makeText(getContext(), R.string.unable_to_add_item, Toast.LENGTH_SHORT).show();
-            } else if (resultCode == RESULT_CANCELED) {
+            } else if (resultCode == Activity.RESULT_CANCELED) {
+                Log.i(TAG, "request canceled, result code = " + resultCode);
                 // The user canceled the operation.
             }
         }
@@ -355,6 +365,7 @@ public class HomeFragment extends Fragment {
     @Override
     public void onPause() {
         super.onPause();
+        // using the reference to the items table, remove the listener
         items.removeEventListener(itemsEventListener);
     }
 
@@ -362,6 +373,7 @@ public class HomeFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
+        // using the reference to the items table, add the listener
         items.addValueEventListener(itemsEventListener);
     }
 }
