@@ -182,9 +182,6 @@ public class HomeFragment extends Fragment {
                                                     // the UI, delete it from the database.
                                                     boolean didRemove = itemsElementsList.remove(itemToRemove);
                                                     if (didRemove) {
-                                                        // notify the listView adapter that the data has changed so that the UI is updated
-                                                        itemsAdapter.notifyDataSetChanged();
-
                                                         // Remove the item and update database
                                                         i.getRef().removeValue();
                                                     } else {
@@ -322,20 +319,9 @@ public class HomeFragment extends Fragment {
             // Here, RESULT_OK indicates that the item was successfully added to the database. We want to make sure
             // that items are only added to the UI if they are added to the database, and vice versa.
             if (resultCode == Activity.RESULT_OK) {
-                Log.i(TAG, "result OK");
-                // get the new item that was added in List Item from the Intent
-                Bundle extras = data.getExtras();
-                String newItem = extras.getString("newItem");
-                // add the new item to the list
-                itemsElementsList.add(newItem);
                 Log.i(TAG, "item added to list");
-
-                // notify the adapter that the dataset has changed so that it updates the UI
-                itemsAdapter.notifyDataSetChanged();
                 // show a toast to notify the user that their item was successfully added
                 Toast.makeText(getContext(), "New item added", Toast.LENGTH_LONG).show();
-                Log.i(TAG, "toast shown");
-
             } else if (resultCode == RESULT_ERROR) {
                 Log.i(TAG, "item not added");
                 Toast.makeText(getContext(), R.string.unable_to_add_item, Toast.LENGTH_SHORT).show();
