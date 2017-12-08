@@ -127,8 +127,16 @@ public class ListItemActivity extends AppCompatActivity {
                 String itemAddress = editAddress.getText().toString();
                 String itemPrice = editPrice.getText().toString();
                 String itemDescription = editDescription.getText().toString();
+                String itemTags = editTags.getText().toString();
 
                 Item newItem = new Item(itemID, itemName, firebaseUser.getUid(), itemDescription, itemPrice, itemAddress);
+
+                // ADDING TAGS TO ITEM
+                String[] tags = itemTags.split(",");
+                for (String tag : tags) {
+                    String tagToAdd = tag.trim();
+                    newItem.addTag(tagToAdd);
+                }
 
                 // DATA VALIDATION
                 // a user cannot list 2 items with the same name
