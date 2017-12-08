@@ -7,7 +7,7 @@
     android:focusableInTouchMode="true">
 
     <LinearLayout
-        android:id="@+id/layout_Adresses"
+        android:id="@+id/layout_Addresses"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_weight="1"
@@ -33,6 +33,14 @@
                 android:layout_height="wrap_content"
                 android:text="@string/plus"
                 android:textColor="@color/blue" />
+
+            <Button
+                android:id="@+id/btnRemoveAddress"
+                style="@android:style/Widget.Material.Light.Button.Small"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/minus"
+                android:textColor="@color/blue" />
         </LinearLayout>
 
         <LinearLayout
@@ -46,7 +54,9 @@
                 android:id="@+id/listviewAddresses"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight="1" />
+                android:layout_weight="1"
+                android:choiceMode="singleChoice"
+                android:listSelector="@color/gray_dark"/>
 
         </LinearLayout>
 

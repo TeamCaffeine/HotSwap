@@ -5,14 +5,15 @@ import android.content.Intent;
 import android.location.Address;
 import android.location.Geocoder;
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ListView;
+import android.widget.FrameLayout;
 import android.widget.Toast;
 
 import com.firebase.geofire.GeoFire;
@@ -27,19 +28,19 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.timessquare.CalendarPickerView;
-import com.teamcaffeine.hotswap.login.User;
+import com.teamcaffeine.hotswap.navigation.AddressesFragment;
+import com.teamcaffeine.hotswap.navigation.HomeFragment;
 import com.teamcaffeine.hotswap.swap.Item;
 
-import java.util.ArrayList;
 import java.io.IOException;
-import java.util.List;
-
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
-public class ListItemActivity extends AppCompatActivity {
+public class ListItemActivity extends FragmentActivity {
 
     private FirebaseUser firebaseUser;
     private FirebaseDatabase database;
@@ -54,9 +55,8 @@ public class ListItemActivity extends AppCompatActivity {
     private EditText editTags;
     private EditText editPrice;
     private EditText editDescription;
-    private ListView lstAddresses;
-    private List<String> addressElementsList;
-    private ArrayAdapter<String> addressAdapter;
+
+    private FrameLayout addressFrameLayout;
 
     private Button listItemButton;
     private CalendarPickerView calendar;
@@ -65,20 +65,11 @@ public class ListItemActivity extends AppCompatActivity {
     private int RESULT_ERROR = 88;
     private String TAG = "LIActivity";
 
-    @Override
-    public void onContentChanged() {
-        super.onContentChanged();
-
-        View empty = findViewById(R.id.noAddresses);
-        ListView list = (ListView) findViewById(R.id.lstAddresses);
-        list.setEmptyView(empty);
-    }
-
     @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.fragment_list_item);
+        setContentView(R.layout.activity_list_item);
 
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         database = FirebaseDatabase.getInstance();
@@ -90,27 +81,12 @@ public class ListItemActivity extends AppCompatActivity {
         editTags = (EditText) findViewById(R.id.editTags);
         editPrice = (EditText) findViewById(R.id.editPrice);
         editDescription = (EditText) findViewById(R.id.editDescription);
-        lstAddresses = (ListView) findViewById(R.id.lstAddresses);
-        lstAddresses.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
-        lstAddresses.setSelector(android.R.color.darker_gray);
-        DatabaseReference ref = users.child(firebaseUser.getUid());
-        ref.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                User user = dataSnapshot.getValue(User.class);
+        addressFrameLayout = (FrameLayout) findViewById(R.id.addressContent);
 
-                addressElementsList = user.getAddresses();
-                addressAdapter = new ArrayAdapter<String>
-                        (getApplicationContext(), android.R.layout.simple_list_item_1, addressElementsList);
-                lstAddresses.setAdapter(addressAdapter);
-                addressAdapter.notifyDataSetChanged();
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                Log.e(TAG, "The read failed: ", databaseError.toException());
-            }
-        });
+        final AddressesFragment addressesFragment = new AddressesFragment();
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        ft.add(R.id.addressContent, addressesFragment);
+        ft.commit();
 
         calendar = (CalendarPickerView) findViewById(R.id.calendarView);
         listItemButton = (Button) findViewById(R.id.listItemButton);
@@ -158,7 +134,6 @@ public class ListItemActivity extends AppCompatActivity {
                 String itemID = items.push().getKey();
                 String itemName = editItemName.getText().toString();
 
-                int position = lstAddresses.getCheckedItemPosition();
                 String itemPrice = editPrice.getText().toString();
                 String itemDescription = editDescription.getText().toString();
 
@@ -171,11 +146,9 @@ public class ListItemActivity extends AppCompatActivity {
                     return;
                 }
 
-                // Get address from list
-                String itemAddress;
-                if (position != -1) {
-                    itemAddress = addressElementsList.get(position);
-                } else {
+                String itemAddress = addressesFragment.getSelectedAddress();
+
+                if (itemAddress == null) {
                     Toast.makeText(getApplicationContext(), "Please select an address.", Toast.LENGTH_LONG).show();
                     return;
                 }

@@ -53,10 +53,21 @@ public class AddressesFragment extends Fragment {
 
     // View references and other fields
     private Button btnAddAddress;
+    private Button btnRemoveAddress;
     private ListView listviewAddresses;
     private List<String> addressElementsList;
     private ArrayAdapter<String> addressAdapter;
     private String TAG = "AddressFragment";
+
+    private String selectedAddress;
+
+    public String getSelectedAddress() {
+        if (selectedAddress != null) {
+            return selectedAddress;
+        } else {
+            return null;
+        }
+    }
 
     public AddressesFragment() {
         // Required empty public constructor
@@ -94,53 +105,49 @@ public class AddressesFragment extends Fragment {
             }
         });
 
+        btnRemoveAddress = view.findViewById(R.id.btnRemoveAddress);
+        btnRemoveAddress.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                if (addressElementsList.isEmpty() || listviewAddresses.getCheckedItemPosition() == -1) {
+                    return;
+                }
+
+                DatabaseReference ref = users.child(firebaseUser.getUid());
+                ref.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        User user = dataSnapshot.getValue(User.class);
+
+                        boolean didRemove = user.removeAddress(listviewAddresses.getItemAtPosition(listviewAddresses.getCheckedItemPosition()).toString());
+                        if (didRemove) {
+                            // Update database
+                            Map<String, Object> userUpdate = new HashMap<>();
+                            userUpdate.put(firebaseUser.getUid(), user.toMap());
+                            users.updateChildren(userUpdate);
+
+                            // Update UI
+                            addressElementsList.remove(listviewAddresses.getCheckedItemPosition());
+                            addressAdapter.notifyDataSetChanged();
+                        } else {
+                            Log.i(TAG, "User attempted to delete a nonexistent address");
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+                        Log.e(TAG, "Address update failed", databaseError.toException());
+                    }
+                });
+            }
+        });
+
         listviewAddresses = view.findViewById(R.id.listviewAddresses);
         listviewAddresses.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
-                AlertDialog myQuittingDialogBox = new AlertDialog.Builder(getContext())
-                        //set message, title, and icon
-                        .setTitle(R.string.delete)
-                        .setMessage(R.string.delete_address_question)
-                        .setPositiveButton(R.string.delete, new DialogInterface.OnClickListener() {
-
-                            public void onClick(DialogInterface dialog, int whichButton) {
-                                DatabaseReference ref = users.child(firebaseUser.getUid());
-                                ref.addListenerForSingleValueEvent(new ValueEventListener() {
-                                    @Override
-                                    public void onDataChange(DataSnapshot dataSnapshot) {
-                                        User user = dataSnapshot.getValue(User.class);
-
-                                        boolean didRemove = user.removeAddress(listviewAddresses.getItemAtPosition(position).toString());
-                                        if (didRemove) {
-                                            // Update database
-                                            Map<String, Object> userUpdate = new HashMap<>();
-                                            userUpdate.put(firebaseUser.getUid(), user.toMap());
-                                            users.updateChildren(userUpdate);
-
-                                            // Update UI
-                                            addressElementsList.remove(position);
-                                            addressAdapter.notifyDataSetChanged();
-                                        } else {
-                                            Log.i(TAG, "User attempted to delete a nonexistent address");
-                                        }
-                                    }
-
-                                    @Override
-                                    public void onCancelled(DatabaseError databaseError) {
-                                        Log.e(TAG, "Address update failed", databaseError.toException());
-                                    }
-                                });
-                                dialog.dismiss();
-                            }
-                        })
-                        .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
-                                dialog.dismiss();
-                            }
-                        })
-                        .create();
-                myQuittingDialogBox.show();
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                selectedAddress = addressElementsList.get(position);
             }
         });
 
@@ -184,8 +191,8 @@ public class AddressesFragment extends Fragment {
                             users.updateChildren(userUpdate);
 
                             // Update UI
-                             addressElementsList.add(place.getAddress().toString());
-                             addressAdapter.notifyDataSetChanged();
+                            addressElementsList.add(place.getAddress().toString());
+                            addressAdapter.notifyDataSetChanged();
                         } else {
                             Log.i(TAG, "User attempted to add a duplicate address");
                         }

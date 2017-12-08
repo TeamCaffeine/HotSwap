@@ -94,18 +94,12 @@
     </LinearLayout>
 
     <FrameLayout
-        android:id="@+id/layout_Adresses"
+        android:id="@+id/layout_Addresses"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_weight="1"
         android:orientation="horizontal"
         android:weightSum="5">
-
-        <fragment
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            class="com.teamcaffeine.hotswap.navigation.AddressesFragment" />
-
     </FrameLayout>
 
     <LinearLayout

@@ -48,22 +48,14 @@
             android:inputType="textLongMessage"
             android:textSize="18sp" />
 
-        <ListView
-            android:id="@+id/lstAddresses"
+        <FrameLayout
+            android:id="@+id/addressContent"
             android:layout_width="match_parent"
-            android:layout_height="200dp"
-            android:layout_weight="0.5"
-            android:ems="10"
-            android:hint="Select an address"
-            android:textSize="18sp" />
-
-        <TextView
-            android:id="@+id/noAddresses"
-            android:text="@string/enter_address_request"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:gravity="center"
-            />
+            android:layout_height="150dp"
+            android:layout_weight="1"
+            android:orientation="horizontal"
+            android:weightSum="5">
+        </FrameLayout>
 
         <EditText
             android:id="@+id/editPrice"
