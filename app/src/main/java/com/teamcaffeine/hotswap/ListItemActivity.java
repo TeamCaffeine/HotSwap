@@ -194,7 +194,7 @@ public class ListItemActivity extends FragmentActivity {
                 Log.i(TAG, "item added to database");
 
                 GeoFire geoFire = new GeoFire(geoFireRef);
-                LatLng itemLatLng = LatLongUtility.getSelectedAddressLatLong(itemAddress);
+                LatLng itemLatLng = LatLongUtility.getLatLongForAddress(itemAddress);
                 if (itemLatLng != null) {
                     items.updateChildren(itemUpdate);
                     geoFire.setLocation(itemID, new GeoLocation(itemLatLng.lat, itemLatLng.lng));

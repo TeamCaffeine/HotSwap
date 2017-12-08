@@ -16,7 +16,7 @@ public class LatLongUtility {
 
     private static String TAG = "LatLongUtility";
     private static String KEY = "AIzaSyCdD6V_pMev1dl8LAsoJ6PLG5JLnR-OiUc";
-    public static LatLng getSelectedAddressLatLong(String address) {
+    public static LatLng getLatLongForAddress(String address) {
         GeoApiContext context = new GeoApiContext.Builder()
                 .apiKey(KEY)
                 .build();
