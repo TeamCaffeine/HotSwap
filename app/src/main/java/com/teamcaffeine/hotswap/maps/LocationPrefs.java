@@ -2,7 +2,6 @@ package com.teamcaffeine.hotswap.maps;
 
 import android.Manifest;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Location;
@@ -36,7 +35,6 @@ import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.Response;
 import com.teamcaffeine.hotswap.R;
-import com.teamcaffeine.hotswap.navigation.NavigationActivity;
 
 import java.io.IOException;
 
@@ -153,15 +151,6 @@ public class LocationPrefs extends AppCompatActivity
                                  //   result.setText(city);
                                 }
                             }
-//
-//                            final String zipcode = jsonObject.getAsJsonArray("results").get(0)
-//                                    .getAsJsonObject().getAsJsonArray("address_components").get(7)
-//                                    .getAsJsonObject().get("long_name")
-//                                    .getAsString();
-//                            final String city = jsonObject.getAsJsonArray("results").get(0)
-//                                    .getAsJsonObject().getAsJsonArray("address_components").get(3)
-//                                    .getAsJsonObject().get("long_name")
-//                                    .getAsString();
                             final String finalZipcode = zipcode;
                             final String finalCity = city;
                             LocationPrefs.this.runOnUiThread(new Runnable() {
