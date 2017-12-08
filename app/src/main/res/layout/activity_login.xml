@@ -30,7 +30,7 @@
             android:layout_width="match_parent"
             android:layout_height="55dp"
             android:layout_marginRight="5dp"
-            android:layout_marginTop="35dp"
+            android:layout_marginTop="40dp"
             android:ems="10"
             android:hint="Email Address"
             android:inputType="textEmailAddress"
@@ -113,7 +113,7 @@
                 app:srcCompat="@drawable/hotswap_divider" />
 
             <TextView
-                android:id="@+id/textView2"
+                android:id="@+id/dividerText"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_marginTop="0dp"
@@ -123,7 +123,7 @@
                 android:textSize="14sp" />
 
             <ImageView
-                android:id="@+id/imageView4"
+                android:id="@+id/divider2"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginLeft="5dp"
