@@ -31,7 +31,12 @@ public final class SessionHandler {
             ((Activity) context).finish();
             return true;
         }
-        return false;
+        else { // cannot ping firebase which means no internet connection
+            Intent login = new Intent(context, LoginActivity.class);
+            context.startActivity(login);
+            ((Activity) context).finish();
+            return false;
+        }
     }
 
     public static boolean alreadyLoggedIn(final Context context) {
