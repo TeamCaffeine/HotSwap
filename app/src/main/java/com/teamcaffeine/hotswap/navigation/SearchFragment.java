@@ -579,8 +579,6 @@ public class SearchFragment extends Fragment implements OnMapReadyCallback, Goog
             @Override
             public void onGeoQueryReady() {
                 Log.e(TAG, "All initial data has been loaded and events have been fired!");
-//                mMap.clear();
-//                lvAdapter.nuke();
                 geoQuery.setCenter(currentLocation);
                 geoQuery.setRadius(progressSeekbar/1000.0);
                 Marker stopMarker = mMap.addMarker(new MarkerOptions()
