@@ -4,12 +4,16 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v4.view.animation.FastOutSlowInInterpolator;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.view.animation.TranslateAnimation;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.facebook.AccessToken;
@@ -19,6 +23,8 @@ import com.facebook.FacebookException;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
+import com.fujiyuu75.sequent.Animation;
+import com.fujiyuu75.sequent.Sequent;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -46,6 +52,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class LoginActivity extends AppCompatActivity {
+    ImageView hotswapLogo;
+    LinearLayout loginVerticalLayout;
     EditText editEmail;
     EditText editPassword;
     Button buttonSignIn;
@@ -93,6 +101,9 @@ public class LoginActivity extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        hotswapLogo = (ImageView) findViewById(R.id.hotswapLogo);
+        loginVerticalLayout = (LinearLayout) findViewById(R.id.loginVerticalLayout);
 
         // EMAIL-PASSWORD LOGIN UI ELEMENTS
         editEmail = (EditText) findViewById(R.id.editEmail);
@@ -152,6 +163,33 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onError(FacebookException error) {
                 Log.d(FacebookLogTag, "facebook:onError", error);
+            }
+        });
+
+        // Run animations
+        hotswapLogo.post(new Runnable() {
+            @Override
+            public void run() {
+                TranslateAnimation logoAnim = new TranslateAnimation(0, 0, -110, -500);
+                logoAnim.setRepeatMode(0);
+                logoAnim.setDuration(1000);
+                logoAnim.setStartOffset(0);
+                logoAnim.setFillAfter(true);
+                logoAnim.setInterpolator(new FastOutSlowInInterpolator());
+                hotswapLogo.startAnimation(logoAnim);
+            }
+        });
+
+        loginVerticalLayout.post(new Runnable() {
+            @Override
+            public void run() {
+                Sequent
+                        .origin(loginVerticalLayout)
+                        .duration(400)
+                        .delay(0)
+                        .offset(50)
+                        .anim(getApplicationContext(), Animation.FADE_IN_UP)
+                        .start();
             }
         });
     }
