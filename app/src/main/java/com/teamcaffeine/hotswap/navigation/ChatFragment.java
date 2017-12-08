@@ -284,8 +284,8 @@ public class ChatFragment extends Fragment implements DialogsListAdapter.OnDialo
 
 
                     // Fixes logout bug
-                    Log.e(TAG, "Enter getDialog when there is no currentUser");
                     if(FirebaseAuth.getInstance().getCurrentUser() == null) {
+                        Log.e(TAG, "Enter getDialog when there is no currentUser");
                         return;
                     }
 
