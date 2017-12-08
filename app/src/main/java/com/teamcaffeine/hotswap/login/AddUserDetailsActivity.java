@@ -40,7 +40,6 @@ public class AddUserDetailsActivity extends AppCompatActivity {
     private EditText edtFirstName;
     private EditText edtLastName;
     private EditText edtPhoneNumber;
-    private Button btnAddPayment;
     private Button btnSubmit;
 
     @Override
@@ -63,7 +62,6 @@ public class AddUserDetailsActivity extends AppCompatActivity {
         edtFirstName = findViewById(R.id.edtFirstName);
         edtLastName = findViewById(R.id.edtLastName);
         edtPhoneNumber = findViewById(R.id.edtPhoneNumber);
-        btnAddPayment = findViewById(R.id.btnPayment);
         btnSubmit = findViewById(R.id.btnSubmit);
 
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
@@ -74,13 +72,6 @@ public class AddUserDetailsActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 submit();
-            }
-        });
-
-        btnAddPayment.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
             }
         });
     }
