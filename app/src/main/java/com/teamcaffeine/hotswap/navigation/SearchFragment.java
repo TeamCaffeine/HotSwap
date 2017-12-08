@@ -541,7 +541,15 @@ public class SearchFragment extends Fragment implements OnMapReadyCallback, Goog
                 ref.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
+                        Log.e(TAG, "Getting title for key " + key);
                         Item item = dataSnapshot.getValue(Item.class);
+
+                        // In the scenario we try to find an item using an item location where the item
+                        // has already been deleted
+                        if(item == null) {
+                          return;  
+                        }
+
                         lvAdapter.putItem(item);
                         String title =  item.getName();
                         hashMapMarkerTitle.put(key, title);
