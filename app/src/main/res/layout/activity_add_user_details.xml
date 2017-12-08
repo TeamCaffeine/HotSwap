@@ -113,13 +113,6 @@
     </FrameLayout>
 
     <Button
-        android:id="@+id/btnPayment"
-        android:layout_width="200dp"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:text="@string/add_payment" />
-
-    <Button
         android:id="@+id/btnSubmit"
         android:layout_width="200dp"
         android:layout_height="wrap_content"
