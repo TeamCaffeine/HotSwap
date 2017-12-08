@@ -533,6 +533,10 @@ public class SearchFragment extends Fragment implements OnMapReadyCallback, Goog
         currentLocation = new GeoLocation(latlng.latitude, latlng.longitude);
         mMap.clear();
         lvAdapter.nuke();
+        // Iterate through hashmap
+        // Add marker title via key
+
+
         final GeoQuery geoQuery = geoFire.queryAtLocation(new GeoLocation(latlng.latitude, latlng.longitude), progressSeekbar/1000.0);
         final HashMap<String,MarkerOptions> hashMapMarker = new HashMap<>();
         geoQuery.addGeoQueryEventListener(new GeoQueryEventListener() {
