@@ -43,8 +43,7 @@ public class Items extends BaseAdapter {
     }
 
     public void nuke() {
-//        this.items = new ArrayList<Item>();
-        this.items.clear();
+        this.items = new ArrayList<Item>();
     }
 
     @Override
