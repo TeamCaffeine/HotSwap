@@ -153,9 +153,9 @@ public class ProfileFragment extends Fragment {
                                             userUpdate.put(firebaseUser.getUid(), user.toMap());
                                             users.updateChildren(userUpdate);
 
-                                            // Update UI
-                                            paymentElementsList.remove(position);
-                                            paymentAdapter.notifyDataSetChanged();
+                                            // tell user card deleted
+                                            Toast.makeText(getContext(), "Card Deleted", Toast.LENGTH_SHORT).show();
+
                                         } else {
                                             Log.i(TAG, "User attempted to delete a nonexistent payment method");
                                         }
@@ -198,7 +198,7 @@ public class ProfileFragment extends Fragment {
         users = database.getReference().child(userTable);
 
         DatabaseReference ref = users.child(firebaseUser.getUid());
-        ref.addListenerForSingleValueEvent(new ValueEventListener() {
+        ref.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 User user = dataSnapshot.getValue(User.class);
@@ -360,9 +360,7 @@ public class ProfileFragment extends Fragment {
                                 userUpdate.put(firebaseUser.getUid(), user.toMap());
                                 users.updateChildren(userUpdate);
 
-                                // Update UI
-                                paymentElementsList.add(cardToSave.getNumber());
-                                paymentAdapter.notifyDataSetChanged();
+                                // tell user card was successfully added
                                 Toast.makeText(getContext(), "Card Added", Toast.LENGTH_SHORT).show();
                                 popupWindow.dismiss();
 
