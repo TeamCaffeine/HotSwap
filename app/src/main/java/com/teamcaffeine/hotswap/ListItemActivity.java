@@ -229,7 +229,7 @@ public class ListItemActivity extends FragmentActivity {
                     Log.i(TAG, "address found");
                 } else {
                     // TODO: handle invalid address / location data more gracefully - likely when we put the address fragment here
-                    Toast.makeText(getBaseContext(), R.string.unable_to_add_item_due_to_address, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getBaseContext(), R.string.unable_to_add_item_due_to_address, Toast.LENGTH_LONG).show();
                 }
             }
 
