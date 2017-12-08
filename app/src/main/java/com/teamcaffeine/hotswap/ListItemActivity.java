@@ -3,12 +3,9 @@ package com.teamcaffeine.hotswap;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
-import android.location.Address;
-import android.location.Geocoder;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
@@ -19,7 +16,6 @@ import android.widget.Toast;
 
 import com.firebase.geofire.GeoFire;
 import com.firebase.geofire.GeoLocation;
-import com.google.android.gms.maps.model.LatLng;
 import com.google.common.base.Strings;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -28,12 +24,12 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.maps.model.LatLng;
 import com.squareup.timessquare.CalendarPickerView;
 import com.teamcaffeine.hotswap.navigation.AddressesFragment;
-import com.teamcaffeine.hotswap.navigation.HomeFragment;
 import com.teamcaffeine.hotswap.swap.Item;
+import com.teamcaffeine.hotswap.utility.LatLongUtility;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -182,30 +178,6 @@ public class ListItemActivity extends FragmentActivity {
         });
     }
 
-    public LatLng getLocationFromAddress(String strAddress) {
-        //Create coder with Activity context - this
-        Geocoder coder = new Geocoder(ListItemActivity.this);
-        List<Address> address;
-        try {
-            //Get latLng from String
-            address = coder.getFromLocationName(strAddress, 5);
-
-            //check for null
-            if (address == null) {
-                return null;
-            }
-
-            //Lets take first possibility from the all possibilities.
-            Address location = address.get(0);
-            LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
-            return latLng;
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        return null;
-    }
-
     private void submit(Item item) {
         Log.i(TAG, "submit method");
         final Item newItem = item;
@@ -222,10 +194,10 @@ public class ListItemActivity extends FragmentActivity {
                 Log.i(TAG, "item added to database");
 
                 GeoFire geoFire = new GeoFire(geoFireRef);
-                LatLng itemLatLng = getLocationFromAddress(itemAddress);
+                LatLng itemLatLng = LatLongUtility.getSelectedAddressLatLong(itemAddress);
                 if (itemLatLng != null) {
                     items.updateChildren(itemUpdate);
-                    geoFire.setLocation(itemID, new GeoLocation(itemLatLng.latitude, itemLatLng.longitude));
+                    geoFire.setLocation(itemID, new GeoLocation(itemLatLng.lat, itemLatLng.lng));
                     Log.i(TAG, "address found");
                 } else {
                     // TODO: handle invalid address / location data more gracefully - likely when we put the address fragment here

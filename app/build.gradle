@@ -79,6 +79,10 @@ dependencies {
 
     // Some nice classes from google
     compile group: 'com.google.guava', name: 'guava', version: '15.0'
+
+    // Google maps wrapper
+    compile 'com.google.maps:google-maps-services:0.2.5'
+    compile 'org.slf4j:slf4j-nop:1.7.25'
 }
 
 
