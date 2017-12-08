@@ -58,6 +58,7 @@ public class AddressesFragment extends Fragment {
 
     private String selectedAddress;
 
+    // Safely get the address the user has selected
     public String getSelectedAddress() {
         if (selectedAddress != null) {
             return selectedAddress;
@@ -70,6 +71,7 @@ public class AddressesFragment extends Fragment {
         // Required empty public constructor
     }
 
+    // Standard onCreateView for fragment
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -92,6 +94,7 @@ public class AddressesFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 try {
+                    // Launch the Google Places Intent
                     Intent intent =
                             new PlaceAutocomplete.IntentBuilder(PlaceAutocomplete.MODE_FULLSCREEN)
                                     .build(getActivity());
@@ -107,12 +110,13 @@ public class AddressesFragment extends Fragment {
             @Override
             public void onClick(View v) {
 
+                // Safely handle remove click if there are no addresses or no address is selected
                 if (addressElementsList.isEmpty() || listviewAddresses.getCheckedItemPosition() == -1) {
                     return;
                 }
 
+                // Remove the address from the database
                 DatabaseReference ref = users.child(firebaseUser.getUid());
-
                 ref.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
@@ -137,6 +141,7 @@ public class AddressesFragment extends Fragment {
             }
         });
 
+        // Allow updates to selectedAddress
         listviewAddresses = view.findViewById(R.id.listviewAddresses);
         listviewAddresses.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -145,6 +150,7 @@ public class AddressesFragment extends Fragment {
             }
         });
 
+        // Top level database listener to synchronize our address list to any database changes
         DatabaseReference ref = users.child(firebaseUser.getUid());
         ref.addValueEventListener(new ValueEventListener() {
             @Override
@@ -166,6 +172,7 @@ public class AddressesFragment extends Fragment {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        // Handle the response from Google Places intent
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == PLACE_AUTOCOMPLETE_REQUEST_CODE) {
             if (resultCode == RESULT_OK) {
@@ -179,7 +186,7 @@ public class AddressesFragment extends Fragment {
 
                         boolean didAdd = user.addAddress(place.getAddress().toString());
                         if (didAdd) {
-                            // Update database
+                            // Update database, and trust that the value listener from onCreate will adjust the UI for us
                             Map<String, Object> userUpdate = new HashMap<>();
                             userUpdate.put(firebaseUser.getUid(), user.toMap());
                             users.updateChildren(userUpdate);
