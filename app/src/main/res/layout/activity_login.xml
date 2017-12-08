@@ -32,7 +32,7 @@
             android:layout_marginRight="5dp"
             android:layout_marginTop="40dp"
             android:ems="10"
-            android:hint="Email Address"
+            android:hint="@string/login_email_hint"
             android:inputType="textEmailAddress"
             android:textAlignment="textStart"
             android:textSize="18sp"
@@ -52,7 +52,7 @@
             android:layout_marginRight="5dp"
             android:layout_marginTop="8dp"
             android:ems="10"
-            android:hint="Password"
+            android:hint="@string/login_password_hint"
             android:inputType="textPassword"
             android:textAlignment="textStart"
 
@@ -79,7 +79,7 @@
                 android:layout_weight="1"
                 android:background="@drawable/hotswap_button"
                 android:gravity="center"
-                android:text="Sign In"
+                android:text="@string/login_sign_in_text"
                 android:textColor="@color/textColorPrimary"
                 android:textSize="12sp"></Button>
 
@@ -91,7 +91,7 @@
                 android:layout_weight="1"
                 android:background="@drawable/hotswap_button"
                 android:gravity="center"
-                android:text="Create Account"
+                android:text="@string/login_create_account_text"
                 android:textColor="@color/textColorPrimary"
                 android:textSize="12sp"></Button>
         </LinearLayout>
@@ -118,7 +118,7 @@
                 android:layout_height="match_parent"
                 android:layout_marginTop="0dp"
                 android:gravity="center"
-                android:text="OR"
+                android:text="@string/login_divider_text"
                 android:textColor="@color/colorPrimary"
                 android:textSize="14sp" />
 

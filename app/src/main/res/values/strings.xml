@@ -165,4 +165,11 @@
     <string name="request_swap">Request Swap</string>
     <string name="message_owner">Message Owner</string>
 
+    <!-- Login Activity Strings-->
+    <string name="login_email_hint">Email Address</string>
+    <string name="login_password_hint">Password</string>
+    <string name="login_sign_in_text">SIGN IN</string>
+    <string name="login_create_account_text">CREATE ACCOUNT</string>
+    <string name="login_divider_text">OR</string>
+
 </resources>
