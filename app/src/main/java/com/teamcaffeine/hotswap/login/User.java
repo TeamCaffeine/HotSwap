@@ -19,6 +19,7 @@ public class User implements IUser{
     private String avatar = "";
     private boolean online = false;
     private List<String> addresses = new ArrayList<>();
+    private List<String> payments = new ArrayList<>();
 
     User() {
     }
@@ -38,6 +39,7 @@ public class User implements IUser{
         this.avatar = user.getAvatar();
         this.online = user.getOnline();
         this.addresses = user.getAddresses();
+        this.payments = user.getPayments();
     }
 
     public Map<String, Object> toMap() {
@@ -51,6 +53,7 @@ public class User implements IUser{
         result.put("avatar", avatar);
         result.put("online", online);
         result.put("addresses", addresses);
+        result.put("payments", payments);
         return result;
     }
 
@@ -150,4 +153,21 @@ public class User implements IUser{
         this.email = newEmail;
     }
 
+
+    public List<String> getPayments() {
+        return payments;
+    }
+
+    public boolean removePayment(String p) {
+        return payments.remove(p);
+    }
+
+    public boolean addPayment(String p) {
+        if (!payments.contains(p)) {
+            payments.add(p);
+            return true;
+        } else {
+            return false;
+        }
+    }
 }

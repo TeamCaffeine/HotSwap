@@ -7,7 +7,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 import com.teamcaffeine.hotswap.R;
-
+import com.teamcaffeine.hotswap.swap.Item;
 
 import java.util.ArrayList;
 
@@ -17,28 +17,33 @@ import java.util.ArrayList;
 
 public class Items extends BaseAdapter {
     private
-    String items[];
-    String itemDescription[];
-    ArrayList<Integer> itemImages;
+    ArrayList<Item> items;
 
     Context context;
 
     public Items(Context aContext) {
         context = aContext;  //saving the context we'll need it again (for intents)
+        items = new ArrayList<Item>();
 
-        items = aContext.getResources().getStringArray(R.array.items);
-        itemDescription = aContext.getResources().getStringArray(R.array.item_descriptions);
-
-        itemImages = new ArrayList<Integer>();
     }
     @Override
     public int getCount() {
-        return items.length;   //all of the arrays are same length
+        return items.size();   //all of the arrays are same length
     }
 
     @Override
     public Object getItem(int position) {
-        return items[position];
+        return items.get(position);
+    }
+
+    public void putItem(Item item) {
+        if (item != null) {
+            this.items.add(item);
+        }
+    }
+
+    public void nuke() {
+        this.items = new ArrayList<Item>();
     }
 
     @Override
@@ -62,8 +67,8 @@ public class Items extends BaseAdapter {
         TextView itemTitle = (TextView) row.findViewById(R.id.itemTitle);
         TextView itemDescriptions = (TextView) row.findViewById(R.id.itemDescription);
 
-        itemTitle.setText(items[position]);
-        itemDescriptions.setText(itemDescription[position]);
+        itemTitle.setText(items.get(position).getName());
+        itemDescriptions.setText(items.get(position).getDescription());
         //      imgItem.setImageResource(itemImages.get(position).intValue());
 
 

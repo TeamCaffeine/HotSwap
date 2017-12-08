@@ -2,7 +2,6 @@ package com.teamcaffeine.hotswap.maps;
 
 import android.Manifest;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Location;
@@ -36,7 +35,6 @@ import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.Response;
 import com.teamcaffeine.hotswap.R;
-import com.teamcaffeine.hotswap.navigation.NavigationActivity;
 
 import java.io.IOException;
 
@@ -217,10 +215,17 @@ public class LocationPrefs extends AppCompatActivity
             @Override
             public void onClick(View view) {
                 // sends location preferences back to search page
-                prefs.edit().putString("city", result.getText().toString()).apply();
-                prefs.edit().putString("zip", zip.getText().toString()).apply();
-                finishActivity(-1);
-                finish();
+                // if valid input, send it to search page
+                // else toast and do nothing
+                if (zip.getText().toString().length() == 5) {
+                    prefs.edit().putString("city", result.getText().toString()).apply();
+                    prefs.edit().putString("zip", zip.getText().toString()).apply();
+                    finishActivity(-1);
+                    finish();
+                }
+                else{
+                    Toast.makeText(getBaseContext(), "Please enter valid zipcode", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 

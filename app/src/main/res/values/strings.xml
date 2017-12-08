@@ -124,7 +124,7 @@
     <!--Profile UI strings-->
     <string name="contact_info_label">Contact Info</string>
     <string name="addresses_label">Addresses</string>
-    <string name="payment_label">Payment Methods</string>
+    <string name="payment_label">Payment \nMethods</string>
     <string name="add_payment_to_profile"><u>+ Add Payment Method</u></string>
     <string name="items_label">Your Items</string>
     <string name="past_transactions"><u>View Past Transactions</u></string>
@@ -135,11 +135,41 @@
     <string name="placeholder_email">Email</string>
     <string name="placeholder_phone_number">Phone Number</string>
     <string name="base_package_name">com.teamcaffeine.hotswap</string>
-    <string name="unable_to_add_address">Unable to add your address. Please try again.</string>
+    <string name="unable_to_add_item_due_to_address">Unable to add your item. The address cannot be found. Please try again.</string>
+    <string name="unable_to_add_address">Unable to add your item. The address cannot be found. Please try again.</string>
+    <string name="unable_to_add_item">Unable to add your item. Please try again.</string>
     <string name="plus">+</string>
+    <string name="minus">-</string>
     <string name="delete">Delete</string>
     <string name="delete_address_question">Are you sure you want to delete this address?</string>
+    <string name="delete_payment_question">Are you sure you want to delete this payment method?</string>
+    <string name="delete_item_question">Are you sure you want to delete this item?</string>
     <string name="cancel">Cancel</string>
+    <string name="validationErrors">Validation Errors</string>
 
+    <!--Home UI strings-->
+    <string name="currently_renting">Currently Renting</string>
+    <string name="currently_lending">Currently Lending</string>
+    <string name="list_item_button">List Item</string>
+    <string name="duplicate_item">You already have an item with that name. Choose another name.</string>
+    <string name="enter_address_request">Please enter an address to your profile first!</string>
+
+    <!--Item Details Activity Strings-->
+    <string name="item_image">Item image</string>
+    <string name="item_name">Item Name:</string>
+    <string name="item_description">Item Description:</string>
+    <string name="item_tags">Tags:</string>
+    <string name="item_price">Price to Rent:</string>
+    <string name="item_location">Location:</string>
+    <string name="item_available_dates">Available Dates:</string>
+    <string name="request_swap">Request Swap</string>
+    <string name="message_owner">Message Owner</string>
+
+    <!-- Login Activity Strings-->
+    <string name="login_email_hint">Email Address</string>
+    <string name="login_password_hint">Password</string>
+    <string name="login_sign_in_text">SIGN IN</string>
+    <string name="login_create_account_text">CREATE ACCOUNT</string>
+    <string name="login_divider_text">OR</string>
 
 </resources>

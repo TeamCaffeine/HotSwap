@@ -22,7 +22,6 @@ import com.teamcaffeine.hotswap.utility.SessionHandler;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -99,7 +98,7 @@ public class AddUserDetailsActivity extends AppCompatActivity {
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     User user = dataSnapshot.getValue(User.class);
 
-                    DateFormat dateFormat = new SimpleDateFormat("MMMM, yyyy");
+                    DateFormat dateFormat = new SimpleDateFormat("MMMM yyyy");
                     Date memberSince = new Date();
 
                     user.setFirstName(firstName);

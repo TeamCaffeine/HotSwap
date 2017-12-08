@@ -27,6 +27,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -73,6 +74,7 @@ public class ChatFragment extends Fragment implements DialogsListAdapter.OnDialo
     private Handler mHandler;
     private DialogsList dialogsList;
     private ChatFragmentListener CFL;
+    private String TAG = "Chat Fragment Tag";
 
     @Nullable
     @Override
@@ -90,10 +92,10 @@ public class ChatFragment extends Fragment implements DialogsListAdapter.OnDialo
             @Override
             public void loadImage(ImageView imageView, String url) {
                 // Set the url to a default picture if none exists //TODO: Decide how we wanna handle the default case, just doing so no crashes
-                if (url != "") {
-                    Picasso.with(getActivity().getApplicationContext()).load(url).into(imageView);
-                } else {
+                if (url.equals("") || url == null) {
                     Picasso.with(getActivity().getApplicationContext()).load("https://www.vccircle.com/wp-content/uploads/2017/03/default-profile.png").into(imageView);
+                } else {
+                    Picasso.with(getActivity().getApplicationContext()).load(url).into(imageView);
                 }
             }
         };
@@ -281,6 +283,14 @@ public class ChatFragment extends Fragment implements DialogsListAdapter.OnDialo
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
                     final User currUser = postSnapshot.getValue(User.class);
+
+
+                    // Fixes logout bug
+                    Log.e(TAG, "Enter getDialog when there is no currentUser");
+                    if(FirebaseAuth.getInstance().getCurrentUser() == null) {
+                        return;
+                    }
+
                     FirebaseDatabase.getInstance()
                             .getReference().child("chats").child("active").child(subscriptionChannel.replace(".", "|")).child(FirebaseAuth.getInstance().getCurrentUser().getEmail().replace(".", "|"))
                             .orderByChild("timestamp").addListenerForSingleValueEvent(new ValueEventListener() {
