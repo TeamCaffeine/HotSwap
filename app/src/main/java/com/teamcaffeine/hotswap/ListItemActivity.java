@@ -1,6 +1,7 @@
 package com.teamcaffeine.hotswap;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Intent;
 import android.location.Address;
 import android.location.Geocoder;
@@ -41,6 +42,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class ListItemActivity extends AppCompatActivity {
+
+    private String TAG = "ListItemActivity";
 
     private FirebaseUser firebaseUser;
     private FirebaseDatabase database;
@@ -135,7 +138,7 @@ public class ListItemActivity extends AppCompatActivity {
                     Toast.makeText(getBaseContext(), R.string.duplicate_item, Toast.LENGTH_LONG).show();
                 } else {
                     // if the user is adding a new item with a new name, submit it to the database
-                    int[] submitStatus = submit(newItem);
+                    submit(newItem);
 
                     // create an intent to send back to the HomeActivity
                     Intent i = new Intent();
@@ -143,8 +146,9 @@ public class ListItemActivity extends AppCompatActivity {
                     // send the updated itemList back to the Home Fragment
                     i.putExtra("newItem", itemName);
 
-                    // Set the result with this data, and finish the activity
-                    setResult(submitStatus[0], i);
+                    // Set the result to indicate adding the item was successful
+                    // and finish the activity
+                    setResult(Activity.RESULT_OK, i);
                     finish();
                 }
             }
@@ -176,8 +180,8 @@ public class ListItemActivity extends AppCompatActivity {
         return null;
     }
 
-    private int[] submit(Item item) {
-        final int[] resultCode = new int[1];
+    private void submit(Item item) {
+        Log.i(TAG, "submit method");
         final Item newItem = item;
         final String itemID = newItem.getItemID();
         final String itemName = newItem.getName();
@@ -186,30 +190,27 @@ public class ListItemActivity extends AppCompatActivity {
         items.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+                Log.i(TAG, "onDataChange method");
                 Map<String, Object> itemUpdate = new HashMap<>();
                 itemUpdate.put(itemID, newItem.toMap());
+                Log.i(TAG, "item added to database");
 
                 GeoFire geoFire = new GeoFire(geoFireRef);
                 LatLng itemLatLng = getLocationFromAddress(itemAddress);
                 if (itemLatLng != null) {
                     items.updateChildren(itemUpdate);
                     geoFire.setLocation(itemID, new GeoLocation(itemLatLng.latitude, itemLatLng.longitude));
+                    Log.i(TAG, "address found");
                 } else {
                     // TODO: handle invalid address / location data more gracefully - likely when we put the address fragment here
                     Toast.makeText(getBaseContext(), R.string.unable_to_add_address, Toast.LENGTH_SHORT).show();
                 }
-
-                // set the result code to indicate that the item was successfully added
-                resultCode[0] = RESULT_OK;
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
                 Log.d("ListItemFragment", "The read failed: " + databaseError.getCode());
-                resultCode[0] = RESULT_ERROR;
             }
         });
-
-        return resultCode;
     }
 }

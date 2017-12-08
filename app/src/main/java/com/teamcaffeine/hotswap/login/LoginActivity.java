@@ -193,7 +193,7 @@ public class LoginActivity extends AppCompatActivity {
         users.updateChildren(userUpdate);
     }
 
-    private void handleFirstTimeUser() {
+    private void handleUser() {
         // Add the user to the database if they do not already exist
         users.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -208,6 +208,10 @@ public class LoginActivity extends AppCompatActivity {
                 } else if (dataSnapshot.child(firebaseUser.getUid()).getValue(User.class).getMemberSince().isEmpty()) {
                     Intent addUserDetails = new Intent(LoginActivity.this, AddUserDetailsActivity.class);
                     startActivity(addUserDetails);
+                    finish();
+                } else {
+                    Intent nav = new Intent(LoginActivity.this, NavigationActivity.class);
+                    startActivity(nav);
                     finish();
                 }
             }
@@ -233,11 +237,8 @@ public class LoginActivity extends AppCompatActivity {
                             // Sign in success, send user to app home page
                             Log.d(GoogleLogTag, "signInWithCredential:success");
 
-                            handleFirstTimeUser();
-
-                            Intent nav = new Intent(LoginActivity.this, NavigationActivity.class);
-                            startActivity(nav);
-                            finish();
+                            handleUser();
+                            
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(GoogleLogTag, "signInWithCredential:failure", task.getException());
@@ -269,11 +270,8 @@ public class LoginActivity extends AppCompatActivity {
                             // Sign in success, send user to app home page
                             Log.d(FacebookLogTag, "signInWithCredential:success");
 
-                            handleFirstTimeUser();
+                            handleUser();
 
-                            Intent nav = new Intent(LoginActivity.this, NavigationActivity.class);
-                            startActivity(nav);
-                            finish();
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(FacebookLogTag, "signInWithCredential:failure", task.getException());
@@ -308,11 +306,8 @@ public class LoginActivity extends AppCompatActivity {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(EPLogTag, "createUserWithEmail:success");
 
-                            handleFirstTimeUser();
+                            handleUser();
 
-                            Intent nav = new Intent(getApplicationContext(), NavigationActivity.class);
-                            startActivity(nav);
-                            finish();
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(EPLogTag, "createUserWithEmail:failure", task.getException());
@@ -347,11 +342,8 @@ public class LoginActivity extends AppCompatActivity {
 
                             Log.d(EPLogTag, "signInWithEmail:success");
 
-                            handleFirstTimeUser();
+                            handleUser();
 
-                            Intent nav = new Intent(getApplicationContext(), NavigationActivity.class);
-                            startActivity(nav);
-                            finish();
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(EPLogTag, "signInWithEmail:failure", task.getException());
