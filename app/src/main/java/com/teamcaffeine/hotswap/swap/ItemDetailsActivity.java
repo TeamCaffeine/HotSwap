@@ -2,11 +2,17 @@ package com.teamcaffeine.hotswap.swap;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
+import android.widget.CalendarView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.squareup.timessquare.CalendarPickerView;
 import com.teamcaffeine.hotswap.R;
 
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 public class ItemDetailsActivity extends AppCompatActivity {
@@ -17,7 +23,6 @@ public class ItemDetailsActivity extends AppCompatActivity {
     private TextView txtItemTags;
     private TextView txtItemPrice;
     private TextView txtItemLocation;
-    private ListView listviewAvailableDates;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,6 +31,7 @@ public class ItemDetailsActivity extends AppCompatActivity {
 
         Bundle extras = getIntent().getExtras();
         Item item = (Item) extras.getParcelable("item");
+        String currentCity = (String) extras.get("currentCity");
 
         txtItemName = (TextView) findViewById(R.id.txtItemName);
         txtItemDescription = (TextView) findViewById(R.id.txtItemDescription);
@@ -37,7 +43,14 @@ public class ItemDetailsActivity extends AppCompatActivity {
         String itemDescription = item.getDescription();
         String itemTags = getTagsAsString(item.getTags());
         String itemPrice = "$" + item.getRentPrice();
-        String itemLocation = item.getAddress().split(",")[1];
+        String itemLocation;
+
+        try {
+            itemLocation = item.getAddress().split(",")[1];
+        } catch (ArrayIndexOutOfBoundsException e) {
+            Log.e(TAG, "Out of bounds when getting city from address: " + item.getAddress(), e);
+            itemLocation = currentCity;
+        }
 
         txtItemName.setText(itemName);
         txtItemDescription.setText(itemDescription);
@@ -47,15 +60,10 @@ public class ItemDetailsActivity extends AppCompatActivity {
     }
 
     public String getTagsAsString(List<String> tagsList){
-        List<String> itemTags = tagsList;
-        String tagsString = itemTags.get(0);
-        itemTags.remove(0);
-
-        for (String tag : itemTags) {
-            tagsString.concat(", ");
-            tagsString.concat(tag);
+        StringBuilder tagsStringBuilder = new StringBuilder();
+        for (int i = 0; i < tagsList.size(); i++) {
+            tagsStringBuilder.append(i == 0 ? tagsList.get(i) : ", " + tagsList.get(i));
         }
-
-        return tagsString;
+        return tagsStringBuilder.toString();
     }
 }

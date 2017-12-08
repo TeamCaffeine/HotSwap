@@ -1,12 +1,15 @@
 package com.teamcaffeine.hotswap.swap;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class Item {
+public class Item implements Parcelable {
     // Force empty initialization of default table fields
     private String itemID ="";
     private String name = "";
@@ -43,6 +46,19 @@ public class Item {
         this.additionalPictures = item.getAdditionalPictures();
         this.availableDates = item.getAvailableDates();
         this.address = item.getAddress();
+    }
+
+    protected Item(Parcel in) {
+        itemID = in.readString();
+        name = in.readString();
+        ownerID = in.readString();
+        renteeID = in.readString();
+        description = in.readString();
+        rentPrice = in.readString();
+        tags = in.createStringArrayList();
+        headerPicture = in.readString();
+        additionalPictures = in.createStringArrayList();
+        address = in.readString();
     }
 
     public Map<String, Object> toMap() {
@@ -159,4 +175,39 @@ public class Item {
     public String getAddress() {
         return address;
     }
+
+    /**
+     * Methods to set Item as a Parcelable class to pass between activities in an intent
+     */
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeString(itemID);
+        parcel.writeString(name);
+        parcel.writeString(ownerID);
+        parcel.writeString(renteeID);
+        parcel.writeString(description);
+        parcel.writeString(rentPrice);
+        parcel.writeStringList(tags);
+        parcel.writeString(headerPicture);
+        parcel.writeStringList(additionalPictures);
+        parcel.writeString(address);
+    }
+
+    public static final Creator<Item> CREATOR = new Creator<Item>() {
+        @Override
+        public Item createFromParcel(Parcel in) {
+            return new Item(in);
+        }
+
+        @Override
+        public Item[] newArray(int size) {
+            return new Item[size];
+        }
+    };
 }

@@ -9,6 +9,7 @@ import android.graphics.Color;
 import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
@@ -65,6 +66,7 @@ import com.firebase.geofire.GeoLocation;
 import com.firebase.geofire.GeoQuery;
 import com.firebase.geofire.GeoQueryEventListener;
 import com.teamcaffeine.hotswap.swap.Item;
+import com.teamcaffeine.hotswap.swap.ItemDetailsActivity;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -133,13 +135,6 @@ public class SearchFragment extends Fragment implements OnMapReadyCallback, Goog
         lvItems.setAdapter(lvAdapter);
         lvItems.setVisibility(View.INVISIBLE);
 
-        lvItems.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                String value = (String) adapterView.getItemAtPosition(i);
-            }
-        });
-
         bSearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -175,7 +170,7 @@ public class SearchFragment extends Fragment implements OnMapReadyCallback, Goog
             }
         });
         localeMsg = (TextView) view.findViewById(R.id.setLocaleMsg);
-        String city = prefs.getString("city", "");
+        final String city = prefs.getString("city", "");
         progress = (SeekBar) view.findViewById(R.id.circleFilter);
 
 
@@ -199,14 +194,11 @@ public class SearchFragment extends Fragment implements OnMapReadyCallback, Goog
         lvItems.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                String value = (String) adapterView.getItemAtPosition(i);
-
-//                i.putExtra("rank", rank);
-//                i.putExtra("country", country);
-//                i.putExtra("population", population);
-//                i.putExtra("position", position);
-                //startActivity(new Intent(MapsActivity.this, ItemData.class));
-                //Toast.makeText(MapsActivity.this, "Item with id ["+l+"] - Position ["+i+"]", Toast.LENGTH_SHORT).show();
+                Item item = (Item) adapterView.getItemAtPosition(i);
+                Intent itemDetailsIntent = new Intent(getActivity(), ItemDetailsActivity.class);
+                itemDetailsIntent.putExtra("item", item);
+                itemDetailsIntent.putExtra("currentCity", city);
+                startActivity(itemDetailsIntent);
             }
         });
 
