@@ -224,9 +224,9 @@ public class ItemDetailsActivity extends AppCompatActivity {
                 });
 
 
-            } // End of OnClick Listener TODO: Delete
+            }
         });
-    } // End of onCreate TODO: Delete
+    }
 
     public String getTagsAsString(List<String> tagsList){
         StringBuilder tagsStringBuilder = new StringBuilder();
