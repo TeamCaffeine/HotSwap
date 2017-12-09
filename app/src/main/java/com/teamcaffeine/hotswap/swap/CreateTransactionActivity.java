@@ -136,8 +136,6 @@ public class CreateTransactionActivity extends AppCompatActivity {
                 transaction.setConfirmed(false);
                 transaction.setInitialMessage(edtAddNote.getText().toString());
                 transaction.setRequestedDates(calendarPickerView.getSelectedDates());
-                //TODO use google api to calculate distance from current location
-
 
                 LocationManager lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
                 if (ActivityCompat.checkSelfPermission(CreateTransactionActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(CreateTransactionActivity.this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
