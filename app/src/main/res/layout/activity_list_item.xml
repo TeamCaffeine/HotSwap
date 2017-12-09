@@ -46,6 +46,7 @@
             android:ems="10"
             android:hint="Item Description"
             android:inputType="textLongMessage"
+            android:imeOptions="actionDone"
             android:textSize="18sp" />
 
         <FrameLayout

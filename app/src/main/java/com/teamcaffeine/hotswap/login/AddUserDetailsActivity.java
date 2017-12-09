@@ -2,6 +2,7 @@ package com.teamcaffeine.hotswap.login;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -17,6 +18,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.teamcaffeine.hotswap.R;
+import com.teamcaffeine.hotswap.navigation.AddressesFragment;
 import com.teamcaffeine.hotswap.navigation.NavigationActivity;
 import com.teamcaffeine.hotswap.utility.SessionHandler;
 
@@ -38,8 +40,6 @@ public class AddUserDetailsActivity extends AppCompatActivity {
     private EditText edtFirstName;
     private EditText edtLastName;
     private EditText edtPhoneNumber;
-    private Button btnAddAddress;
-    private Button btnAddPayment;
     private Button btnSubmit;
 
     @Override
@@ -49,11 +49,19 @@ public class AddUserDetailsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_user_details);
 
+        // populate the listview with the user's addresses
+        // step 1: instantiate the Address Fragment
+        AddressesFragment addressesFragment = new AddressesFragment();
+        // step 2: begin the fragment transaction
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        // step 3: add fragment to the activity state
+        ft.add(R.id.addressContent, addressesFragment);
+        // stop 4: commit the transaction
+        ft.commit();
+
         edtFirstName = findViewById(R.id.edtFirstName);
         edtLastName = findViewById(R.id.edtLastName);
         edtPhoneNumber = findViewById(R.id.edtPhoneNumber);
-        btnAddAddress = findViewById(R.id.btnAddress);
-        btnAddPayment = findViewById(R.id.btnPayment);
         btnSubmit = findViewById(R.id.btnSubmit);
 
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
@@ -64,20 +72,6 @@ public class AddUserDetailsActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 submit();
-            }
-        });
-
-        btnAddAddress.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-            }
-        });
-
-        btnAddPayment.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
             }
         });
     }

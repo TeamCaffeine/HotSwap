@@ -33,6 +33,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import com.google.common.base.Strings;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -92,7 +93,7 @@ public class ChatFragment extends Fragment implements DialogsListAdapter.OnDialo
             @Override
             public void loadImage(ImageView imageView, String url) {
                 // Set the url to a default picture if none exists //TODO: Decide how we wanna handle the default case, just doing so no crashes
-                if (url.equals("") || url == null) {
+                if (Strings.isNullOrEmpty(url)) {
                     Picasso.with(getActivity().getApplicationContext()).load("https://www.vccircle.com/wp-content/uploads/2017/03/default-profile.png").into(imageView);
                 } else {
                     Picasso.with(getActivity().getApplicationContext()).load(url).into(imageView);

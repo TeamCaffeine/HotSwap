@@ -44,6 +44,7 @@ import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.common.base.Strings;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -175,7 +176,7 @@ public class SearchFragment extends Fragment implements OnMapReadyCallback, Goog
         progress = (SeekBar) view.findViewById(R.id.circleFilter);
 
 
-        if (city.equals("")) {
+        if (Strings.isNullOrEmpty(city)) {
             localeMsg.setText("");
         } else {
             localeMsg.setText("Items near " + city);
