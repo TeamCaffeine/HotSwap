@@ -197,7 +197,7 @@ public class SearchFragment extends Fragment implements OnMapReadyCallback, Goog
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 Item item = (Item) adapterView.getItemAtPosition(i);
                 Intent itemDetailsIntent = new Intent(getActivity(), ItemDetailsActivity.class);
-                itemDetailsIntent.putExtra("item", item);
+                itemDetailsIntent.putExtra("itemID", item.getItemID());
                 itemDetailsIntent.putExtra("currentCity", city);
                 startActivity(itemDetailsIntent);
             }
@@ -539,7 +539,7 @@ public class SearchFragment extends Fragment implements OnMapReadyCallback, Goog
                 markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE));
                 hashMapMarker.put(key,markerOptions);
                 ref = database.getReference().child("items").child(key);
-                ref.addListenerForSingleValueEvent(new ValueEventListener() {
+                ref.addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         Item item = dataSnapshot.getValue(Item.class);
