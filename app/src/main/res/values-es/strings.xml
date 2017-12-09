@@ -21,41 +21,41 @@
     <string name="label_emailpassword">Email/Password Authentication</string>
     <string name="desc_emailpassword">Use an email and password to authenticate with Firebase.</string>
 
-    <string name="hint_user_id">User ID</string>
+    <string name="hint_user_id">Identidad de usuario</string>
     <string name="get_custom_token">Get Token</string>
-    <string name="sign_in">Sign In</string>
-    <string name="create_account">Create Account</string>
-    <string name="sign_out">Sign Out</string>
-    <string name="verify_email">Verify Email</string>
-    <string name="disconnect">Disconnect</string>
+    <string name="sign_in">Iniciar Sesión</string>
+    <string name="create_account">Registrarse</string>
+    <string name="sign_out">Cerrar Sesión</string>
+    <string name="verify_email">Verificar el correo electrónico</string>
+    <string name="disconnect">Desconectar</string>
     <string name="loading">Cargando…</string>
     <string name="custom_token">Custom Token</string>
-    <string name="signed_in">Signed In</string>
-    <string name="signed_out">Signed Out</string>
+    <string name="signed_in">Sesión iniciado</string>
+    <string name="signed_out">Se cerró sesión</string>
     <string name="token_null">Token: null</string>
-    <string name="hint_email">Email</string>
-    <string name="hint_password">Password</string>
-    <string name="desc_firebase_lockup">Firebase logo and name</string>
+    <string name="hint_email">Dirección de correo electrónico</string>
+    <string name="hint_password">Contraseña</string>
+    <string name="desc_firebase_lockup">Logotipo y nombre de Firebase</string>
     <string name="auth_failed">Se falló la autenticación</string>
-    <string name="start_phone_auth">Start</string>
-    <string name="verify_phone_auth">Verify</string>
-    <string name="resend_phone_auth">Resend</string>
-    <string name="hint_phone_number">Phone Number</string>
-    <string name="hint_verification_code">Verification Code</string>
-    <string name="status_code_sent">Code Sent</string>
-    <string name="status_verification_failed">Verification failed</string>
-    <string name="status_verification_succeeded">Verification succeeded</string>
-    <string name="status_sign_in_failed">Sign-in failed</string>
+    <string name="start_phone_auth">Empezar</string>
+    <string name="verify_phone_auth">Verificar</string>
+    <string name="resend_phone_auth">Reenviar</string>
+    <string name="hint_phone_number">Numero de teléfono</string>
+    <string name="hint_verification_code">Código de verificación</string>
+    <string name="status_code_sent">Código enviado</string>
+    <string name="status_verification_failed">Se falló la verificación</string>
+    <string name="status_verification_succeeded">La verificación fue exitosa</string>
+    <string name="status_sign_in_failed">Se falló el inicio</string>
     <string name="instant_validation">(instant validation)</string>
 
-    <string name="firebase_status_fmt">Firebase User: %s</string>
-    <string name="firebase_user_management">Firebase User Management</string>
+    <string name="firebase_status_fmt">Usuario de Firebase: %s</string>
+    <string name="firebase_user_management">Gestión de usuarios de Firebase</string>
 
-    <string name="google_status_fmt">Google User: %s</string>
-    <string name="google_title_text">Google Sign In</string>
+    <string name="google_status_fmt">Usuario de Google: %s</string>
+    <string name="google_title_text">Inicio de sesión Facebook Google</string>
 
-    <string name="facebook_status_fmt">Facebook User: %s</string>
-    <string name="facebook_title_text">Facebook Login</string>
+    <string name="facebook_status_fmt">Usuario de Facebook: %s</string>
+    <string name="facebook_title_text">Inicio de sesión Facebook</string>
 
     <string name="emailpassword_status_fmt">Usuario: %1$s (verificado: %2$b)</string>
     <string name="emailpassword_title_text">Dirección de correo electrónico y Contraseña</string>
@@ -104,7 +104,7 @@
     <string name="post_to_facebook">Publicar en Facebook</string>
 
     <!--Invite friends strings-->
-    <string name="invite_message">¡Hola amigos! ¡He estado usando HotSwap para alquilar ítemes que necesito pero no quiero comprar! ¡Echale un vistazo!</string>
+    <string name="invite_message">¡Hola! ¡He estado usando HotSwap para alquilar ítemes que necesito pero no quiero comprar! ¡Echale un vistazo!</string>
     <string name="post_to_FB_url">https://developers.facebook.com</string>
     <string name="invite_email_subject">¡Unirse a HotSwap!</string>
 
