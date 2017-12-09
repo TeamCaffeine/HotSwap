@@ -586,7 +586,6 @@ public class SearchFragment extends Fragment implements OnMapReadyCallback, Goog
     }
     @Override
     public void onMarkerDragEnd(Marker marker) {
-        mMap.clear();
         LatLng dragPosition = marker.getPosition();
         double dragLat = dragPosition.latitude;
         double dragLong = dragPosition.longitude;
