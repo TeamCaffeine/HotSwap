@@ -195,7 +195,7 @@ public class HomeFragment extends Fragment {
 
                                                             @Override
                                                             public void onCancelled(DatabaseError databaseError) {
-
+                                                                Log.i(TAG, "User attempted to delete a nonexistent item location");
                                                             }
                                                         });
 
