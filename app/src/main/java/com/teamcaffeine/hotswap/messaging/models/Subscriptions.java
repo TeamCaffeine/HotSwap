@@ -24,4 +24,12 @@ public class Subscriptions {
     public void setChannel(List<String> channel) {
         this.channel = channel;
     }
+
+    public void addChannel(String channel) {
+        this.channel.add(channel);
+    }
+
+    public boolean findChannel(String channel) {
+        return this.channel.contains(channel);
+    }
 }

@@ -45,6 +45,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.common.base.Strings;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -199,6 +200,7 @@ public class SearchFragment extends Fragment implements OnMapReadyCallback, Goog
                 Intent itemDetailsIntent = new Intent(getActivity(), ItemDetailsActivity.class);
                 itemDetailsIntent.putExtra("itemID", item.getItemID());
                 itemDetailsIntent.putExtra("currentCity", city);
+                itemDetailsIntent.putExtra("ownerID", item.getOwnerID());
                 startActivity(itemDetailsIntent);
             }
         });
@@ -542,7 +544,15 @@ public class SearchFragment extends Fragment implements OnMapReadyCallback, Goog
                 ref.addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
+                        Log.e(TAG, "Getting title for key " + key);
                         Item item = dataSnapshot.getValue(Item.class);
+
+                        // In the scenario we try to find an item using an item location where the item
+                        // has already been deleted
+                        if(item == null) {
+                          return;
+                        }
+
                         lvAdapter.putItem(item);
                         String title =  item.getName();
                         hashMapMarkerTitle.put(key, title);

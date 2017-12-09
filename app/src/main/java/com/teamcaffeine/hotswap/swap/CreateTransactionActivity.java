@@ -4,6 +4,7 @@ import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationManager;
 import android.support.v4.app.ActivityCompat;
@@ -149,7 +150,10 @@ public class CreateTransactionActivity extends AppCompatActivity {
                     // for ActivityCompat#requestPermissions for more details.
                     return;
                 }
-                Location location = lm.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+
+                Criteria criteria = new Criteria();
+                String provider = lm.getBestProvider(criteria, false);
+                Location location = lm.getLastKnownLocation(provider);
 
                 transaction.setDistance(LatLongUtility.getDistanceToAddress(item.getAddress(), location));
                 transaction.setRequestUserID(FirebaseAuth.getInstance().getCurrentUser().getUid());
