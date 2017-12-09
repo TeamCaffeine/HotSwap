@@ -202,7 +202,7 @@ public class SearchFragment extends Fragment implements OnMapReadyCallback, Goog
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 Item item = (Item) adapterView.getItemAtPosition(i);
                 Intent itemDetailsIntent = new Intent(getActivity(), ItemDetailsActivity.class);
-                itemDetailsIntent.putExtra("item", item);
+                itemDetailsIntent.putExtra("itemID", item.getItemID());
                 itemDetailsIntent.putExtra("currentCity", city);
                 itemDetailsIntent.putExtra("ownerID", item.getOwnerID());
                 startActivity(itemDetailsIntent);
