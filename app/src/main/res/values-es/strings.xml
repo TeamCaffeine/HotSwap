@@ -177,5 +177,9 @@
     <string name="login_sign_in_text">Iniciar sesión</string>
     <string name="login_create_account_text">Registrarse</string>
     <string name="login_divider_text">O</string>
+    <string name="total_price">Precio Total:</string>
+    <string name="add_a_note_to_the_owner">Enviar mensaje al dueño</string>
+    <string name="begin_a_swap">Empezar un Intercambio</string>
+    <string name="get_swapping">¡Comience a intercambiar!</string>
 
 </resources>
