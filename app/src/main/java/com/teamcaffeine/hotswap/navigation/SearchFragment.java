@@ -151,7 +151,6 @@ public class SearchFragment extends Fragment implements OnMapReadyCallback, Goog
                 //if(! location.equals("")) {
                 // checks if user entered anything or not "empty string"
                 //   if (location.equals("Vacuum")) {
-                lvItems.setVisibility(View.VISIBLE);
                 //   }
                 // }
 //                else{
@@ -394,7 +393,6 @@ public class SearchFragment extends Fragment implements OnMapReadyCallback, Goog
                 zoomlevel = mMap.getCameraPosition().zoom;
 
         }
-        lvItems.setVisibility(View.VISIBLE);
 
 
 
@@ -543,7 +541,6 @@ public class SearchFragment extends Fragment implements OnMapReadyCallback, Goog
             }
 
         });
-        lvItems.setVisibility(View.VISIBLE);
 
     }
 
