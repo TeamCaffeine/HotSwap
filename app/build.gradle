@@ -86,9 +86,6 @@ dependencies {
     // Google maps wrapper
     compile 'com.google.maps:google-maps-services:0.2.5'
     compile 'org.slf4j:slf4j-nop:1.7.25'
-
-    // Image picker
-    compile 'com.yalantis:ucrop:2.2.0'
 }
 
 apply plugin: 'com.google.gms.google-services'
