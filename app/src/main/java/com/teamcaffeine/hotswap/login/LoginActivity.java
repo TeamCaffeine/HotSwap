@@ -80,7 +80,7 @@ public class LoginActivity extends AppCompatActivity {
 
     public void showProgressDialog() {
         if (mProgressDialog == null) {
-            mProgressDialog = new ProgressDialog(LoginActivity.this);
+            mProgressDialog = new ProgressDialog(LoginActivity.this, R.style.HotSwapProgressDialog);
             mProgressDialog.setMessage(getString(R.string.loading));
             mProgressDialog.setIndeterminate(true);
         }
