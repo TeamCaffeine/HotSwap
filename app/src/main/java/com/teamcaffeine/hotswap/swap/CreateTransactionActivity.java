@@ -158,9 +158,7 @@ public class CreateTransactionActivity extends AppCompatActivity {
 
                 // At this point the transaction is fully constructed. We can now add it to the item and update the database.
                 if (item.addTransaction(transaction)) {
-                    Map<String, Object> itemUpdate = new HashMap<>();
-                    itemUpdate.put(item.getItemID(), item.toMap());
-                    items.updateChildren(itemUpdate);
+                    items.child(itemID).updateChildren(item.toMap());
                 } else {
                     Toast.makeText(getApplicationContext(), "You already have a transaction for this item for these days.", Toast.LENGTH_LONG).show();
                 }
