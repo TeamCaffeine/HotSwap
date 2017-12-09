@@ -241,7 +241,7 @@ public class ChatFragment extends Fragment implements DialogsListAdapter.OnDialo
     private void getDialogs() {
         FirebaseDatabase.getInstance()
                 .getReference().child("channels").orderByChild("channel").equalTo(FirebaseAuth.getInstance().getCurrentUser().getEmail())
-                .limitToLast(1).addListenerForSingleValueEvent(new ValueEventListener() {
+                .limitToLast(1).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
