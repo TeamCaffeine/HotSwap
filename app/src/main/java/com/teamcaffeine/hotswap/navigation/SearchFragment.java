@@ -6,7 +6,9 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
+import android.location.Criteria;
 import android.location.Location;
+import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Parcelable;
@@ -69,6 +71,7 @@ import com.firebase.geofire.GeoQuery;
 import com.firebase.geofire.GeoQueryEventListener;
 import com.teamcaffeine.hotswap.swap.Item;
 import com.teamcaffeine.hotswap.swap.ItemDetailsActivity;
+import com.teamcaffeine.hotswap.utility.LatLongUtility;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -96,6 +99,10 @@ public class SearchFragment extends Fragment implements OnMapReadyCallback, Goog
     private String TAG = "696969";
     private double lat;
     private double lng;
+    private LocationManager locationManager;
+    private String provider;
+
+
 
 
     private FirebaseDatabase database = FirebaseDatabase.getInstance();
@@ -131,12 +138,10 @@ public class SearchFragment extends Fragment implements OnMapReadyCallback, Goog
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
         bSearch = (Button) view.findViewById(R.id.bSearch);
         lvItems = (ListView) view.findViewById(R.id.itemLists);
         lvAdapter = new Items(getActivity());
-        lvItems.setAdapter(lvAdapter);
-        lvItems.setVisibility(View.INVISIBLE);
-
         bSearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -191,14 +196,13 @@ public class SearchFragment extends Fragment implements OnMapReadyCallback, Goog
 
         });
         lvItems.setAdapter(lvAdapter);
-        lvItems.setVisibility(View.INVISIBLE);
 
         lvItems.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 Item item = (Item) adapterView.getItemAtPosition(i);
                 Intent itemDetailsIntent = new Intent(getActivity(), ItemDetailsActivity.class);
-                itemDetailsIntent.putExtra("item", item);
+                itemDetailsIntent.putExtra("itemID", item.getItemID());
                 itemDetailsIntent.putExtra("currentCity", city);
                 itemDetailsIntent.putExtra("ownerID", item.getOwnerID());
                 startActivity(itemDetailsIntent);
@@ -220,7 +224,7 @@ public class SearchFragment extends Fragment implements OnMapReadyCallback, Goog
         if (requestCode == SET_LOCATION_REQUEST_CODE) {
             if (resultCode == 0) {
                 localeMsg.setText(prefs.getString("city", ""));
-                onLocationChanged(null);
+                onLocationChanged(lastLocation);
                 mMap.clear();
                 onMapReady(mMap);
             }
@@ -264,6 +268,7 @@ public class SearchFragment extends Fragment implements OnMapReadyCallback, Goog
                 == PackageManager.PERMISSION_GRANTED) {
             buildGoogleApiClient();
             mMap.setMyLocationEnabled(true);
+
         }
         mMap.setOnMarkerDragListener(this);
 
@@ -306,20 +311,6 @@ public class SearchFragment extends Fragment implements OnMapReadyCallback, Goog
                             double dragLat = latlng.latitude;
                             double dragLong = latlng.longitude;
                             setLocaleArea(dragLat, dragLong);
-
-                            Marker stopMarker = mMap.addMarker(new MarkerOptions()
-                                    .draggable(true)
-                                    .position(latlng)
-                                    .title("Current Location"));
-                            CircleOptions circleOptions = new CircleOptions()
-                                    .center(stopMarker.getPosition()).radius(progressSeekbar).strokeWidth(5.0f)
-                                    .strokeColor(Color.parseColor("#00BFFF"))
-                                    .fillColor(Color.argb(
-                                            50, //This is your alpha.  Adjust this to make it more or less translucent
-                                            Color.red(Color.BLUE), //Red component.
-                                            Color.green(Color.BLUE),  //Green component.
-                                            Color.blue(Color.BLUE)));  //Blue component.);
-                            circle = mMap.addCircle(circleOptions);
                             setQueryinGoogleMaps(latlng);
 
                             mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
@@ -346,129 +337,65 @@ public class SearchFragment extends Fragment implements OnMapReadyCallback, Goog
                                     System.out.println(progressSeekbar);
                                     circle.setRadius(progressSeekbar);
                                     setQueryinGoogleMaps(latlng);
-
-
                                 }
-
                             });
-
                             zoomlevel = 13.5f;
                             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latlng, zoomlevel));
                             zoomlevel=mMap.getCameraPosition().zoom;
-
-
                         }
                     });
                 }
             });
         }
-        Log.e(TAG, "MAP IS READY AND LOADED");
+        else { // if preferences do not exist
+            // set location to currentlocation
+            // if location services not enabled
+            // set Toast to tell user to enable location services
+            locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
+            Criteria criteria = new Criteria();
+            provider = locationManager.getBestProvider(criteria, false);
+            lastLocation = locationManager.getLastKnownLocation(provider);
+            if (lastLocation == null) {
+                double lat = lastLocation.getLatitude();
+                double lng = lastLocation.getLongitude();
+                final LatLng latlng = new LatLng(lat, lng);
 
-//        else{
-//            LatLng currentLocale = new LatLng(lastLocation.getLatitude(), lastLocation.getLongitude());
-//            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocale, zoomlevel));
-//        }
+                setQueryinGoogleMaps(latlng);
+                mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+                    @Override
+                    public boolean onMarkerClick(Marker marker) {
+                        return false;
+                    }
 
+                });
 
-//
-//        // if preferences do not exist
-//        else {
-//            LatLng latlng = new LatLng(location.getLatitude(), location.getLongitude());
-//            Marker stopMarker = mMap.addMarker(new MarkerOptions()
-//                    .draggable(true)
-//                    .position(latlng)
-//                    .title("Current Location"));
-//            circleOptions = new CircleOptions()
-//                    .center(stopMarker.getPosition()).radius(500).strokeWidth(5.0f)
-//                    .strokeColor(Color.parseColor("#00BFFF"))
-//                    .fillColor(Color.argb(
-//                            50, //This is your alpha.  Adjust this to make it more or less translucent
-//                            Color.red(Color.BLUE), //Red component.
-//                            Color.green(Color.BLUE),  //Green component.
-//                            Color.blue(Color.BLUE)));  //Blue component.);
-//            circle = mMap.addCircle(circleOptions);
-//
-//            progress.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-//                public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-//                    // progress = progress*10;
-////                    circle.setRadius(progress);
-////                    float[] distance = new float[2];
-////                    Location.distanceBetween(42.365014, -71.102660,
-////                            circle.getCenter().latitude, circle.getCenter().longitude, distance);
-////
-////                    if (distance[0] > circle.getRadius()) {
-////                        Toast.makeText(getActivity(), "iVacuum X is Outside the circle", Toast.LENGTH_SHORT).show();
-////                    } else {
-////                        Toast.makeText(getActivity(), "iVacuum X is Inside the circle", Toast.LENGTH_SHORT).show();
-////                    }
-//                }
-//
-//                @Override
-//                public void onStartTrackingTouch(final SeekBar seekBar) {
-//                }
-//
-//                @Override
-//                public void onStopTrackingTouch(final SeekBar seekBar) {
-//                    circle.setRadius(seekBar.getProgress());
-//                    database = FirebaseDatabase.getInstance();
-//                    geoFireRef = database.getReference(geoFireTable);
-//                    GeoFire geoFire = new GeoFire(geoFireRef);
-//
-//                    GeoQuery geoQuery = geoFire.queryAtLocation(new GeoLocation(latlng.latitude, latlng.longitude), progress/1000.0);
-//                    geoQuery.addGeoQueryEventListener(new GeoQueryEventListener() {
-//                        @Override
-//                        public void onKeyEntered(String key, GeoLocation location) {
-//                            System.out.println(String.format("Key %s entered the search area at [%f,%f]", key, location.latitude, location.longitude));
-//                            Marker markerKey = mMap.addMarker(new MarkerOptions()
-//                                    .draggable(true)
-//                                    .position(new LatLng(location.latitude, location.longitude))
-//                                    .title("Item"));
-//                            HashMap<String,Marker> hashMapMarker = new HashMap<>();
-//                            hashMapMarker.put(key,markerKey);
-//
-//                        }
-//
-//                        @Override
-//                        public void onKeyExited(String key) {
-//                                          mMap.clear()
-//                            // redo geoquery
-//                            System.out.println(String.format("Key %s is no longer in the search area", key));
-//
-//                        }
-//
-//                        @Override
-//                        public void onKeyMoved(String key, GeoLocation location) {
-//                            System.out.println(String.format("Key %s moved within the search area to [%f,%f]", key, location.latitude, location.longitude));
-//
-//                        }
-//
-//                        @Override
-//                        public void onGeoQueryReady() {
-//                            System.out.println("All initial data has been loaded and events have been fired!");
-//                        }
-//
-//                        @Override
-//                        public void onGeoQueryError(DatabaseError error) {
-//                            System.err.println("There was an error with this query: " + error);
-//                        }
-//                    });
-//                                    float[] distance = new float[2];
-//                                    Location.distanceBetween(42.365014, -71.102660,
-//                                            circle.getCenter().latitude, circle.getCenter().longitude, distance);
-//
-//                                    if (distance[0] > circle.getRadius()) {
-//                                        Toast.makeText(getActivity(), "iVacuum X is Outside the circle", Toast.LENGTH_SHORT).show();
-//                                    } else {
-//                                        Toast.makeText(getActivity(), "iVacuum X is Inside the circle", Toast.LENGTH_SHORT).show();
-//                                    }
-//                }
-//            });
-//            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(location.getLatitude(), location.getLongitude()), 15.5f));
-//        }
-//
+                progress.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+                    public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                        // progress = progress*10;
+
+                    }
+
+                    @Override
+                    public void onStartTrackingTouch(final SeekBar seekBar) {
+                    }
+
+                    @Override
+                    public void onStopTrackingTouch(final SeekBar seekBar) {
+                        progressSeekbar = seekBar.getProgress();
+                        System.out.println(progressSeekbar);
+                        circle.setRadius(progressSeekbar);
+                        setQueryinGoogleMaps(latlng);
+                    }
+                });
+                zoomlevel = 13.5f;
+                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latlng, zoomlevel));
+                zoomlevel = mMap.getCameraPosition().zoom;
+            } else { //  user did not enable any form of location prefs
+                Toast.makeText(getActivity(), "Enable User Location Please", Toast.LENGTH_LONG).show();
+            }
+        }
 
 
-        lvItems.setVisibility(View.VISIBLE);
     }
 
     protected synchronized void buildGoogleApiClient() {
@@ -496,6 +423,9 @@ public class SearchFragment extends Fragment implements OnMapReadyCallback, Goog
             // inconvenience this may have caused.
             LocationServices.FusedLocationApi.requestLocationUpdates(client, locationRequest, this);
         }
+
+
+
     }
 
     @Override
@@ -529,6 +459,19 @@ public class SearchFragment extends Fragment implements OnMapReadyCallback, Goog
         currentLocation = new GeoLocation(latlng.latitude, latlng.longitude);
         mMap.clear();
         lvAdapter.nuke();
+        Marker stopMarker = mMap.addMarker(new MarkerOptions()
+                .draggable(true)
+                .position(latlng)
+                .title("Current Location"));
+        CircleOptions circleOptions = new CircleOptions()
+                .center(stopMarker.getPosition()).radius(progressSeekbar).strokeWidth(5.0f)
+                .strokeColor(Color.parseColor("#00BFFF"))
+                .fillColor(Color.argb(
+                        50, //This is your alpha.  Adjust this to make it more or less translucent
+                        Color.red(Color.BLUE), //Red component.
+                        Color.green(Color.BLUE),  //Green component.
+                        Color.blue(Color.BLUE)));  //Blue component.);
+        circle = mMap.addCircle(circleOptions);
         final GeoQuery geoQuery = geoFire.queryAtLocation(new GeoLocation(latlng.latitude, latlng.longitude), progressSeekbar/1000.0);
         final HashMap<String,MarkerOptions> hashMapMarker = new HashMap<>();
         geoQuery.addGeoQueryEventListener(new GeoQueryEventListener() {
@@ -583,19 +526,6 @@ public class SearchFragment extends Fragment implements OnMapReadyCallback, Goog
                 Log.e(TAG, "All initial data has been loaded and events have been fired!");
                 geoQuery.setCenter(currentLocation);
                 geoQuery.setRadius(progressSeekbar/1000.0);
-                Marker stopMarker = mMap.addMarker(new MarkerOptions()
-                        .draggable(true)
-                        .position(latlng)
-                        .title("Current Location"));
-                CircleOptions circleOptions = new CircleOptions()
-                        .center(stopMarker.getPosition()).radius(progressSeekbar).strokeWidth(5.0f)
-                        .strokeColor(Color.parseColor("#00BFFF"))
-                        .fillColor(Color.argb(
-                                50, //This is your alpha.  Adjust this to make it more or less translucent
-                                Color.red(Color.BLUE), //Red component.
-                                Color.green(Color.BLUE),  //Green component.
-                                Color.blue(Color.BLUE)));  //Blue component.);
-                circle = mMap.addCircle(circleOptions);
 
                 if(geoQuery != null){
                     geoQuery.removeAllListeners();
@@ -609,8 +539,6 @@ public class SearchFragment extends Fragment implements OnMapReadyCallback, Goog
             }
 
         });
-
-
     }
 
     public void setLocaleArea(Double lat, Double lng){
@@ -658,26 +586,11 @@ public class SearchFragment extends Fragment implements OnMapReadyCallback, Goog
     }
     @Override
     public void onMarkerDragEnd(Marker marker) {
-        mMap.clear();
         LatLng dragPosition = marker.getPosition();
         double dragLat = dragPosition.latitude;
         double dragLong = dragPosition.longitude;
         setLocaleArea(dragLat, dragLong);
         final LatLng latlng = new LatLng(dragLat, dragLong);
-
-        Marker stopMarker = mMap.addMarker(new MarkerOptions()
-                .draggable(true)
-                .position(latlng)
-                .title("Current Location"));
-        CircleOptions circleOptions = new CircleOptions()
-                .center(stopMarker.getPosition()).radius(progressSeekbar).strokeWidth(5.0f)
-                .strokeColor(Color.parseColor("#00BFFF"))
-                .fillColor(Color.argb(
-                        50, //This is your alpha.  Adjust this to make it more or less translucent
-                        Color.red(Color.BLUE), //Red component.
-                        Color.green(Color.BLUE),  //Green component.
-                        Color.blue(Color.BLUE)));  //Blue component.);
-        circle = mMap.addCircle(circleOptions);
         setQueryinGoogleMaps(latlng);
 
         progress.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
@@ -714,7 +627,3 @@ public class SearchFragment extends Fragment implements OnMapReadyCallback, Goog
     }
 
 }
-
-
-
-

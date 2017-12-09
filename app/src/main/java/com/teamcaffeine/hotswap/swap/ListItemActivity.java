@@ -1,4 +1,4 @@
-package com.teamcaffeine.hotswap;
+package com.teamcaffeine.hotswap.swap;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -11,7 +11,6 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.FrameLayout;
 import android.widget.Toast;
 
 import com.firebase.geofire.GeoFire;
@@ -26,6 +25,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.maps.model.LatLng;
 import com.squareup.timessquare.CalendarPickerView;
+import com.teamcaffeine.hotswap.R;
 import com.teamcaffeine.hotswap.navigation.AddressesFragment;
 import com.teamcaffeine.hotswap.swap.Item;
 import com.teamcaffeine.hotswap.utility.LatLongUtility;
