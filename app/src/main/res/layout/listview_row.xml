@@ -27,6 +27,6 @@
             android:layout_gravity="center_horizontal"
             android:text="User"
             android:textAppearance="?android:attr/textAppearanceSmall" />
-        
+
     </LinearLayout>
 </LinearLayout>

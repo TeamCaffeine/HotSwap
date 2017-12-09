@@ -146,7 +146,7 @@ public class ItemDetailsActivity extends AppCompatActivity {
 
                                             @Override
                                             public void onCancelled(DatabaseError databaseError) {
-
+                                                Log.e(TAG, databaseError.getMessage());
                                             }
                                         });
 
@@ -199,7 +199,7 @@ public class ItemDetailsActivity extends AppCompatActivity {
 
                                             @Override
                                             public void onCancelled(DatabaseError databaseError) {
-
+                                                Log.e(TAG, databaseError.getMessage());
                                             }
                                         });
                                     }
@@ -207,7 +207,7 @@ public class ItemDetailsActivity extends AppCompatActivity {
 
                                 @Override
                                 public void onCancelled(DatabaseError databaseError) {
-
+                                    Log.e(TAG, databaseError.getMessage());
                                 }
                             });
                         }
@@ -219,7 +219,7 @@ public class ItemDetailsActivity extends AppCompatActivity {
 
                     @Override
                     public void onCancelled(DatabaseError databaseError) {
-
+                        Log.e(TAG, databaseError.getMessage());
                     }
                 });
 
