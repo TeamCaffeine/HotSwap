@@ -133,9 +133,6 @@ public class SearchFragment extends Fragment implements OnMapReadyCallback, Goog
         bSearch = (Button) view.findViewById(R.id.bSearch);
         lvItems = (ListView) view.findViewById(R.id.itemLists);
         lvAdapter = new Items(getActivity());
-        lvItems.setAdapter(lvAdapter);
-        lvItems.setVisibility(View.INVISIBLE);
-
         bSearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
