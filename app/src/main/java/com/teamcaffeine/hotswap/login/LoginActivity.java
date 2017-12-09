@@ -409,7 +409,7 @@ public class LoginActivity extends AppCompatActivity {
 
         String email = editEmail.getText().toString();
         if (TextUtils.isEmpty(email)) {
-            editEmail.setError("Required.");
+            editEmail.setError(getResources().getString(R.string.required));
             valid = false;
         } else {
             editEmail.setError(null);
@@ -417,7 +417,7 @@ public class LoginActivity extends AppCompatActivity {
 
         String password = editPassword.getText().toString();
         if (TextUtils.isEmpty(password)) {
-            editPassword.setError("Required.");
+            editPassword.setError(getResources().getString(R.string.required));
             valid = false;
         } else {
             editPassword.setError(null);
