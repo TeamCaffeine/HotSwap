@@ -168,7 +168,7 @@
     <string name="item_price">Precio para alquilar:</string>
     <string name="item_location">Lugar:</string>
     <string name="item_available_dates">Fechas disponibles:</string>
-    <string name="request_swap">Pedir Intercambio:</string>
+    <string name="request_swap">Pedir Intercambio</string>
     <string name="message_owner">Enviar un Mensaje al Dueño</string>
 
     <!-- Login Activity Strings-->
