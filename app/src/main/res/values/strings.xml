@@ -146,6 +146,10 @@
     <string name="delete_item_question">Are you sure you want to delete this item?</string>
     <string name="cancel">Cancel</string>
     <string name="validationErrors">Validation Errors</string>
+    <string name="card_deleted">Card Deleted</string>
+    <string name="member_since">Member Since: </string>
+    <string name="card_added">Card Added</string>
+    <string name="duplicate_card">Cannot add a duplicate card</string>
 
     <!--Home UI strings-->
     <string name="currently_renting">Currently Renting</string>
