@@ -43,6 +43,9 @@ dependencies {
     // FirebaseUI for Firebase Auth
     compile 'com.firebaseui:firebase-ui-auth:3.1.0'
 
+    // Firebase storage
+    compile 'com.google.firebase:firebase-storage:11.6.0'
+
     // Facebook login dependency
     compile 'com.facebook.android:facebook-login:4.28.0'
 
@@ -86,6 +89,9 @@ dependencies {
     // Google maps wrapper
     compile 'com.google.maps:google-maps-services:0.2.5'
     compile 'org.slf4j:slf4j-nop:1.7.25'
+
+    // Image picker library
+    compile 'com.theartofdev.edmodo:android-image-cropper:2.6.+'
 }
 
 apply plugin: 'com.google.gms.google-services'

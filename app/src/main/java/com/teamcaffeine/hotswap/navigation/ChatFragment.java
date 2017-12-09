@@ -242,7 +242,7 @@ public class ChatFragment extends Fragment implements DialogsListAdapter.OnDialo
     private void getDialogs() {
         FirebaseDatabase.getInstance()
                 .getReference().child("channels").orderByChild("channel").equalTo(FirebaseAuth.getInstance().getCurrentUser().getEmail())
-                .limitToLast(1).addListenerForSingleValueEvent(new ValueEventListener() {
+                .limitToLast(1).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
@@ -285,8 +285,8 @@ public class ChatFragment extends Fragment implements DialogsListAdapter.OnDialo
 
 
                     // Fixes logout bug
-                    Log.e(TAG, "Enter getDialog when there is no currentUser");
                     if(FirebaseAuth.getInstance().getCurrentUser() == null) {
+                        Log.e(TAG, "Enter getDialog when there is no currentUser");
                         return;
                     }
 

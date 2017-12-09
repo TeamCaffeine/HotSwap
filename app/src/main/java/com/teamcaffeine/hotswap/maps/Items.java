@@ -63,16 +63,11 @@ public class Items extends BaseAdapter {
             row = convertView;
         }
 
-//        ImageView imgItem = (ImageView) row.findViewById(R.id.imgItem);
         TextView itemTitle = (TextView) row.findViewById(R.id.itemTitle);
         TextView itemDescriptions = (TextView) row.findViewById(R.id.itemDescription);
 
         itemTitle.setText(items.get(position).getName());
         itemDescriptions.setText(items.get(position).getDescription());
-        //      imgItem.setImageResource(itemImages.get(position).intValue());
-
-
-
         return row;
 
     }
