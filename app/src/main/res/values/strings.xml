@@ -104,7 +104,7 @@
 
     <!--Invite friends strings-->
     <string name="invite_message">Hey I\'ve been using HotSwap to rent items that I need but don\'t want to buy! Check it out!</string>
-    <string name="post_to_FB_url">https://developers.facebook.com</string>
+    <string name="post_to_FB_url">https://hotswap.com</string>
     <string name="invite_email_subject">Join HotSwap!</string>
 
     <!--add details string-->
