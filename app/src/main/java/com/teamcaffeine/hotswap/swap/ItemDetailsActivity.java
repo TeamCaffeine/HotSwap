@@ -81,76 +81,77 @@ public class ItemDetailsActivity extends AppCompatActivity {
         btnMessageOwner.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                // TODO: What if they ALREADY have a chat connection
-//                // Get a reference to this users channels TODO: What if they don't have any channels?
-//                DatabaseReference rentee = chatChannels.child(channel);
-//                rentee.addListenerForSingleValueEvent(new ValueEventListener() {
-//                    @Override
-//                    public void onDataChange(DataSnapshot dataSnapshot) {
-//                        if (dataSnapshot.exists()) {
-//                            // Create the subscription from channel to subscription (renter to lender)
-//                            Channel renteeChatChannels = dataSnapshot.getValue(Channel.class);
-//                            renteeChatChannels.addSubscription(subscription);
-//                            // TODO: How should I push this to the database?
-//                            chatChannels.updateChildren(renteeChatChannels.toMap());
-//
-//                            // Now create a subscription from subscription to channel (lender to render)
-//                            DatabaseReference lender = chatChannels.child(subscription);
-//                            lender.addListenerForSingleValueEvent(new ValueEventListener() {
-//                                @Override
-//                                public void onDataChange(DataSnapshot dataSnapshot) {
-//                                    if (dataSnapshot.exists()) {
-//                                        Channel lenderChatChannels = dataSnapshot.getValue(Channel.class);
-//                                        lenderChatChannels.addSubscription(channel);
-//                                        chatChannels.updateChildren(lenderChatChannels.toMap());
-//
-//                                        // Now that we have created the chat between the two, we can start the messaging activity
-//                                        Intent intent = new Intent(getApplicationContext(), StyledMessagesActivity.class);
-//                                        intent.putExtra("channel", channel);
-//                                        intent.putExtra("subscription", subscription);
-//                                        startActivity(intent);
-//                                    }
-//                                }
-//
-//                                @Override
-//                                public void onCancelled(DatabaseError databaseError) {
-//
-//                                }
-//                            });
-//                        }
-//
-//                        // User has not chatted with anyone in the database before
-//                        else {
-//                            // Hard coded example
-//                            List<String> list1 = new ArrayList<>();
-//                            list1.add("chamathsd@gmail.com");
-//                            Subscriptions williamSubs = new Subscriptions(list1);
-//                            Channel williamChannel = new Channel("william@william.com", williamSubs);
-//                            chatChannels.child("qziMys23rIg1ZMQZaf9TBAioXas2").updateChildren(williamChannel.toMap());
-//
-//                            List<String> list2 = new ArrayList<>();
-//                            list2.add("william@william.com");
-//                            Subscriptions chamathSubs = new Subscriptions(list2);
-//                            Channel chamathChannel = new Channel("chamathsd@gmail.com", chamathSubs);
-//                            chatChannels.child("416pQWI7FmXWTLaysqLXFIsFTSo1").updateChildren(chamathChannel.toMap());
-//
-//                            Intent intent = new Intent(getApplicationContext(), StyledMessagesActivity.class);
-//                            intent.putExtra("channel", "william@william.com");
-//                            intent.putExtra("subscription", "chamathsd@gmail.com");
-//                            startActivity(intent);
-//                        }
-//                    }
-//
-//                    @Override
-//                    public void onCancelled(DatabaseError databaseError) {
-//
-//                    }
-//                });
+                // TODO: What if they ALREADY have a chat connection
+                // Get a reference to this users channels TODO: What if they don't have any channels?
+                DatabaseReference rentee = chatChannels.child("416pQWI7FmXWTLaysqLXFIsFTSo1"); //TODO: This is hard coded
+                rentee.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        if (dataSnapshot.exists()) {
+                            // Create the subscription from channel to subscription (renter to lender)
+                            Channel renteeChatChannels = dataSnapshot.getValue(Channel.class);
+                            renteeChatChannels.addSubscription(subscription);
+                            // TODO: How should I push this to the database?
+                            chatChannels.updateChildren(renteeChatChannels.toMap());
 
-                Intent intent = new Intent(getApplicationContext(), StyledMessagesActivity.class);
-                intent.putExtra("channel", channel);
-                intent.putExtra("subscription", subscription);
-                startActivity(intent);
+                            // Now create a subscription from subscription to channel (lender to render)
+                            DatabaseReference lender = chatChannels.child(subscription);
+                            lender.addListenerForSingleValueEvent(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(DataSnapshot dataSnapshot) {
+                                    if (dataSnapshot.exists()) {
+                                        Channel lenderChatChannels = dataSnapshot.getValue(Channel.class);
+                                        lenderChatChannels.addSubscription(channel);
+                                        chatChannels.updateChildren(lenderChatChannels.toMap());
+
+                                        // Now that we have created the chat between the two, we can start the messaging activity
+                                        Intent intent = new Intent(getApplicationContext(), StyledMessagesActivity.class);
+                                        intent.putExtra("channel", channel);
+                                        intent.putExtra("subscription", subscription);
+                                        startActivity(intent);
+                                    }
+                                }
+
+                                @Override
+                                public void onCancelled(DatabaseError databaseError) {
+
+                                }
+                            });
+                        }
+
+                        // User has not chatted with anyone in the database before
+                        else {
+                            // Hard coded example
+                            List<String> list1 = new ArrayList<>();
+                            list1.add("chamathsd@gmail.com");
+                            Subscriptions williamSubs = new Subscriptions(list1);
+                            Channel williamChannel = new Channel("william@william.com", williamSubs);
+                            chatChannels.child("qziMys23rIg1ZMQZaf9TBAioXas2").updateChildren(williamChannel.toMap());
+
+                            // TODO: Handle if the person we are TRYING to talk to has chatted before
+                            List<String> list2 = new ArrayList<>();
+                            list2.add("william@william.com");
+                            Subscriptions chamathSubs = new Subscriptions(list2);
+                            Channel chamathChannel = new Channel("chamathsd@gmail.com", chamathSubs);
+                            chatChannels.child("416pQWI7FmXWTLaysqLXFIsFTSo1").updateChildren(chamathChannel.toMap());
+
+                            Intent intent = new Intent(getApplicationContext(), StyledMessagesActivity.class);
+                            intent.putExtra("channel", "william@william.com");
+                            intent.putExtra("subscription", "chamathsd@gmail.com");
+                            startActivity(intent);
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
+
+//                Intent intent = new Intent(getApplicationContext(), StyledMessagesActivity.class);
+//                intent.putExtra("channel", channel);
+//                intent.putExtra("subscription", subscription);
+//                startActivity(intent);
             }
         });
 
