@@ -84,6 +84,14 @@
             android:name=".swap.ItemDetailsActivity"
             android:screenOrientation="portrait">
         </activity>
+        <activity
+            android:name=".image.TempActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Translucent"/>
+        <activity
+            android:name="com.yalantis.ucrop.UCropActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
     </application>
 
 </manifest>
