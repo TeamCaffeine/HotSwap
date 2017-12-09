@@ -66,10 +66,12 @@ public class ProfileFragment extends Fragment {
     private TextView txtEmail;
     private TextView txtPhoneNumber;
     private Button btnAddPayment;
+    private Button btnRemovePayment;
     private ListView listviewPayment;
     private List<String> paymentElementsList;
     private ArrayAdapter<String> paymentAdapter;
     private TextView txtPastTransactions;
+    private String selectedPayment;
 
     // Progress dialog, to show page is loading
     public ProgressDialog mProgressDialog;
@@ -96,6 +98,15 @@ public class ProfileFragment extends Fragment {
     public void hideProgressDialog() {
         if (mProgressDialog != null && mProgressDialog.isShowing()) {
             mProgressDialog.dismiss();
+        }
+    }
+
+    // Safely get the payment the user has selected
+    public String getSelectedPayment() {
+        if (selectedPayment != null) {
+            return selectedPayment;
+        } else {
+            return null;
         }
     }
 
@@ -131,7 +142,6 @@ public class ProfileFragment extends Fragment {
         // instantiate the button to add a payment method to the user's profile
         btnAddPayment = view.findViewById(R.id.btnAddPayment);
         // set on click listener to open a popup to add the payment using a Stripe widget
-        // see method below
         btnAddPayment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -143,16 +153,29 @@ public class ProfileFragment extends Fragment {
         paymentElementsList = new ArrayList<String>();
         // instantiate the listview to hold the list of item names
         listviewPayment = view.findViewById(R.id.listviewPayment);
-
-        /**
-         * DELETE AN ITEM
-         */
-
-        // set an onClick listener so that when a user clicks on an item,
-        // they get a dialog to delete the item
         listviewPayment.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                selectedPayment = paymentElementsList.get(position);
+            }
+        });
+
+        /**
+         * DELETE A PAYMENT METHOD
+         */
+
+        // set an onClick listener so that when a user clicks on an item
+        // and then clicks the "-" button, they get a dialog to delete the item
+        btnRemovePayment = view.findViewById(R.id.btnRemovePayment);
+        btnRemovePayment.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                // Safely handle remove click if there are no addresses or no address is selected
+                if (paymentElementsList.isEmpty() || listviewPayment.getCheckedItemPosition() == -1) {
+                    return;
+                }
+
                 // create an alert dialog that asks the user if they want to delete the item,
                 // and gives them the option to delete or cancel
                 AlertDialog myQuittingDialogBox = new AlertDialog.Builder(getContext())
@@ -179,8 +202,8 @@ public class ProfileFragment extends Fragment {
                                         // the user's list  of payments
                                         // the removePayment method in the User class returns a boolean value on
                                         // success or failure of removal
-                                        boolean didRemove = user.removePayment(listviewPayment.getItemAtPosition(position).toString());
-                                        // when removePayment is successfuly and returns true, we can delete the payment method
+                                        boolean didRemove = user.removePayment(getSelectedPayment());
+                                        // when removePayment is successfully and returns true, we can delete the payment method
                                         // from the database
                                         // we only ever want to delete from the database when we delete from the in-app list,
                                         // and vice versa, to make sure the UI and the backend database remain synced
