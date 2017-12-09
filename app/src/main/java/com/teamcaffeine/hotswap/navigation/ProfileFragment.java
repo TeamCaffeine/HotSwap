@@ -273,7 +273,7 @@ public class ProfileFragment extends Fragment {
                 // like of most social media platforms, this field indicates how long a user
                 // has been using the app, which could indicate reliability and experience
                 // to potential renters
-                txtMemberSince.setText(String.valueOf(R.string.member_since) + user.getMemberSince());
+                txtMemberSince.setText(getResources().getString(R.string.member_since) + " " + user.getMemberSince());
 
                 // set the user's email
                 txtEmail.setText(user.getEmail());
