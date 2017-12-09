@@ -9,6 +9,7 @@ import android.widget.Button;
 import android.widget.CalendarView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -18,17 +19,20 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.timessquare.CalendarPickerView;
 import com.teamcaffeine.hotswap.R;
+import com.teamcaffeine.hotswap.login.User;
 import com.teamcaffeine.hotswap.messaging.StyledMessagesActivity;
 import com.teamcaffeine.hotswap.messaging.models.Channel;
 import com.teamcaffeine.hotswap.messaging.models.Subscriptions;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
 public class ItemDetailsActivity extends AppCompatActivity {
-    private DatabaseReference chatChannels;
+    private DatabaseReference channels;
+    private DatabaseReference users;
     private String TAG = "ItemDetailsActivity";
 
     private TextView txtItemName;
@@ -44,12 +48,15 @@ public class ItemDetailsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_item_details);
 
-        chatChannels = FirebaseDatabase.getInstance().getReference().child("channels");
+        channels = FirebaseDatabase.getInstance().getReference().child("channels");
+        users = FirebaseDatabase.getInstance().getReference().child("users");
+
         Bundle extras = getIntent().getExtras();
         Item item = (Item) extras.getParcelable("item");
         String currentCity = (String) extras.get("currentCity");
-        final String channel = extras.getString("channel"); //TODO: Perhaps rename
-        final String subscription = extras.getString("subscription"); // TODO: Perhaps rename
+        final String userEmail = FirebaseAuth.getInstance().getCurrentUser().getEmail();
+        final String userUID = FirebaseAuth.getInstance().getUid();
+        final String ownerID = extras.getString("ownerID");
 
         txtItemName = (TextView) findViewById(R.id.txtItemName);
         txtItemDescription = (TextView) findViewById(R.id.txtItemDescription);
@@ -81,34 +88,120 @@ public class ItemDetailsActivity extends AppCompatActivity {
         btnMessageOwner.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // TODO: What if they ALREADY have a chat connection
-                // Get a reference to this users channels TODO: What if they don't have any channels?
-                DatabaseReference rentee = chatChannels.child("416pQWI7FmXWTLaysqLXFIsFTSo1"); //TODO: This is hard coded
-                rentee.addListenerForSingleValueEvent(new ValueEventListener() {
+                // First we must get the email of the owner of the item
+                users.child(ownerID).addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
-                        if (dataSnapshot.exists()) {
-                            // Create the subscription from channel to subscription (renter to lender)
-                            Channel renteeChatChannels = dataSnapshot.getValue(Channel.class);
-                            renteeChatChannels.addSubscription(subscription);
-                            // TODO: How should I push this to the database?
-                            chatChannels.updateChildren(renteeChatChannels.toMap());
+                        if(dataSnapshot.exists()) {
+                            // IMPORTANT: Owner's email
+                            User owner = dataSnapshot.getValue(User.class);
+                            final String ownerEmail = owner.getEmail();
 
-                            // Now create a subscription from subscription to channel (lender to render)
-                            DatabaseReference lender = chatChannels.child(subscription);
-                            lender.addListenerForSingleValueEvent(new ValueEventListener() {
+                            // Now we can start creating chat; check if user has chatted before
+                            channels.child(userUID).addListenerForSingleValueEvent(new ValueEventListener() {
                                 @Override
                                 public void onDataChange(DataSnapshot dataSnapshot) {
-                                    if (dataSnapshot.exists()) {
-                                        Channel lenderChatChannels = dataSnapshot.getValue(Channel.class);
-                                        lenderChatChannels.addSubscription(channel);
-                                        chatChannels.updateChildren(lenderChatChannels.toMap());
+                                    // User has chatted before
+                                    if(dataSnapshot.exists()) {
+                                        Channel userChannels = dataSnapshot.getValue(Channel.class);
+                                        // If the user does not already have a subscription to the owner
+                                        if (!userChannels.getSubscriptions().findChannel(ownerEmail)) {
+                                            userChannels.addSubscription(ownerEmail);
+                                            channels.child(userUID).updateChildren(userChannels.toMap());
+                                        }
 
-                                        // Now that we have created the chat between the two, we can start the messaging activity
-                                        Intent intent = new Intent(getApplicationContext(), StyledMessagesActivity.class);
-                                        intent.putExtra("channel", channel);
-                                        intent.putExtra("subscription", subscription);
-                                        startActivity(intent);
+                                        // Now we must check if the owner has chatted before
+                                        channels.child(ownerID).addListenerForSingleValueEvent(new ValueEventListener() {
+                                            @Override
+                                            public void onDataChange(DataSnapshot dataSnapshot) {
+                                                // Owner has chatted before
+                                                if (dataSnapshot.exists()) {
+                                                    Channel ownerChannels = dataSnapshot.getValue(Channel.class);
+                                                    // If the owner does not already have a subscription to the user
+                                                    if (!ownerChannels.getSubscriptions().findChannel(userEmail)) {
+                                                        ownerChannels.addSubscription(userEmail);
+                                                        channels.child(ownerID).updateChildren(userEmail);
+                                                    }
+
+                                                    Intent intent = new Intent(getApplicationContext(), StyledMessagesActivity.class);
+                                                    intent.putExtra("channel", userEmail);
+                                                    intent.putExtra("subscription", ownerEmail);
+                                                    startActivity(intent);
+                                                }
+                                                // Owner has not chatted before
+                                                else {
+                                                    ArrayList<String> list2 = new ArrayList<>();
+                                                    list2.add(userEmail);
+                                                    Subscriptions ownerSubs = new Subscriptions(list2);
+                                                    Channel ownerChannels = new Channel(ownerEmail, ownerSubs);
+                                                    channels.child(ownerID).updateChildren(ownerChannels.toMap());
+
+                                                    // Now that owner has a subscription to the user, we can start the chat
+                                                    Intent intent = new Intent(getApplicationContext(), StyledMessagesActivity.class);
+                                                    intent.putExtra("channel", userEmail);
+                                                    intent.putExtra("subscription", ownerEmail);
+                                                    startActivity(intent);
+                                                }
+                                            }
+
+                                            @Override
+                                            public void onCancelled(DatabaseError databaseError) {
+
+                                            }
+                                        });
+
+                                    }
+                                    // User has not chatted before
+                                    else {
+                                        // Add subscription to owner
+                                        ArrayList<String> list1 = new ArrayList<>();
+                                        list1.add(ownerEmail);
+                                        Subscriptions userSubs = new Subscriptions(list1);
+                                        Channel userChannels = new Channel(userEmail, userSubs);
+                                        channels.child(userUID).updateChildren(userChannels.toMap());
+
+                                        // Check if owner has chatted before
+                                        channels.child(ownerID).addListenerForSingleValueEvent(new ValueEventListener() {
+                                            @Override
+                                            public void onDataChange(DataSnapshot dataSnapshot) {
+                                                // Owner has chatted before
+                                                if (dataSnapshot.exists()) {
+                                                    // Add the new subscription to the user
+                                                    Channel ownerChannels = dataSnapshot.getValue(Channel.class);
+                                                    // If the owner does not already have a subscription to the user
+                                                    if (!ownerChannels.getSubscriptions().findChannel(userEmail)) {
+                                                        ownerChannels.addSubscription(userEmail);
+                                                        channels.child(ownerID).updateChildren(ownerChannels.toMap());
+                                                    }
+
+                                                    // Then start chat between two user and owner
+                                                    Intent intent = new Intent(getApplicationContext(), StyledMessagesActivity.class);
+                                                    intent.putExtra("channel", userEmail);
+                                                    intent.putExtra("subscription", ownerEmail);
+                                                    startActivity(intent);
+                                                }
+                                                // Owner also has not chatted before
+                                                else {
+                                                    ArrayList<String> list2 = new ArrayList<>();
+                                                    list2.add(userEmail);
+                                                    Subscriptions ownerSubs = new Subscriptions(list2);
+                                                    Channel ownerChannels = new Channel(ownerEmail, ownerSubs);
+                                                    channels.child(ownerID).updateChildren(ownerChannels.toMap());
+
+                                                    // Now that we have created channel entries for both the user and owner
+                                                    // both of which have not chatted, before, we can start a chat
+                                                    Intent intent = new Intent(getApplicationContext(), StyledMessagesActivity.class);
+                                                    intent.putExtra("channel", userEmail);
+                                                    intent.putExtra("subscription", ownerEmail);
+                                                    startActivity(intent);
+                                                }
+                                            }
+
+                                            @Override
+                                            public void onCancelled(DatabaseError databaseError) {
+
+                                            }
+                                        });
                                     }
                                 }
 
@@ -118,27 +211,9 @@ public class ItemDetailsActivity extends AppCompatActivity {
                                 }
                             });
                         }
-
-                        // User has not chatted with anyone in the database before
                         else {
-                            // Hard coded example
-                            List<String> list1 = new ArrayList<>();
-                            list1.add("chamathsd@gmail.com");
-                            Subscriptions williamSubs = new Subscriptions(list1);
-                            Channel williamChannel = new Channel("william@william.com", williamSubs);
-                            chatChannels.child("qziMys23rIg1ZMQZaf9TBAioXas2").updateChildren(williamChannel.toMap());
-
-                            // TODO: Handle if the person we are TRYING to talk to has chatted before
-                            List<String> list2 = new ArrayList<>();
-                            list2.add("william@william.com");
-                            Subscriptions chamathSubs = new Subscriptions(list2);
-                            Channel chamathChannel = new Channel("chamathsd@gmail.com", chamathSubs);
-                            chatChannels.child("416pQWI7FmXWTLaysqLXFIsFTSo1").updateChildren(chamathChannel.toMap());
-
-                            Intent intent = new Intent(getApplicationContext(), StyledMessagesActivity.class);
-                            intent.putExtra("channel", "william@william.com");
-                            intent.putExtra("subscription", "chamathsd@gmail.com");
-                            startActivity(intent);
+                            Toast.makeText(getApplicationContext(), "Unable to find owner in database, cannot start chat", Toast.LENGTH_SHORT);
+                            return;
                         }
                     }
 
@@ -148,15 +223,10 @@ public class ItemDetailsActivity extends AppCompatActivity {
                     }
                 });
 
-//                Intent intent = new Intent(getApplicationContext(), StyledMessagesActivity.class);
-//                intent.putExtra("channel", channel);
-//                intent.putExtra("subscription", subscription);
-//                startActivity(intent);
-            }
+
+            } // End of OnClick Listener TODO: Delete
         });
-
-
-    }
+    } // End of onCreate TODO: Delete
 
     public String getTagsAsString(List<String> tagsList){
         StringBuilder tagsStringBuilder = new StringBuilder();

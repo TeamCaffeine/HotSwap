@@ -28,4 +28,8 @@ public class Subscriptions {
     public void addChannel(String channel) {
         this.channel.add(channel);
     }
+
+    public boolean findChannel(String channel) {
+        return this.channel.contains(channel);
+    }
 }

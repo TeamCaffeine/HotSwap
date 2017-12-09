@@ -199,8 +199,7 @@ public class SearchFragment extends Fragment implements OnMapReadyCallback, Goog
                 Intent itemDetailsIntent = new Intent(getActivity(), ItemDetailsActivity.class);
                 itemDetailsIntent.putExtra("item", item);
                 itemDetailsIntent.putExtra("currentCity", city);
-                itemDetailsIntent.putExtra("channel", FirebaseAuth.getInstance().getCurrentUser().getEmail());
-                itemDetailsIntent.putExtra("subscription", item.getRenteeID()); //TODO: Need easy reference to item lender's email
+                itemDetailsIntent.putExtra("ownerID", item.getOwnerID());
                 startActivity(itemDetailsIntent);
             }
         });
