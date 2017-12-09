@@ -347,48 +347,52 @@ public class SearchFragment extends Fragment implements OnMapReadyCallback, Goog
                 }
             });
         }
-        else{ // if preferences do not exist
-                // set location to currentlocation
-                // if location services not enabled
-                // set Toast to tell user to enable location services
+        else { // if preferences do not exist
+            // set location to currentlocation
+            // if location services not enabled
+            // set Toast to tell user to enable location services
             locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
             Criteria criteria = new Criteria();
             provider = locationManager.getBestProvider(criteria, false);
             lastLocation = locationManager.getLastKnownLocation(provider);
-            double lat = lastLocation.getLatitude();
-            double lng = lastLocation.getLongitude();
-            final LatLng latlng = new LatLng(lat, lng);
+            if (lastLocation == null) {
+                double lat = lastLocation.getLatitude();
+                double lng = lastLocation.getLongitude();
+                final LatLng latlng = new LatLng(lat, lng);
 
-            setQueryinGoogleMaps(latlng);
-            mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
-                @Override
-                public boolean onMarkerClick(Marker marker) {
-                    return false;
-                }
+                setQueryinGoogleMaps(latlng);
+                mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+                    @Override
+                    public boolean onMarkerClick(Marker marker) {
+                        return false;
+                    }
 
-            });
+                });
 
-            progress.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-                public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                    // progress = progress*10;
+                progress.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+                    public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                        // progress = progress*10;
 
-                }
+                    }
 
-                @Override
-                public void onStartTrackingTouch(final SeekBar seekBar) {
-                }
+                    @Override
+                    public void onStartTrackingTouch(final SeekBar seekBar) {
+                    }
 
-                @Override
-                public void onStopTrackingTouch(final SeekBar seekBar) {
-                    progressSeekbar = seekBar.getProgress();
-                    System.out.println(progressSeekbar);
-                    circle.setRadius(progressSeekbar);
-                    setQueryinGoogleMaps(latlng);
-                }
-            });
-            zoomlevel = 13.5f;
-            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latlng, zoomlevel));
-            zoomlevel=mMap.getCameraPosition().zoom;
+                    @Override
+                    public void onStopTrackingTouch(final SeekBar seekBar) {
+                        progressSeekbar = seekBar.getProgress();
+                        System.out.println(progressSeekbar);
+                        circle.setRadius(progressSeekbar);
+                        setQueryinGoogleMaps(latlng);
+                    }
+                });
+                zoomlevel = 13.5f;
+                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latlng, zoomlevel));
+                zoomlevel = mMap.getCameraPosition().zoom;
+            } else { //  user did not enable any form of location prefs
+                Toast.makeText(getActivity(), "Enable User Location Please", Toast.LENGTH_LONG).show();
+            }
         }
 
 
