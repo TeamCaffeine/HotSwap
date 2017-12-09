@@ -30,7 +30,10 @@ import com.facebook.share.model.ShareLinkContent;
 import com.facebook.share.widget.ShareDialog;
 import com.firebase.ui.auth.AuthUI;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.common.base.Strings;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -38,6 +41,10 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
+import com.squareup.picasso.Picasso;
 import com.stripe.android.model.Card;
 import com.stripe.android.view.CardMultilineWidget;
 import com.teamcaffeine.hotswap.R;
@@ -82,6 +89,7 @@ public class ProfileFragment extends Fragment {
     // Database reference fields
     private FirebaseUser firebaseUser;
     private FirebaseDatabase database;
+    private StorageReference storage;
     private DatabaseReference users;
     private String userTable = "users";
 
@@ -275,6 +283,12 @@ public class ProfileFragment extends Fragment {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 // create a user object from the datasnapshot
                 User user = dataSnapshot.getValue(User.class);
+                // set the profile picture
+                String avatar = user.getAvatar();
+                if (!Strings.isNullOrEmpty(avatar)) {
+                    Picasso.with(getActivity().getApplicationContext()).load(avatar).into(imgPhoto);
+                }
+
                 // set the user's name
                 txtName.setText(user.getFirstName() + " " + user.getLastName());
 
@@ -336,7 +350,48 @@ public class ProfileFragment extends Fragment {
             if (resultCode == RESULT_OK) {
                 Uri resultUri = result.getUri();
                 imgPhoto.setImageURI(resultUri);
+
+                storage = FirebaseStorage.getInstance().getReference();
+                StorageReference imageRef = storage.child("images/" + firebaseUser.getUid() + ".jpg");
+                UploadTask upload = imageRef.putFile(resultUri);
+
+                // Register observers to listen for when the download is done or if it fails
+                upload.addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception exception) {
+                        // TODO: Handle unsuccessful uploads
+                    }
+                }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                        // taskSnapshot.getMetadata() contains file metadata such as size, content-type, and download URL.
+                        final Uri downloadUrl = taskSnapshot.getDownloadUrl();
+
+                        DatabaseReference ref = users.child(firebaseUser.getUid());
+                        ref.addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(DataSnapshot dataSnapshot) {
+                                User user = dataSnapshot.getValue(User.class);
+                                user.setAvatar(downloadUrl.toString());
+
+                                Map<String, Object> userUpdate = new HashMap<>();
+                                userUpdate.put(firebaseUser.getUid(), user.toMap());
+
+                                users.updateChildren(userUpdate);
+
+                                Toast.makeText(getActivity(), "Successfully updated profile picture.", Toast.LENGTH_SHORT).show();
+                            }
+
+                            @Override
+                            public void onCancelled(DatabaseError databaseError) {
+                                Toast.makeText(getActivity(), "Unable to update profile picture.", Toast.LENGTH_SHORT).show();
+                                Log.e(TAG, "The read failed:", databaseError.toException());
+                            }
+                        });
+                    }
+                });
             } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
+                Toast.makeText(getActivity(), "Unable to change image.", Toast.LENGTH_SHORT).show();
                 Exception error = result.getError();
                 Log.d(TAG, error.getMessage());
             }
