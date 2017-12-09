@@ -66,8 +66,10 @@ public class HomeFragment extends Fragment {
     // Database reference fields
     private FirebaseUser firebaseUser;
     private FirebaseDatabase database;
+    private DatabaseReference itemslocation;
     private DatabaseReference items; // reference to the items table, used for onDataChange listening
     private String itemTable = "items";
+    private String itemlocationsTable="items_location";
 
     // create a value event user
     // This event listener will be used to detect changes in the database
@@ -132,6 +134,7 @@ public class HomeFragment extends Fragment {
 
         // get a reference to the items table
         items = database.getReference().child(itemTable);
+        itemslocation = database.getReference().child(itemlocationsTable);
 
         // instantiate the list that wil hold all of the user's items
         itemsElementsList = new ArrayList<String>();
@@ -166,9 +169,9 @@ public class HomeFragment extends Fragment {
                                     // attributes)
                                     public void onDataChange(DataSnapshot dataSnapshot) {
                                         // loop through all of the items in the table from the dataSnapshot
-                                        for (DataSnapshot i: dataSnapshot.getChildren()) {
+                                        for (final DataSnapshot i: dataSnapshot.getChildren()) {
                                             // create an item object so you can read the item's contents
-                                            Item item = i.getValue(Item.class);
+                                            final Item item = i.getValue(Item.class);
                                             // check if the item you are currently looping through belongs to the current user
                                             if (item.getOwnerID().equals(firebaseUser.getUid())){
                                                 // if the item does belong to the user, get its name
@@ -184,6 +187,18 @@ public class HomeFragment extends Fragment {
                                                     if (didRemove) {
                                                         // Remove the item and update database
                                                         i.getRef().removeValue();
+                                                        itemslocation.addListenerForSingleValueEvent(new ValueEventListener() {
+                                                            @Override
+                                                            public void onDataChange(DataSnapshot dataSnapshot) {
+                                                                dataSnapshot.getRef().child(item.getItemID()).removeValue();
+                                                            }
+
+                                                            @Override
+                                                            public void onCancelled(DatabaseError databaseError) {
+                                                                Log.i(TAG, "User attempted to delete a nonexistent item location", databaseError.toException());
+                                                            }
+                                                        });
+
                                                     } else {
                                                         // if the item was NOT successfully removed from the item list, log the error message
                                                         Log.i(TAG, "User attempted to delete a nonexistent item");
