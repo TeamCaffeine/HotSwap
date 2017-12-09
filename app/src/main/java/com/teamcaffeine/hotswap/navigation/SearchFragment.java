@@ -484,7 +484,7 @@ public class SearchFragment extends Fragment implements OnMapReadyCallback, Goog
                 markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE));
                 hashMapMarker.put(key,markerOptions);
                 ref = database.getReference().child("items").child(key);
-                ref.addValueEventListener(new ValueEventListener() {
+                ref.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         Log.e(TAG, "Getting title for key " + key);
