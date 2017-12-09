@@ -438,14 +438,11 @@ public class SearchFragment extends Fragment implements OnMapReadyCallback, Goog
 
     @Override
     public void onLocationChanged(Location location) {
-        Log.e(TAG, "onLocationChanged");
         lastLocation = location;
 
         if (client != null) {
             LocationServices.FusedLocationApi.removeLocationUpdates(client, this);
         }
-
-        Log.e(TAG, "Lat: " + Double.toString(location.getLatitude()) + "Lng: " + Double.toString(location.getLongitude()));
     }
 
     @Override
