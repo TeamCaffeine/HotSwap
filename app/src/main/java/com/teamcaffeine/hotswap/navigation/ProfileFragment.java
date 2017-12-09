@@ -20,6 +20,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
@@ -42,6 +43,7 @@ import com.stripe.android.view.CardMultilineWidget;
 import com.teamcaffeine.hotswap.R;
 import com.teamcaffeine.hotswap.login.LoginActivity;
 import com.teamcaffeine.hotswap.login.User;
+import com.theartofdev.edmodo.cropper.CropImage;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -59,6 +61,7 @@ public class ProfileFragment extends Fragment {
     final int PLACE_AUTOCOMPLETE_REQUEST_CODE = 1;
 
     // create objects to reference layout objects
+    private ImageView imgPhoto;
     private TextView txtName;
     private TextView txtMemberSince;
     private Button btnLogout;
@@ -236,6 +239,10 @@ public class ProfileFragment extends Fragment {
 
         // get the reference to the past transactions button (actually a textview for display purposes) on the UI
         txtPastTransactions = view.findViewById(R.id.txtPastTransactions);
+
+        // get reference to profile picutre
+        imgPhoto = view.findViewById(R.id.imgPhoto);
+
         // get references to all user info textviews
         txtName = view.findViewById(R.id.txtName);
         txtMemberSince = view.findViewById(R.id.txtMemberSince);
@@ -307,6 +314,15 @@ public class ProfileFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 inviteFriendsPopup();
+            }
+        });
+
+        // Set onClick functionality for profile picture
+        imgPhoto.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                CropImage.activity()
+                        .start(getContext(), ProfileFragment.this);
             }
         });
     }
