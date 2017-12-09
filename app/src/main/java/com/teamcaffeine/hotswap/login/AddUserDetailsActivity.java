@@ -129,12 +129,9 @@ public class AddUserDetailsActivity extends AppCompatActivity {
                             @Override
                             public void onDataChange(DataSnapshot dataSnapshot) {
                                 User user = dataSnapshot.getValue(User.class);
+
                                 user.setAvatar(downloadUrl.toString());
-
-                                Map<String, Object> userUpdate = new HashMap<>();
-                                userUpdate.put(firebaseUser.getUid(), user.toMap());
-
-                                users.updateChildren(userUpdate);
+                                users.child(firebaseUser.getUid()).updateChildren(user.toMap());
 
                                 Toast.makeText(AddUserDetailsActivity.this, "Successfully updated profile picture.", Toast.LENGTH_SHORT).show();
                             }
@@ -178,11 +175,7 @@ public class AddUserDetailsActivity extends AppCompatActivity {
                     user.setLastName(lastName);
                     user.setPhoneNumber(phoneNumber);
                     user.setMemberSince(dateFormat.format(memberSince));
-
-                    Map<String, Object> userUpdate = new HashMap<>();
-                    userUpdate.put(firebaseUser.getUid(), user.toMap());
-
-                    users.updateChildren(userUpdate);
+                    users.child(firebaseUser.getUid()).updateChildren(user.toMap());
 
                     Intent i = new Intent(AddUserDetailsActivity.this, NavigationActivity.class);
                     startActivity(i);

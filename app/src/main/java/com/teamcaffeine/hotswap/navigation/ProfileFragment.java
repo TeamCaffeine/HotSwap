@@ -199,13 +199,7 @@ public class ProfileFragment extends Fragment {
                                         // and vice versa, to make sure the UI and the backend database remain synced
                                         if (didRemove) {
                                             // Update database
-                                            // step 1: create hashmap object
-                                            Map<String, Object> userUpdate = new HashMap<>();
-                                            // step 2: put the data from the user object into the hashmap
-                                            userUpdate.put(firebaseUser.getUid(), user.toMap());
-                                            // step 3: replace the existing hashmap for the user in the database with the
-                                            // update hashmap that does not contain the deleted payment method
-                                            users.updateChildren(userUpdate);
+                                            users.child(firebaseUser.getUid()).updateChildren(user.toMap());
 
                                             // show a toast to tell the user the card was deleted
                                             Toast.makeText(getContext(), R.string.card_deleted, Toast.LENGTH_SHORT).show();
@@ -373,11 +367,7 @@ public class ProfileFragment extends Fragment {
                             public void onDataChange(DataSnapshot dataSnapshot) {
                                 User user = dataSnapshot.getValue(User.class);
                                 user.setAvatar(downloadUrl.toString());
-
-                                Map<String, Object> userUpdate = new HashMap<>();
-                                userUpdate.put(firebaseUser.getUid(), user.toMap());
-
-                                users.updateChildren(userUpdate);
+                                users.child(firebaseUser.getUid()).updateChildren(user.toMap());
 
                                 Toast.makeText(getActivity(), "Successfully updated profile picture.", Toast.LENGTH_SHORT).show();
                             }
@@ -513,9 +503,7 @@ public class ProfileFragment extends Fragment {
                             boolean didAdd = user.addPayment(cardToSave.getNumber());
                             if (didAdd) {
                                 // Update database
-                                Map<String, Object> userUpdate = new HashMap<>();
-                                userUpdate.put(firebaseUser.getUid(), user.toMap());
-                                users.updateChildren(userUpdate);
+                                users.child(firebaseUser.getUid()).updateChildren(user.toMap());
 
                                 // tell user card was successfully added
                                 Toast.makeText(getContext(), R.string.card_added, Toast.LENGTH_SHORT).show();
