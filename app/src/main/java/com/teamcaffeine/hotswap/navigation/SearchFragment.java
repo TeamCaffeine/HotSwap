@@ -351,20 +351,20 @@ public class SearchFragment extends Fragment implements OnMapReadyCallback, Goog
             // if location services not enabled
             // set Toast to tell user to enable location services
 
+            // TODO uncomment later
+            // locationManager = (LocationManager)getActivity().getSystemService(Context.LOCATION_SERVICE);
+            // Criteria criteria = new Criteria();
+            // provider = locationManager.getBestProvider(criteria, false);
+            // lastLocation = locationManager.getLastKnownLocation(provider);
+            // if (lastLocation != null) {
+
+                // LAT LNG OF CENTER OF AMERICA
                 final LatLng latlng = new LatLng(37.0902, -95.7129);
 
                 setQueryinGoogleMaps(latlng);
-                mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
-                    @Override
-                    public boolean onMarkerClick(Marker marker) {
-                        return false;
-                    }
-
-                });
 
                 progress.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
                     public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                        // progress = progress*10;
 
                     }
 
