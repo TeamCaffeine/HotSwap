@@ -360,6 +360,32 @@ public class SearchFragment extends Fragment implements OnMapReadyCallback, Goog
             final LatLng latlng = new LatLng(lat, lng);
 
             setQueryinGoogleMaps(latlng);
+            mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+                @Override
+                public boolean onMarkerClick(Marker marker) {
+                    return false;
+                }
+
+            });
+
+            progress.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+                public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                    // progress = progress*10;
+
+                }
+
+                @Override
+                public void onStartTrackingTouch(final SeekBar seekBar) {
+                }
+
+                @Override
+                public void onStopTrackingTouch(final SeekBar seekBar) {
+                    progressSeekbar = seekBar.getProgress();
+                    System.out.println(progressSeekbar);
+                    circle.setRadius(progressSeekbar);
+                    setQueryinGoogleMaps(latlng);
+                }
+            });
             zoomlevel = 13.5f;
             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latlng, zoomlevel));
             zoomlevel=mMap.getCameraPosition().zoom;
