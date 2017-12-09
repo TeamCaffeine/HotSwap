@@ -1,17 +1,14 @@
 package com.teamcaffeine.hotswap.swap;
 
-import android.os.Parcel;
-import android.os.Parcelable;
-
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class Item implements Parcelable {
+public class Item {
     // Force empty initialization of default table fields
-    private String itemID ="";
+    private String itemID = "";
     private String name = "";
     private String ownerID = "";
     private String renteeID = "";
@@ -22,8 +19,10 @@ public class Item implements Parcelable {
     private List<String> additionalPictures = new ArrayList<String>();
     private List<Date> availableDates = new ArrayList<Date>();
     private String address = "";
+    private List<Transaction> transactions = new ArrayList<>();
 
-    Item() {}
+    Item() {
+    }
 
     public Item(String itemID, String name, String ownerID, String description, String rentPrice, String address) {
         this.itemID = itemID;
@@ -32,6 +31,16 @@ public class Item implements Parcelable {
         this.description = description;
         this.rentPrice = rentPrice;
         this.address = address;
+    }
+
+    public Item(String itemID, String name, String ownerID, String description, String rentPrice, String address, List<Transaction> transactions) {
+        this.itemID = itemID;
+        this.name = name;
+        this.ownerID = ownerID;
+        this.description = description;
+        this.rentPrice = rentPrice;
+        this.address = address;
+        this.transactions = transactions;
     }
 
     public Item(Item item) {
@@ -46,19 +55,7 @@ public class Item implements Parcelable {
         this.additionalPictures = item.getAdditionalPictures();
         this.availableDates = item.getAvailableDates();
         this.address = item.getAddress();
-    }
-
-    protected Item(Parcel in) {
-        itemID = in.readString();
-        name = in.readString();
-        ownerID = in.readString();
-        renteeID = in.readString();
-        description = in.readString();
-        rentPrice = in.readString();
-        tags = in.createStringArrayList();
-        headerPicture = in.readString();
-        additionalPictures = in.createStringArrayList();
-        address = in.readString();
+        this.transactions = item.getTransactions();
     }
 
     public Map<String, Object> toMap() {
@@ -73,6 +70,7 @@ public class Item implements Parcelable {
         result.put("headerPicture", headerPicture);
         result.put("additionalPictures", additionalPictures);
         result.put("address", address);
+        result.put("transactions", transactions);
         return result;
     }
 
@@ -160,6 +158,14 @@ public class Item implements Parcelable {
         return tags;
     }
 
+    public String getTagsToString() {
+        StringBuilder tagsStringBuilder = new StringBuilder();
+        for (int i = 0; i < tags.size(); i++) {
+            tagsStringBuilder.append(i == 0 ? tags.get(i) : ", " + tags.get(i));
+        }
+        return tagsStringBuilder.toString();
+    }
+
     public String getHeaderPicture() {
         return headerPicture;
     }
@@ -176,38 +182,22 @@ public class Item implements Parcelable {
         return address;
     }
 
-    /**
-     * Methods to set Item as a Parcelable class to pass between activities in an intent
-     */
-
-    @Override
-    public int describeContents() {
-        return 0;
+    public List<Transaction> getTransactions() {
+        return transactions;
     }
 
-    @Override
-    public void writeToParcel(Parcel parcel, int i) {
-        parcel.writeString(itemID);
-        parcel.writeString(name);
-        parcel.writeString(ownerID);
-        parcel.writeString(renteeID);
-        parcel.writeString(description);
-        parcel.writeString(rentPrice);
-        parcel.writeStringList(tags);
-        parcel.writeString(headerPicture);
-        parcel.writeStringList(additionalPictures);
-        parcel.writeString(address);
+    public void setTransactions(List<Transaction> transactions) {
+        this.transactions = transactions;
     }
 
-    public static final Creator<Item> CREATOR = new Creator<Item>() {
-        @Override
-        public Item createFromParcel(Parcel in) {
-            return new Item(in);
+    public boolean addTransaction(Transaction transaction) {
+        for (Transaction t : transactions) {
+            if (t.getRequestUserID().equals(transaction.getRequestUserID()) && t.getRequestedDates().equals(transaction.getRequestedDates())) {
+                //TODO this doesn't handle overlap, just checks for equal dates. Future work to check for any overlap and notify user
+                return false;
+            }
         }
-
-        @Override
-        public Item[] newArray(int size) {
-            return new Item[size];
-        }
-    };
+        transactions.add(transaction);
+        return true;
+    }
 }
