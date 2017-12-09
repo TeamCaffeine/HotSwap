@@ -120,7 +120,7 @@ public class ItemDetailsActivity extends AppCompatActivity {
                                                     // If the owner does not already have a subscription to the user
                                                     if (!ownerChannels.getSubscriptions().findChannel(userEmail)) {
                                                         ownerChannels.addSubscription(userEmail);
-                                                        channels.child(ownerID).updateChildren(userEmail);
+                                                        channels.child(ownerID).updateChildren(ownerChannels.toMap());
                                                     }
 
                                                     Intent intent = new Intent(getApplicationContext(), StyledMessagesActivity.class);
