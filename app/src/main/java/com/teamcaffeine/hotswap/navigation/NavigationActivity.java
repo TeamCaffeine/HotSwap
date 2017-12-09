@@ -1,6 +1,7 @@
 package com.teamcaffeine.hotswap.navigation;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.internal.BottomNavigationItemView;
@@ -130,6 +131,17 @@ public class NavigationActivity extends AppCompatActivity implements
             selectNavigationItem(homeItem);
         } else {
             super.onBackPressed();
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        for (Fragment f : getSupportFragmentManager().getFragments()) {
+            if (f instanceof ProfileFragment) {
+                f.onActivityResult(requestCode, resultCode, data);
+            }
         }
     }
 

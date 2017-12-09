@@ -176,5 +176,9 @@
     <string name="login_sign_in_text">SIGN IN</string>
     <string name="login_create_account_text">CREATE ACCOUNT</string>
     <string name="login_divider_text">OR</string>
+    <string name="get_swapping">Get Swapping!</string>
+    <string name="begin_a_swap">Begin a swap:</string>
+    <string name="add_a_note_to_the_owner">Add a note to the owner</string>
+    <string name="total_price">Total Price:</string>
 
 </resources>
