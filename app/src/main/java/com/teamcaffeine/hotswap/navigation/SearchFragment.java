@@ -151,7 +151,6 @@ public class SearchFragment extends Fragment implements OnMapReadyCallback, Goog
                 //if(! location.equals("")) {
                 // checks if user entered anything or not "empty string"
                 //   if (location.equals("Vacuum")) {
-                lvItems.setVisibility(View.VISIBLE);
                 //   }
                 // }
 //                else{
@@ -196,6 +195,7 @@ public class SearchFragment extends Fragment implements OnMapReadyCallback, Goog
 
         });
         lvItems.setAdapter(lvAdapter);
+
 
         lvItems.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -271,6 +271,7 @@ public class SearchFragment extends Fragment implements OnMapReadyCallback, Goog
         }
         mMap.setOnMarkerDragListener(this);
 
+
         if (prefs.contains("zip")) {
             String postalcode = prefs.getString("zip", "02215");
             String key = "https://maps.googleapis.com/maps/api/geocode/json?address=";
@@ -306,7 +307,6 @@ public class SearchFragment extends Fragment implements OnMapReadyCallback, Goog
                         public void run() {
                             final LatLng latlng = new LatLng(lat, lng);
 
-                            mMap.clear();
                             double dragLat = latlng.latitude;
                             double dragLong = latlng.longitude;
                             setLocaleArea(dragLat, dragLong);
@@ -317,7 +317,6 @@ public class SearchFragment extends Fragment implements OnMapReadyCallback, Goog
                                 public boolean onMarkerClick(Marker marker) {
                                         return false;
                                     }
-
                             });
 
                             progress.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
@@ -335,6 +334,8 @@ public class SearchFragment extends Fragment implements OnMapReadyCallback, Goog
                                     progressSeekbar = seekBar.getProgress();
                                     System.out.println(progressSeekbar);
                                     circle.setRadius(progressSeekbar);
+                                    mMap.clear();
+                                    lvAdapter.nuke();
                                     setQueryinGoogleMaps(latlng);
                                 }
                             });
@@ -357,15 +358,22 @@ public class SearchFragment extends Fragment implements OnMapReadyCallback, Goog
             // provider = locationManager.getBestProvider(criteria, false);
             // lastLocation = locationManager.getLastKnownLocation(provider);
             // if (lastLocation != null) {
+            mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+                @Override
+                public boolean onMarkerClick(Marker marker) {
+                    return false;
+                }
+
+            });
 
                 // LAT LNG OF CENTER OF AMERICA
                 final LatLng latlng = new LatLng(37.0902, -95.7129);
 
                 setQueryinGoogleMaps(latlng);
 
+
                 progress.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
                     public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-
                     }
 
                     @Override
@@ -385,6 +393,7 @@ public class SearchFragment extends Fragment implements OnMapReadyCallback, Goog
                 zoomlevel = mMap.getCameraPosition().zoom;
 
         }
+
 
 
     }
@@ -447,9 +456,9 @@ public class SearchFragment extends Fragment implements OnMapReadyCallback, Goog
     }
 
     public void setQueryinGoogleMaps(final LatLng latlng){
-        currentLocation = new GeoLocation(latlng.latitude, latlng.longitude);
         mMap.clear();
         lvAdapter.nuke();
+        currentLocation = new GeoLocation(latlng.latitude, latlng.longitude);
         Marker stopMarker = mMap.addMarker(new MarkerOptions()
                 .draggable(true)
                 .position(latlng)
@@ -492,6 +501,8 @@ public class SearchFragment extends Fragment implements OnMapReadyCallback, Goog
                         hashMapMarkerTitle.put(key, title);
                         hashMapMarker.get(key).title(title);
                         mMap.addMarker(hashMapMarker.get(key));
+                        lvAdapter.notifyDataSetChanged();
+
                     }
 
                     @Override
@@ -530,6 +541,7 @@ public class SearchFragment extends Fragment implements OnMapReadyCallback, Goog
             }
 
         });
+
     }
 
     public void setLocaleArea(Double lat, Double lng){
