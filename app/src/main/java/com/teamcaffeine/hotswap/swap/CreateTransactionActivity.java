@@ -105,14 +105,13 @@ public class CreateTransactionActivity extends AppCompatActivity {
                 for (Transaction t : transactions) {
                     for (Date d : t.getRequestedDates()) {
                         if (d.equals(date) && t.isConfirmed()) {
-                            Log.e(TAG, "inside loop " + " transaction dates are: " + Arrays.toString(t.getRequestedDates().toArray()) + "date d: " + d.toString());
                             return false;
                         } else {
-                            return true;
+                            // Do nothing
                         }
                     }
                 }
-                return false;
+                return true;
             }
         });
 
