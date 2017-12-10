@@ -12,14 +12,6 @@
     <string name="facebook_login_protocol_scheme" translatable="false">fb497436047284132</string>
 
     <!--Login Activity Strings-->
-    <string name="label_google_sign_in">Firebase + Google Sign In</string>
-    <string name="desc_google_sign_in">Use a Google Sign In credential to authenticate with Firebase.</string>
-
-    <string name="label_facebook_login">Firebase + Facebook Login</string>
-    <string name="desc_facebook_login">Use a Facebook Login credential to authenticate with Firebase.</string>
-
-    <string name="label_emailpassword">Email/Password Authentication</string>
-    <string name="desc_emailpassword">Use an email and password to authenticate with Firebase.</string>
 
     <string name="hint_user_id">Identidad de usuario</string>
     <string name="get_custom_token">Get Token</string>
@@ -104,7 +96,7 @@
     <string name="post_to_facebook">Publicar en Facebook</string>
 
     <!--Invite friends strings-->
-    <string name="invite_message">¡Hola! ¡He estado usando HotSwap para alquilar ítemes que necesito pero no quiero comprar! ¡Echale un vistazo!</string>
+    <string name="invite_message">¡Oye! ¡He estado usando HotSwap para alquilar ítemes que necesito pero no quiero comprar! ¡Echale un vistazo!</string>
     <string name="post_to_FB_url">https://hotswap.com</string>
     <string name="invite_email_subject">¡Unirse a HotSwap!</string>
 
