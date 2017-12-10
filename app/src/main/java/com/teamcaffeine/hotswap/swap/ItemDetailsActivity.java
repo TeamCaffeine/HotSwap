@@ -6,9 +6,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.common.base.Strings;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -16,6 +18,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.squareup.picasso.Picasso;
 import com.teamcaffeine.hotswap.R;
 import com.teamcaffeine.hotswap.login.User;
 import com.teamcaffeine.hotswap.messaging.StyledMessagesActivity;
@@ -31,6 +34,7 @@ public class ItemDetailsActivity extends AppCompatActivity {
 
     private String currentCity;
 
+    private ImageView imgItemImage;
     private TextView txtItemName;
     private TextView txtItemDescription;
     private TextView txtItemTags;
@@ -62,6 +66,14 @@ public class ItemDetailsActivity extends AppCompatActivity {
         Bundle extras = getIntent().getExtras();
         itemID = extras.getString("itemID");
 
+        imgItemImage = (ImageView) findViewById(R.id.imgItemImage);
+        txtItemName = (TextView) findViewById(R.id.txtItemName);
+        txtItemDescription = (TextView) findViewById(R.id.txtItemDescription);
+        txtItemTags = (TextView) findViewById(R.id.txtItemTags);
+        txtItemPrice = (TextView) findViewById(R.id.txtItemPrice);
+        txtItemLocation = (TextView) findViewById(R.id.txtItemLocation);
+        btnRequestSwap = findViewById(R.id.btnRequestSwap);
+
         // Set up Firebase
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         database = FirebaseDatabase.getInstance();
@@ -75,7 +87,11 @@ public class ItemDetailsActivity extends AppCompatActivity {
                 String itemDescription = item.getDescription();
                 String itemTags = item.getTagsToString();
                 String itemPrice = "$" + item.getRentPrice();
+                String downloadUrl = item.getHeaderPicture();
                 String itemLocation;
+                if (!Strings.isNullOrEmpty(downloadUrl)) {
+                    Picasso.with(getApplicationContext()).load(downloadUrl).into(imgItemImage);
+                }
 
                 try {
                     itemLocation = item.getAddress().split(",")[1];
@@ -104,12 +120,6 @@ public class ItemDetailsActivity extends AppCompatActivity {
         final String userUID = FirebaseAuth.getInstance().getUid();
         final String ownerID = extras.getString("ownerID");
 
-        txtItemName = (TextView) findViewById(R.id.txtItemName);
-        txtItemDescription = (TextView) findViewById(R.id.txtItemDescription);
-        txtItemTags = (TextView) findViewById(R.id.txtItemTags);
-        txtItemPrice = (TextView) findViewById(R.id.txtItemPrice);
-        txtItemLocation = (TextView) findViewById(R.id.txtItemLocation);
-        btnRequestSwap = findViewById(R.id.btnRequestSwap);
         btnRequestSwap.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
