@@ -61,6 +61,7 @@ public class CreateTransactionActivity extends AppCompatActivity {
     private String itemID;
     private Item item;
     private ArrayList<Transaction> transactions;
+    private ArrayList<Date> invalidDates;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,6 +82,7 @@ public class CreateTransactionActivity extends AppCompatActivity {
         btnGetSwapping = findViewById(R.id.btnGetSwapping);
         calendarPickerView = findViewById(R.id.calendarView);
 
+        invalidDates = new ArrayList<>();
         Calendar nextYear = Calendar.getInstance();
         nextYear.add(Calendar.YEAR, 1);
         Date today = new Date();
@@ -90,6 +92,21 @@ public class CreateTransactionActivity extends AppCompatActivity {
         calendarPickerView.setOnDateSelectedListener(new CalendarPickerView.OnDateSelectedListener() {
             @Override
             public void onDateSelected(Date date) {
+                // if date range contains invalid date, disable selection
+                Date previousDate = calendarPickerView.getSelectedDates().get(0);
+                for (Date d : calendarPickerView.getSelectedDates()) {
+                    if (previousDate.equals(d)) {
+                        // Ignore. This is the first iteration.
+                    } else if (d.getDay() == previousDate.getDay() + 1){
+                        previousDate = (Date) d.clone();
+                    } else {
+                        // We must have skipped a day. Log and handle appropriately.
+                        Log.i(TAG, "Selected range with disabled day inside of it.");
+                        Toast.makeText(getApplicationContext(), R.string.invalid_date_selected, Toast.LENGTH_LONG).show();
+                        calendarPickerView.selectDate(calendarPickerView.getSelectedDate());
+                    }
+                }
+
                 // Safely calculate the total price with proper error handling and try catch statements
                 txtTotalPrice.setText(String.format("$%s", Double.parseDouble(item.getRentPrice()) * calendarPickerView.getSelectedDates().size()));
             }
@@ -99,12 +116,21 @@ public class CreateTransactionActivity extends AppCompatActivity {
                 // Do nothing, this won't ever be called
             }
         });
+
+        calendarPickerView.setOnInvalidDateSelectedListener(new CalendarPickerView.OnInvalidDateSelectedListener() {
+            @Override
+            public void onInvalidDateSelected(Date date) {
+                Toast.makeText(getApplicationContext(), R.string.invalid_date_selected, Toast.LENGTH_LONG).show();
+            }
+        });
+
         calendarPickerView.setDateSelectableFilter(new CalendarPickerView.DateSelectableFilter() {
             @Override
             public boolean isDateSelectable(Date date) {
                 for (Transaction t : transactions) {
                     for (Date d : t.getRequestedDates()) {
                         if (d.equals(date) && t.isConfirmed()) {
+                            invalidDates.add(d);
                             return false;
                         } else {
                             // Do nothing
