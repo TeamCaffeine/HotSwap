@@ -131,7 +131,6 @@ public class ChatFragment extends Fragment implements DialogsListAdapter.OnDialo
 
     @Override
     public void onDialogLongClick(Dialog dialog) {
-//        AppUtils.showToast(App.getAppContext(), dialog.getDialogName(), false);
     }
 
     @Override
