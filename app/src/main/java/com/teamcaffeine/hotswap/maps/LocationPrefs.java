@@ -112,7 +112,7 @@ public class LocationPrefs extends AppCompatActivity
                     String key = "https://maps.googleapis.com/maps/api/geocode/json?latlng=";
                     String latitude = Double.toString(lat);
                     String longitude = Double.toString(lng);
-                    String api = "&key=AIzaSyCdD6V_pMev1dl8LAsoJ6PLG5JLnR-OiUc";
+                    String api = "&key=" + getString(R.string.locale_key);
                     String stringUrl = key+latitude+","+longitude+api;
                     System.out.println(stringUrl);
 
@@ -167,7 +167,7 @@ public class LocationPrefs extends AppCompatActivity
                 if (s.length() == 5) {
                     String area = zip.getText().toString();
                     String key = "https://maps.googleapis.com/maps/api/geocode/json?address=";
-                    String api = "&key=AIzaSyCdD6V_pMev1dl8LAsoJ6PLG5JLnR-OiUc";
+                    String api = "&key=" + getString(R.string.locale_key);
                     String stringUrl = key + area + api;
                     System.out.println(stringUrl);
 

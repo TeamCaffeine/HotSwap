@@ -9,16 +9,16 @@ import com.google.maps.GeocodingApi;
 import com.google.maps.errors.ApiException;
 import com.google.maps.model.GeocodingResult;
 import com.google.maps.model.LatLng;
+import com.teamcaffeine.hotswap.R;
 
 import java.io.IOException;
 
 public class LatLongUtility {
 
     private static String TAG = "LatLongUtility";
-    private static String KEY = "AIzaSyCdD6V_pMev1dl8LAsoJ6PLG5JLnR-OiUc";
-    public static LatLng getLatLongForAddress(String address) {
+    public static LatLng getLatLongForAddress(String address, String key) {
         GeoApiContext context = new GeoApiContext.Builder()
-                .apiKey(KEY)
+                .apiKey(key)
                 .build();
         GeocodingResult[] results = new GeocodingResult[0];
 
@@ -32,9 +32,9 @@ public class LatLongUtility {
         return results[0].geometry.location;
     }
 
-    public static float getDistanceToAddress(String address, Location myLocation) {
+    public static float getDistanceToAddress(String address, Location myLocation, String key) {
         GeoApiContext context = new GeoApiContext.Builder()
-                .apiKey(KEY)
+                .apiKey(key)
                 .build();
         GeocodingResult[] results = new GeocodingResult[0];
 
