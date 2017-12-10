@@ -7,9 +7,10 @@ import android.content.pm.PackageManager;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationManager;
+import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -29,10 +30,10 @@ import com.teamcaffeine.hotswap.R;
 import com.teamcaffeine.hotswap.navigation.NavigationActivity;
 import com.teamcaffeine.hotswap.utility.LatLongUtility;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 
 public class CreateTransactionActivity extends AppCompatActivity {
 
@@ -59,6 +60,7 @@ public class CreateTransactionActivity extends AppCompatActivity {
     // Relevant item for this transaction
     private String itemID;
     private Item item;
+    private ArrayList<Transaction> transactions;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,12 +80,13 @@ public class CreateTransactionActivity extends AppCompatActivity {
         edtAddNote = findViewById(R.id.edtAddNote);
         btnGetSwapping = findViewById(R.id.btnGetSwapping);
         calendarPickerView = findViewById(R.id.calendarView);
+
         Calendar nextYear = Calendar.getInstance();
         nextYear.add(Calendar.YEAR, 1);
         Date today = new Date();
-        calendarPickerView.init(today, nextYear.getTime())
-                .withSelectedDate(today)
-                .inMode(CalendarPickerView.SelectionMode.RANGE);
+
+        // Set our listeners
+
         calendarPickerView.setOnDateSelectedListener(new CalendarPickerView.OnDateSelectedListener() {
             @Override
             public void onDateSelected(Date date) {
@@ -96,12 +99,29 @@ public class CreateTransactionActivity extends AppCompatActivity {
                 // Do nothing, this won't ever be called
             }
         });
+        calendarPickerView.setDateSelectableFilter(new CalendarPickerView.DateSelectableFilter() {
+            @Override
+            public boolean isDateSelectable(Date date) {
+                for (Transaction t : transactions) {
+                    for (Date d : t.getRequestedDates()) {
+                        if (d.equals(date) && t.isConfirmed()) {
+                            Log.e(TAG, "inside loop " + " transaction dates are: " + Arrays.toString(t.getRequestedDates().toArray()) + "date d: " + d.toString());
+                            return false;
+                        } else {
+                            return true;
+                        }
+                    }
+                }
+                return false;
+            }
+        });
 
         // Ensure we were passed an item. This activity cannot exist without one.
         Bundle extras = getIntent().getExtras();
 
         if (extras != null) {
             itemID = extras.getString("itemID");
+            transactions = extras.getParcelableArrayList("transactions");
         } else {
             goHomeSafely("Bundle extras are null. Returning to previous intent.");
             return;
@@ -116,11 +136,6 @@ public class CreateTransactionActivity extends AppCompatActivity {
                 txtItemName.setText(item.getName());
                 txtItemPrice.setText(String.format("$%s", item.getRentPrice()));
                 txtTotalPrice.setText(String.format("$%s", item.getRentPrice()));
-//        for (Date d : item.getAvailableDates()) {
-//            //TODO set the calendar to gray out the dates that it has already been rented on
-//            calendarPickerView.selectDate(d);
-//        }
-
             }
 
             @Override
@@ -165,6 +180,9 @@ public class CreateTransactionActivity extends AppCompatActivity {
             }
         });
 
+        // Initialize the calendar. During this, the filter listener will be applied.
+        calendarPickerView.init(today, nextYear.getTime())
+                .inMode(CalendarPickerView.SelectionMode.RANGE);
     }
 
     private void goHomeSafely(String msg) {
