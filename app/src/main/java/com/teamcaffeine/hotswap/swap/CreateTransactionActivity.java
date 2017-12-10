@@ -61,7 +61,6 @@ public class CreateTransactionActivity extends AppCompatActivity {
     private String itemID;
     private Item item;
     private ArrayList<Transaction> transactions;
-    private ArrayList<Date> invalidDates;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,7 +81,6 @@ public class CreateTransactionActivity extends AppCompatActivity {
         btnGetSwapping = findViewById(R.id.btnGetSwapping);
         calendarPickerView = findViewById(R.id.calendarView);
 
-        invalidDates = new ArrayList<>();
         Calendar nextYear = Calendar.getInstance();
         nextYear.add(Calendar.YEAR, 1);
         Date today = new Date();
@@ -130,7 +128,6 @@ public class CreateTransactionActivity extends AppCompatActivity {
                 for (Transaction t : transactions) {
                     for (Date d : t.getRequestedDates()) {
                         if (d.equals(date) && t.isConfirmed()) {
-                            invalidDates.add(d);
                             return false;
                         } else {
                             // Do nothing
