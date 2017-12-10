@@ -153,7 +153,7 @@ public class CreateTransactionActivity extends AppCompatActivity {
                 String provider = lm.getBestProvider(criteria, false);
                 Location location = lm.getLastKnownLocation(provider);
 
-                transaction.setDistance(LatLongUtility.getDistanceToAddress(item.getAddress(), location));
+                transaction.setDistance(LatLongUtility.getDistanceToAddress(item.getAddress(), location, getString(R.string.locale_key)));
                 transaction.setRequestUserID(FirebaseAuth.getInstance().getCurrentUser().getUid());
 
                 // At this point the transaction is fully constructed. We can now add it to the item and update the database.
