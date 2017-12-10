@@ -241,7 +241,7 @@ public class SearchFragment extends Fragment implements OnMapReadyCallback, Goog
             if (resultCode == 0) {
                 localeMsg.setText(prefs.getString("city", ""));
                 onLocationChanged(lastLocation);
-                Log.e(TAG, Float.toString(zoomlevel));
+                Log.i(TAG, Float.toString(zoomlevel));
                 mMap.clear();
                 onMapReady(mMap);
             }
@@ -282,7 +282,6 @@ public class SearchFragment extends Fragment implements OnMapReadyCallback, Goog
     public void onPause() {
         super.onPause();
         super.onResume();
-        Log.e(TAG, "SearchFrag onPause started");
         getActivity().overridePendingTransition(R.anim.slide_in_up, R.anim.slide_out_up);
     }
 
@@ -290,14 +289,7 @@ public class SearchFragment extends Fragment implements OnMapReadyCallback, Goog
     public void onResume() {
         super.onResume();
         super.onPause();
-        Log.e(TAG, "SearchFrag onResume started");
             getActivity().overridePendingTransition(R.anim.slide_in_down, R.anim.slide_out_down);
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) { // marshmellow
-//            checkLocationPermission();
-//        }
-//        else{
-//            checkLocationPermission();
-//        }
     }
 
     public boolean checkLocationPermission() {
@@ -314,7 +306,6 @@ public class SearchFragment extends Fragment implements OnMapReadyCallback, Goog
 
     }
     private void DoAfterMapsLoaded(){
-        Log.e(TAG, "HNNNNG");
         if (prefs.contains("zip")) {
             String postalcode = prefs.getString("zip", "02215");
             String key = "https://maps.googleapis.com/maps/api/geocode/json?address=";
@@ -454,7 +445,6 @@ public class SearchFragment extends Fragment implements OnMapReadyCallback, Goog
 
     @Override
     public void onMapReady(GoogleMap googleMap) { // should automatically be at current location
-        Log.e(TAG, "Calling onMapReady");
         mMap = googleMap;
         if (ContextCompat.checkSelfPermission(getActivity().getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION)
                 == PackageManager.PERMISSION_GRANTED) {
@@ -679,7 +669,7 @@ public class SearchFragment extends Fragment implements OnMapReadyCallback, Goog
         geoQuery.addGeoQueryEventListener(new GeoQueryEventListener() {
             @Override
             public void onKeyEntered(final String key, GeoLocation location) {
-                Log.e(TAG, String.format("Key %s entered the search area at [%f,%f]", key, location.latitude, location.longitude));
+                Log.i(TAG, String.format("Key %s entered the search area at [%f,%f]", key, location.latitude, location.longitude));
 
                 final MarkerOptions markerOptions = new MarkerOptions();
                 markerOptions.position(new LatLng(location.latitude, location.longitude));
@@ -689,7 +679,7 @@ public class SearchFragment extends Fragment implements OnMapReadyCallback, Goog
                 ref.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
-                        Log.e(TAG, "Getting title for key " + key);
+                        Log.i(TAG, "Getting title for key " + key);
                         // create an item object to read each item's contents
                         Item item = dataSnapshot.getValue(Item.class);
 
@@ -744,7 +734,7 @@ public class SearchFragment extends Fragment implements OnMapReadyCallback, Goog
 
             @Override
             public void onGeoQueryReady() {
-                Log.e(TAG, "All initial data has been loaded and events have been fired!");
+                Log.i(TAG, "All initial data has been loaded and events have been fired!");
                 geoQuery.setCenter(currentLocation);
                 geoQuery.setRadius(progressSeekbar/1000.0);
 
