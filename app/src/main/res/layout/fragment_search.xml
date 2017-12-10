@@ -32,7 +32,6 @@
             android:layout_weight="1"
             android:layout_above="@+id/map"
             android:layout_toEndOf="@+id/tfLocation"
-            android:onClick="onClick"
             android:text="Search" />
 
 
@@ -67,32 +66,40 @@
             android:textColor="#0000EE"
             android:textSize="16dp"
             />
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
         <TextView
-                android:id="@+id/distanceMsg"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:textSize="16dp"
-                android:textColor="@color/black"
-                android:inputType="numberDecimal"
-                android:text="Distance(Kilometers)" />
+            android:id="@+id/distanceMsg"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:textSize="16dp"
+            android:textColor="@color/black"
+            android:inputType="numberDecimal"
+            android:text="Distance(Kilometers)"
+            />
 
-            <TextView
-                android:id="@+id/distanceInput"
-                android:layout_width="45dp"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:textSize="16dp"
-                android:textColor="@color/black"
-                android:inputType="numberDecimal"
-                android:text="1.00" />
+        <TextView
+            android:id="@+id/distanceInput"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:textSize="16dp"
+            android:textColor="@color/black"
+            android:inputType="numberDecimal"
+            android:text="1.00"
+            />
+
     </LinearLayout>
 
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp">
             <SeekBar
                 android:id="@+id/circleFilter"
                 style="@style/Widget.AppCompat.SeekBar.Discrete"
