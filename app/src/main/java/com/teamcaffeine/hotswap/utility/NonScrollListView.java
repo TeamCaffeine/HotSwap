@@ -1,4 +1,4 @@
-package com.teamcaffeine.hotswap;
+package com.teamcaffeine.hotswap.utility;
 
 import android.content.Context;
 import android.util.AttributeSet;

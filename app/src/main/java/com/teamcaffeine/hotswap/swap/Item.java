@@ -24,13 +24,14 @@ public class Item {
     Item() {
     }
 
-    public Item(String itemID, String name, String ownerID, String description, String rentPrice, String address) {
+    public Item(String itemID, String name, String ownerID, String description, String rentPrice, String address, String headerPicture) {
         this.itemID = itemID;
         this.name = name;
         this.ownerID = ownerID;
         this.description = description;
         this.rentPrice = rentPrice;
         this.address = address;
+        this.headerPicture = headerPicture;
     }
 
     public Item(String itemID, String name, String ownerID, String description, String rentPrice, String address, List<Transaction> transactions) {
