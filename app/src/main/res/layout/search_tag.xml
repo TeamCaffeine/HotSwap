@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/com_facebook_button_background_color_focused_disabled"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_gravity="center_vertical">
+
+        <Button
+            android:id="@+id/btnClose"
+            android:layout_width="41dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:text="X" />
+
+        <Button
+            android:id="@+id/btnSendText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/send_text" />
+
+        <Button
+            android:id="@+id/btnSendEmail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/send_email" />
+
+        <Button
+            android:id="@+id/btnPostToFacebook"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/post_to_facebook" />
+
+    </LinearLayout>
+
+</LinearLayout>

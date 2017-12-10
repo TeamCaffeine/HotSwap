@@ -55,6 +55,8 @@ public class LocationPrefs extends AppCompatActivity
     private LocationRequest locationRequest;
     private Location lastLocation;
     private SharedPreferences prefs;
+    public static final int REQUEST_LOCATION_CODE = 99;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,13 +92,7 @@ public class LocationPrefs extends AppCompatActivity
                 // sets EditText to current area zip code
 
                 if (ActivityCompat.checkSelfPermission(getBaseContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getBaseContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                    // TODO: Consider calling
-                    //    ActivityCompat#requestPermissions
-                    // here to request the missing permissions, and then overriding
-                    //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                    //                                          int[] grantResults)
-                    // to handle the case where the user grants the permission. See the documentation
-                    // for ActivityCompat#requestPermissions for more details.
+                    // Permission already granted
                     return;
                 }
                 Location location= LocationServices.FusedLocationApi.getLastLocation(client);
