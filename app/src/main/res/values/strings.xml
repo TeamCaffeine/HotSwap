@@ -4,12 +4,6 @@
     <string name="default_notification_channel_id" translatable="false">fcm_default_channel</string>
     <string name="msg_subscribed" translatable="false">Subscribed to news topic</string>
 
-    <!-- Facebook application ID and custom URL scheme (app ID prefixed by 'fb'). -->
-    <!--<string name="facebook_app_id">497436047284132</string>-->
-    <!--<string name="fb_login_protocol_scheme">fb497436047284132</string>-->
-    <string name="facebook_application_id" translatable="false">497436047284132</string>
-    <string name="facebook_login_protocol_scheme" translatable="false">fb497436047284132</string>
-
     <!--Login Activity Strings-->
     <string name="label_google_sign_in">Firebase + Google Sign In</string>
     <string name="desc_google_sign_in">Use a Google Sign In credential to authenticate with Firebase.</string>
@@ -78,14 +72,6 @@
     <string name="title_inbox">Inbox</string>
     <string name="title_profile">Profile</string>
     <string name="title_activity_navigation_search" translatable="false">NavigationSearchActivity</string>
-
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment" translatable="false">First Blank Fragment</string>
-    <string name="hello_blank_fragment2" translatable="false">XDDDDD</string>
-
-    <!-- Search Activity Resources -->
-    <string name="google_maps_key" templateMergeStrategy="preserve" translatable="false">
-        AIzaSyDVEVPxdS5ZWc-uRiSWZXDAM4ZAhqwOKGM</string>
 
     <string-array name="items">
         <item>iVacuum 6</item>
