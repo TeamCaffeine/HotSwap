@@ -197,5 +197,9 @@
     <string name="unable_change_image">No se puede cambiar la imagen</string>
     <string name="unable_to_find_owner">No se puede encontrar el dueño en la base de datos, no se puede iniciar un chat</string>
     <string name="invalid_date_selected">Fecha invalida escogida</string>
+    <string name="distance_kilometers">Distancia (Kilómetros)</string>
+    <string name="set_tags">Dar Etiquetas</string>
+    <string name="currently_pending">Intercambios Pendientes</string>
+    <string name="item_requests_title">Solicitudes de ítemes</string>
 
 </resources>
