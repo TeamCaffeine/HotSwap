@@ -92,7 +92,7 @@ import java.util.HashMap;
  */
 public class SearchFragment extends Fragment implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener, LocationListener, GoogleMap.OnMarkerDragListener {
-    private float zoomlevel;
+    private float zoomlevel = 13.5f;
     private GoogleMap mMap;
     private GoogleApiClient client;
     private Location lastLocation;
@@ -364,12 +364,12 @@ public class SearchFragment extends Fragment implements OnMapReadyCallback, Goog
                     String jsonData = response.body().string();
                     Gson gson = new Gson();
                     JsonObject jsonObject = gson.fromJson(jsonData, JsonObject.class);
-                    final double lat = jsonObject.getAsJsonArray("results").get(0)
+                    lat = jsonObject.getAsJsonArray("results").get(0)
                             .getAsJsonObject().get("geometry")
                             .getAsJsonObject().get("location")
                             .getAsJsonObject().get("lat")
                             .getAsDouble();
-                    final double lng = jsonObject.getAsJsonArray("results").get(0)
+                    lng = jsonObject.getAsJsonArray("results").get(0)
                             .getAsJsonObject().get("geometry")
                             .getAsJsonObject().get("location")
                             .getAsJsonObject().get("lng")
@@ -414,7 +414,6 @@ public class SearchFragment extends Fragment implements OnMapReadyCallback, Goog
                                     });
                                 }
                             });
-                            zoomlevel = 13.5f;
 //                            zoomlevel=mMap.getCameraPosition().zoom;
                             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latlng, zoomlevel));
                         }
@@ -730,18 +729,28 @@ public class SearchFragment extends Fragment implements OnMapReadyCallback, Goog
                         if(item == null) {
                             return;
                         }
-                        if (!item.getOwnerID().equals(FirebaseAuth.getInstance().getCurrentUser().getUid())) {
-                            if (item.getName().toLowerCase().contains(tfLocation.getText().toString().toLowerCase())) {
-                                // add to listview
-                                lvAdapter.putItem(item);
-                                String title = item.getName();
-                                hashMapMarkerTitle.put(key, title);
-                                hashMapMarker.get(key).title(title);
-                                mMap.addMarker(hashMapMarker.get(key));
-                                lvAdapter.notifyDataSetChanged();
-                            }
 
-                        }
+                        // for each word in entry
+
+                        String[] splited = tfLocation.getText().toString().toLowerCase().split("\\s+");
+
+                       // for (int i = 0; i < splited.length; i++){
+                            // if tag not matched
+                            if (!item.getOwnerID().equals(FirebaseAuth.getInstance().getCurrentUser().getUid())) {
+                             //   if (item.getName().toLowerCase().contains(splited[i])) {
+                                if (item.getName().toLowerCase().contains(tfLocation.getText().toString().toLowerCase())) {
+                                    // add to listview
+                                    lvAdapter.putItem(item);
+                                    String title = item.getName();
+                                    hashMapMarkerTitle.put(key, title);
+                                    hashMapMarker.get(key).title(title);
+                                    mMap.addMarker(hashMapMarker.get(key));
+                                    lvAdapter.notifyDataSetChanged();
+                                }
+                            }
+                        //}
+
+
                     }
 
                     @Override
@@ -836,7 +845,6 @@ public class SearchFragment extends Fragment implements OnMapReadyCallback, Goog
         setQueryinGoogleMaps(latlng);
         progress.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-
             }
 
             @Override
