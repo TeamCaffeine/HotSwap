@@ -6,6 +6,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.renderscript.Sampler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -15,7 +16,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -30,7 +30,6 @@ import com.teamcaffeine.hotswap.R;
 import com.teamcaffeine.hotswap.swap.Item;
 
 import java.io.Serializable;
-import java.util.List;
 
 /**
  * The Home Fragment is the landing page for the user when they first open the app.
@@ -46,11 +45,11 @@ public class HomeFragment extends Fragment {
     // create objects to reference layout objects
     private Button btnListItem;
     private ListView listviewOwnedItems;
-    private HomeFragmentItemsListAdapter ownedItemsAdapter;
+    private OwnedItemsAdapter ownedItemsAdapter;
     private ListView listviewRenting;
-    private HomeFragmentItemsListAdapter rentingAdapter;
+    private OwnedItemsAdapter rentingAdapter;
     private ListView listviewPending;
-    private HomeFragmentItemsListAdapter pendingAdapter;
+    private OwnedItemsAdapter pendingAdapter;
     private int LIST_ITEM_REQUEST_CODE = 999;
     private int RESULT_ERROR = 88;
 
@@ -62,7 +61,9 @@ public class HomeFragment extends Fragment {
     private FirebaseDatabase database;
     private DatabaseReference itemslocation;
     private DatabaseReference items; // reference to the items table, used for onDataChange listening
+    private DatabaseReference currentUser;
     private String itemTable = "items";
+    private String userTable = "users";
     private String itemlocationsTable="items_location";
 
     // create a value event user
@@ -73,6 +74,7 @@ public class HomeFragment extends Fragment {
     // so the Home Activity does not listen for database changes when it is not open
     // (if it does keep listening, the app crashes).
     private ValueEventListener itemsEventListener;
+    private ValueEventListener userEventListener;
 
     // progress dialog to show page is loading
     public void showProgressDialog() {
@@ -122,9 +124,9 @@ public class HomeFragment extends Fragment {
         listviewRenting = view.findViewById(R.id.listviewRenting);
 
         // instantiate the list that wil hold all of the user's items
-        ownedItemsAdapter = new HomeFragmentItemsListAdapter(getContext());
-        rentingAdapter = new HomeFragmentItemsListAdapter(getContext());
-        pendingAdapter = new HomeFragmentItemsListAdapter(getContext());
+        ownedItemsAdapter = new OwnedItemsAdapter(getContext());
+        rentingAdapter = new OwnedItemsAdapter(getContext());
+        pendingAdapter = new OwnedItemsAdapter(getContext());
 
         // set tbe adapter on the listview in the UI
         listviewOwnedItems.setAdapter(ownedItemsAdapter);
@@ -139,6 +141,7 @@ public class HomeFragment extends Fragment {
 
         // get a reference to the items table
         items = database.getReference().child(itemTable);
+        currentUser = database.getReference().child(userTable).child(firebaseUser.getUid());
         itemslocation = database.getReference().child(itemlocationsTable);
 
 
@@ -237,7 +240,7 @@ public class HomeFragment extends Fragment {
 //        });
 
         /**
-         * ADDING THE LISTS TO THE UI
+         * ADDING THE OWNED ITEM LIST TO THE UI
          */
 
         // Create the event listener to listen to database changes
@@ -264,8 +267,6 @@ public class HomeFragment extends Fragment {
                     if (item.getOwnerID().equals(firebaseUser.getUid())) {
                         ownedItemsAdapter.putItem(item);
                     }
-
-                    //TODO: figure out how we know what items are currently being rented/lended -- is that flag on user or item?
                 }
                 // notify the adapter that the dataset has changed so that it shows the new
                 // list of the user's items
@@ -282,6 +283,47 @@ public class HomeFragment extends Fragment {
         // using the reference to the items table,
         // add the event listener to the items table
         items.addValueEventListener(itemsEventListener);
+
+        /**
+         * ADDING THE RENTING AND PENDING ITEMS TO THE UI
+         */
+
+        // Create the event listener to listen to database changes
+        userEventListener = new ValueEventListener() {
+            @Override
+            // get a data snapshot of the whole table
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                rentingAdapter.clear();
+                pendingAdapter.clear();
+
+
+
+                // TODO: change this to fit user
+                for (DataSnapshot u : dataSnapshot.getChildren()) {
+                    Item item = u.getValue(Item.class);
+                    if (item.getOwnerID().equals(firebaseUser.getUid())) {
+                        ownedItemsAdapter.putItem(item);
+                    }
+
+                    //TODO: figure out how we know what items are currently being rented/lended -- is that flag on user or item?
+                }
+
+
+
+
+
+                rentingAdapter.notifyDataSetChanged();
+                pendingAdapter.notifyDataSetChanged();
+            }
+
+            // if the read of the items table failed, log the error message
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Log.i(TAG, "The read failed: " + databaseError.getCode());
+            }
+        };
+
+        currentUser.addValueEventListener(itemsEventListener);
 
         /**
          * LIST A NEW ITEM

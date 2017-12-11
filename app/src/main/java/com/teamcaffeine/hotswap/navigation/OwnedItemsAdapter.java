@@ -12,12 +12,12 @@ import com.teamcaffeine.hotswap.swap.Item;
 
 import java.util.ArrayList;
 
-public class HomeFragmentItemsListAdapter extends BaseAdapter {
+public class OwnedItemsAdapter extends BaseAdapter {
 
     private ArrayList<Item> items;
     private Context context;
 
-    public HomeFragmentItemsListAdapter(Context aContext) {
+    public OwnedItemsAdapter(Context aContext) {
         context = aContext;  //saving the context we'll need it again (for intents)
         items = new ArrayList<Item>();
 
