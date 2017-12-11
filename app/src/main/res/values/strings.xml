@@ -169,5 +169,6 @@
     <string name="begin_a_swap">Begin a swap:</string>
     <string name="add_a_note_to_the_owner">Add a note to the owner</string>
     <string name="total_price">Total Price:</string>
+    <string name="invalid_date_selected">Invalid date selected.</string>
 
 </resources>
