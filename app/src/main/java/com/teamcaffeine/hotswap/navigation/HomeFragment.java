@@ -1,5 +1,8 @@
 package com.teamcaffeine.hotswap.navigation;
 
+/**
+ * IMPORTANT FILE FOR THIS PR
+ */
 
 import android.app.Activity;
 import android.app.ProgressDialog;
@@ -34,9 +37,7 @@ import com.teamcaffeine.hotswap.swap.Item;
 import java.io.Serializable;
 import java.util.List;
 
-/**
- * IMPORTANT FILE FOR THIS PR
- */
+
 
 
 public class HomeFragment extends Fragment {
