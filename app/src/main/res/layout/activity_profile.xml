@@ -41,7 +41,7 @@
                 android:textAlignment="center" />
         </LinearLayout>
 
-        <ImageView
+        <android.support.v7.widget.AppCompatImageView
             android:id="@+id/imgPhoto"
             android:layout_width="0dp"
             android:layout_height="match_parent"

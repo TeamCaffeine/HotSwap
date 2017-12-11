@@ -19,11 +19,11 @@
             android:layout_height="wrap_content"
             android:text="@string/items_label" />
 
-        <com.teamcaffeine.hotswap.NonScrollListView
+        <com.teamcaffeine.hotswap.utility.NonScrollListView
             android:id="@+id/listviewAllItems"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
-        </com.teamcaffeine.hotswap.NonScrollListView>
+        </com.teamcaffeine.hotswap.utility.NonScrollListView>
 
         <TextView
             android:id="@+id/txtRentingLabel"
@@ -43,11 +43,11 @@
             android:layout_height="wrap_content"
             android:text="@string/currently_lending" />
 
-        <com.teamcaffeine.hotswap.NonScrollListView
+        <com.teamcaffeine.hotswap.utility.NonScrollListView
             android:id="@+id/listviewLending"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
-        </com.teamcaffeine.hotswap.NonScrollListView>
+        </com.teamcaffeine.hotswap.utility.NonScrollListView>
 
         <Button
             android:id="@+id/btnListItem"

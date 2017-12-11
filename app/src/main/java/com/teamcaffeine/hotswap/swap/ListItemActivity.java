@@ -3,7 +3,9 @@ package com.teamcaffeine.hotswap.swap;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
@@ -11,10 +13,13 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.firebase.geofire.GeoFire;
 import com.firebase.geofire.GeoLocation;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.common.base.Strings;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -23,12 +28,18 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 import com.google.maps.model.LatLng;
 import com.squareup.timessquare.CalendarPickerView;
 import com.teamcaffeine.hotswap.R;
+import com.teamcaffeine.hotswap.login.User;
 import com.teamcaffeine.hotswap.navigation.AddressesFragment;
+import com.teamcaffeine.hotswap.navigation.ProfileFragment;
 import com.teamcaffeine.hotswap.swap.Item;
 import com.teamcaffeine.hotswap.utility.LatLongUtility;
+import com.theartofdev.edmodo.cropper.CropImage;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -47,16 +58,17 @@ public class ListItemActivity extends FragmentActivity {
     private String userTable = "users";
     private DatabaseReference items;
     private DatabaseReference geoFireRef;
+    private StorageReference storage;
     private String itemTable = "items";
     private String geoFireTable = "items_location";
+    private Uri imageUri = null;
 
+    private ImageView itemPhoto;
     private EditText editItemName;
-    private EditText editTags;
     private EditText editPrice;
     private EditText editDescription;
 
     private Button listItemButton;
-    private CalendarPickerView calendar;
     private List<String> itemList = new ArrayList<String>();
 
     private int RESULT_ERROR = 88;
@@ -73,8 +85,8 @@ public class ListItemActivity extends FragmentActivity {
         items = database.getReference(itemTable);
         geoFireRef = database.getReference(geoFireTable);
 
+        itemPhoto = (ImageView) findViewById(R.id.itemPhoto);
         editItemName = (EditText) findViewById(R.id.editItemName);
-        editTags = (EditText) findViewById(R.id.editTags);
         editPrice = (EditText) findViewById(R.id.editPrice);
         editDescription = (EditText) findViewById(R.id.editDescription);
 
@@ -83,7 +95,6 @@ public class ListItemActivity extends FragmentActivity {
         ft.add(R.id.addressContent, addressesFragment);
         ft.commit();
 
-        calendar = (CalendarPickerView) findViewById(R.id.calendarView);
         listItemButton = (Button) findViewById(R.id.listItemButton);
 
         // get the  current list of the user's items from the intent
@@ -94,44 +105,14 @@ public class ListItemActivity extends FragmentActivity {
         Bundle args = intent.getBundleExtra("BUNDLE");
         itemList = (ArrayList<String>) args.getSerializable("itemList");
 
-        Calendar nextYear = Calendar.getInstance();
-        nextYear.add(Calendar.YEAR, 1);
-
-        Date today = new Date();
-        calendar.init(today, nextYear.getTime())
-                .withSelectedDate(today)
-                .inMode(CalendarPickerView.SelectionMode.MULTIPLE);
-
-        calendar.setOnTouchListener(new View.OnTouchListener() {
-
-            public boolean onTouch(View v, MotionEvent event) {
-                int action = event.getAction();
-                switch (action) {
-                    case MotionEvent.ACTION_DOWN:
-                        // Disallow ScrollView to intercept touch events.
-                        v.getParent().requestDisallowInterceptTouchEvent(true);
-                        break;
-
-                    case MotionEvent.ACTION_UP:
-                        // Allow ScrollView to intercept touch events.
-                        v.getParent().requestDisallowInterceptTouchEvent(false);
-                        break;
-                }
-
-                v.onTouchEvent(event);
-                return true;
-            }
-        });
-
         listItemButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String itemID = items.push().getKey();
-                String itemName = editItemName.getText().toString();
+                final String itemID = items.push().getKey();
+                final String itemName = editItemName.getText().toString();
 
-                String itemPrice = editPrice.getText().toString();
-                String itemDescription = editDescription.getText().toString();
-                String itemTags = editTags.getText().toString();
+                final String itemPrice = editPrice.getText().toString();
+                final String itemDescription = editDescription.getText().toString();
 
                 // FIELD VALIDATION
                 if (Strings.isNullOrEmpty(itemID) ||
@@ -142,45 +123,86 @@ public class ListItemActivity extends FragmentActivity {
                     return;
                 }
 
-                String itemAddress = addressesFragment.getSelectedAddress();
+                final String itemAddress = addressesFragment.getSelectedAddress();
 
                 if (itemAddress == null) {
                     Toast.makeText(getApplicationContext(), "Please select an address.", Toast.LENGTH_LONG).show();
                     return;
                 }
 
-                Item newItem = new Item(itemID, itemName, firebaseUser.getUid(), itemDescription, itemPrice, itemAddress);
-
-                // ADDING TAGS TO ITEM
-                String[] tags = itemTags.split(",");
-                for (String tag : tags) {
-                    String tagToAdd = tag.trim();
-                    newItem.addTag(tagToAdd);
+                if (imageUri == null) {
+                    Toast.makeText(getApplicationContext(), "Please add an image for this item.", Toast.LENGTH_LONG).show();
+                    return;
                 }
 
-                // DATA VALIDATION
-                // a user cannot list 2 items with the same name
-                // if they enter a new item with the same name as an existing item, an Toast
-                // will show with an error message
-                if (itemList.contains(itemName)) {
-                    Toast.makeText(getBaseContext(), R.string.duplicate_item, Toast.LENGTH_LONG).show();
-                } else {
-                    // if the user is adding a new item with a new name, submit it to the database
-                    submit(newItem);
+                storage = FirebaseStorage.getInstance().getReference();
+                StorageReference imageRef = storage.child("images/items/" + itemID + ".jpg");
+                UploadTask upload = imageRef.putFile(imageUri);
 
-                    // create an intent to send back to the HomeActivity
-                    Intent i = new Intent();
+                // Register observers to listen for when the download is done or if it fails
+                upload.addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception exception) {
+                        // TODO: Handle unsuccessful uploads
+                    }
+                }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                        // taskSnapshot.getMetadata() contains file metadata such as size, content-type, and download URL.
+                        final Uri downloadUrl = taskSnapshot.getDownloadUrl();
 
-                    // send the updated itemList back to the Home Fragment
-                    i.putExtra("newItem", itemName);
+                        Item newItem = new Item(itemID, itemName, firebaseUser.getUid(), itemDescription, itemPrice, itemAddress, downloadUrl.toString());
 
-                    // Set the result to indicate adding the item was successful
-                    // and finish the activity
-                    setResult(Activity.RESULT_OK, i);
-                    finish();
-                }
+                        // DATA VALIDATION
+                        // a user cannot list 2 items with the same name
+                        // if they enter a new item with the same name as an existing item, an Toast
+                        // will show with an error message
+                        if (itemList.contains(itemName)) {
+                            Toast.makeText(getBaseContext(), R.string.duplicate_item, Toast.LENGTH_LONG).show();
+                            return;
+                        } else {
+                            // if the user is adding a new item with a new name, submit it to the database
+                            submit(newItem);
+
+                            // create an intent to send back to the HomeActivity
+                            Intent i = new Intent();
+
+                            // send the updated itemList back to the Home Fragment
+                            i.putExtra("newItem", itemName);
+
+                            // Set the result to indicate adding the item was successful
+                            // and finish the activity
+                            setResult(Activity.RESULT_OK, i);
+                            finish();
+                        }
+                    }
+                });
             }
         });
+
+        itemPhoto.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                CropImage.activity()
+                        .start(ListItemActivity.this);
+            }
+        });
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
+            CropImage.ActivityResult result = CropImage.getActivityResult(data);
+            if (resultCode == RESULT_OK) {
+                Uri resultUri = result.getUri();
+                itemPhoto.setImageURI(resultUri);
+                imageUri = resultUri;
+            } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
+                Toast.makeText(this, "Unable to select image.", Toast.LENGTH_SHORT).show();
+                Exception error = result.getError();
+                Log.d(TAG, error.getMessage());
+            }
+        }
     }
 
     private void submit(Item item) {

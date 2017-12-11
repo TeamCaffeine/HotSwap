@@ -346,7 +346,7 @@ public class ProfileFragment extends Fragment {
                 imgPhoto.setImageURI(resultUri);
 
                 storage = FirebaseStorage.getInstance().getReference();
-                StorageReference imageRef = storage.child("images/" + firebaseUser.getUid() + ".jpg");
+                StorageReference imageRef = storage.child("images/users/" + firebaseUser.getUid() + ".jpg");
                 UploadTask upload = imageRef.putFile(resultUri);
 
                 // Register observers to listen for when the download is done or if it fails
