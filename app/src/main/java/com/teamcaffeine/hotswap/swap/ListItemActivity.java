@@ -203,6 +203,7 @@ public class ListItemActivity extends FragmentActivity {
                 Log.d(TAG, error.getMessage());
             }
         }
+        super.onActivityResult(requestCode, resultCode, data);
     }
 
     private void submit(Item item) {
@@ -226,6 +227,26 @@ public class ListItemActivity extends FragmentActivity {
                     items.updateChildren(itemUpdate);
                     geoFire.setLocation(itemID, new GeoLocation(itemLatLng.lat, itemLatLng.lng));
                     Log.i(TAG, "address found");
+
+                    // Add this item to the users owned items list
+
+                    DatabaseReference ref = users.child(firebaseUser.getUid());
+                    ref.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            User user = dataSnapshot.getValue(User.class);
+                            user.addOwnedItem(itemID);
+                            users.child(firebaseUser.getUid()).updateChildren(user.toMap());
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+                            Log.e(TAG, "The read failed:", databaseError.toException());
+                        }
+                    });
+
+
+
                 } else {
                     // TODO: handle invalid address / location data more gracefully - likely when we put the address fragment here
                     Toast.makeText(getBaseContext(), R.string.unable_to_add_item_due_to_address, Toast.LENGTH_LONG).show();
@@ -237,5 +258,8 @@ public class ListItemActivity extends FragmentActivity {
                 Log.d("ListItemFragment", "The read failed: " + databaseError.getCode());
             }
         });
+
+
+
     }
 }
