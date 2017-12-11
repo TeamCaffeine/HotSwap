@@ -2,10 +2,8 @@ package com.teamcaffeine.hotswap.navigation;
 
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -15,8 +13,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -34,7 +30,6 @@ import com.teamcaffeine.hotswap.R;
 import com.teamcaffeine.hotswap.swap.Item;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -50,13 +45,12 @@ public class HomeFragment extends Fragment {
 
     // create objects to reference layout objects
     private Button btnListItem;
-    private ListView listviewAllItems;
-    private List<String> itemsElementsList;
-    private ArrayAdapter<String> itemsAdapter;
+    private ListView listviewOwnedItems;
+    private HomeFragmentItemsListAdapter ownedItemsAdapter;
     private TextView txtCurrentlyRenting;
     private ListView listviewLending;
     private List<String> lendingElements;
-    private ArrayAdapter<String> lendingAdapter;
+    private HomeFragmentItemsListAdapter pendingAdapter;
     private int LIST_ITEM_REQUEST_CODE = 999;
     private int RESULT_ERROR = 88;
 
@@ -122,7 +116,7 @@ public class HomeFragment extends Fragment {
 
         // get the views from the layout
         btnListItem = view.findViewById(R.id.btnListItem);
-        listviewAllItems = view.findViewById(R.id.listviewAllItems);
+        listviewOwnedItems = view.findViewById(R.id.listviewAllItems);
         txtCurrentlyRenting = view.findViewById(R.id.txtCurrentlyRenting);
         listviewLending = view.findViewById(R.id.listviewLending);
 
@@ -137,100 +131,103 @@ public class HomeFragment extends Fragment {
         itemslocation = database.getReference().child(itemlocationsTable);
 
         // instantiate the list that wil hold all of the user's items
-        itemsElementsList = new ArrayList<String>();
+        ownedItemsAdapter = new HomeFragmentItemsListAdapter(getContext());
 
-        /**
-         * DELETE AN ITEM
-         */
+        // set tbe adapter on the listview in the UI
+        listviewOwnedItems.setAdapter(ownedItemsAdapter);
 
-        // This onClick listener allows the user the delete an item when they click on it
-        // in the list view.
-        listviewAllItems.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
-                // when the item is clicked, an alert dialog shows asking the user if they acutally
-                // want to delete the item
-                AlertDialog myQuittingDialogBox = new AlertDialog.Builder(getContext())
-                        //set message, title, and icon
-                        .setTitle(R.string.delete)
-                        .setMessage(R.string.delete_item_question)
-                        .setPositiveButton(R.string.delete, new DialogInterface.OnClickListener() {
-                            // if they click the "delete" button, delete the item
-                            public void onClick(DialogInterface dialog, int whichButton) {
-                                // get the name of the item to be deleted
-                                final String itemToRemove = listviewAllItems.getItemAtPosition(position).toString();
-                                // using the reference to the items table,
-                                // add a listener to the items table in the database to delete the item
-                                items.addListenerForSingleValueEvent(new ValueEventListener() {
-                                    @Override
-                                    // get a snapshot of the ENTIRE items table, so the onDataChange will detect when an
-                                    // item is deleted from the items table (since items are not stored per user, every item
-                                    // is stored in the data table with a reference to the appropriate user as one of the
-                                    // attributes)
-                                    public void onDataChange(DataSnapshot dataSnapshot) {
-                                        // loop through all of the items in the table from the dataSnapshot
-                                        for (final DataSnapshot i: dataSnapshot.getChildren()) {
-                                            // create an item object so you can read the item's contents
-                                            final Item item = i.getValue(Item.class);
-                                            // check if the item you are currently looping through belongs to the current user
-                                            if (item.getOwnerID().equals(firebaseUser.getUid())){
-                                                // if the item does belong to the user, get its name
-                                                String iteratingItem = item.getName();
-                                                // if the item you are currenlty looping thorugh is the item the user wants to remove,
-                                                // remove it
-                                                if (iteratingItem.equalsIgnoreCase(itemToRemove)){
-                                                    // first remove it from the item list for the listView in the UI
-                                                    // the boolean didRemove will indicate when the item has been successfully
-                                                    // deleted from the list. Only once it has been successfully deleted from
-                                                    // the UI, delete it from the database.
-                                                    boolean didRemove = itemsElementsList.remove(itemToRemove);
-                                                    if (didRemove) {
-                                                        // Remove the item and update database
-                                                        i.getRef().removeValue();
-                                                        itemslocation.addListenerForSingleValueEvent(new ValueEventListener() {
-                                                            @Override
-                                                            public void onDataChange(DataSnapshot dataSnapshot) {
-                                                                dataSnapshot.getRef().child(item.getItemID()).removeValue();
-                                                            }
-
-                                                            @Override
-                                                            public void onCancelled(DatabaseError databaseError) {
-                                                                Log.i(TAG, "User attempted to delete a nonexistent item location", databaseError.toException());
-                                                            }
-                                                        });
-
-                                                    } else {
-                                                        // if the item was NOT successfully removed from the item list, log the error message
-                                                        Log.i(TAG, "User attempted to delete a nonexistent item");
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-
-                                    // if the user cancels the operation, log the error message
-                                    @Override
-                                    public void onCancelled(DatabaseError databaseError) {
-                                        Log.e(TAG, "Item update failed", databaseError.toException());
-                                    }
-                                });
-                                // after the item has been deleted, dismiss the alert dialog
-                                dialog.dismiss();
-                            }
-                        })
-                        // if the user clicks "cancel" instead of "delete," dismiss the dialog and do not
-                        // do anything to the database
-                        .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
-                                dialog.dismiss();
-                            }
-                        })
-                        // once all of the above functionality had been set create the alert dialog box
-                        .create();
-                // once the dialog box has been created, show it
-                myQuittingDialogBox.show();
-            }
-        });
+//        /**
+//         * DELETE AN ITEM
+//         */
+//
+//        // This onClick listener allows the user the delete an item when they click on it
+//        // in the list view.
+//        listviewOwnedItems.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
+//                // when the item is clicked, an alert dialog shows asking the user if they acutally
+//                // want to delete the item
+//                AlertDialog myQuittingDialogBox = new AlertDialog.Builder(getContext())
+//                        //set message, title, and icon
+//                        .setTitle(R.string.delete)
+//                        .setMessage(R.string.delete_item_question)
+//                        .setPositiveButton(R.string.delete, new DialogInterface.OnClickListener() {
+//                            // if they click the "delete" button, delete the item
+//                            public void onClick(DialogInterface dialog, int whichButton) {
+//                                // get the name of the item to be deleted
+//                                final String itemToRemove = listviewOwnedItems.getItemAtPosition(position).toString();
+//                                // using the reference to the items table,
+//                                // add a listener to the items table in the database to delete the item
+//                                items.addListenerForSingleValueEvent(new ValueEventListener() {
+//                                    @Override
+//                                    // get a snapshot of the ENTIRE items table, so the onDataChange will detect when an
+//                                    // item is deleted from the items table (since items are not stored per user, every item
+//                                    // is stored in the data table with a reference to the appropriate user as one of the
+//                                    // attributes)
+//                                    public void onDataChange(DataSnapshot dataSnapshot) {
+//                                        // loop through all of the items in the table from the dataSnapshot
+//                                        for (final DataSnapshot i: dataSnapshot.getChildren()) {
+//                                            // create an item object so you can read the item's contents
+//                                            final Item item = i.getValue(Item.class);
+//                                            // check if the item you are currently looping through belongs to the current user
+//                                            if (item.getOwnerID().equals(firebaseUser.getUid())){
+//                                                // if the item does belong to the user, get its name
+//                                                String iteratingItem = item.getName();
+//                                                // if the item you are currenlty looping thorugh is the item the user wants to remove,
+//                                                // remove it
+//                                                if (iteratingItem.equalsIgnoreCase(itemToRemove)){
+//                                                    // first remove it from the item list for the listView in the UI
+//                                                    // the boolean didRemove will indicate when the item has been successfully
+//                                                    // deleted from the list. Only once it has been successfully deleted from
+//                                                    // the UI, delete it from the database.
+////                                                    boolean didRemove = itemsElementsList.remove(itemToRemove);
+//                                                    if (didRemove) {
+//                                                        // Remove the item and update database
+//                                                        i.getRef().removeValue();
+//                                                        itemslocation.addListenerForSingleValueEvent(new ValueEventListener() {
+//                                                            @Override
+//                                                            public void onDataChange(DataSnapshot dataSnapshot) {
+//                                                                dataSnapshot.getRef().child(item.getItemID()).removeValue();
+//                                                            }
+//
+//                                                            @Override
+//                                                            public void onCancelled(DatabaseError databaseError) {
+//                                                                Log.i(TAG, "User attempted to delete a nonexistent item location", databaseError.toException());
+//                                                            }
+//                                                        });
+//
+//                                                    } else {
+//                                                        // if the item was NOT successfully removed from the item list, log the error message
+//                                                        Log.i(TAG, "User attempted to delete a nonexistent item");
+//                                                    }
+//                                                }
+//                                            }
+//                                        }
+//                                    }
+//
+//                                    // if the user cancels the operation, log the error message
+//                                    @Override
+//                                    public void onCancelled(DatabaseError databaseError) {
+//                                        Log.e(TAG, "Item update failed", databaseError.toException());
+//                                    }
+//                                });
+//                                // after the item has been deleted, dismiss the alert dialog
+//                                dialog.dismiss();
+//                            }
+//                        })
+//                        // if the user clicks "cancel" instead of "delete," dismiss the dialog and do not
+//                        // do anything to the database
+//                        .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+//                            public void onClick(DialogInterface dialog, int which) {
+//                                dialog.dismiss();
+//                            }
+//                        })
+//                        // once all of the above functionality had been set create the alert dialog box
+//                        .create();
+//                // once the dialog box has been created, show it
+//                myQuittingDialogBox.show();
+//            }
+//        });
 
         /**
          * ADDING THE ITEM LIST TO THE UI
@@ -247,7 +244,7 @@ public class HomeFragment extends Fragment {
                 // addValueEvent listener will reprint all items values it finds as long as it
                 // is listening, so by clearing the list before printing it, we guarantee that
                 // each item will only be listed once in the UI.
-                itemsElementsList.clear();
+                ownedItemsAdapter.clear();
                 // loop through all of the items in the items table
                 // we need to loop thorugh all of the items become items do not belong to users,
                 // each items is in the table and the appropriate user is stored as an attribute.
@@ -258,16 +255,12 @@ public class HomeFragment extends Fragment {
                     Item item = i.getValue(Item.class);
                     // if the item belongs to the user, add it to the list of the user's items
                     if (item.getOwnerID().equals(firebaseUser.getUid())) {
-                        itemsElementsList.add(item.getName());
+                        ownedItemsAdapter.putItem(item);
                     }
                 }
-                // once we have a list of the user's items, create the listview adapater
-                itemsAdapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_list_item_1, itemsElementsList);
-                // set tbe adapter on the listview in the UI
-                listviewAllItems.setAdapter(itemsAdapter);
                 // notify the adapter that the dataset has changed so that it shows the new
                 // list of the user's items
-                itemsAdapter.notifyDataSetChanged();
+                ownedItemsAdapter.notifyDataSetChanged();
             }
 
             // if the read of the items table failed, log the error message
@@ -294,7 +287,7 @@ public class HomeFragment extends Fragment {
                 // send the current list of items with the intent
                 // so when a new item is added, it is added to the list
                 Bundle args = new Bundle();
-                args.putSerializable("itemList",(Serializable)itemsElementsList);
+                args.putSerializable("itemList",(Serializable) ownedItemsAdapter.getListOfItemNames());
                 i.putExtra("BUNDLE",args);
 
 
