@@ -24,6 +24,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 
+import com.google.common.base.Strings;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -119,6 +120,7 @@ public class StyledMessagesActivity extends MessagesActivity implements MessageI
         this.channel = intentBundle.getString("channel").replace(".", "|");
         this.subscription = intentBundle.getString("subscription").replace(".", "|");
         getUser(this.channel, this.subscription);
+        String initialMessage = intentBundle.getString("initialMessage");
 
         /* Set Message Adapter */
         messagesList = findViewById(R.id.messagesList);
@@ -132,6 +134,11 @@ public class StyledMessagesActivity extends MessagesActivity implements MessageI
         /* Update Online Status */
         mHandler = new Handler();
         mStatusChecker.run();
+
+        /* Send message if there is a bundled initial message */
+        if (!Strings.isNullOrEmpty(initialMessage)) {
+            input.getInputEditText().setText(initialMessage);
+        }
     }
 
     /**

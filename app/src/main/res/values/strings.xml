@@ -65,6 +65,10 @@
     <string name="list_item_title">List an Item:</string>
     <string name="title_activity_list_item">ListItemActivity</string>
 
+    <!-- Item Requests Activity Strings -->
+    <string name="item_requests_title">Item Requests</string>
+    <string name="title_activity_item_requests">ItemRequestsActivity</string>
+
     <string name="action_settings">Settings</string>
     <string name="title_activity_navigation">NavigationActivity</string>
     <string name="title_home">Home</string>
@@ -165,5 +169,6 @@
     <string name="begin_a_swap">Begin a swap:</string>
     <string name="add_a_note_to_the_owner">Add a note to the owner</string>
     <string name="total_price">Total Price:</string>
+    <string name="invalid_date_selected">Invalid date selected.</string>
 
 </resources>

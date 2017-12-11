@@ -1,5 +1,6 @@
 package com.teamcaffeine.hotswap.swap;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -19,21 +20,22 @@ public class Item {
     private List<String> additionalPictures = new ArrayList<String>();
     private List<Date> availableDates = new ArrayList<Date>();
     private String address = "";
-    private List<Transaction> transactions = new ArrayList<>();
+    private ArrayList<Transaction> transactions = new ArrayList<>();
 
     Item() {
     }
 
-    public Item(String itemID, String name, String ownerID, String description, String rentPrice, String address) {
+    public Item(String itemID, String name, String ownerID, String description, String rentPrice, String address, String headerPicture) {
         this.itemID = itemID;
         this.name = name;
         this.ownerID = ownerID;
         this.description = description;
         this.rentPrice = rentPrice;
         this.address = address;
+        this.headerPicture = headerPicture;
     }
 
-    public Item(String itemID, String name, String ownerID, String description, String rentPrice, String address, List<Transaction> transactions) {
+    public Item(String itemID, String name, String ownerID, String description, String rentPrice, String address, ArrayList<Transaction> transactions) {
         this.itemID = itemID;
         this.name = name;
         this.ownerID = ownerID;
@@ -182,11 +184,11 @@ public class Item {
         return address;
     }
 
-    public List<Transaction> getTransactions() {
+    public ArrayList<Transaction> getTransactions() {
         return transactions;
     }
 
-    public void setTransactions(List<Transaction> transactions) {
+    public void setTransactions(ArrayList<Transaction> transactions) {
         this.transactions = transactions;
     }
 
