@@ -47,9 +47,9 @@ public class HomeFragment extends Fragment {
     private Button btnListItem;
     private ListView listviewOwnedItems;
     private HomeFragmentItemsListAdapter ownedItemsAdapter;
-    private TextView txtCurrentlyRenting;
-    private ListView listviewLending;
-    private List<String> lendingElements;
+    private ListView listviewRenting;
+    private HomeFragmentItemsListAdapter rentingAdapter;
+    private ListView listviewPending;
     private HomeFragmentItemsListAdapter pendingAdapter;
     private int LIST_ITEM_REQUEST_CODE = 999;
     private int RESULT_ERROR = 88;
@@ -116,9 +116,20 @@ public class HomeFragment extends Fragment {
 
         // get the views from the layout
         btnListItem = view.findViewById(R.id.btnListItem);
+
         listviewOwnedItems = view.findViewById(R.id.listviewAllItems);
-        txtCurrentlyRenting = view.findViewById(R.id.txtCurrentlyRenting);
-        listviewLending = view.findViewById(R.id.listviewLending);
+        listviewPending = view.findViewById(R.id.listviewLending);
+        listviewRenting = view.findViewById(R.id.listviewRenting);
+
+        // instantiate the list that wil hold all of the user's items
+        ownedItemsAdapter = new HomeFragmentItemsListAdapter(getContext());
+        rentingAdapter = new HomeFragmentItemsListAdapter(getContext());
+        pendingAdapter = new HomeFragmentItemsListAdapter(getContext());
+
+        // set tbe adapter on the listview in the UI
+        listviewOwnedItems.setAdapter(ownedItemsAdapter);
+        listviewRenting.setAdapter(rentingAdapter);
+        listviewPending.setAdapter(pendingAdapter);
 
         // Get a database reference to our user
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
@@ -130,11 +141,7 @@ public class HomeFragment extends Fragment {
         items = database.getReference().child(itemTable);
         itemslocation = database.getReference().child(itemlocationsTable);
 
-        // instantiate the list that wil hold all of the user's items
-        ownedItemsAdapter = new HomeFragmentItemsListAdapter(getContext());
 
-        // set tbe adapter on the listview in the UI
-        listviewOwnedItems.setAdapter(ownedItemsAdapter);
 
 //        /**
 //         * DELETE AN ITEM
@@ -230,7 +237,7 @@ public class HomeFragment extends Fragment {
 //        });
 
         /**
-         * ADDING THE ITEM LIST TO THE UI
+         * ADDING THE LISTS TO THE UI
          */
 
         // Create the event listener to listen to database changes
@@ -257,6 +264,8 @@ public class HomeFragment extends Fragment {
                     if (item.getOwnerID().equals(firebaseUser.getUid())) {
                         ownedItemsAdapter.putItem(item);
                     }
+
+                    //TODO: figure out how we know what items are currently being rented/lended -- is that flag on user or item?
                 }
                 // notify the adapter that the dataset has changed so that it shows the new
                 // list of the user's items
