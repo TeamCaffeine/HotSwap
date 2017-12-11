@@ -1,6 +1,7 @@
 package com.teamcaffeine.hotswap.login;
 
 import com.stfalcon.chatkit.commons.models.IUser;
+import com.teamcaffeine.hotswap.swap.ActiveTransactionInfo;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -8,7 +9,7 @@ import java.util.List;
 import java.util.Map;
 
 
-public class User implements IUser{
+public class User implements IUser {
     // Force empty initialization of default table fields
     private String Uid = "";
     private String firstName = "";
@@ -20,6 +21,13 @@ public class User implements IUser{
     private boolean online = false;
     private List<String> addresses = new ArrayList<>();
     private List<String> payments = new ArrayList<>();
+
+    // The list of item ids this user owns
+    private List<String> owned = new ArrayList<>();
+
+    // The users current renting or pending items
+    private HashMap<String, ActiveTransactionInfo> renting = new HashMap<>();
+    private HashMap<String, ActiveTransactionInfo> pending = new HashMap<>();
 
     User() {
     }
@@ -40,6 +48,9 @@ public class User implements IUser{
         this.online = user.getOnline();
         this.addresses = user.getAddresses();
         this.payments = user.getPayments();
+        this.owned = user.getOwned();
+        this.renting = user.getRenting();
+        this.pending = user.getPending();
     }
 
     public Map<String, Object> toMap() {
@@ -54,6 +65,9 @@ public class User implements IUser{
         result.put("online", online);
         result.put("addresses", addresses);
         result.put("payments", payments);
+        result.put("owned", owned);
+        result.put("renting", renting);
+        result.put("pending", pending);
         return result;
     }
 
@@ -136,6 +150,36 @@ public class User implements IUser{
         } else {
             return false;
         }
+    }
+
+    public List<String> getOwned() {
+        return owned;
+    }
+
+    public void addOwnedItem(String itemID) {
+        if (!owned.contains(itemID)) {
+            owned.add(itemID);
+        }
+    }
+
+    public void setOwned(List<String> owned) {
+        this.owned = owned;
+    }
+
+    public HashMap<String, ActiveTransactionInfo> getRenting() {
+        return renting;
+    }
+
+    public void setRenting(HashMap<String, ActiveTransactionInfo> renting) {
+        this.renting = renting;
+    }
+
+    public HashMap<String, ActiveTransactionInfo> getPending() {
+        return pending;
+    }
+
+    public void setPending(HashMap<String, ActiveTransactionInfo> pending) {
+        this.pending = pending;
     }
 
     // Methods that need to be implemented for the IUser class for chatkit
