@@ -7,6 +7,8 @@
     android:focusableInTouchMode="true">
 
 
+
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -30,7 +32,6 @@
             android:layout_weight="1"
             android:layout_above="@+id/map"
             android:layout_toEndOf="@+id/tfLocation"
-            android:onClick="onClick"
             android:text="Search" />
 
 
@@ -39,10 +40,8 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+        android:orientation="horizontal">
+
             <TextView
                 android:id="@+id/setLocaleFilters"
                 android:layout_width="wrap_content"
@@ -52,37 +51,76 @@
                 android:clickable="true"
                 android:layout_marginLeft="10dp"
                 android:textColor="#0000EE"
-                android:textSize="16dp"/>
+                android:textSize="16dp"
+                />
 
-            <TextView
-                android:id="@+id/setItemFilters"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Item Filters"
-                android:onClick="onClick"
-                android:clickable="true"
-                android:textColor="#0000EE"
-                android:layout_marginLeft="10dp"
-                android:textSize="16dp" />
-        </LinearLayout>
+
         <TextView
-            android:id="@+id/setLocaleMsg"
+            android:id="@+id/setTagFilters"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="4"
-            android:text=""
-            android:layout_marginLeft="10dp"/>
+            android:text="Set Tags"
+            android:onClick="onClick"
+            android:clickable="true"
+            android:layout_marginStart="10dp"
+            android:textColor="#0000EE"
+            android:textSize="16dp"
+            />
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
-        <SeekBar
-            android:id="@+id/circleFilter"
-            style="@style/Widget.AppCompat.SeekBar.Discrete"
-            android:layout_width="250dp"
+        <TextView
+            android:id="@+id/distanceMsg"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="2"
-            android:max="5000"
-            android:progress="500"/>
+            android:layout_marginLeft="10dp"
+            android:textSize="16dp"
+            android:textColor="@color/black"
+            android:inputType="numberDecimal"
+            android:text="Distance(Kilometers)"
+            />
+
+        <TextView
+            android:id="@+id/distanceInput"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:textSize="16dp"
+            android:textColor="@color/black"
+            android:inputType="numberDecimal"
+            android:text="1.00"
+            />
 
     </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp">
+            <SeekBar
+                android:id="@+id/circleFilter"
+                style="@style/Widget.AppCompat.SeekBar.Discrete"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="4"
+                android:max="10000"
+                android:progress="1000"/>
+
+            <TextView
+                android:id="@+id/setLocaleMsg"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:text=""
+                android:layout_marginLeft="5dp"/>
+
+
+    </LinearLayout>
+
+
 
     <LinearLayout
         android:layout_width="match_parent"
