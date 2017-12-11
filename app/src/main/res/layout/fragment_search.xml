@@ -21,7 +21,7 @@
             android:ems="10"
             android:imeOptions="actionDone"
             android:singleLine="true"
-            android:hint="Item Name"/>
+            android:hint="@string/hint_item_name"/>
 
         <Button
             android:id="@+id/bSearch"
@@ -31,7 +31,7 @@
             android:layout_above="@+id/map"
             android:layout_toEndOf="@+id/tfLocation"
             android:onClick="onClick"
-            android:text="Search" />
+            android:text="@string/search" />
 
 
     </LinearLayout>
@@ -47,7 +47,7 @@
                 android:id="@+id/setLocaleFilters"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Set Location"
+                android:text="@string/set_location"
                 android:onClick="onClick"
                 android:clickable="true"
                 android:layout_marginLeft="10dp"
@@ -58,7 +58,7 @@
                 android:id="@+id/setItemFilters"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Item Filters"
+                android:text="@string/item_filters"
                 android:onClick="onClick"
                 android:clickable="true"
                 android:textColor="#0000EE"

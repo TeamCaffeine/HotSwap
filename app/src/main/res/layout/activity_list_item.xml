@@ -25,7 +25,7 @@
             android:layout_height="50dp"
             android:layout_weight="0.5"
             android:ems="10"
-            android:hint="Item Name"
+            android:hint="@string/hint_item_name"
             android:inputType="textPersonName"
             android:textSize="18sp" />
 
@@ -35,7 +35,7 @@
             android:layout_height="50dp"
             android:layout_weight="0.5"
             android:ems="10"
-            android:hint="Item Tags (separated by commas)"
+            android:hint="@string/hint_item_tags"
             android:textSize="18sp" />
 
         <EditText
@@ -44,7 +44,7 @@
             android:layout_height="50dp"
             android:layout_weight="0.5"
             android:ems="10"
-            android:hint="Item Description"
+            android:hint="@string/hint_item_description"
             android:inputType="textLongMessage"
             android:imeOptions="actionDone"
             android:textSize="18sp" />
@@ -64,7 +64,7 @@
             android:layout_height="50dp"
             android:layout_weight="0.5"
             android:ems="10"
-            android:hint="Price"
+            android:hint="@string/hint_price"
             android:inputType="number|numberDecimal"
             android:textSize="18sp" />
 
@@ -93,7 +93,7 @@
             android:layout_height="65dp"
             android:layout_weight="0.5"
             android:gravity="center"
-            android:text="List Item"
+            android:text="@string/list_item"
             android:textAlignment="center"
             android:textSize="24sp" />
 

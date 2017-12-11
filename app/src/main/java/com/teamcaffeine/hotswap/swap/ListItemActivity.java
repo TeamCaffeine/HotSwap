@@ -138,14 +138,14 @@ public class ListItemActivity extends FragmentActivity {
                         Strings.isNullOrEmpty(itemName) ||
                         Strings.isNullOrEmpty(itemPrice) ||
                         Strings.isNullOrEmpty(itemDescription)) {
-                    Toast.makeText(getApplicationContext(), "Please enter all fields.", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), R.string.enter_all_fields, Toast.LENGTH_LONG).show();
                     return;
                 }
 
                 String itemAddress = addressesFragment.getSelectedAddress();
 
                 if (itemAddress == null) {
-                    Toast.makeText(getApplicationContext(), "Please select an address.", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), R.string.select_address, Toast.LENGTH_LONG).show();
                     return;
                 }
 

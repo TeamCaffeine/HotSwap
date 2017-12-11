@@ -21,7 +21,7 @@
     <string name="hint_email">Dirección de correo electrónico</string>
     <string name="hint_password">Contraseña</string>
     <string name="desc_firebase_lockup">Logotipo y nombre de Firebase</string>
-    <string name="auth_failed">Se falló la autenticación</string>
+    <string name="authentication_failed">Se falló la autenticación</string>
     <string name="start_phone_auth">Empezar</string>
     <string name="verify_phone_auth">Verificar</string>
     <string name="resend_phone_auth">Reenviar</string>
@@ -62,7 +62,7 @@
     <string name="title_home">Principal</string>
     <string name="title_search">Buscar</string>
     <string name="title_inbox">Mensajes</string>
-    <string name="title_profile">Pérfil</string>
+    <string name="title_profile">Perfil</string>
     <string name="title_activity_navigation_search">NavigationSearchActivity</string>
 
     <!-- TODO: Remove or change this placeholder text -->
@@ -94,7 +94,7 @@
     <string name="invite_email_subject">¡Unirse a HotSwap!</string>
 
     <!--add details string-->
-    <string name="enter_all_details">Por favor, ingrese todos los detalles</string>
+    <string name="enter_all_details">Por favor, ingrese una dirección todos los detalles</string>
 
     <!--Add User Details UI strings-->
     <string name="first_name_label">Nombre:</string>
@@ -166,5 +166,36 @@
     <string name="add_a_note_to_the_owner">Enviar mensaje al dueño</string>
     <string name="begin_a_swap">Empezar un Intercambio</string>
     <string name="get_swapping">¡Comience a intercambiar!</string>
+    <string name="copy">Copiar</string>
+    <string name="user">Usuario</string>
+    <string name="search">Buscar</string>
+    <string name="name">Nombre</string>
+    <string name="x">X</string>
+    <string name="item">Ítem</string>
+    <string name="item_filters">Filtros de ítem</string>
+    <string name="last_message">Último Mensaje</string>
+    <string name="add_card">Añadir Tarjeta</string>
+    <string name="save">Guardar</string>
+    <string name="hint_price">Precio</string>
+    <string name="hint_item_name">Nombre del ítem</string>
+    <string name="something_wrong">" ¡Ay! Algo malo pasó."</string>
+    <string name="GPS_no_signal">El señal de SPG no fue encontrada</string>
+    <string name="label_emailpassword">Autenticación de correo electrónico y contraseña</string>
+    <string name="hint_item_description">Descripción del ítem</string>
+    <string name="hint_item_tags">Etiquetas del ítem (separado por comas)</string>
+    <string name="list_item">Registrar un ítem</string>
+    <string name="enter_all_fields">Por favor, ingrese todos los detalles</string>
+    <string name="enter_zip_code">"Anotar código postal "</string>
+    <string name="get_current_location">Obtener su ubicación actual</string>
+    <string name="item_added">" Ítem nuevo agregado"</string>
+    <string name="set_location">"Establecer localización "</string>
+    <string name="enter_zipcode">Por favor, ingrese un código postal válido</string>
+    <string name="select_address">"Por favor, seleccione una dirección "</string>
+    <string name="where_are_you_swapping">¿Dónde intercambia?</string>
+    <string name="existing_transaction">Ya tienes una transacción por este ítem, por estos días</string>
+    <string name="profile_pic_update_failed">No se puede agregar la foto de perfil</string>
+    <string name="profile_pic_update_success">La foto de perfil actualizada exitosamente</string>
+    <string name="unable_change_image">No se puede cambiar la imagen</string>
+    <string name="unable_to_find_owner">No se puede encontrar el dueño en la base de datos, no se puede iniciar un chat</string>
 
 </resources>

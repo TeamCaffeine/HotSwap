@@ -29,7 +29,7 @@
     <string name="hint_email">Email</string>
     <string name="hint_password">Password</string>
     <string name="desc_firebase_lockup">Firebase logo and name</string>
-    <string name="auth_failed">Authentication failed</string>
+    <string name="authentication_failed">Authentication failed</string>
     <string name="start_phone_auth">Start</string>
     <string name="verify_phone_auth">Verify</string>
     <string name="resend_phone_auth">Resend</string>
@@ -167,5 +167,37 @@
     <string name="add_a_note_to_the_owner">Add a note to the owner</string>
     <string name="total_price">Total Price:</string>
     <string name="item_added">New item added</string>
+    <string name="profile_pic_update_success">Successfully updated profile picture.</string>
+    <string name="profile_pic_update_failed">Unable to update profile picture.</string>
+    <string name="unable_change_image">Unable to change image.</string>
+    <string name="GPS_no_signal">GPS signal not found</string>
+    <string name="enter_zipcode">Please enter a valid zipcode</string>
+    <string name="existing_transaction">You already have a transaction for this item for these days.</string>
+    <string name="something_wrong">Whoops! Something went wrong.</string>
+    <string name="unable_to_find_owner">Unable to find owner in database, cannot start chat</string>
+    <string name="enter_all_fields">Please enter all fields.</string>
+    <string name="select_address">Please select an address.</string>
+    <string name="hint_item_name">Item Name</string>
+    <string name="hint_item_tags">Item Tags (separated by commas)</string>
+    <string name="hint_item_description">Item Description</string>
+    <string name="hint_price">Price</string>
+    <string name="list_item">List Item</string>
+    <string name="set_location">Set Location</string>
+    <string name="cancel">Cancel</string>
+    <string name="get_current_location">Get Current Location</string>
+    <string name="enter_zip_code">Enter Zip Code</string>
+    <string name="where_are_you_swapping">Where are you swapping?</string>
+    <string name="save">Save</string>
+    <string name="x">X</string>
+    <string name="add_card">Add Card</string>
+    <string name="name">Name</string>
+    <string name="last_message">Last message</string>
+    <string name="search">Search</string>
+    <string name="set_location">Set Location</string>
+    <string name="item_filters">Item Filters</string>
+    <string name="user">User</string>
+    <string name="item">Item</string>
+    <string name="delete">Delete</string>
+    <string name="copy">Copy</string>
 
 </resources>
