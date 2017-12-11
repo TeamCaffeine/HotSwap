@@ -156,6 +156,12 @@ public class User implements IUser {
         return owned;
     }
 
+    public void addOwnedItem(String itemID) {
+        if (!owned.contains(itemID)) {
+            owned.add(itemID);
+        }
+    }
+
     public void setOwned(List<String> owned) {
         this.owned = owned;
     }
