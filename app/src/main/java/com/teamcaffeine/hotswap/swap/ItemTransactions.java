@@ -81,7 +81,7 @@ public class ItemTransactions extends AppCompatActivity {
                         public void onDataChange(DataSnapshot dataSnapshot) {
                             User u = dataSnapshot.getValue(User.class);
                             String name = u.getFirstName() + " " + u.getLastName();
-                            transaction.add("User name: " + name + " | Distance: " + dist);
+                            transaction.add("Name: " + name + " | Distance: " + dist);
                             ArrayAdapter<String> lvAdapter = new ArrayAdapter<String>(ItemTransactions.this, android.R.layout.simple_list_item_1, android.R.id.text1, transaction);
                             lvItems.setAdapter(lvAdapter);
                         }
