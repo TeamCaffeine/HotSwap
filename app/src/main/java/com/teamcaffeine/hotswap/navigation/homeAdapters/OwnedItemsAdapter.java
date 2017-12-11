@@ -68,10 +68,10 @@ public class OwnedItemsAdapter extends BaseAdapter {
         }
 
         TextView itemName = (TextView) row.findViewById(R.id.itemTitle);
-        TextView swapDates = (TextView) row.findViewById(R.id.itemDescription);
+        TextView itemDescription = (TextView) row.findViewById(R.id.itemDescription);
 
         itemName.setText(items.get(position).getName());
-        swapDates.setText(items.get(position).getDescription());
+        itemDescription.setText(items.get(position).getDescription());
         return row;
     }
 

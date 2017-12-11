@@ -35,9 +35,6 @@ import com.teamcaffeine.hotswap.R;
 import com.teamcaffeine.hotswap.swap.Item;
 
 import java.io.Serializable;
-import java.util.List;
-
-
 
 
 public class HomeFragment extends Fragment {
@@ -115,7 +112,7 @@ public class HomeFragment extends Fragment {
         btnListItem = view.findViewById(R.id.btnListItem);
 
         listviewOwnedItems = view.findViewById(R.id.listviewAllItems);
-        listviewPending = view.findViewById(R.id.listviewLending);
+        listviewPending = view.findViewById(R.id.listviewPending);
         listviewRenting = view.findViewById(R.id.listviewRenting);
 
         // instantiate the list that wil hold all of the user's items
