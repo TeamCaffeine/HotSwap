@@ -1,6 +1,8 @@
 package com.teamcaffeine.hotswap.swap;
 
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 public class ActiveTransactionInfo {
 
@@ -16,6 +18,14 @@ public class ActiveTransactionInfo {
 
     public String toKey() {
         return item.getName() + renterId + date.toString();
+    }
+
+    public Map<String, Object> toMap() {
+        HashMap<String, Object> result = new HashMap<>();
+        result.put("item", item);
+        result.put("renterId", renterId);
+        result.put("date", date);
+        return result;
     }
 
     public Item getItem() {
