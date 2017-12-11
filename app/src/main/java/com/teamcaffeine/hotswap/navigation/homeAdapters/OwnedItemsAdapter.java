@@ -12,6 +12,10 @@ import com.teamcaffeine.hotswap.swap.Item;
 
 import java.util.ArrayList;
 
+/**
+ * IMPORTANT FILE FOR THIS PR
+ */
+
 public class OwnedItemsAdapter extends BaseAdapter {
 
     private ArrayList<Item> items;

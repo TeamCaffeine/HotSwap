@@ -35,12 +35,10 @@ import java.io.Serializable;
 import java.util.List;
 
 /**
- * The Home Fragment is the landing page for the user when they first open the app.
- * Its purpose is to display all of ht items they have listed and show what items they
- * are currently renting and lending. This is also the page where they have the option
- * to list new items with the "list items" button. This button takes them to the List
- * Item Activity.
+ * IMPORTANT FILE FOR THIS PR
  */
+
+
 public class HomeFragment extends Fragment {
 
     private String TAG = "HomeFragment";
