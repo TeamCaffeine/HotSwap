@@ -98,7 +98,6 @@ public class ItemDetailsActivity extends AppCompatActivity {
         });
 
         currentCity = (String) extras.get("currentCity");
-        Item item = (Item) extras.getParcelable("item");
         String currentCity = (String) extras.get("currentCity");
         final String userEmail = FirebaseAuth.getInstance().getCurrentUser().getEmail();
         final String userUID = FirebaseAuth.getInstance().getUid();
@@ -115,6 +114,7 @@ public class ItemDetailsActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent i = new Intent(getApplicationContext(), CreateTransactionActivity.class);
                 i.putExtra("itemID", itemID);
+                i.putParcelableArrayListExtra("transactions", item.getTransactions());
                 startActivity(i);
             }
         });

@@ -47,7 +47,6 @@
 
     <string name="id_fmt">Identidad de usuario: %s</string>
     <string name="email_fmt">Dirección de correo electrónico: %s</string>
-    <string name="authentication_failed">Se falló la autenticación</string>
     <string name="successfully_signed_out">Se cerró exitosamente.</string>
     <string name="unsuccessfully_signed_out">Incapaz de cerrar la sesión.</string>
     <string name="verification_sent_to">El mensaje de verificación ha sido enviado a</string>
@@ -174,7 +173,7 @@
     <string name="item">Ítem</string>
     <string name="item_filters">Filtros de ítem</string>
     <string name="last_message">Último Mensaje</string>
-    <string name="add_card">Añadir Tarjeta</string>
+    <string name="add_card_button">Añadir Tarjeta</string>
     <string name="save">Guardar</string>
     <string name="hint_price">Precio</string>
     <string name="hint_item_name">Nombre del ítem</string>
@@ -197,5 +196,6 @@
     <string name="profile_pic_update_success">La foto de perfil actualizada exitosamente</string>
     <string name="unable_change_image">No se puede cambiar la imagen</string>
     <string name="unable_to_find_owner">No se puede encontrar el dueño en la base de datos, no se puede iniciar un chat</string>
+    <string name="invalid_date_selected">Fecha invalida escogida</string>
 
 </resources>

@@ -5,14 +5,14 @@
     <string name="msg_subscribed" translatable="false">Subscribed to news topic</string>
 
     <!--Login Activity Strings-->
-    <string name="label_google_sign_in">Firebase + Google Sign In</string>
-    <string name="desc_google_sign_in">Use a Google Sign In credential to authenticate with Firebase.</string>
+    <string name="label_google_sign_in" translatable="false">Firebase + Google Sign In</string>
+    <string name="desc_google_sign_in" translatable="false">Use a Google Sign In credential to authenticate with Firebase.</string>
 
-    <string name="label_facebook_login">Firebase + Facebook Login</string>
-    <string name="desc_facebook_login">Use a Facebook Login credential to authenticate with Firebase.</string>
+    <string name="label_facebook_login" translatable="false">Firebase + Facebook Login</string>
+    <string name="desc_facebook_login" translatable="false">Use a Facebook Login credential to authenticate with Firebase.</string>
 
     <string name="label_emailpassword">Email/Password Authentication</string>
-    <string name="desc_emailpassword">Use an email and password to authenticate with Firebase.</string>
+    <string name="desc_emailpassword" translatable="false">Use an email and password to authenticate with Firebase.</string>
 
     <string name="hint_user_id">User ID</string>
     <string name="get_custom_token" translatable="false">Get Token</string>
@@ -55,7 +55,6 @@
 
     <string name="id_fmt">User ID: %s</string>
     <string name="email_fmt">Email: %s</string>
-    <string name="authentication_failed">Authentication failed.</string>
     <string name="successfully_signed_out">You have been successfully signed out.</string>
     <string name="unsuccessfully_signed_out">Unable to sign you out.</string>
     <string name="verification_sent_to">Verification email sent to</string>
@@ -166,6 +165,7 @@
     <string name="begin_a_swap">Begin a swap:</string>
     <string name="add_a_note_to_the_owner">Add a note to the owner</string>
     <string name="total_price">Total Price:</string>
+    <string name="invalid_date_selected">Invalid date selected.</string>
     <string name="item_added">New item added</string>
     <string name="profile_pic_update_success">Successfully updated profile picture.</string>
     <string name="profile_pic_update_failed">Unable to update profile picture.</string>
@@ -182,14 +182,12 @@
     <string name="hint_item_description">Item Description</string>
     <string name="hint_price">Price</string>
     <string name="list_item">List Item</string>
-    <string name="set_location">Set Location</string>
-    <string name="cancel">Cancel</string>
     <string name="get_current_location">Get Current Location</string>
     <string name="enter_zip_code">Enter Zip Code</string>
     <string name="where_are_you_swapping">Where are you swapping?</string>
     <string name="save">Save</string>
     <string name="x">X</string>
-    <string name="add_card">Add Card</string>
+    <string name="add_card_button">Add Card</string>
     <string name="name">Name</string>
     <string name="last_message">Last message</string>
     <string name="search">Search</string>
@@ -197,7 +195,8 @@
     <string name="item_filters">Item Filters</string>
     <string name="user">User</string>
     <string name="item">Item</string>
-    <string name="delete">Delete</string>
     <string name="copy">Copy</string>
+    <string name="set_tags">Set Tags</string>
+    <string name="distance_kilometers">Distance (Kilometers)</string>
 
 </resources>

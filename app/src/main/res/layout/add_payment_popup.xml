@@ -32,6 +32,6 @@
         android:id="@+id/btnAddCard"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/add_card" />
+        android:text="@string/add_card_button" />
 
 </LinearLayout>
