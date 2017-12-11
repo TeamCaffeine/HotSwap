@@ -171,9 +171,6 @@ public class ListItemActivity extends FragmentActivity {
                     // create an intent to send back to the HomeActivity
                     Intent i = new Intent();
 
-                    // send the updated itemList back to the Home Fragment
-                    i.putExtra("newItem", itemName);
-
                     // Set the result to indicate adding the item was successful
                     // and finish the activity
                     setResult(Activity.RESULT_OK, i);

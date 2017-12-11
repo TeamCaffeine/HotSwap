@@ -316,7 +316,7 @@ public class HomeFragment extends Fragment {
     }
 
     /**
-     * ADDING A NEW ITEM TO THE LISTVIEW IN THE UI
+     * ADDING A NEW ITEM TO THE LISTVIEW IN THE UI AFTER ADDED WITH ListItemActivity
      */
 
     // Once the user lists a new item in the List Item Activity, it will be added to their items list
@@ -336,7 +336,7 @@ public class HomeFragment extends Fragment {
             if (resultCode == Activity.RESULT_OK) {
                 Log.i(TAG, "item added to list");
                 // show a toast to notify the user that their item was successfully added
-                Toast.makeText(getContext(), "New item added", Toast.LENGTH_LONG).show();
+                Toast.makeText(getContext(), R.string.item_added, Toast.LENGTH_LONG).show();
             } else if (resultCode == RESULT_ERROR) {
                 Log.i(TAG, "item not added");
                 Toast.makeText(getContext(), R.string.unable_to_add_item, Toast.LENGTH_SHORT).show();
