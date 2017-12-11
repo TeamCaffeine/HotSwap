@@ -143,7 +143,7 @@
 
     <!--Home UI strings-->
     <string name="currently_renting">Currently Renting</string>
-    <string name="currently_lending">Currently Lending</string>
+    <string name="currently_pending">Currently Pending</string>
     <string name="list_item_button">List Item</string>
     <string name="duplicate_item">You already have an item with that name. Choose another name.</string>
     <string name="enter_address_request">Please enter an address to your profile first!</string>

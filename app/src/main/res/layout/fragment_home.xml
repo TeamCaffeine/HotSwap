@@ -40,7 +40,7 @@
             android:id="@+id/txtLendingLabel"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/currently_lending" />
+            android:text="@string/currently_pending" />
 
         <com.teamcaffeine.hotswap.utility.NonScrollListView
             android:id="@+id/listviewLending"
