@@ -35,7 +35,6 @@ import java.util.ArrayList;
 public class ItemTransactions extends AppCompatActivity {
     private DatabaseReference items;
     private ListView lvItems;
-//    private ListAdapter lvAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,7 +42,6 @@ public class ItemTransactions extends AppCompatActivity {
         setContentView(R.layout.activity_item_transactions);
         lvItems = (ListView) findViewById(R.id.itemLists);
         final ArrayList<String> transaction = new ArrayList<>();
-//        lvAdapter = new Items(this);
 
 
 
@@ -51,25 +49,26 @@ public class ItemTransactions extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 // do stuff
+                // show alert box to confirm or reject transaction
             }
         });
 
+
+        //TODO: replace with item key sent in from Megan's bundle that gets passed to this activity
         String itemWithTransaction = "-L-au0kTc3rhO_wd6fca";
+        // Bundle extras = getIntent().getExtras();
+        // itemID = extras.getString("itemID");
 
         items = FirebaseDatabase.getInstance().getReference().child("items").child(itemWithTransaction);
 
         // if items is null, show nothing in Listview or show no transactions exist for this item
 
-//        Bundle extras = getIntent().getExtras();
-//        itemID = extras.getString("itemID");
 
         // Set up Firebase
         items.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 Item i = dataSnapshot.getValue(Item.class);
-//                lvAdapter.putItem(item);
-//                i.getTransactions();
                 for (Transaction t : i.getTransactions()) {
                     String uid = t.getRequestUserID();
                     final String dist = Double.toString(t.getDistance());
@@ -90,10 +89,7 @@ public class ItemTransactions extends AppCompatActivity {
 
                         }
                     });
-
                 }
-//                ArrayAdapter<String> lvAdapter = new ArrayAdapter<String>(ItemTransactions.this, android.R.layout.simple_list_item_1, android.R.id.text1, transaction);
-//                lvItems.setAdapter(lvAdapter);
             }
 
             @Override
