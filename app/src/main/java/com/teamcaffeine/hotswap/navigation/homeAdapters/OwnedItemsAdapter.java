@@ -1,4 +1,4 @@
-package com.teamcaffeine.hotswap.navigation;
+package com.teamcaffeine.hotswap.navigation.homeAdapters;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -20,7 +20,6 @@ public class OwnedItemsAdapter extends BaseAdapter {
     public OwnedItemsAdapter(Context aContext) {
         context = aContext;  //saving the context we'll need it again (for intents)
         items = new ArrayList<Item>();
-
     }
 
     @Override
