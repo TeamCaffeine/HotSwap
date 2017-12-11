@@ -236,7 +236,7 @@ public class HomeFragment extends Fragment {
         super.onPause();
         // using the reference to the items table, remove the listener
         items.removeEventListener(itemsEventListener);
-        items.removeEventListener(userEventListener);
+        currentUser.removeEventListener(userEventListener);
     }
 
     // when the fragment is resumed, add the event listener
@@ -245,6 +245,6 @@ public class HomeFragment extends Fragment {
         super.onResume();
         // using the reference to the items table, add the listener
         items.addValueEventListener(itemsEventListener);
-        items.addValueEventListener(userEventListener);
+        currentUser.addValueEventListener(userEventListener);
     }
 }
