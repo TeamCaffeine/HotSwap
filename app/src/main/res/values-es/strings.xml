@@ -1,0 +1,204 @@
+<resources>
+    <string name="app_name">HotSwap</string>
+    <string name="msg_token_fmt" translatable="false">InstanceID Token: %s</string>
+    <string name="default_notification_channel_id" translatable="false">fcm_default_channel</string>
+    <string name="msg_subscribed">Subscribed to news topic</string>
+
+    <!--Login Activity Strings-->
+
+    <string name="hint_user_id">Identidad de usuario</string>
+    <string name="get_custom_token">Get Token</string>
+    <string name="sign_in">Iniciar Sesión</string>
+    <string name="create_account">Registrarse</string>
+    <string name="sign_out">Cerrar Sesión</string>
+    <string name="verify_email">Verificar el correo electrónico</string>
+    <string name="disconnect">Desconectar</string>
+    <string name="loading">Cargando…</string>
+    <string name="custom_token">Custom Token</string>
+    <string name="signed_in">Sesión iniciado</string>
+    <string name="signed_out">Se cerró sesión</string>
+    <string name="token_null">Token: null</string>
+    <string name="hint_email">Dirección de correo electrónico</string>
+    <string name="hint_password">Contraseña</string>
+    <string name="desc_firebase_lockup">Logotipo y nombre de Firebase</string>
+    <string name="authentication_failed">Se falló la autenticación</string>
+    <string name="start_phone_auth">Empezar</string>
+    <string name="verify_phone_auth">Verificar</string>
+    <string name="resend_phone_auth">Reenviar</string>
+    <string name="hint_phone_number">Numero de teléfono</string>
+    <string name="hint_verification_code">Código de verificación</string>
+    <string name="status_code_sent">Código enviado</string>
+    <string name="status_verification_failed">Se falló la verificación</string>
+    <string name="status_verification_succeeded">La verificación fue exitosa</string>
+    <string name="status_sign_in_failed">Se falló el inicio</string>
+    <string name="instant_validation">(instant validation)</string>
+
+    <string name="firebase_status_fmt">Usuario de Firebase: %s</string>
+    <string name="firebase_user_management">Gestión de usuarios de Firebase</string>
+
+    <string name="google_status_fmt">Usuario de Google: %s</string>
+    <string name="google_title_text">Inicio de sesión Facebook Google</string>
+
+    <string name="facebook_status_fmt">Usuario de Facebook: %s</string>
+    <string name="facebook_title_text">Inicio de sesión Facebook</string>
+
+    <string name="emailpassword_status_fmt">Usuario: %1$s (verificado: %2$b)</string>
+    <string name="emailpassword_title_text">Dirección de correo electrónico y Contraseña</string>
+
+    <string name="id_fmt">Identidad de usuario: %s</string>
+    <string name="email_fmt">Dirección de correo electrónico: %s</string>
+    <string name="successfully_signed_out">Se cerró exitosamente.</string>
+    <string name="unsuccessfully_signed_out">Incapaz de cerrar la sesión.</string>
+    <string name="verification_sent_to">El mensaje de verificación ha sido enviado a</string>
+    <string name="failed_to_send_verification_email">No se pudo enviar el correo electrónico de verificación.</string>
+
+    <!-- List Item Activity Strings -->
+    <string name="list_item_title">Registrar un Ítem:</string>
+    <string name="title_activity_list_item">ListItemActivity</string>
+
+    <string name="action_settings">Ajustes</string>
+    <string name="title_activity_navigation">NavigationActivity</string>
+    <string name="title_home">Principal</string>
+    <string name="title_search">Buscar</string>
+    <string name="title_inbox">Mensajes</string>
+    <string name="title_profile">Perfil</string>
+    <string name="title_activity_navigation_search">NavigationSearchActivity</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">First Blank Fragment</string>
+    <string name="hello_blank_fragment2">XDDDDD</string>
+
+    <!-- Search Activity Resources -->
+    <string name="google_maps_key" templateMergeStrategy="preserve" translatable="false">
+        AIzaSyDVEVPxdS5ZWc-uRiSWZXDAM4ZAhqwOKGM</string>
+
+    <string-array name="items">
+        <item>iVacuum 6</item>
+        <item>iVacuum 7</item>
+    </string-array>
+
+    <string-array name="item_descriptions">
+        <item>My vacuum does have a headphone jack</item>
+        <item>My vacuum does not have a headphone jack</item>
+    </string-array>
+
+    <!--Invite Friends popup strings-->
+    <string name="send_text">Enviar Texto</string>
+    <string name="send_email">Enviar Correo Eletrónico</string>
+    <string name="post_to_facebook">Publicar en Facebook</string>
+
+    <!--Invite friends strings-->
+    <string name="invite_message">¡Oye! ¡He estado usando HotSwap para alquilar ítemes que necesito pero no quiero comprar! ¡Echale un vistazo!</string>
+    <string name="post_to_FB_url">https://hotswap.com</string>
+    <string name="invite_email_subject">¡Unirse a HotSwap!</string>
+
+    <!--add details string-->
+    <string name="enter_all_details">Por favor, ingrese una dirección todos los detalles</string>
+
+    <!--Add User Details UI strings-->
+    <string name="first_name_label">Nombre:</string>
+    <string name="first_name_hint">Anotar Nombre</string>
+    <string name="last_name_label">Apellido:</string>
+    <string name="last_name_hint">Anotar Apellido</string>
+    <string name="phone_number_label">Numero de Teléfono:</string>
+    <string name="phone_number_hint">Anotar Numero de Teléfono</string>
+    <string name="add_address">Añadir Dirección</string>
+    <string name="add_payment">Añadir Método de Pago</string>
+    <string name="submit">Enviar</string>
+
+    <!--Profile UI strings-->
+    <string name="contact_info_label">Datos de contacto</string>
+    <string name="addresses_label">Direcciónes</string>
+    <string name="payment_label">Métodos \nde pago</string>
+    <string name="add_payment_to_profile"><u>+ Añadir método de pago</u></string>
+    <string name="items_label">Sus Ítemes</string>
+    <string name="past_transactions"><u>Ver transacciónes pasadas</u></string>
+    <string name="invite_friends">Invitar Amigos</string>
+    <string name="logout">Cerrar Sesión</string>
+    <string name="placeholder_name">Nombre</string>
+    <string name="placeholder_member_since">Miembro Desde:</string>
+    <string name="placeholder_email">Dirección de correo electrónico</string>
+    <string name="placeholder_phone_number">Numero de teléfono</string>
+    <string name="base_package_name">com.teamcaffeine.hotswap</string>
+    <string name="unable_to_add_item_due_to_address">No se puede agregar la dirección. Por favor, inténtalo de nuevo.</string>
+    <string name="unable_to_add_address">No se puede agregar la dirección. Por favor, inténtalo de nuevo.</string>
+    <string name="unable_to_add_item">No se puede agregar el ítem. Por favor, inténtalo de nuevo.</string>
+    <string name="plus">+</string>
+    <string name="minus">-</string>
+    <string name="delete">Borrar</string>
+    <string name="delete_address_question">¿Está seguro de que desea eliminar esta dirección?</string>
+    <string name="delete_payment_question">¿Está seguro de que desea eliminar este método de pago?</string>
+    <string name="delete_item_question">¿Está seguro de que desea eliminar este ítem?</string>
+    <string name="cancel">Cancelar</string>
+    <string name="validationErrors">Errores de Validación</string>
+    <string name="card_deleted">Tarjeta Borrada</string>
+    <string name="member_since">Miembro Desde: </string>
+    <string name="card_added">Tarjeta Agregada</string>
+    <string name="duplicate_card">No se puede agregar una tarjeta duplicada.</string>
+    <string name="required">Requerido.</string>
+
+    <!--Home UI strings-->
+    <string name="currently_renting">Alquilando</string>
+    <string name="pending_swaps">Intercambios Pendientes</string>
+    <string name="list_item_button">Registrar un ítem</string>
+    <string name="duplicate_item">Ya tienes un ítem con este nombre. Elija otro nombre.</string>
+    <string name="enter_address_request">Por favor, primero escriba una dirección en su perfil.</string>
+
+    <!--Item Details Activity Strings-->
+    <string name="item_image">Imagen del ítem</string>
+    <string name="item_name">Nombre del ítem:</string>
+    <string name="item_description">Descripción del ítem:</string>
+    <string name="item_tags">Etiquetas:</string>
+    <string name="item_price">Precio para alquilar:</string>
+    <string name="item_location">Lugar:</string>
+    <string name="item_available_dates">Fechas disponibles:</string>
+    <string name="request_swap">Pedir Intercambio</string>
+    <string name="message_owner">Enviar un Mensaje al Dueño</string>
+
+    <!-- Login Activity Strings-->
+    <string name="login_email_hint">Dirección de correo electrónico</string>
+    <string name="login_password_hint">Contraseña</string>
+    <string name="login_sign_in_text">Iniciar sesión</string>
+    <string name="login_create_account_text">Registrarse</string>
+    <string name="login_divider_text">O</string>
+    <string name="total_price">Precio Total:</string>
+    <string name="add_a_note_to_the_owner">Enviar mensaje al dueño</string>
+    <string name="begin_a_swap">Empezar un Intercambio</string>
+    <string name="get_swapping">¡Comience a intercambiar!</string>
+    <string name="copy">Copiar</string>
+    <string name="user">Usuario</string>
+    <string name="search">Buscar</string>
+    <string name="name">Nombre</string>
+    <string name="x">X</string>
+    <string name="item">Ítem</string>
+    <string name="item_filters">Filtros de ítem</string>
+    <string name="last_message">Último Mensaje</string>
+    <string name="add_card_button">Añadir Tarjeta</string>
+    <string name="save">Guardar</string>
+    <string name="hint_price">Precio</string>
+    <string name="hint_item_name">Nombre del ítem</string>
+    <string name="something_wrong">" ¡Ay! Algo malo pasó."</string>
+    <string name="GPS_no_signal">El señal de SPG no fue encontrada</string>
+    <string name="label_emailpassword">Autenticación de correo electrónico y contraseña</string>
+    <string name="hint_item_description">Descripción del ítem</string>
+    <string name="hint_item_tags">Etiquetas del ítem (separado por comas)</string>
+    <string name="list_item">Registrar un ítem</string>
+    <string name="enter_all_fields">Por favor, ingrese todos los detalles</string>
+    <string name="enter_zip_code">"Anotar código postal "</string>
+    <string name="get_current_location">Obtener su ubicación actual</string>
+    <string name="item_added">" Ítem nuevo agregado"</string>
+    <string name="set_location">"Establecer localización "</string>
+    <string name="enter_zipcode">Por favor, ingrese un código postal válido</string>
+    <string name="select_address">"Por favor, seleccione una dirección "</string>
+    <string name="where_are_you_swapping">¿Dónde intercambia?</string>
+    <string name="existing_transaction">Ya tienes una transacción por este ítem, por estos días</string>
+    <string name="profile_pic_update_failed">No se puede agregar la foto de perfil</string>
+    <string name="profile_pic_update_success">La foto de perfil actualizada exitosamente</string>
+    <string name="unable_change_image">No se puede cambiar la imagen</string>
+    <string name="unable_to_find_owner">No se puede encontrar el dueño en la base de datos, no se puede iniciar un chat</string>
+    <string name="invalid_date_selected">Fecha invalida escogida</string>
+    <string name="distance_kilometers">Distancia (Kilómetros)</string>
+    <string name="set_tags">Dar Etiquetas</string>
+    <string name="item_requests_title">Solicitudes de ítemes</string>
+
+</resources>

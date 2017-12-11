@@ -207,7 +207,7 @@ public class CreateTransactionActivity extends AppCompatActivity {
                     String msg = String.format("I'd like to rent your %s. %s", item.getName(), transaction.getInitialMessage());
                     createChatChannels(item.getOwnerID(), transaction.getRequestUserID(), FirebaseAuth.getInstance().getCurrentUser().getEmail(), msg);
                 } else {
-                    Toast.makeText(getApplicationContext(), "You already have a transaction for this item for these days.", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), R.string.existing_transaction, Toast.LENGTH_LONG).show();
                 }
             }
         });
@@ -219,7 +219,7 @@ public class CreateTransactionActivity extends AppCompatActivity {
 
     private void goHomeSafely(String msg) {
         Log.e(TAG, msg);
-        Toast.makeText(getApplicationContext(), "Whoops! Something went wrong.", Toast.LENGTH_LONG).show();
+        Toast.makeText(getApplicationContext(), R.string.something_wrong, Toast.LENGTH_LONG).show();
         Intent i = new Intent(getApplicationContext(), NavigationActivity.class);
         startActivity(i);
         finish();

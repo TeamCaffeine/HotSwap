@@ -1,21 +1,21 @@
 <resources>
-    <string name="app_name">HotSwap</string>
+    <string name="app_name" translatable="false">HotSwap</string>
     <string name="msg_token_fmt" translatable="false">InstanceID Token: %s</string>
     <string name="default_notification_channel_id" translatable="false">fcm_default_channel</string>
-    <string name="msg_subscribed">Subscribed to news topic</string>
+    <string name="msg_subscribed" translatable="false">Subscribed to news topic</string>
 
     <!--Login Activity Strings-->
-    <string name="label_google_sign_in">Firebase + Google Sign In</string>
-    <string name="desc_google_sign_in">Use a Google Sign In credential to authenticate with Firebase.</string>
+    <string name="label_google_sign_in" translatable="false">Firebase + Google Sign In</string>
+    <string name="desc_google_sign_in" translatable="false">Use a Google Sign In credential to authenticate with Firebase.</string>
 
-    <string name="label_facebook_login">Firebase + Facebook Login</string>
-    <string name="desc_facebook_login">Use a Facebook Login credential to authenticate with Firebase.</string>
+    <string name="label_facebook_login" translatable="false">Firebase + Facebook Login</string>
+    <string name="desc_facebook_login" translatable="false">Use a Facebook Login credential to authenticate with Firebase.</string>
 
     <string name="label_emailpassword">Email/Password Authentication</string>
-    <string name="desc_emailpassword">Use an email and password to authenticate with Firebase.</string>
+    <string name="desc_emailpassword" translatable="false">Use an email and password to authenticate with Firebase.</string>
 
     <string name="hint_user_id">User ID</string>
-    <string name="get_custom_token">Get Token</string>
+    <string name="get_custom_token" translatable="false">Get Token</string>
     <string name="sign_in">Sign In</string>
     <string name="create_account">Create Account</string>
     <string name="sign_out">Sign Out</string>
@@ -29,7 +29,7 @@
     <string name="hint_email">Email</string>
     <string name="hint_password">Password</string>
     <string name="desc_firebase_lockup">Firebase logo and name</string>
-    <string name="auth_failed">Authentication failed</string>
+    <string name="authentication_failed">Authentication failed</string>
     <string name="start_phone_auth">Start</string>
     <string name="verify_phone_auth">Verify</string>
     <string name="resend_phone_auth">Resend</string>
@@ -55,7 +55,6 @@
 
     <string name="id_fmt">User ID: %s</string>
     <string name="email_fmt">Email: %s</string>
-    <string name="authentication_failed">Authentication failed.</string>
     <string name="successfully_signed_out">You have been successfully signed out.</string>
     <string name="unsuccessfully_signed_out">Unable to sign you out.</string>
     <string name="verification_sent_to">Verification email sent to</string>
@@ -63,19 +62,19 @@
 
     <!-- List Item Activity Strings -->
     <string name="list_item_title">List an Item:</string>
-    <string name="title_activity_list_item">ListItemActivity</string>
+    <string name="title_activity_list_item" translatable="false">ListItemActivity</string>
 
     <!-- Item Requests Activity Strings -->
     <string name="item_requests_title">Item Requests</string>
-    <string name="title_activity_item_requests">ItemRequestsActivity</string>
+    <string name="title_activity_item_requests" translatable="false">ItemRequestsActivity</string>
 
     <string name="action_settings">Settings</string>
-    <string name="title_activity_navigation">NavigationActivity</string>
+    <string name="title_activity_navigation" translatable="false">NavigationActivity</string>
     <string name="title_home">Home</string>
     <string name="title_search">Search</string>
     <string name="title_inbox">Inbox</string>
     <string name="title_profile">Profile</string>
-    <string name="title_activity_navigation_search">NavigationSearchActivity</string>
+    <string name="title_activity_navigation_search" translatable="false">NavigationSearchActivity</string>
 
     <string-array name="items">
         <item>iVacuum 6</item>
@@ -94,7 +93,7 @@
 
     <!--Invite friends strings-->
     <string name="invite_message">Hey I\'ve been using HotSwap to rent items that I need but don\'t want to buy! Check it out!</string>
-    <string name="post_to_FB_url">https://developers.facebook.com</string>
+    <string name="post_to_FB_url" translatable="false">https://hotswap.com</string>
     <string name="invite_email_subject">Join HotSwap!</string>
 
     <!--add details string-->
@@ -124,7 +123,7 @@
     <string name="placeholder_member_since">Member Since:</string>
     <string name="placeholder_email">Email</string>
     <string name="placeholder_phone_number">Phone Number</string>
-    <string name="base_package_name">com.teamcaffeine.hotswap</string>
+    <string name="base_package_name" translatable="false">com.teamcaffeine.hotswap</string>
     <string name="unable_to_add_item_due_to_address">Unable to add your item. The address cannot be found. Please try again.</string>
     <string name="unable_to_add_address">Unable to add your item. The address cannot be found. Please try again.</string>
     <string name="unable_to_add_item">Unable to add your item. Please try again.</string>
@@ -140,10 +139,11 @@
     <string name="member_since">Member Since: </string>
     <string name="card_added">Card Added</string>
     <string name="duplicate_card">Cannot add a duplicate card</string>
+    <string name="required">Required.</string>
 
     <!--Home UI strings-->
     <string name="currently_renting">Currently Renting</string>
-    <string name="currently_lending">Currently Lending</string>
+    <string name="pending_swaps">Pending Swaps</string>
     <string name="list_item_button">List Item</string>
     <string name="duplicate_item">You already have an item with that name. Choose another name.</string>
     <string name="enter_address_request">Please enter an address to your profile first!</string>
@@ -170,5 +170,37 @@
     <string name="add_a_note_to_the_owner">Add a note to the owner</string>
     <string name="total_price">Total Price:</string>
     <string name="invalid_date_selected">Invalid date selected.</string>
+    <string name="item_added">New item added</string>
+    <string name="profile_pic_update_success">Successfully updated profile picture.</string>
+    <string name="profile_pic_update_failed">Unable to update profile picture.</string>
+    <string name="unable_change_image">Unable to change image.</string>
+    <string name="GPS_no_signal">GPS signal not found</string>
+    <string name="enter_zipcode">Please enter a valid zipcode</string>
+    <string name="existing_transaction">You already have a transaction for this item for these days.</string>
+    <string name="something_wrong">Whoops! Something went wrong.</string>
+    <string name="unable_to_find_owner">Unable to find owner in database, cannot start chat</string>
+    <string name="enter_all_fields">Please enter all fields.</string>
+    <string name="select_address">Please select an address.</string>
+    <string name="hint_item_name">Item Name</string>
+    <string name="hint_item_tags">Item Tags (separated by commas)</string>
+    <string name="hint_item_description">Item Description</string>
+    <string name="hint_price">Price</string>
+    <string name="list_item">List Item</string>
+    <string name="get_current_location">Get Current Location</string>
+    <string name="enter_zip_code">Enter Zip Code</string>
+    <string name="where_are_you_swapping">Where are you swapping?</string>
+    <string name="save">Save</string>
+    <string name="x">X</string>
+    <string name="add_card_button">Add Card</string>
+    <string name="name">Name</string>
+    <string name="last_message">Last message</string>
+    <string name="search">Search</string>
+    <string name="set_location">Set Location</string>
+    <string name="item_filters">Item Filters</string>
+    <string name="user">User</string>
+    <string name="item">Item</string>
+    <string name="copy">Copy</string>
+    <string name="set_tags">Set Tags</string>
+    <string name="distance_kilometers">Distance (Kilometers)</string>
 
 </resources>

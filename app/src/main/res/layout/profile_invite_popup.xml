@@ -16,7 +16,7 @@
             android:layout_width="41dp"
             android:layout_height="wrap_content"
             android:layout_gravity="right"
-            android:text="X" />
+            android:text="@string/x" />
 
         <Button
             android:id="@+id/btnSendText"

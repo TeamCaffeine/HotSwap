@@ -133,19 +133,19 @@ public class AddUserDetailsActivity extends AppCompatActivity {
                                 user.setAvatar(downloadUrl.toString());
                                 users.child(firebaseUser.getUid()).updateChildren(user.toMap());
 
-                                Toast.makeText(AddUserDetailsActivity.this, "Successfully updated profile picture.", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(AddUserDetailsActivity.this, R.string.profile_pic_update_success, Toast.LENGTH_SHORT).show();
                             }
 
                             @Override
                             public void onCancelled(DatabaseError databaseError) {
-                                Toast.makeText(AddUserDetailsActivity.this, "Unable to update profile picture.", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(AddUserDetailsActivity.this, R.string.profile_pic_update_failed, Toast.LENGTH_SHORT).show();
                                 Log.e(TAG, "The read failed:", databaseError.toException());
                             }
                         });
                     }
                 });
             } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
-                Toast.makeText(this, "Unable to change image.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, R.string.unable_change_image, Toast.LENGTH_SHORT).show();
                 Exception error = result.getError();
                 Log.d(TAG, error.getMessage());
             }

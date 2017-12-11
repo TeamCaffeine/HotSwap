@@ -20,7 +20,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="Name"
+            android:text="@string/name"
             android:id="@+id/convoName"
             android:layout_gravity="center_horizontal" />
 
@@ -28,7 +28,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceSmall"
-            android:text="Last message"
+            android:text="@string/last_message"
             android:id="@+id/convoLastMessage"
             android:layout_gravity="center_horizontal" />
     </LinearLayout>

@@ -31,20 +31,19 @@
             android:layout_height="wrap_content"
             android:text="@string/currently_renting" />
 
-        <TextView
-            android:id="@+id/txtCurrentlyRenting"
+        <com.teamcaffeine.hotswap.utility.NonScrollListView
+            android:id="@+id/listviewRenting"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingLeft="30dp"/>
+            android:layout_height="match_parent" />
 
         <TextView
-            android:id="@+id/txtLendingLabel"
+            android:id="@+id/txtPendingLabel"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/currently_lending" />
+            android:text="@string/pending_swaps" />
 
         <com.teamcaffeine.hotswap.utility.NonScrollListView
-            android:id="@+id/listviewLending"
+            android:id="@+id/listviewPending"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
         </com.teamcaffeine.hotswap.utility.NonScrollListView>

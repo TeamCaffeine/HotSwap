@@ -98,7 +98,7 @@ public class LocationPrefs extends AppCompatActivity
                 Location location= LocationServices.FusedLocationApi.getLastLocation(client);
 
                 if (location == null) {
-                    Toast.makeText(getApplicationContext(), "GPS signal not found", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), R.string.GPS_no_signal, Toast.LENGTH_SHORT).show();
                 }
                 else{
                     // Reasoning: Geocoder kept throwing errors even though properly implemented,
@@ -220,7 +220,7 @@ public class LocationPrefs extends AppCompatActivity
                     finish();
                 }
                 else{
-                    Toast.makeText(getBaseContext(), "Please enter valid zipcode", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getBaseContext(), R.string.enter_zipcode, Toast.LENGTH_SHORT).show();
                 }
             }
         });

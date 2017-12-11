@@ -119,14 +119,14 @@ public class ListItemActivity extends FragmentActivity {
                         Strings.isNullOrEmpty(itemName) ||
                         Strings.isNullOrEmpty(itemPrice) ||
                         Strings.isNullOrEmpty(itemDescription)) {
-                    Toast.makeText(getApplicationContext(), "Please enter all fields.", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), R.string.enter_all_fields, Toast.LENGTH_LONG).show();
                     return;
                 }
 
                 final String itemAddress = addressesFragment.getSelectedAddress();
 
                 if (itemAddress == null) {
-                    Toast.makeText(getApplicationContext(), "Please select an address.", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), R.string.select_address, Toast.LENGTH_LONG).show();
                     return;
                 }
 
@@ -167,8 +167,6 @@ public class ListItemActivity extends FragmentActivity {
                             // create an intent to send back to the HomeActivity
                             Intent i = new Intent();
 
-                            // send the updated itemList back to the Home Fragment
-                            i.putExtra("newItem", itemName);
 
                             // Set the result to indicate adding the item was successful
                             // and finish the activity

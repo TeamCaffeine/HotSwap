@@ -103,7 +103,7 @@ public class SearchFragment extends Fragment implements OnMapReadyCallback, Goog
     private TextView locale, tags;
     private SeekBar progress;
     private SharedPreferences prefs;
-    private String TAG = "696969";
+    private String TAG = "SearchFragment";
     private double lat;
     private double lng;
     private LocationManager locationManager;
@@ -722,13 +722,13 @@ public class SearchFragment extends Fragment implements OnMapReadyCallback, Goog
             }
             @Override
             public void onKeyExited(String key) {
-                System.out.println(String.format("Key %s is no longer in the search area", key));
+                Log.i(TAG, String.format("Key %s is no longer in the search area", key));
 
             }
 
             @Override
             public void onKeyMoved(String key, GeoLocation location) {
-                System.out.println(String.format("Key %s moved within the search area to [%f,%f]", key, location.latitude, location.longitude));
+                Log.i(TAG, String.format("Key %s moved within the search area to [%f,%f]", key, location.latitude, location.longitude));
 
             }
 
@@ -746,7 +746,7 @@ public class SearchFragment extends Fragment implements OnMapReadyCallback, Goog
 
             @Override
             public void onGeoQueryError(DatabaseError error) {
-                System.err.println("There was an error with this query: " + error);
+                Log.e(TAG, "There was an error with this query: " + error);
             }
 
         });

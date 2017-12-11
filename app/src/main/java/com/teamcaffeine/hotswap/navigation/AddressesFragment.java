@@ -122,7 +122,7 @@ public class AddressesFragment extends Fragment {
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         User user = dataSnapshot.getValue(User.class);
 
-                        boolean didRemove = user.removeAddress(listviewAddresses.getItemAtPosition(listviewAddresses.getCheckedItemPosition()).toString());
+                        boolean didRemove = user.removeAddress(getSelectedAddress());
                         if (didRemove) {
                             // Update database
                             Map<String, Object> userUpdate = new HashMap<>();

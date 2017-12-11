@@ -263,7 +263,7 @@ public class ItemDetailsActivity extends AppCompatActivity {
                     });
                 }
                 else {
-                    Toast.makeText(getApplicationContext(), "Unable to find owner in database, cannot start chat", Toast.LENGTH_SHORT);
+                    Toast.makeText(getApplicationContext(), R.string.unable_to_find_owner, Toast.LENGTH_SHORT);
                     return;
                 }
             }

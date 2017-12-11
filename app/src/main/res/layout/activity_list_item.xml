@@ -44,7 +44,7 @@
         android:layout_height="0dp"
         android:layout_weight="1"
         android:ems="10"
-        android:hint="Item Name"
+        android:hint="@string/hint_item_name"
         android:inputType="textPersonName"
         android:textSize="18sp" />
 
@@ -54,7 +54,7 @@
         android:layout_height="0dp"
         android:layout_weight="1"
         android:ems="10"
-        android:hint="Item Description"
+        android:hint="@string/hint_item_description"
         android:imeOptions="actionDone"
         android:inputType="textLongMessage"
         android:textSize="18sp" />
