@@ -29,6 +29,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.teamcaffeine.hotswap.swap.ItemTransactions;
 import com.teamcaffeine.hotswap.swap.ListItemActivity;
 import com.teamcaffeine.hotswap.R;
 import com.teamcaffeine.hotswap.swap.Item;
@@ -47,6 +48,7 @@ import java.util.List;
 public class HomeFragment extends Fragment {
 
     private String TAG = "HomeFragment";
+    private Button bTrans;
 
     // create objects to reference layout objects
     private Button btnListItem;
@@ -119,6 +121,15 @@ public class HomeFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         Log.i(TAG, "onViewCreated");
+
+        bTrans = view.findViewById(R.id.bTrans);
+        bTrans.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i2 = new Intent(getActivity(), ItemTransactions.class);
+                startActivity(i2);
+            }
+        });
 
         // get the views from the layout
         btnListItem = view.findViewById(R.id.btnListItem);

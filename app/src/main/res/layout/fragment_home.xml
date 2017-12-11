@@ -13,6 +13,12 @@
 
         <!-- TODO: Update blank fragment layout -->
 
+        <Button
+            android:id="@+id/bTrans"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Button" />
+
         <TextView
             android:id="@+id/txtItemsLabel"
             android:layout_width="match_parent"

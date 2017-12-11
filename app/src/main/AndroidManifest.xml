@@ -61,6 +61,10 @@
             </intent-filter>
         </activity>
         <activity
+            android:name=".swap.ItemTransactions"
+            android:screenOrientation="portrait">
+        </activity>
+        <activity
             android:name=".maps.LocationPrefs"
             android:screenOrientation="portrait">
             <intent-filter>
