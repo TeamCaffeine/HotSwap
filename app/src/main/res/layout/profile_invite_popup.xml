@@ -5,6 +5,7 @@
     android:layout_height="wrap_content"
     android:layout_gravity="center_vertical"
     android:background="@color/com_facebook_button_background_color_focused_disabled"
+    android:gravity="center_vertical"
     android:orientation="vertical"
     android:padding="20dp">
 

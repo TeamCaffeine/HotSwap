@@ -293,7 +293,7 @@ public class ProfileFragment extends Fragment {
 
     private void inviteFriendsPopup() {
         View popupView = LayoutInflater.from(getActivity()).inflate(R.layout.profile_invite_popup, null);
-        final PopupWindow popupWindow = new PopupWindow(popupView, 600, 300, true);
+        final PopupWindow popupWindow = new PopupWindow(popupView, 600, 350, true);
         popupWindow.setOutsideTouchable(true);
         popupWindow.setAnimationStyle(R.style.PopupAnimation);
 
