@@ -72,6 +72,7 @@
             android:ems="10"
             android:text="Choose Tag"
             android:imeOptions="actionDone"
+            android:textColor="#0000EE"
             android:layout_marginLeft="5dp"
             android:inputType="textLongMessage"
             android:textSize="18sp" />

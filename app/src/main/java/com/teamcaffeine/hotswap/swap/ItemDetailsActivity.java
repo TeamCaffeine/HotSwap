@@ -84,7 +84,7 @@ public class ItemDetailsActivity extends AppCompatActivity {
                 item = dataSnapshot.getValue(Item.class);
                 String itemName = item.getName();
                 String itemDescription = item.getDescription();
-                String itemTags = item.getTagsToString();
+                String itemTags = item.getTag();
                 String itemPrice = "$" + item.getRentPrice();
                 String downloadUrl = item.getHeaderPicture();
                 String itemLocation;

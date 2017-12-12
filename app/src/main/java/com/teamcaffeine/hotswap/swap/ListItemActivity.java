@@ -67,7 +67,7 @@ public class ListItemActivity extends FragmentActivity {
     private String geoFireTable = "items_location";
     private Uri imageUri = null;
     private RadioGroup tagList;
-    private TextView tagChosen, tags;
+    private TextView tagChosen, tag;
 
 
     private ImageView itemPhoto;
@@ -120,12 +120,14 @@ public class ListItemActivity extends FragmentActivity {
 
                 final String itemPrice = editPrice.getText().toString();
                 final String itemDescription = editDescription.getText().toString();
+                final String tagSelected = tagChosen.getText().toString();
 
                 // FIELD VALIDATION
                 if (Strings.isNullOrEmpty(itemID) ||
                         Strings.isNullOrEmpty(itemName) ||
                         Strings.isNullOrEmpty(itemPrice) ||
-                        Strings.isNullOrEmpty(itemDescription)) {
+                        Strings.isNullOrEmpty(itemDescription) ||
+                        Strings.isNullOrEmpty(tagSelected)) {
                     Toast.makeText(getApplicationContext(), R.string.enter_all_fields, Toast.LENGTH_LONG).show();
                     return;
                 }
@@ -158,7 +160,7 @@ public class ListItemActivity extends FragmentActivity {
                         // taskSnapshot.getMetadata() contains file metadata such as size, content-type, and download URL.
                         final Uri downloadUrl = taskSnapshot.getDownloadUrl();
 
-                        Item newItem = new Item(itemID, itemName, firebaseUser.getUid(), itemDescription, itemPrice, itemAddress, downloadUrl.toString());
+                        Item newItem = new Item(itemID, itemName, firebaseUser.getUid(), itemDescription, itemPrice, itemAddress, downloadUrl.toString(), tagSelected);
 
                         // DATA VALIDATION
                         // a user cannot list 2 items with the same name
@@ -186,12 +188,12 @@ public class ListItemActivity extends FragmentActivity {
         });
         tagChosen = (TextView) findViewById(R.id.showTag);
 
-        tags = (TextView) findViewById(R.id.chooseTag);
-        SpannableString content = new SpannableString(tags.getText());
+        tag = (TextView) findViewById(R.id.chooseTag);
+        SpannableString content = new SpannableString(tag.getText());
         content.setSpan(new UnderlineSpan(), 0, content.length(), 0);
-        tags.setText(content);
+        tag.setText(content);
 
-        tags.setOnClickListener(new View.OnClickListener() {
+        tag.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 tagsPopup();
@@ -230,6 +232,7 @@ public class ListItemActivity extends FragmentActivity {
         final String itemID = newItem.getItemID();
         final String itemName = newItem.getName();
         final String itemAddress = newItem.getAddress();
+        final String tagSelected = newItem.getTag();
 
         items.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
