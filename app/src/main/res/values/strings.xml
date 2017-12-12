@@ -65,8 +65,7 @@
     <string name="title_activity_list_item" translatable="false">ListItemActivity</string>
 
     <!-- Item Requests Activity Strings -->
-    <string name="item_requests_title">Item Requests</string>
-    <string name="title_activity_item_requests" translatable="false">ItemRequestsActivity</string>
+    <string name="title_activity_item_requests">ItemRequestsActivity</string>
 
     <string name="action_settings">Settings</string>
     <string name="title_activity_navigation" translatable="false">NavigationActivity</string>

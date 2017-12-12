@@ -6,52 +6,75 @@
     android:orientation="vertical">
 
 
-        <RadioGroup
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
+    <RadioGroup
+        android:id="@+id/tagList"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-            <RadioButton
-                android:id="@+id/radioButton1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="JAKE"
-                android:layout_gravity="center"/>
-            <RadioButton
-                android:id="@+id/radioButton2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="JAKU"
-                android:layout_gravity="center"/>
-            <RadioButton
-                android:id="@+id/radioButton3"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="JAKUU"
-                android:layout_gravity="center"/>
-            <RadioButton
-                android:id="@+id/radioButton4"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="JAKUUU"
-                android:layout_gravity="center"/>
-            <RadioButton
-                android:id="@+id/radioButton5"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="JAKUUUU"
-                android:layout_gravity="center"/>
-            <RadioButton
-                android:id="@+id/radioButton6"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="JAKUUUUU"
-                android:layout_gravity="center"/>
-        </RadioGroup>
+        <RadioButton
+            android:id="@+id/radioButton1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:text="JAKE"
+            android:textAlignment="center"
+            android:textColor="@color/white"
+            />
+
+        <RadioButton
+            android:id="@+id/radioButton2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:text="JAKU"
+            android:textAlignment="center"
+            android:textColor="@color/white"
+            />
+
+        <RadioButton
+            android:id="@+id/radioButton3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:text="JAKUU"
+            android:textAlignment="center"
+            android:textColor="@color/white"
+            />
+
+        <RadioButton
+            android:id="@+id/radioButton4"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:text="JAKUUU"
+            android:textAlignment="center"
+            android:textColor="@color/white"
+            />
+
+        <RadioButton
+            android:id="@+id/radioButton5"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:text="JAKUUUU"
+            android:textAlignment="center"
+            android:textColor="@color/white"
+            />
+
+        <RadioButton
+            android:id="@+id/radioButton6"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="JAKUUUUU"
+            android:textAlignment="center"
+            android:textColor="@color/white"
+            />
+    </RadioGroup>
 
 </LinearLayout>
