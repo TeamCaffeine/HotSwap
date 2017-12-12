@@ -11,14 +11,21 @@
     <android.support.v7.widget.AppCompatImageView
         android:id="@+id/imgItemImage"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:layout_gravity="center"
+        android:layout_weight="2"
         android:contentDescription="@string/item_image"
-        app:srcCompat="@drawable/com_facebook_profile_picture_blank_square" />
+        app:srcCompat="@mipmap/ic_launcher_foreground" />
+
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.25" />
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
+        android:layout_weight="0.75"
         android:orientation="horizontal">
 
         <TextView
@@ -26,18 +33,20 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="@string/item_name" />
+            android:text="@string/item_name"
+            android:textColor="@color/colorAccent" />
 
         <TextView
             android:id="@+id/txtItemName"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight="2" />
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
+        android:layout_weight="0.75"
         android:orientation="horizontal">
 
         <TextView
@@ -45,19 +54,21 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="@string/item_description" />
+            android:text="@string/item_description"
+            android:textColor="@color/colorAccent" />
 
         <TextView
             android:id="@+id/txtItemDescription"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight="2" />
 
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
+        android:layout_weight="0.75"
         android:orientation="horizontal">
 
         <TextView
@@ -65,18 +76,20 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="@string/item_tags" />
+            android:text="@string/item_tags"
+            android:textColor="@color/colorAccent" />
 
         <TextView
             android:id="@+id/txtItemTags"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight="2" />
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
+        android:layout_weight="0.75"
         android:orientation="horizontal">
 
         <TextView
@@ -84,18 +97,20 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="@string/item_price" />
+            android:text="@string/item_price"
+            android:textColor="@color/colorAccent" />
 
         <TextView
             android:id="@+id/txtItemPrice"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight="2" />
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
+        android:layout_weight="0.75"
         android:orientation="horizontal">
 
         <TextView
@@ -103,25 +118,34 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="@string/item_location" />
+            android:text="@string/item_location"
+            android:textColor="@color/colorAccent" />
 
         <TextView
             android:id="@+id/txtItemLocation"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight="2" />
     </LinearLayout>
 
     <Button
         android:id="@+id/btnRequestSwap"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/request_swap" />
+        android:layout_height="0dp"
+        android:layout_margin="8dp"
+        android:layout_weight="0.5"
+        android:background="@drawable/hotswap_button"
+        android:text="@string/request_swap"
+        android:textColor="@color/textColorPrimary" />
 
     <Button
         android:id="@+id/btnMessageOwner"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/message_owner" />
+        android:layout_height="0dp"
+        android:layout_margin="8dp"
+        android:layout_weight="0.5"
+        android:background="@drawable/hotswap_button"
+        android:text="@string/message_owner"
+        android:textColor="@color/textColorPrimary" />
 
 </LinearLayout>
