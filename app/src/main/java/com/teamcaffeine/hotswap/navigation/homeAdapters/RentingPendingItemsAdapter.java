@@ -1,11 +1,5 @@
 package com.teamcaffeine.hotswap.navigation.homeAdapters;
 
-
-/**
- * IMPORTANT FILE FOR THIS PR
- */
-
-
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,18 +21,19 @@ import java.util.Map;
 
 public class RentingPendingItemsAdapter extends BaseAdapter {
 
-    Context context;
+    private Context context;
     private HashMap<String, ActiveTransactionInfo> items;
     private ArrayList<Map.Entry<String, ActiveTransactionInfo>> itemList;
 
     public RentingPendingItemsAdapter(Context aContext) {
         context = aContext;
-        items = new HashMap<String, ActiveTransactionInfo>();
-        itemList = new ArrayList<Map.Entry<String, ActiveTransactionInfo>>(items.entrySet());
+        items = new HashMap<>();
+        itemList = new ArrayList<>(items.entrySet());
     }
 
-    public void putItems(HashMap items){
+    public void putItems(HashMap<String, ActiveTransactionInfo> items){
         this.items = items;
+        this.itemList.addAll(items.entrySet());
     }
 
     @Override
