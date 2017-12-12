@@ -126,6 +126,7 @@ public class ItemTransactions extends AppCompatActivity {
                                                 break;
                                             }
                                         }
+                                        items.child(itemID).updateChildren(item.toMap());
                                     }
 
                                     @Override
