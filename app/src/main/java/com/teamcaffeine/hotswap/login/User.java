@@ -198,5 +198,13 @@ public class User implements IUser {
 
     public void setBalance(double balance) {this.balance = balance;}
 
+    public void addBalance(double balance) {
+        this.balance += balance;
+    }
+
+    public void deductBalance(double balance) {
+        this.balance -= balance;
+    }
+
     public double getBalance() {return balance; }
 }

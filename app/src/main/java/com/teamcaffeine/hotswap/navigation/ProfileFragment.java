@@ -166,6 +166,8 @@ public class ProfileFragment extends Fragment {
 
                 txtEmail.setText(user.getEmail());
                 txtPhoneNumber.setText(user.getPhoneNumber());
+
+                txtBalance.setText(getString(R.string.current_balance) + " $" + Double.toString(user.getBalance()));
             }
 
             @Override

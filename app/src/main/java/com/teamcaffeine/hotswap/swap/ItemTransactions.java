@@ -95,7 +95,7 @@ public class ItemTransactions extends AppCompatActivity {
                                         sendMessage(confirmationString, t.getRequestUserID());
 
                                         // Update the renter user to have a new pending item
-                                        ActiveTransactionInfo activeTransactionInfo = new ActiveTransactionInfo(item, t.getRequestUserID(), date);
+                                        ActiveTransactionInfo activeTransactionInfo = new ActiveTransactionInfo(item, t.getRequestUserID(), date, Double.parseDouble(item.getRentPrice()) * t.getRequestedDates().size());
                                         users.child(t.getRequestUserID()).child("pending").child(activeTransactionInfo.toKey()).setValue(activeTransactionInfo);
                                     }
 
