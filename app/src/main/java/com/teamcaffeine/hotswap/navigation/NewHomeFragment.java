@@ -1,8 +1,10 @@
 package com.teamcaffeine.hotswap.navigation;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.renderscript.Sampler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -28,7 +30,11 @@ import com.teamcaffeine.hotswap.R;
 import com.teamcaffeine.hotswap.login.User;
 import com.teamcaffeine.hotswap.navigation.homeAdapters.OwnedItemsAdapter;
 import com.teamcaffeine.hotswap.navigation.homeAdapters.OwnedItemsCardAdapter;
+import com.teamcaffeine.hotswap.navigation.homeAdapters.RentingPendingItemsAdapter;
+import com.teamcaffeine.hotswap.navigation.homeAdapters.RentingPendingItemsCardAdapter;
 import com.teamcaffeine.hotswap.navigation.homePages.OwnedScrollFragment;
+import com.teamcaffeine.hotswap.navigation.homePages.PendingScrollFragment;
+import com.teamcaffeine.hotswap.navigation.homePages.RentingScrollFragment;
 import com.teamcaffeine.hotswap.swap.Item;
 import com.teamcaffeine.hotswap.swap.ListItemActivity;
 
@@ -38,21 +44,46 @@ public class NewHomeFragment extends Fragment {
 
     private String TAG = "HomeFragment";
 
-    int pageCount = 1;
+    int pageCount = 3;
 
     private FirebaseUser firebaseUser;
     private FirebaseDatabase database;
     private DatabaseReference items; // reference to the items table, used for onDataChange listening
     private DatabaseReference currentUser;
     private String itemTable = "items";
+    private String userTable = "users";
 
     private Button listItemButton;
 
     private OwnedItemsCardAdapter ownedItemsCardAdapter;
+    private RentingPendingItemsCardAdapter rentingItemsCardAdapter;
+    private RentingPendingItemsCardAdapter pendingItemsCardAdapter;
     private ValueEventListener itemsEventListener;
+    private ValueEventListener userEventListener;
     private HollyViewPager hollyViewPager;
     private int LIST_ITEM_REQUEST_CODE = 999;
     private int RESULT_ERROR = 88;
+
+    // progress dialog to show page is loading
+    public ProgressDialog mProgressDialog;
+
+    // progress dialog to show page is loading
+    public void showProgressDialog() {
+        if (mProgressDialog == null) {
+            mProgressDialog = new ProgressDialog(getContext());
+            mProgressDialog.setMessage(getString(R.string.loading));
+            mProgressDialog.setIndeterminate(true);
+        }
+
+        mProgressDialog.show();
+    }
+
+    // hide progress dialog once page loads
+    public void hideProgressDialog() {
+        if (mProgressDialog != null && mProgressDialog.isShowing()) {
+            mProgressDialog.dismiss();
+        }
+    }
 
     public NewHomeFragment() {
         // Required empty public constructor
@@ -87,12 +118,16 @@ public class NewHomeFragment extends Fragment {
 
         // Initialize adapters
         ownedItemsCardAdapter = new OwnedItemsCardAdapter(getContext());
+        rentingItemsCardAdapter = new RentingPendingItemsCardAdapter(getContext());
+        pendingItemsCardAdapter = new RentingPendingItemsCardAdapter(getContext());
 
         hollyViewPager.setAdapter(new FragmentPagerAdapter(getActivity().getSupportFragmentManager()) {
             @Override
             public Fragment getItem(int position) {
                 switch (position) {
                     case 0: return OwnedScrollFragment.newInstance("Owned Items", ownedItemsCardAdapter);
+                    case 1: return RentingScrollFragment.newInstance("Rented Items", rentingItemsCardAdapter);
+                    case 2: return PendingScrollFragment.newInstance("Pending Items", pendingItemsCardAdapter);
                 }
                 return OwnedScrollFragment.newInstance("Owned Items", ownedItemsCardAdapter);
             }
@@ -106,6 +141,8 @@ public class NewHomeFragment extends Fragment {
             public CharSequence getPageTitle(int position) {
                 switch (position) {
                     case 0: return "Owned Items";
+                    case 1: return "Rented Items";
+                    case 2: return "Pending Items";
                 }
                 return "TITLE " + position;
             }
@@ -117,6 +154,7 @@ public class NewHomeFragment extends Fragment {
         // get a reference to our database
         database = FirebaseDatabase.getInstance();
         items = database.getReference().child(itemTable);
+        currentUser = database.getReference().child(userTable).child(firebaseUser.getUid());
 
         // Initialize listeners
         itemsEventListener = new ValueEventListener() {
@@ -141,6 +179,28 @@ public class NewHomeFragment extends Fragment {
 
         // add the event listener to the items table
         items.addValueEventListener(itemsEventListener);
+
+        // Create the event listener to listen to database changes
+        userEventListener = new ValueEventListener() {
+            @Override
+            // get a data snapshot of the whole table
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                User user = dataSnapshot.getValue(User.class);
+                rentingItemsCardAdapter.putItems(user.getRenting());
+                pendingItemsCardAdapter.putItems(user.getPending());
+
+                rentingItemsCardAdapter.notifyDataSetChanged();
+                pendingItemsCardAdapter.notifyDataSetChanged();
+            }
+
+            // if the read of the items table failed, log the error message
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Log.i(TAG, "The read failed: " + databaseError.getCode());
+            }
+        };
+
+        currentUser.addValueEventListener(userEventListener);
 
         listItemButton = view.findViewById(R.id.listItemButton);
         listItemButton.setOnClickListener(new View.OnClickListener() {
@@ -185,7 +245,7 @@ public class NewHomeFragment extends Fragment {
         super.onPause();
         // using the reference to the items table, remove the listener
         items.removeEventListener(itemsEventListener);
-        //currentUser.removeEventListener(userEventListener);
+        currentUser.removeEventListener(userEventListener);
     }
 
     // when the fragment is resumed, add the event listener
@@ -194,6 +254,6 @@ public class NewHomeFragment extends Fragment {
         super.onResume();
         // using the reference to the items table, add the listener
         items.addValueEventListener(itemsEventListener);
-        //currentUser.addValueEventListener(userEventListener);
+        currentUser.addValueEventListener(userEventListener);
     }
 }
