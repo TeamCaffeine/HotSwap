@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layout_margin="20dp"
     android:focusable="true"
-    android:focusableInTouchMode="true">
+    android:focusableInTouchMode="true"
+    android:orientation="vertical">
 
     <TextView
         android:id="@+id/textView"
@@ -13,6 +15,7 @@
         android:layout_weight="1"
         android:text="@string/list_item_title"
         android:textAlignment="center"
+        android:textColor="@color/colorAccent"
         android:textSize="30sp" />
 
     <LinearLayout
@@ -26,7 +29,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            app:srcCompat="@drawable/com_facebook_profile_picture_blank_square" />
+            app:srcCompat="@mipmap/ic_launcher_foreground" />
 
         <TextView
             android:layout_width="match_parent"
@@ -34,12 +37,14 @@
             android:layout_weight="1"
             android:text="Tap picture at left to modify item photo."
             android:textAlignment="center"
+            android:textColor="@color/colorPrimaryDark"
             android:textSize="18sp" />
 
     </LinearLayout>
 
     <EditText
         android:id="@+id/editItemName"
+        style="@style/HotSwapEditTextStyle"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
@@ -50,6 +55,7 @@
 
     <EditText
         android:id="@+id/editDescription"
+        style="@style/HotSwapEditTextStyle"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
@@ -58,31 +64,32 @@
         android:imeOptions="actionDone"
         android:inputType="textLongMessage"
         android:textSize="18sp" />
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"
+        android:layout_weight="0"
         android:orientation="horizontal">
 
         <TextView
             android:id="@+id/chooseTag"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_marginLeft="5dp"
             android:layout_weight="3"
             android:ems="10"
-            android:text="Choose Tag"
             android:imeOptions="actionDone"
-            android:textColor="#0000EE"
-            android:layout_marginLeft="5dp"
             android:inputType="textLongMessage"
+            android:text="Choose Tag"
+            android:textColor="#0000EE"
             android:textSize="18sp" />
 
         <TextView
             android:id="@+id/showTag"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_weight="1.5"
             android:layout_marginStart="10dp"
+            android:layout_weight="1.5"
             android:ems="10"
             android:hint="No Tag Chosen"
             android:textSize="18sp" />
@@ -100,6 +107,7 @@
 
     <EditText
         android:id="@+id/editPrice"
+        style="@style/HotSwapEditTextStyle"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
@@ -116,6 +124,8 @@
         android:gravity="center"
         android:text="List Item"
         android:textAlignment="center"
-        android:textSize="24sp" />
+        android:textSize="24sp"
+        android:textColor="@color/textColorPrimary"
+        android:background="@drawable/hotswap_button"/>
 
 </LinearLayout>
