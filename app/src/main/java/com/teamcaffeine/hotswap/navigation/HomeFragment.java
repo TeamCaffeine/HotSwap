@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -118,8 +119,45 @@ public class HomeFragment extends Fragment {
 
         // set tbe adapter on the listview in the UI
         listviewOwnedItems.setAdapter(ownedItemsAdapter);
+        listviewOwnedItems.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                //TODO call tony's code
+            }
+        });
+
         listviewRenting.setAdapter(rentingAdapter);
+        listviewRenting.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                // Do nothing. Future work, perhaps do some small informational activity or message.
+            }
+        });
+
         listviewPending.setAdapter(pendingAdapter);
+        listviewPending.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                //TODO check if the user is the owner or renter of item.
+
+                //if owner
+                    // popup dialog to ask if they have gotten their item back.
+                        // If yes
+                            // remove the ActiveTransactionInfo from pending for self, do not put anywhere else (it's done)
+                            // remove the ActiveTransactionInfo from renting for renter, do not put anywhere else (it's done)
+                            // remove in UI from both lists... (the userEventListener will understand this
+                            // and readjust the UI for both ourselves and the other user)
+                        // If no
+                            // do nothing, close dialog.
+                //if renter
+                    // popup dialog to ask if they have received the item they are renting
+                        // If yes
+                            // removing the ActiveTransactionInfo from pending for self, place in renting for self
+                            // add the ActiveTransactionInfo to pending for item's owner
+                            // adjust the UI for both lists... again, this doesn't need to be coded out, the userEventListener
+                            // will handle this behavior.
+            }
+        });
 
         // Get a database reference to our user
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
