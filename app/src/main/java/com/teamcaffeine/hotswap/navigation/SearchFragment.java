@@ -11,10 +11,8 @@ import android.graphics.drawable.ColorDrawable;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationManager;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
@@ -36,10 +34,12 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.SeekBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.facebook.share.model.ShareLinkContent;
-import com.facebook.share.widget.ShareDialog;
+import com.firebase.client.Firebase;
+import com.firebase.geofire.GeoFire;
+import com.firebase.geofire.GeoLocation;
+import com.firebase.geofire.GeoQuery;
+import com.firebase.geofire.GeoQueryEventListener;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationListener;
@@ -72,17 +72,8 @@ import com.squareup.okhttp.Response;
 import com.teamcaffeine.hotswap.R;
 import com.teamcaffeine.hotswap.maps.Items;
 import com.teamcaffeine.hotswap.maps.LocationPrefs;
-
-import com.firebase.client.Firebase;
-import com.firebase.geofire.GeoFire;
-import com.firebase.geofire.GeoLocation;
-import com.firebase.geofire.GeoQuery;
-import com.firebase.geofire.GeoQueryEventListener;
 import com.teamcaffeine.hotswap.swap.Item;
 import com.teamcaffeine.hotswap.swap.ItemDetailsActivity;
-import com.teamcaffeine.hotswap.utility.LatLongUtility;
-
-import org.w3c.dom.Text;
 
 import java.io.IOException;
 import java.util.HashMap;

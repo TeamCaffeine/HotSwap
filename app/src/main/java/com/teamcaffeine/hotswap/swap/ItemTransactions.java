@@ -84,6 +84,8 @@ public class ItemTransactions extends AppCompatActivity {
                                                 break;
                                             }
                                         }
+
+                                        items.child(itemID).updateChildren(item.toMap());
                                         // Set the transaction's confirmed field to false to true
                                         // We pull the item, because it may have changed since the time we pulled it in
                                             // items.child(Integer.toString(i)).updateChildren(currentTransaction.toMap());
@@ -105,42 +107,13 @@ public class ItemTransactions extends AppCompatActivity {
                                     }
                                 });
 
-
-//                                items.child(Integer.toString(i)).addListenerForSingleValueEvent(new ValueEventListener() {
-//                                    @Override
-//                                    public void onDataChange(DataSnapshot dataSnapshot) {
-//                                        Transaction i = dataSnapshot.getValue(Transaction.class);
-//                                        i.setConfirmed(true);
-//                                        String renterID = u.getId();
-//                                        // set renters' user model to have
-//                                        // pending entry of (item, renterID, start date
-//                                        users.child(renterID).child("pending").addListenerForSingleValueEvent(new ValueEventListener() {
-//                                            @Override
-//                                            public void onDataChange(DataSnapshot dataSnapshot) {
-//                                                User u = dataSnapshot.getValue(User.class);
-//
-//                                            }
-//
-//                                            @Override
-//                                            public void onCancelled(DatabaseError databaseError) {
-//
-//                                                }
-//                                            });
-//
-//                                                // remove from listview
-//                                            }
-//
-//                                    @Override
-//                                    public void onCancelled(DatabaseError databaseError) {
-////                                        System.out.println(TAG, "Payment update failed", databaseError.toException());
-//                                    }
-//                                });
                                 // after the item is deleted, dismiss the delete dialog
                                 dialog.dismiss();
                             }
                         })
                         .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
+
                                 dialog.dismiss();
                             }
                         })

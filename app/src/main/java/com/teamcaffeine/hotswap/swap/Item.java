@@ -11,7 +11,6 @@ public class Item {
     private String itemID = "";
     private String name = "";
     private String ownerID = "";
-    private String renteeID = "";
     private String description = "";
     private String rentPrice = "";
     private List<String> tags = new ArrayList<String>();
@@ -48,7 +47,6 @@ public class Item {
         this.itemID = item.getItemID();
         this.name = item.getName();
         this.ownerID = item.getOwnerID();
-        this.renteeID = item.getRenteeID();
         this.description = item.getDescription();
         this.rentPrice = rentPrice;
         this.tags = item.getTags();
@@ -64,7 +62,6 @@ public class Item {
         result.put("itemID", itemID);
         result.put("name", name);
         result.put("ownerID", ownerID);
-        result.put("renteeID", renteeID);
         result.put("description", description);
         result.put("rentPrice", rentPrice);
         result.put("tags", tags);
@@ -81,10 +78,6 @@ public class Item {
 
     public void setOwnerID(String ownerID) {
         this.ownerID = ownerID;
-    }
-
-    public void setRenteeID(String renteeID) {
-        this.renteeID = renteeID;
     }
 
     public void setDescription(String description) {
@@ -141,10 +134,6 @@ public class Item {
 
     public String getOwnerID() {
         return ownerID;
-    }
-
-    public String getRenteeID() {
-        return renteeID;
     }
 
     public String getDescription() {
