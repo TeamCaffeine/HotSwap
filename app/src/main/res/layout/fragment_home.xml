@@ -9,7 +9,22 @@
         android:id="@+id/listItemButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/list_item" />
+        android:layout_marginBottom="15dp"
+        android:layout_marginLeft="40dp"
+        android:layout_marginRight="40dp"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/hotswap_button"
+        android:text="@string/list_item_button"
+        android:textColor="@color/textColorPrimary"
+        android:textSize="16sp" />
+
+    <ImageView
+        android:id="@+id/divider1"
+        android:layout_width="match_parent"
+        android:layout_height="4dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        app:srcCompat="@drawable/hotswap_divider" />
 
     <com.github.florent37.hollyviewpager.HollyViewPager
         android:id="@+id/hollyViewPager"

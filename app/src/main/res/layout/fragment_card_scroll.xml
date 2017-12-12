@@ -15,7 +15,9 @@
         android:layout_marginRight="@dimen/viewpager_margin_fix"
         android:orientation="vertical">
 
-        <include layout="@layout/hvp_header_placeholder"/>
+        <com.github.florent37.hollyviewpager.HollyViewPagerPlaceholder xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/header_height" />
 
         <android.support.v7.widget.CardView
             android:id="@+id/cardView"
@@ -39,6 +41,7 @@
                     android:paddingLeft="25dp"
                     android:text="TITLE"
                     android:textColor="@color/colorAccent"
+                    android:textSize="18sp"
                     android:textStyle="bold" />
 
                 <View
