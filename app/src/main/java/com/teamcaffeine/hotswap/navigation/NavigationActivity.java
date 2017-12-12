@@ -29,8 +29,7 @@ import java.lang.reflect.Field;
 public class NavigationActivity extends AppCompatActivity implements
         ChatFragment.ChatFragmentListener,
         ProfileFragment.ProfileFragmentListener,
-        SearchFragment.SearchFragmentListener,
-        HomeFragment.HomeFragmentListener {
+        SearchFragment.SearchFragmentListener {
 
     private final String TAG = "NavigationActivity";
 

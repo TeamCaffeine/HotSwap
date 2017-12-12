@@ -1,7 +1,10 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@id/dialogRootLayout"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:layout_marginLeft="15dp"
+    android:layout_marginRight="15dp"
+    android:layout_marginTop="15dp">
 
     <RelativeLayout
         android:id="@id/dialogContainer"
@@ -29,7 +32,8 @@
             android:ellipsize="end"
             android:fontFamily="@string/font_fontFamily_medium"
             android:includeFontPadding="false"
-            android:maxLines="1" />
+            android:maxLines="1"
+            android:textColor="@color/colorAccent" />
 
         <TextView
             android:id="@id/dialogDate"
@@ -41,7 +45,8 @@
             android:layout_marginRight="16dp"
             android:layout_marginTop="16dp"
             android:ellipsize="end"
-            android:maxLines="1" />
+            android:maxLines="1"
+            android:textColor="@color/textColorPrimary" />
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -72,7 +77,8 @@
                 android:layout_toRightOf="@id/dialogLastMessageUserAvatar"
                 android:ellipsize="end"
                 android:gravity="top"
-                android:maxLines="1" />
+                android:maxLines="1"
+                android:textColor="@color/textColorPrimary" />
 
         </RelativeLayout>
 
@@ -111,7 +117,7 @@
             <View
                 android:id="@id/dialogDivider"
                 android:layout_width="match_parent"
-                android:layout_height="1dp"
+                android:layout_height="0dp"
                 android:background="@color/dialog_divider" />
 
         </FrameLayout>
