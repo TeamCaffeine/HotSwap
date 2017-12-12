@@ -101,12 +101,12 @@ public class CreateTransactionActivity extends AppCompatActivity {
                 for (Date d : calendarPickerView.getSelectedDates()) {
                     if (previousDate.equals(d)) {
                         // Ignore. This is the first iteration.
-                    } else if (d.getDay() == previousDate.getDay() + 1){
+                    } else if (d.getDay() == (previousDate.getDay() + 1) % 7){
                         previousDate = (Date) d.clone();
                     } else {
                         // We must have skipped a day. Log and handle appropriately.
                         Log.i(TAG, "Selected range with disabled day inside of it.");
-                        Toast.makeText(getApplicationContext(), R.string.invalid_date_selected, Toast.LENGTH_LONG).show();
+                        Toast.makeText(getApplicationContext(), R.string.invalid_date_selected, Toast.LENGTH_SHORT).show();
                         calendarPickerView.selectDate(calendarPickerView.getSelectedDate());
                     }
                 }

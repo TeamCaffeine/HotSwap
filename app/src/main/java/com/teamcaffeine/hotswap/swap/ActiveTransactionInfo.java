@@ -10,6 +10,10 @@ public class ActiveTransactionInfo {
     private String renterId;
     private Date date;
 
+    public ActiveTransactionInfo() {
+        // Required empty constructor to deserialize object
+    }
+
     public ActiveTransactionInfo(Item item, String renterId, Date date) {
         this.item = item;
         this.renterId = renterId;
