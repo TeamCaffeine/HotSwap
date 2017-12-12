@@ -26,7 +26,6 @@ import com.teamcaffeine.hotswap.messaging.models.Channel;
 import com.teamcaffeine.hotswap.messaging.models.Subscriptions;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class ItemDetailsActivity extends AppCompatActivity {
     private DatabaseReference channels;
