@@ -155,7 +155,7 @@ public class ItemTransactions extends AppCompatActivity {
 
 
         // Set up Firebase
-        items.addListenerForSingleValueEvent(new ValueEventListener() {
+        items.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 Item i = dataSnapshot.getValue(Item.class);
