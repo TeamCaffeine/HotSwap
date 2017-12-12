@@ -29,8 +29,7 @@ import java.lang.reflect.Field;
 public class NavigationActivity extends AppCompatActivity implements
         ChatFragment.ChatFragmentListener,
         ProfileFragment.ProfileFragmentListener,
-        SearchFragment.SearchFragmentListener,
-        HomeFragment.HomeFragmentListener {
+        SearchFragment.SearchFragmentListener {
 
     private final String TAG = "NavigationActivity";
 
@@ -98,7 +97,7 @@ public class NavigationActivity extends AppCompatActivity implements
             // No fragments exist yet, instantiate them
             selectedItem = navigation.getMenu().getItem(0);
 
-            homeFragment = new NewHomeFragment();
+            homeFragment = new HomeFragment();
             searchFragment = new SearchFragment();
             chatFragment = new ChatFragment();
             profileFragment = new ProfileFragment();
