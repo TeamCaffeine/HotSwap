@@ -591,16 +591,12 @@ public class SearchFragment extends Fragment implements OnMapReadyCallback, Goog
                             return;
                         }
 
-                        // for each word in entry
 
-                        String[] splited = tfLocation.getText().toString().toLowerCase().split("\\s+");
-
-                       // for (int i = 0; i < splited.length; i++){
                             // if tag not matched
                             if (!item.getOwnerID().equals(FirebaseAuth.getInstance().getCurrentUser().getUid())) {
                              //   if (item.getName().toLowerCase().contains(splited[i])) {
                                 if (item.getName().toLowerCase().contains(tfLocation.getText().toString().toLowerCase())) {
-
+                                    // if tag not matched
                                     if(item.getTag().contains(tagChosen.getText().toString())) {
                                         // add to listview
                                         lvAdapter.putItem(item);
@@ -612,7 +608,6 @@ public class SearchFragment extends Fragment implements OnMapReadyCallback, Goog
                                     }
                                 }
                             }
-                        //}
 
 
                     }
