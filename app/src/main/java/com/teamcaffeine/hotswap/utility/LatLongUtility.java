@@ -3,13 +3,11 @@ package com.teamcaffeine.hotswap.utility;
 import android.location.Location;
 import android.util.Log;
 
-import com.google.android.gms.location.LocationServices;
 import com.google.maps.GeoApiContext;
 import com.google.maps.GeocodingApi;
 import com.google.maps.errors.ApiException;
 import com.google.maps.model.GeocodingResult;
 import com.google.maps.model.LatLng;
-import com.teamcaffeine.hotswap.R;
 
 import java.io.IOException;
 

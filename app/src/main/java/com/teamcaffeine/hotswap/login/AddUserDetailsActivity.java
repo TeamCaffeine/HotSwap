@@ -28,15 +28,12 @@ import com.google.firebase.storage.UploadTask;
 import com.teamcaffeine.hotswap.R;
 import com.teamcaffeine.hotswap.navigation.AddressesFragment;
 import com.teamcaffeine.hotswap.navigation.NavigationActivity;
-import com.teamcaffeine.hotswap.navigation.ProfileFragment;
 import com.teamcaffeine.hotswap.utility.SessionHandler;
 import com.theartofdev.edmodo.cropper.CropImage;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 
 public class AddUserDetailsActivity extends AppCompatActivity {
 
