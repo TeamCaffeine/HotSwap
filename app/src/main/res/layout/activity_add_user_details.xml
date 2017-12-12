@@ -5,20 +5,33 @@
     android:id="@+id/layout_main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layout_margin="20dp"
     android:orientation="vertical"
     tools:context=".login.AddUserDetailsActivity">
 
-    <ImageView
+    <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/imgProfilePhoto"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:layout_weight="2"
-        app:srcCompat="@drawable/com_facebook_profile_picture_blank_square" />
+        android:src="@drawable/com_facebook_profile_picture_blank_square"
+        app:civ_border_color="@color/textColorPrimary"
+        app:civ_border_width="2dp" />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="10dp"
+        android:layout_weight="0.5"
+        android:text="@string/picture_upload_hint"
+        android:textAlignment="center"
+        android:textColor="@color/colorPrimaryDark" />
 
     <LinearLayout
         android:id="@+id/layout_FirstName"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:layout_weight="1"
         android:orientation="horizontal">
 
@@ -29,7 +42,8 @@
             android:layout_weight="1.25"
             android:gravity="right|center_vertical"
             android:text="@string/first_name_label"
-            android:textSize="18sp" />
+            android:textColor="@color/colorAccent"
+            android:textSize="14sp" />
 
         <EditText
             android:id="@+id/edtFirstName"
@@ -40,13 +54,14 @@
             android:layout_weight="2"
             android:hint="@string/first_name_hint"
             android:inputType="textPersonName"
-            android:paddingLeft="15dp" />
+            android:paddingLeft="15dp"
+            android:textSize="14sp" />
     </LinearLayout>
 
     <LinearLayout
         android:id="@+id/layout_LastName"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:layout_weight="1"
         android:orientation="horizontal">
 
@@ -57,7 +72,8 @@
             android:layout_weight="1.25"
             android:gravity="right|center_vertical"
             android:text="@string/last_name_label"
-            android:textSize="18sp" />
+            android:textColor="@color/colorAccent"
+            android:textSize="14sp" />
 
         <EditText
             android:id="@+id/edtLastName"
@@ -68,14 +84,15 @@
             android:layout_weight="2"
             android:hint="@string/last_name_hint"
             android:inputType="textPersonName"
-            android:paddingLeft="15dp" />
+            android:paddingLeft="15dp"
+            android:textSize="14sp" />
 
     </LinearLayout>
 
     <LinearLayout
         android:id="@+id/layout_phoneNumber"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:layout_weight="1"
         android:orientation="horizontal">
 
@@ -86,7 +103,8 @@
             android:layout_weight="1.25"
             android:gravity="right|center_vertical"
             android:text="@string/phone_number_label"
-            android:textSize="18sp" />
+            android:textColor="@color/colorAccent"
+            android:textSize="14sp" />
 
         <EditText
             android:id="@+id/edtPhoneNumber"
@@ -96,26 +114,29 @@
             android:layout_marginRight="10dp"
             android:layout_weight="2"
             android:hint="@string/phone_number_hint"
+            android:imeOptions="actionDone"
             android:inputType="phone"
             android:paddingLeft="15dp"
-            android:imeOptions="actionDone"
-            />
+            android:textSize="14sp" />
 
     </LinearLayout>
 
     <FrameLayout
         android:id="@+id/addressContent"
         android:layout_width="match_parent"
-        android:layout_height="150dp"
-        android:layout_weight="1"
+        android:layout_height="0dp"
+        android:layout_weight="3"
         android:orientation="horizontal"
-        android:weightSum="5">
-    </FrameLayout>
+        android:weightSum="5"></FrameLayout>
 
     <Button
         android:id="@+id/btnSubmit"
         android:layout_width="200dp"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:layout_gravity="center_horizontal"
-        android:text="@string/submit" />
+        android:layout_marginTop="15dp"
+        android:layout_weight="1"
+        android:background="@drawable/hotswap_button"
+        android:text="@string/submit"
+        android:textColor="@color/textColorPrimary" />
 </LinearLayout>

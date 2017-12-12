@@ -12,14 +12,14 @@
         android:layout_height="0dp"
         android:layout_weight="1"
         android:textAlignment="center"
+        android:textColor="@color/colorAccent"
         android:textSize="30sp" />
 
     <ListView
         android:id="@+id/itemLists"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="8"
-        android:fastScrollAlwaysVisible="false"
-        />
+        android:layout_weight="4"
+        android:fastScrollAlwaysVisible="false" />
 
 </LinearLayout>

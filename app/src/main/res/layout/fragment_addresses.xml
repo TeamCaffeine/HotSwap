@@ -1,10 +1,10 @@
-<LinearLayout
-    android:layout_height="match_parent"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:orientation="vertical"
-    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_height="match_parent"
+    android:layout_marginTop="5dp"
     android:focusable="true"
-    android:focusableInTouchMode="true">
+    android:focusableInTouchMode="true"
+    android:orientation="vertical">
 
     <LinearLayout
         android:id="@+id/layout_Addresses"
@@ -17,30 +17,36 @@
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="1"
+            android:layout_weight="1.5"
             android:orientation="vertical">
 
             <TextView
                 android:id="@+id/txtAddressesLabel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/addresses_label" />
+                android:text="@string/addresses_label"
+                android:textAlignment="viewStart"
+                android:textColor="@color/colorAccent" />
 
             <Button
                 android:id="@+id/btnAddAddress"
                 style="@android:style/Widget.Material.Light.Button.Small"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:background="@drawable/hotswap_button"
                 android:text="@string/plus"
-                android:textColor="@color/blue" />
+                android:textColor="@color/textColorPrimary" />
 
             <Button
                 android:id="@+id/btnRemoveAddress"
                 style="@android:style/Widget.Material.Light.Button.Small"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:background="@drawable/hotswap_button"
                 android:text="@string/minus"
-                android:textColor="@color/blue" />
+                android:textColor="@color/textColorPrimary" />
         </LinearLayout>
 
         <LinearLayout
@@ -56,7 +62,7 @@
                 android:layout_height="0dp"
                 android:layout_weight="1"
                 android:choiceMode="singleChoice"
-                android:listSelector="@color/gray_dark"/>
+                android:listSelector="@color/gray_dark" />
 
         </LinearLayout>
 
