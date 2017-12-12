@@ -29,12 +29,12 @@ public class RentingPendingItemsAdapter extends BaseAdapter {
 
     Context context;
     private HashMap<String, ActiveTransactionInfo> items;
-    private List<Map.Entry<String, ActiveTransactionInfo>> itemList;
+    private ArrayList<Map.Entry<String, ActiveTransactionInfo>> itemList;
 
     public RentingPendingItemsAdapter(Context aContext) {
         context = aContext;
         items = new HashMap<String, ActiveTransactionInfo>();
-        itemList = new ArrayList(items.entrySet());
+        itemList = new ArrayList<Map.Entry<String, ActiveTransactionInfo>>(items.entrySet());
     }
 
     public void putItems(HashMap items){
