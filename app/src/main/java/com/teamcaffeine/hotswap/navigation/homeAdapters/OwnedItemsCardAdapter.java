@@ -6,10 +6,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.common.base.Strings;
 import com.squareup.picasso.Picasso;
 import com.teamcaffeine.hotswap.R;
+import com.teamcaffeine.hotswap.navigation.NavigationActivity;
 import com.teamcaffeine.hotswap.swap.Item;
 
 import java.util.ArrayList;
@@ -63,9 +66,15 @@ public class OwnedItemsCardAdapter extends BaseAdapter {
             row = convertView;
         }
 
+        ImageView circleImage = (ImageView) row.findViewById(R.id.circleImage);
         TextView itemName = (TextView) row.findViewById(R.id.cardItemTitle);
         TextView itemDescription = (TextView) row.findViewById(R.id.cardItemDescription);
 
+        Item item = items.get(position);
+        String picture = item.getHeaderPicture();
+        if (!Strings.isNullOrEmpty(picture)) {
+            Picasso.with(circleImage.getContext()).load(picture).into(circleImage);
+        }
         itemName.setText(items.get(position).getName());
         itemDescription.setText(items.get(position).getDescription());
         return row;
