@@ -119,6 +119,8 @@
     <string name="past_transactions"><u>View Past Transactions</u></string>
     <string name="invite_friends">Invite Friends</string>
     <string name="logout">Logout</string>
+    <string name="current_balance">Current Balance:</string>
+    <string name="add_balance">Add Balance</string>
     <string name="placeholder_name">Name</string>
     <string name="placeholder_member_since">Member Since:</string>
     <string name="placeholder_email">Email</string>
