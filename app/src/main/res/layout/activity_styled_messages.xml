@@ -45,5 +45,6 @@
         app:inputButtonDefaultBgPressedColor="@color/colorPrimaryDark"
         app:inputCursorDrawable="@drawable/shape_custom_cursor"
         app:inputHint="Enter a message..."
+        app:inputTextColor="@color/textColorPrimary"
         app:showAttachmentButton="true" />
 </RelativeLayout>
