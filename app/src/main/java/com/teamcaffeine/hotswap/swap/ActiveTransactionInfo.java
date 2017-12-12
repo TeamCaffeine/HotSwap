@@ -10,6 +10,10 @@ public class ActiveTransactionInfo {
     private String renterId;
     private Date date;
 
+
+    ActiveTransactionInfo() {
+    }
+
     public ActiveTransactionInfo(Item item, String renterId, Date date) {
         this.item = item;
         this.renterId = renterId;

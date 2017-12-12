@@ -69,6 +69,21 @@ public class Transaction implements Parcelable {
         return distance;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Transaction that = (Transaction) o;
+
+        if (Double.compare(that.getDistance(), getDistance()) != 0) return false;
+        if (isConfirmed() != that.isConfirmed()) return false;
+        if (getRequestUserID() != null ? !getRequestUserID().equals(that.getRequestUserID()) : that.getRequestUserID() != null)
+            return false;
+        if (getInitialMessage() != null ? !getInitialMessage().equals(that.getInitialMessage()) : that.getInitialMessage() != null)
+            return false;
+        return getRequestedDates() != null ? getRequestedDates().equals(that.getRequestedDates()) : that.getRequestedDates() == null;
+    }
+
     public void setDistance(double distance) {
         this.distance = distance;
     }

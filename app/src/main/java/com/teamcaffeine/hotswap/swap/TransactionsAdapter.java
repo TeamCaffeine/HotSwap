@@ -1,5 +1,9 @@
 package com.teamcaffeine.hotswap.swap;
 
+/**
+ * Created by Tkixi on 12/11/17.
+ */
+
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,34 +19,34 @@ import java.util.ArrayList;
  * Created by Tkixi on 11/28/17.
  */
 
-public class Users extends BaseAdapter {
+public class TransactionsAdapter extends BaseAdapter {
     private
-    ArrayList<User> users;
+    ArrayList<Transaction> Transactions;
 
     Context context;
 
-    public Users(Context aContext) {
+    public TransactionsAdapter(Context aContext) {
         context = aContext;  //saving the context we'll need it again (for intents)
-        users = new ArrayList<User>();
+        Transactions = new ArrayList<Transaction>();
     }
     @Override
     public int getCount() {
-        return users.size();   //all of the arrays are same length
+        return Transactions.size();   //all of the arrays are same length
     }
 
     @Override
     public Object getItem(int position) {
-        return users.get(position);
+        return Transactions.get(position);
     }
 
-    public void putUser(User user) {
-        if (user != null) {
-            this.users.add(user);
+    public void putTransaction(Transaction transaction) {
+        if (transaction != null) {
+            this.Transactions.add(transaction);
         }
     }
 
     public void nuke() {
-        this.users = new ArrayList<User>();
+        this.Transactions = new ArrayList<Transaction>();
     }
 
     @Override
@@ -62,11 +66,11 @@ public class Users extends BaseAdapter {
             row = convertView;
         }
 
-        TextView userTitle = (TextView) row.findViewById(R.id.itemTitle);
-        TextView userSince = (TextView) row.findViewById(R.id.itemDescription);
+        TextView transDist = (TextView) row.findViewById(R.id.itemTitle);
+        TextView transDates = (TextView) row.findViewById(R.id.itemDescription);
 
-        userTitle.setText(users.get(position).getName());
-        userSince.setText(users.get(position).getMemberSince());
+        transDist.setText("User is " + String.format("%.2f",Transactions.get(position).getDistance()/ 1000.0) + "KM Away");
+        transDates.setText(Transactions.get(position).getRequestedDates().get(0).toString() +" to " + Transactions.get(position).getRequestedDates().get(Transactions.get(position).getRequestedDates().size()-1).toString());
         return row;
 
     }
