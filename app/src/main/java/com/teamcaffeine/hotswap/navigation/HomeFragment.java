@@ -27,6 +27,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.teamcaffeine.hotswap.login.User;
 import com.teamcaffeine.hotswap.navigation.homeAdapters.OwnedItemsAdapter;
 import com.teamcaffeine.hotswap.navigation.homeAdapters.RentingPendingItemsAdapter;
+import com.teamcaffeine.hotswap.swap.ActiveTransactionInfo;
 import com.teamcaffeine.hotswap.swap.ListItemActivity;
 import com.teamcaffeine.hotswap.R;
 import com.teamcaffeine.hotswap.swap.Item;
@@ -139,6 +140,8 @@ public class HomeFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 //TODO check if the user is the owner or renter of item.
+                ActiveTransactionInfo activeTransactionInfo = pendingAdapter.getActiveTransactionInfo(position);
+
 
                 //if owner
                     // popup dialog to ask if they have gotten their item back.
