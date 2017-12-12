@@ -18,7 +18,7 @@ import java.util.HashMap;
 
 public class RentingPendingItemsCardAdapter extends BaseAdapter {
 
-    Context context;
+    private Context context;
     private HashMap<String, ActiveTransactionInfo> items;
     private ArrayList<ActiveTransactionInfo> itemList;
 
