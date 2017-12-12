@@ -8,7 +8,6 @@ import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -36,7 +35,6 @@ import com.teamcaffeine.hotswap.navigation.NavigationActivity;
 import com.teamcaffeine.hotswap.utility.LatLongUtility;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 

@@ -38,13 +38,6 @@ import com.teamcaffeine.hotswap.R;
 
 import java.io.IOException;
 
-
-
-
-/**
- * Created by Tkixi on 11/25/17.
- */
-
 public class LocationPrefs extends AppCompatActivity
         implements LocationListener, GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener {

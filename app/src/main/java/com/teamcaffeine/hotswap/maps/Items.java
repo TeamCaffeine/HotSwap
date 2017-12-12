@@ -11,10 +11,6 @@ import com.teamcaffeine.hotswap.swap.Item;
 
 import java.util.ArrayList;
 
-/**
- * Created by Tkixi on 11/28/17.
- */
-
 public class Items extends BaseAdapter {
     private
     ArrayList<Item> items;

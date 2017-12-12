@@ -1,8 +1,5 @@
 package com.teamcaffeine.hotswap.navigation.homeAdapters;
 
-/**
- * IMPORTANT FILE FOR THIS PR
- */
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -15,8 +12,6 @@ import com.teamcaffeine.hotswap.R;
 import com.teamcaffeine.hotswap.swap.Item;
 
 import java.util.ArrayList;
-
-
 
 public class OwnedItemsAdapter extends BaseAdapter {
 
