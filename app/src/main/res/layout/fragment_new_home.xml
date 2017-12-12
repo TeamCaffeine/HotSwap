@@ -15,6 +15,7 @@
         android:id="@+id/hollyViewPager"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_marginBottom="56dp"
         app:hvp_headerHeight="150dp" />
 
 </LinearLayout>
