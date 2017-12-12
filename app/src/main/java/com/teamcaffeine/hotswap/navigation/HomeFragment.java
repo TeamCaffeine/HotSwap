@@ -1,8 +1,10 @@
 package com.teamcaffeine.hotswap.navigation;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -32,8 +34,10 @@ import com.teamcaffeine.hotswap.swap.ActiveTransactionInfo;
 import com.teamcaffeine.hotswap.swap.ListItemActivity;
 import com.teamcaffeine.hotswap.R;
 import com.teamcaffeine.hotswap.swap.Item;
+import com.teamcaffeine.hotswap.swap.Transaction;
 
 import java.io.Serializable;
+import java.util.Date;
 
 
 public class HomeFragment extends Fragment {
@@ -62,7 +66,7 @@ public class HomeFragment extends Fragment {
     private DatabaseReference currentUser;
     private String itemTable = "items";
     private String userTable = "users";
-    private String itemlocationsTable="items_location";
+    private String itemlocationsTable = "items_location";
 
     private ValueEventListener itemsEventListener;
     private ValueEventListener userEventListener;
@@ -120,7 +124,6 @@ public class HomeFragment extends Fragment {
         pendingAdapter = new RentingPendingItemsAdapter(getContext());
 
 
-
         // set tbe adapter on the listview in the UI
         listviewOwnedItems.setAdapter(ownedItemsAdapter);
         listviewOwnedItems.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -143,26 +146,51 @@ public class HomeFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 //TODO check if the user is the owner or renter of item.
-                ActiveTransactionInfo activeTransactionInfo = pendingAdapter.getActiveTransactionInfoAtPosition(position);
+                final ActiveTransactionInfo activeTransactionInfo = pendingAdapter.getActiveTransactionInfoAtPosition(position);
 
-
-
-                //if owner
-                    // popup dialog to ask if they have gotten their item back.
-                        // If yes
-                            // remove the ActiveTransactionInfo from pending for self, do not put anywhere else (it's done)
-                            // remove the ActiveTransactionInfo from renting for renter, do not put anywhere else (it's done)
-                            // remove in UI from both lists... (the userEventListener will understand this
-                            // and readjust the UI for both ourselves and the other user)
-                        // If no
-                            // do nothing, close dialog.
-                //if renter
-                    // popup dialog to ask if they have received the item they are renting
-                        // If yes
-                            // removing the ActiveTransactionInfo from pending for self, place in renting for self
-                            // add the ActiveTransactionInfo to pending for item's owner
-                            // adjust the UI for both lists... again, this doesn't need to be coded out, the userEventListener
-                            // will handle this behavior.
+                if (activeTransactionInfo.getRenterId().equals(FirebaseAuth.getInstance().getUid())) {
+                    AlertDialog alertDialog = new AlertDialog.Builder(getContext())
+                            //set message, title, and buttons
+                            .setTitle("Renting item")
+                            .setMessage("Have you picked up the item?")
+                            .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                                // when the user clicks the "delete" button, delete the transaction from the database
+                                // when the transaction is deleted from the database, the UI is automatically updated
+                                // by the value event listener on the database
+                                public void onClick(DialogInterface dialog, int whichButton) {
+                                    onItemReceived(activeTransactionInfo);
+                                    dialog.dismiss();
+                                }
+                            })
+                            .setNegativeButton("Not yet", new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.dismiss();
+                                }
+                            })
+                            .create();
+                    alertDialog.show();
+                } else {
+                    AlertDialog alertDialog = new AlertDialog.Builder(getContext())
+                            //set message, title, and buttons
+                            .setTitle("Receiving returned item")
+                            .setMessage("Did you get your item back?")
+                            .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                                // when the user clicks the "delete" button, delete the transaction from the database
+                                // when the transaction is deleted from the database, the UI is automatically updated
+                                // by the value event listener on the database
+                                public void onClick(DialogInterface dialog, int whichButton) {
+                                    onItemReturned(activeTransactionInfo);
+                                    dialog.dismiss();
+                                }
+                            })
+                            .setNegativeButton("Not yet", new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.dismiss();
+                                }
+                            })
+                            .create();
+                    alertDialog.show();
+                }
             }
         });
 
@@ -239,8 +267,8 @@ public class HomeFragment extends Fragment {
                 Intent i = new Intent(getActivity(), ListItemActivity.class);
                 // send the current list of items with the intent
                 Bundle args = new Bundle();
-                args.putSerializable("itemList",(Serializable) ownedItemsAdapter.getListOfItemNames());
-                i.putExtra("BUNDLE",args);
+                args.putSerializable("itemList", (Serializable) ownedItemsAdapter.getListOfItemNames());
+                i.putExtra("BUNDLE", args);
 
                 // start the Activity with the appropriate request code
                 startActivityForResult(i, LIST_ITEM_REQUEST_CODE);
@@ -295,5 +323,38 @@ public class HomeFragment extends Fragment {
         // using the reference to the items table, add the listener
         items.addValueEventListener(itemsEventListener);
         currentUser.addValueEventListener(userEventListener);
+    }
+
+    // For the renter when they receive the item they wish to rent
+    private void onItemReceived(ActiveTransactionInfo activeTransactionInfo) {
+        DatabaseReference users = FirebaseDatabase.getInstance().getReference().child("users");
+        String activeTransitionKey = activeTransactionInfo.toKey();
+        // Check if the date is valid (i.e is today past the start date of our transaction?)
+        Date today = new Date();
+        if (today.before(activeTransactionInfo.getDate())) {
+            Toast.makeText(getActivity(), "You cannot receive an item before the start date of your rent", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        // Add pending item to the owner user
+        users.child(activeTransactionInfo.getItem().getOwnerID()).child("pending").child(activeTransitionKey).setValue(activeTransactionInfo); //TODO: REPLACE WITH OBJECT OR tOMAP?
+
+        // Remove pending item from the renter user
+        users.child(activeTransactionInfo.getRenterId()).child("pending").child(activeTransitionKey).removeValue(); //TODO: SEE IF REMOVE GOT DEPRECATED
+
+        // Add renting item to the renter user
+        users.child(activeTransactionInfo.getRenterId()).child("renting").child(activeTransitionKey).setValue(activeTransactionInfo);
+    }
+
+    // For the lender when they are returned the item they lent
+    private void onItemReturned(ActiveTransactionInfo activeTransactionInfo) {
+        DatabaseReference users = FirebaseDatabase.getInstance().getReference().child("users");
+        String activeTransitionKey = activeTransactionInfo.toKey();
+
+        // Delete item from renting in renter user
+        users.child(activeTransactionInfo.getRenterId()).child("renting").child(activeTransitionKey).removeValue();
+
+        // Delete pending from owner user
+        users.child(activeTransactionInfo.getItem().getOwnerID()).child("pending").child(activeTransitionKey).removeValue();
     }
 }
