@@ -20,10 +20,8 @@ package com.teamcaffeine.hotswap.navigation;
 */
 
 import android.app.ProgressDialog;
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -41,7 +39,6 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 import com.stfalcon.chatkit.commons.ImageLoader;
@@ -80,27 +77,11 @@ public class ChatFragment extends Fragment implements DialogsListAdapter.OnDialo
     private ChatFragmentListener CFL;
     private String TAG = "Chat Fragment Tag";
     private String userEmail = FirebaseAuth.getInstance().getCurrentUser().getEmail();
-    private ValueEventListener userListener;
-    private DatabaseReference ref;
-    private ValueEventListener chatListener;
-    private Query userChannel;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.activity_styled_dialogs, container, false);
-
-        IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction("CLOSE_ALL");
-        BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                onDestroy();
-            }
-        };
-        getActivity().registerReceiver(broadcastReceiver, intentFilter);
-
-
         dialogsList = (DialogsList) view.findViewById(R.id.dialogsList);
 
       /* Load Animation */
@@ -124,24 +105,23 @@ public class ChatFragment extends Fragment implements DialogsListAdapter.OnDialo
         /* Set Online */
         userRef = FirebaseDatabase.getInstance().getReference().child("presence")
                 .child(userEmail.replace(".", "|"));
-        userListener = new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                if (dataSnapshot.exists()) {
-                    if (null != userRef) {
-                        userRef.onDisconnect().removeValue();
-                        userRef.setValue(true);
+        FirebaseDatabase.getInstance().getReference(".info/connected")
+                .addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        if (dataSnapshot.exists()) {
+                            if (null != userRef) {
+                                userRef.onDisconnect().removeValue();
+                                userRef.setValue(true);
+                            }
+                        }
                     }
-                }
-            }
 
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                /* Do Nothing */
-            }
-        };
-        ref = FirebaseDatabase.getInstance().getReference(".info/connected");
-        ref.addValueEventListener(userListener);
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+                        /* Do Nothing */
+                    }
+                });
 
         /* Load Dialogs */
         initAdapter();
@@ -260,7 +240,9 @@ public class ChatFragment extends Fragment implements DialogsListAdapter.OnDialo
      * Get Dialogs
      */
     private void getDialogs() {
-        chatListener = new ValueEventListener() {
+        FirebaseDatabase.getInstance()
+                .getReference().child("channels").orderByChild("channel").equalTo(userEmail)
+                .limitToLast(1).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
@@ -269,25 +251,21 @@ public class ChatFragment extends Fragment implements DialogsListAdapter.OnDialo
                     for (final String subscriptionChannel : subscriptions.getChannel()) {
                         getDialog(subscriptionChannel, null);
                     }
-            /* Update Online Status */
+                    /* Update Online Status */
                     mHandler = new Handler();
                     mStatusChecker.run();
 
                 }
 
-        /* Dismiss Progress Dialog */
+                /* Dismiss Progress Dialog */
                 progressDialog.dismiss();
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-        /* Do Nothing */
+                /* Do Nothing */
             }
-        };
-        userChannel = FirebaseDatabase.getInstance()
-                .getReference().child("channels").orderByChild("channel").equalTo(userEmail)
-                .limitToLast(1);
-        userChannel.addValueEventListener(chatListener);
+        });
     }
 
     /**
@@ -526,19 +504,5 @@ public class ChatFragment extends Fragment implements DialogsListAdapter.OnDialo
     public void onAttach(Context context) {
         super.onAttach(context);
         CFL = (ChatFragment.ChatFragmentListener) context;
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        ref.removeEventListener(userListener);
-        userChannel.removeEventListener(chatListener);
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        ref.addValueEventListener(userListener);
-        userChannel.addListenerForSingleValueEvent(chatListener);
     }
 }

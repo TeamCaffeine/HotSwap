@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 import com.teamcaffeine.hotswap.R;
+import com.teamcaffeine.hotswap.login.User;
 
 import java.util.ArrayList;
 
@@ -20,32 +21,32 @@ import java.util.ArrayList;
 
 public class TransactionsAdapter extends BaseAdapter {
     private
-    ArrayList<Transaction> transactions;
+    ArrayList<Transaction> Transactions;
 
     Context context;
 
     public TransactionsAdapter(Context aContext) {
         context = aContext;  //saving the context we'll need it again (for intents)
-        transactions = new ArrayList<Transaction>();
+        Transactions = new ArrayList<Transaction>();
     }
     @Override
     public int getCount() {
-        return transactions.size();   //all of the arrays are same length
+        return Transactions.size();   //all of the arrays are same length
     }
 
     @Override
     public Object getItem(int position) {
-        return transactions.get(position);
+        return Transactions.get(position);
     }
 
     public void putTransaction(Transaction transaction) {
         if (transaction != null) {
-            this.transactions.add(transaction);
+            this.Transactions.add(transaction);
         }
     }
 
     public void nuke() {
-        this.transactions = new ArrayList<Transaction>();
+        this.Transactions = new ArrayList<Transaction>();
     }
 
     @Override
@@ -68,8 +69,8 @@ public class TransactionsAdapter extends BaseAdapter {
         TextView transDist = (TextView) row.findViewById(R.id.itemTitle);
         TextView transDates = (TextView) row.findViewById(R.id.itemDescription);
 
-        transDist.setText("User is " + String.format("%.2f", transactions.get(position).getDistance()/ 1000.0) + "KM Away");
-        transDates.setText(transactions.get(position).getRequestedDates().get(0).toString() +" to " + transactions.get(position).getRequestedDates().get(transactions.get(position).getRequestedDates().size()-1).toString());
+        transDist.setText("User is " + String.format("%.2f",Transactions.get(position).getDistance()/ 1000.0) + "KM Away");
+        transDates.setText(Transactions.get(position).getRequestedDates().get(0).toString() +" to " + Transactions.get(position).getRequestedDates().get(Transactions.get(position).getRequestedDates().size()-1).toString());
         return row;
 
     }

@@ -1,11 +1,8 @@
 package com.teamcaffeine.hotswap.swap;
 
 import android.app.AlertDialog;
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -42,17 +39,6 @@ public class ItemTransactions extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction("CLOSE_ALL");
-        BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                finish();
-            }
-        };
-        registerReceiver(broadcastReceiver, intentFilter);
-
         setContentView(R.layout.activity_item_transactions);
         lvItems = (ListView) findViewById(R.id.itemLists);
         title = (TextView) findViewById(R.id.transTitle);

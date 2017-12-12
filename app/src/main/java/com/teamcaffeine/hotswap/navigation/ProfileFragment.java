@@ -3,11 +3,9 @@ package com.teamcaffeine.hotswap.navigation;
 
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -94,8 +92,6 @@ public class ProfileFragment extends Fragment {
     private StorageReference storage;
     private DatabaseReference users;
     private String userTable = "users";
-    private ValueEventListener userListener;
-    private DatabaseReference ref;
 
     // progress dialog to show page is loading
     public void showProgressDialog() {
@@ -143,17 +139,6 @@ public class ProfileFragment extends Fragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
-        IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction("CLOSE_ALL");
-        BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                onDestroy();
-            }
-        };
-        getActivity().registerReceiver(broadcastReceiver, intentFilter);
-
 
         AddressesFragment addressesFragment = new AddressesFragment();
         FragmentTransaction ft = getFragmentManager().beginTransaction();
@@ -252,8 +237,8 @@ public class ProfileFragment extends Fragment {
         database = FirebaseDatabase.getInstance();
         users = database.getReference().child(userTable);
 
-        ref = users.child(firebaseUser.getUid());
-        userListener = new ValueEventListener() {
+        DatabaseReference ref = users.child(firebaseUser.getUid());
+        ref.addValueEventListener(new ValueEventListener() {
             @Override
             // get a datasnapshot of the current user to access its data
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -261,12 +246,7 @@ public class ProfileFragment extends Fragment {
                 // set the profile picture
                 String avatar = user.getAvatar();
                 if (!Strings.isNullOrEmpty(avatar)) {
-
-                    Picasso.with(getContext()).load(avatar).into(imgPhoto);
-                }
-
-                if (getActivity() == null) {
-                    return;
+                    Picasso.with(getActivity().getApplicationContext()).load(avatar).into(imgPhoto);
                 }
 
                 // set the user's name
@@ -288,8 +268,7 @@ public class ProfileFragment extends Fragment {
             public void onCancelled(DatabaseError databaseError) {
                 Log.e(TAG, "The read failed:", databaseError.toException());
             }
-        };
-        ref.addValueEventListener(userListener);
+        });
 
 
         btnLogout.setOnClickListener(new View.OnClickListener() {
@@ -386,11 +365,6 @@ public class ProfileFragment extends Fragment {
                     public void onComplete(@NonNull Task<Void> task) {
                         if (task.isSuccessful()) {
                             Intent logout = new Intent(getActivity(), LoginActivity.class);
-
-                            Intent broadcastIntent = new Intent();
-                            broadcastIntent.setAction("ACTION_LOGOUT");
-                            getActivity().sendBroadcast(broadcastIntent);
-
                             startActivity(logout);
                             getActivity().finish();
                         } else {
@@ -521,15 +495,5 @@ public class ProfileFragment extends Fragment {
         popupWindow.showAtLocation(popupView, Gravity.CENTER, 0, 0);
     }
 
-    @Override
-    public void onPause() {
-        super.onPause();
-        ref.removeEventListener(userListener);
-    }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        ref.addValueEventListener(userListener);
-    }
 }

@@ -1,10 +1,7 @@
 package com.teamcaffeine.hotswap.navigation;
 
 import android.annotation.SuppressLint;
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.internal.BottomNavigationItemView;
@@ -56,17 +53,6 @@ public class NavigationActivity extends AppCompatActivity implements
         SessionHandler.shouldLogIn(this);
 
         super.onCreate(savedInstanceState);
-
-        IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction("CLOSE_ALL");
-        BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                finish();
-            }
-        };
-        registerReceiver(broadcastReceiver, intentFilter);
-
         setContentView(R.layout.activity_navigation);
 
         navigation = findViewById(R.id.navigation);

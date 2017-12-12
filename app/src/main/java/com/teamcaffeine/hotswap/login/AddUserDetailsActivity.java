@@ -1,9 +1,6 @@
 package com.teamcaffeine.hotswap.login;
 
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -61,18 +58,6 @@ public class AddUserDetailsActivity extends AppCompatActivity {
         SessionHandler.shouldLogIn(this);
 
         super.onCreate(savedInstanceState);
-
-        IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction("CLOSE_ALL");
-        BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                finish();
-            }
-        };
-        registerReceiver(broadcastReceiver, intentFilter);
-
-
         setContentView(R.layout.activity_add_user_details);
 
         // populate the listview with the user's addresses
