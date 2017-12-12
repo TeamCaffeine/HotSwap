@@ -1,9 +1,5 @@
 package com.teamcaffeine.hotswap.navigation;
 
-/**
- * IMPORTANT FILE FOR THIS PR
- */
-
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
