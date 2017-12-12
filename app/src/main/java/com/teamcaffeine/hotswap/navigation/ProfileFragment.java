@@ -293,23 +293,15 @@ public class ProfileFragment extends Fragment {
 
     private void inviteFriendsPopup() {
         View popupView = LayoutInflater.from(getActivity()).inflate(R.layout.profile_invite_popup, null);
-        final PopupWindow popupWindow = new PopupWindow(popupView, 800, 800, true);
+        final PopupWindow popupWindow = new PopupWindow(popupView, 600, 300, true);
         popupWindow.setOutsideTouchable(true);
         popupWindow.setAnimationStyle(R.style.PopupAnimation);
 
         // define view buttons
 
-        Button btnClosePopUp = (Button) popupView.findViewById(R.id.btnClose);
         Button btnSendText = (Button) popupView.findViewById(R.id.btnSendText);
         Button btnSendEmail = (Button) popupView.findViewById(R.id.btnSendEmail);
         Button btnPostToFacebook = (Button) popupView.findViewById(R.id.btnPostToFacebook);
-
-        btnClosePopUp.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                popupWindow.dismiss();
-            }
-        });
 
         btnSendText.setOnClickListener(new View.OnClickListener() {
             @Override
