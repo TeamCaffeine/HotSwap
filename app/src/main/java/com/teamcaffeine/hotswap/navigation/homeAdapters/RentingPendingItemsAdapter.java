@@ -12,24 +12,22 @@ import com.teamcaffeine.hotswap.swap.ActiveTransactionInfo;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 public class RentingPendingItemsAdapter extends BaseAdapter {
 
     private Context context;
     private HashMap<String, ActiveTransactionInfo> items;
-    private ArrayList<Map.Entry<String, ActiveTransactionInfo>> itemList;
+    private ArrayList<ActiveTransactionInfo> itemList;
 
     public RentingPendingItemsAdapter(Context aContext) {
         context = aContext;
         items = new HashMap<>();
-        itemList = new ArrayList<>(items.entrySet());
+        itemList = new ArrayList<ActiveTransactionInfo> (items.values());
     }
 
-    public void putItems(HashMap<String, ActiveTransactionInfo> items){
+    public void putItems(HashMap<String, ActiveTransactionInfo> items) {
         this.items = items;
-        this.itemList.addAll(items.entrySet());
+        this.itemList = new ArrayList<>(items.values());
     }
 
     @Override
@@ -51,35 +49,22 @@ public class RentingPendingItemsAdapter extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
         View row;
 
-        if(convertView == null){
+        if (convertView == null) {
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             row = inflater.inflate(R.layout.listview_row, parent, false);
-        }
-
-        else
-        {
+        } else {
             row = convertView;
         }
 
         TextView itemName = (TextView) row.findViewById(R.id.itemTitle);
         TextView swapDates = (TextView) row.findViewById(R.id.itemDescription);
 
-        itemName.setText(getActiveTransactionInfo(position).getItem().getName());
-        swapDates.setText(getActiveTransactionInfo(position).getDate().toString());
+        itemName.setText(itemList.get(position).getItem().getName());
+        swapDates.setText(itemList.get(position).getDate().toString());
         return row;
     }
 
-    public String getTransactionKey(int position){
-        Map.Entry<String, ActiveTransactionInfo> info = itemList.get(position);
-        return info.getKey();
-    }
-
-    public ActiveTransactionInfo getActiveTransactionInfo (int position) {
-        Map.Entry<String, ActiveTransactionInfo> info = itemList.get(position);
-        return info.getValue();
-    }
-
-    public ActiveTransactionInfo getActiveTransactionInfo(String key) {
-        return items.get(key);
+    public ActiveTransactionInfo getActiveTransactionInfoAtPosition(int position) {
+        return itemList.get(position);
     }
 }

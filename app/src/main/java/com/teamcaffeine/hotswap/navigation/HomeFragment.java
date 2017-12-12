@@ -140,7 +140,8 @@ public class HomeFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 //TODO check if the user is the owner or renter of item.
-                ActiveTransactionInfo activeTransactionInfo = pendingAdapter.getActiveTransactionInfo(position);
+                ActiveTransactionInfo activeTransactionInfo = pendingAdapter.getActiveTransactionInfoAtPosition(position);
+
 
 
                 //if owner
