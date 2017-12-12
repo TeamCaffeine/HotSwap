@@ -1,12 +1,15 @@
 package com.teamcaffeine.hotswap.swap;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class Transaction {
+public class Transaction implements Parcelable {
 
     // Force empty initialization of default table fields
     private String requestUserID = "";
@@ -26,6 +29,26 @@ public class Transaction {
         this.confirmed = confirmed;
     }
 
+    protected Transaction(Parcel in) {
+        requestUserID = in.readString();
+        initialMessage = in.readString();
+        in.readList(requestedDates, Date.class.getClassLoader());
+        distance = in.readDouble();
+        confirmed = in.readByte() != 0;
+    }
+
+    public static final Creator<Transaction> CREATOR = new Creator<Transaction>() {
+        @Override
+        public Transaction createFromParcel(Parcel in) {
+            return new Transaction(in);
+        }
+
+        @Override
+        public Transaction[] newArray(int size) {
+            return new Transaction[size];
+        }
+    };
+
     public String getRequestUserID() {
         return requestUserID;
     }
@@ -44,6 +67,21 @@ public class Transaction {
 
     public double getDistance() {
         return distance;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Transaction that = (Transaction) o;
+
+        if (Double.compare(that.getDistance(), getDistance()) != 0) return false;
+        if (isConfirmed() != that.isConfirmed()) return false;
+        if (getRequestUserID() != null ? !getRequestUserID().equals(that.getRequestUserID()) : that.getRequestUserID() != null)
+            return false;
+        if (getInitialMessage() != null ? !getInitialMessage().equals(that.getInitialMessage()) : that.getInitialMessage() != null)
+            return false;
+        return getRequestedDates() != null ? getRequestedDates().equals(that.getRequestedDates()) : that.getRequestedDates() == null;
     }
 
     public void setDistance(double distance) {
@@ -92,4 +130,17 @@ public class Transaction {
         return result;
     }
 
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(requestUserID);
+        dest.writeString(initialMessage);
+        dest.writeList(requestedDates);
+        dest.writeDouble(distance);
+        dest.writeByte((byte) (confirmed ? 1 : 0));
+    }
 }

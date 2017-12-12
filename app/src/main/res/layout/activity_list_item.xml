@@ -1,101 +1,121 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_width="match_parent"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+    android:focusable="true"
+    android:focusableInTouchMode="true">
 
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        android:orientation="vertical" android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:focusable="true"
-        android:focusableInTouchMode="true">
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:text="@string/list_item_title"
+        android:textAlignment="center"
+        android:textSize="30sp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="2"
+        android:orientation="horizontal">
+
+        <android.support.v7.widget.AppCompatImageView
+            android:id="@+id/itemPhoto"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            app:srcCompat="@drawable/com_facebook_profile_picture_blank_square" />
 
         <TextView
-            android:id="@+id/textView"
             android:layout_width="match_parent"
-            android:layout_height="35dp"
-            android:layout_weight="0.5"
-            android:text="@string/list_item_title"
-            android:textAlignment="center"
-            android:textSize="30sp" />
-
-        <EditText
-            android:id="@+id/editItemName"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_weight="0.5"
-            android:ems="10"
-            android:hint="Item Name"
-            android:inputType="textPersonName"
-            android:textSize="18sp" />
-
-        <EditText
-            android:id="@+id/editTags"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_weight="0.5"
-            android:ems="10"
-            android:hint="Item Tags (separated by commas)"
-            android:textSize="18sp" />
-
-        <EditText
-            android:id="@+id/editDescription"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_weight="0.5"
-            android:ems="10"
-            android:hint="Item Description"
-            android:inputType="textLongMessage"
-            android:imeOptions="actionDone"
-            android:textSize="18sp" />
-
-        <FrameLayout
-            android:id="@+id/addressContent"
-            android:layout_width="match_parent"
-            android:layout_height="150dp"
+            android:layout_height="match_parent"
             android:layout_weight="1"
-            android:orientation="horizontal"
-            android:weightSum="5">
-        </FrameLayout>
-
-        <EditText
-            android:id="@+id/editPrice"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_weight="0.5"
-            android:ems="10"
-            android:hint="Price"
-            android:inputType="number|numberDecimal"
-            android:textSize="18sp" />
-
-        <com.squareup.timessquare.CalendarPickerView
-            android:id="@+id/calendarView"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_alignParentTop="true" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="0.5"
-            android:orientation="horizontal">
-
-        </LinearLayout>
-
-        <Space
-            android:layout_width="match_parent"
-            android:layout_height="20dp"
-            android:layout_weight="1" />
-
-        <Button
-            android:id="@+id/listItemButton"
-            android:layout_width="match_parent"
-            android:layout_height="65dp"
-            android:layout_weight="0.5"
-            android:gravity="center"
-            android:text="List Item"
+            android:text="Tap picture at left to modify item photo."
             android:textAlignment="center"
-            android:textSize="24sp" />
+            android:textSize="18sp" />
 
     </LinearLayout>
-</ScrollView>
+
+    <EditText
+        android:id="@+id/editItemName"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:ems="10"
+        android:hint="@string/hint_item_name"
+        android:inputType="textPersonName"
+        android:textSize="18sp" />
+
+    <EditText
+        android:id="@+id/editDescription"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:ems="10"
+        android:hint="@string/hint_item_description"
+        android:imeOptions="actionDone"
+        android:inputType="textLongMessage"
+        android:textSize="18sp" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/chooseTag"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="3"
+            android:ems="10"
+            android:text="Choose Tag"
+            android:imeOptions="actionDone"
+            android:textColor="#0000EE"
+            android:layout_marginLeft="5dp"
+            android:inputType="textLongMessage"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/showTag"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1.5"
+            android:layout_marginStart="10dp"
+            android:ems="10"
+            android:hint="No Tag Chosen"
+            android:textSize="18sp" />
+
+    </LinearLayout>
+
+
+    <FrameLayout
+        android:id="@+id/addressContent"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="2.5"
+        android:orientation="horizontal"
+        android:weightSum="5"></FrameLayout>
+
+    <EditText
+        android:id="@+id/editPrice"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:ems="10"
+        android:hint="Price per Day"
+        android:inputType="number|numberDecimal"
+        android:textSize="18sp" />
+
+    <Button
+        android:id="@+id/listItemButton"
+        android:layout_width="match_parent"
+        android:layout_height="65dp"
+        android:layout_weight="0.25"
+        android:gravity="center"
+        android:text="List Item"
+        android:textAlignment="center"
+        android:textSize="24sp" />
+
+</LinearLayout>

@@ -1,4 +1,5 @@
-package com.teamcaffeine.hotswap.maps;
+package com.teamcaffeine.hotswap.navigation.homeAdapters;
+
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -6,29 +7,29 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
+
 import com.teamcaffeine.hotswap.R;
 import com.teamcaffeine.hotswap.swap.Item;
 
 import java.util.ArrayList;
 
-public class Items extends BaseAdapter {
-    private
-    ArrayList<Item> items;
+public class OwnedItemsAdapter extends BaseAdapter {
 
-    Context context;
+    private ArrayList<Item> items;
+    private Context context;
 
-    public Items(Context aContext) {
+    public OwnedItemsAdapter(Context aContext) {
         context = aContext;  //saving the context we'll need it again (for intents)
         items = new ArrayList<Item>();
-
     }
+
     @Override
     public int getCount() {
-        return items.size();   //all of the arrays are same length
+        return items.size();
     }
 
     @Override
-    public Object getItem(int position) {
+    public Item getItem(int position) {
         return items.get(position);
     }
 
@@ -38,7 +39,7 @@ public class Items extends BaseAdapter {
         }
     }
 
-    public void nuke() {
+    public void clear() {
         this.items = new ArrayList<Item>();
     }
 
@@ -48,23 +49,33 @@ public class Items extends BaseAdapter {
     }
 
     @Override
-    public View getView(final int position, View convertView, ViewGroup parent) {
+    public View getView(int position, View convertView, ViewGroup parent) {
         View row;
+
         if(convertView == null){
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             row = inflater.inflate(R.layout.listview_row, parent, false);
         }
+
         else
         {
             row = convertView;
         }
 
-        TextView itemTitle = (TextView) row.findViewById(R.id.itemTitle);
-        TextView itemDescriptions = (TextView) row.findViewById(R.id.itemDescription);
+        TextView itemName = (TextView) row.findViewById(R.id.itemTitle);
+        TextView itemDescription = (TextView) row.findViewById(R.id.itemDescription);
 
-        itemTitle.setText(items.get(position).getName());
-        itemDescriptions.setText(items.get(position).getDescription());
+        itemName.setText(items.get(position).getName());
+        itemDescription.setText(items.get(position).getDescription());
         return row;
+    }
 
+    public ArrayList<String> getListOfItemNames() {
+        ArrayList<String> nameList = new ArrayList<String>();
+        for (Item i : items) {
+            nameList.add(i.getName());
+        }
+
+        return nameList;
     }
 }

@@ -16,7 +16,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:text="Item"
+            android:text="@string/item"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:layout_marginTop="20dp"/>
 
@@ -25,7 +25,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:text="User"
+            android:text="@string/user"
             android:textAppearance="?android:attr/textAppearanceSmall" />
 
     </LinearLayout>

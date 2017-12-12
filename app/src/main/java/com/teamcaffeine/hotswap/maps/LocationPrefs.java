@@ -38,13 +38,6 @@ import com.teamcaffeine.hotswap.R;
 
 import java.io.IOException;
 
-
-
-
-/**
- * Created by Tkixi on 11/25/17.
- */
-
 public class LocationPrefs extends AppCompatActivity
         implements LocationListener, GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener {
@@ -55,6 +48,8 @@ public class LocationPrefs extends AppCompatActivity
     private LocationRequest locationRequest;
     private Location lastLocation;
     private SharedPreferences prefs;
+    public static final int REQUEST_LOCATION_CODE = 99;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,19 +85,13 @@ public class LocationPrefs extends AppCompatActivity
                 // sets EditText to current area zip code
 
                 if (ActivityCompat.checkSelfPermission(getBaseContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getBaseContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                    // TODO: Consider calling
-                    //    ActivityCompat#requestPermissions
-                    // here to request the missing permissions, and then overriding
-                    //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                    //                                          int[] grantResults)
-                    // to handle the case where the user grants the permission. See the documentation
-                    // for ActivityCompat#requestPermissions for more details.
+                    // Permission already granted
                     return;
                 }
                 Location location= LocationServices.FusedLocationApi.getLastLocation(client);
 
                 if (location == null) {
-                    Toast.makeText(getApplicationContext(), "GPS signal not found", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), R.string.GPS_no_signal, Toast.LENGTH_SHORT).show();
                 }
                 else{
                     // Reasoning: Geocoder kept throwing errors even though properly implemented,
@@ -116,7 +105,7 @@ public class LocationPrefs extends AppCompatActivity
                     String key = "https://maps.googleapis.com/maps/api/geocode/json?latlng=";
                     String latitude = Double.toString(lat);
                     String longitude = Double.toString(lng);
-                    String api = "&key=AIzaSyCdD6V_pMev1dl8LAsoJ6PLG5JLnR-OiUc";
+                    String api = "&key=" + getString(R.string.locale_key);
                     String stringUrl = key+latitude+","+longitude+api;
                     System.out.println(stringUrl);
 
@@ -171,7 +160,7 @@ public class LocationPrefs extends AppCompatActivity
                 if (s.length() == 5) {
                     String area = zip.getText().toString();
                     String key = "https://maps.googleapis.com/maps/api/geocode/json?address=";
-                    String api = "&key=AIzaSyCdD6V_pMev1dl8LAsoJ6PLG5JLnR-OiUc";
+                    String api = "&key=" + getString(R.string.locale_key);
                     String stringUrl = key + area + api;
                     System.out.println(stringUrl);
 
@@ -224,7 +213,7 @@ public class LocationPrefs extends AppCompatActivity
                     finish();
                 }
                 else{
-                    Toast.makeText(getBaseContext(), "Please enter valid zipcode", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getBaseContext(), R.string.enter_zipcode, Toast.LENGTH_SHORT).show();
                 }
             }
         });

@@ -28,15 +28,12 @@ import com.google.firebase.storage.UploadTask;
 import com.teamcaffeine.hotswap.R;
 import com.teamcaffeine.hotswap.navigation.AddressesFragment;
 import com.teamcaffeine.hotswap.navigation.NavigationActivity;
-import com.teamcaffeine.hotswap.navigation.ProfileFragment;
 import com.teamcaffeine.hotswap.utility.SessionHandler;
 import com.theartofdev.edmodo.cropper.CropImage;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 
 public class AddUserDetailsActivity extends AppCompatActivity {
 
@@ -109,7 +106,7 @@ public class AddUserDetailsActivity extends AppCompatActivity {
                 imgProfilePhoto.setImageURI(resultUri);
 
                 storage = FirebaseStorage.getInstance().getReference();
-                StorageReference imageRef = storage.child("images/" + firebaseUser.getUid() + ".jpg");
+                StorageReference imageRef = storage.child("images/users/" + firebaseUser.getUid() + ".jpg");
                 UploadTask upload = imageRef.putFile(resultUri);
 
                 // Register observers to listen for when the download is done or if it fails
@@ -133,19 +130,19 @@ public class AddUserDetailsActivity extends AppCompatActivity {
                                 user.setAvatar(downloadUrl.toString());
                                 users.child(firebaseUser.getUid()).updateChildren(user.toMap());
 
-                                Toast.makeText(AddUserDetailsActivity.this, "Successfully updated profile picture.", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(AddUserDetailsActivity.this, R.string.profile_pic_update_success, Toast.LENGTH_SHORT).show();
                             }
 
                             @Override
                             public void onCancelled(DatabaseError databaseError) {
-                                Toast.makeText(AddUserDetailsActivity.this, "Unable to update profile picture.", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(AddUserDetailsActivity.this, R.string.profile_pic_update_failed, Toast.LENGTH_SHORT).show();
                                 Log.e(TAG, "The read failed:", databaseError.toException());
                             }
                         });
                     }
                 });
             } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
-                Toast.makeText(this, "Unable to change image.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, R.string.unable_change_image, Toast.LENGTH_SHORT).show();
                 Exception error = result.getError();
                 Log.d(TAG, error.getMessage());
             }

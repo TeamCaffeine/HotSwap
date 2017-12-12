@@ -11,29 +11,30 @@ public class Item {
     private String itemID = "";
     private String name = "";
     private String ownerID = "";
-    private String renteeID = "";
     private String description = "";
     private String rentPrice = "";
-    private List<String> tags = new ArrayList<String>();
+    private String tag = "";
     private String headerPicture = "";
     private List<String> additionalPictures = new ArrayList<String>();
     private List<Date> availableDates = new ArrayList<Date>();
     private String address = "";
-    private List<Transaction> transactions = new ArrayList<>();
+    private ArrayList<Transaction> transactions = new ArrayList<>();
 
     Item() {
     }
 
-    public Item(String itemID, String name, String ownerID, String description, String rentPrice, String address) {
+    public Item(String itemID, String name, String ownerID, String description, String rentPrice, String address, String headerPicture, String tag) {
         this.itemID = itemID;
         this.name = name;
         this.ownerID = ownerID;
         this.description = description;
         this.rentPrice = rentPrice;
         this.address = address;
+        this.headerPicture = headerPicture;
+        this.tag = tag;
     }
 
-    public Item(String itemID, String name, String ownerID, String description, String rentPrice, String address, List<Transaction> transactions) {
+    public Item(String itemID, String name, String ownerID, String description, String rentPrice, String address, ArrayList<Transaction> transactions) {
         this.itemID = itemID;
         this.name = name;
         this.ownerID = ownerID;
@@ -47,10 +48,9 @@ public class Item {
         this.itemID = item.getItemID();
         this.name = item.getName();
         this.ownerID = item.getOwnerID();
-        this.renteeID = item.getRenteeID();
         this.description = item.getDescription();
         this.rentPrice = rentPrice;
-        this.tags = item.getTags();
+        this.tag = item.getTag();
         this.headerPicture = item.getHeaderPicture();
         this.additionalPictures = item.getAdditionalPictures();
         this.availableDates = item.getAvailableDates();
@@ -63,10 +63,9 @@ public class Item {
         result.put("itemID", itemID);
         result.put("name", name);
         result.put("ownerID", ownerID);
-        result.put("renteeID", renteeID);
         result.put("description", description);
         result.put("rentPrice", rentPrice);
-        result.put("tags", tags);
+        result.put("tag", tag);
         result.put("headerPicture", headerPicture);
         result.put("additionalPictures", additionalPictures);
         result.put("address", address);
@@ -78,12 +77,16 @@ public class Item {
         this.name = name;
     }
 
-    public void setOwnerID(String ownerID) {
-        this.ownerID = ownerID;
+    public void setTag(String tag){
+        this.tag = tag;
     }
 
-    public void setRenteeID(String renteeID) {
-        this.renteeID = renteeID;
+    public String getTag(){
+        return tag;
+    }
+
+    public void setOwnerID(String ownerID) {
+        this.ownerID = ownerID;
     }
 
     public void setDescription(String description) {
@@ -92,18 +95,6 @@ public class Item {
 
     public void setRentPrice(String rentPrice) {
         this.rentPrice = rentPrice;
-    }
-
-    public boolean addTag(String tag) {
-        if (!this.tags.contains(tag)) {
-            this.tags.add(tag);
-            return true;
-        }
-        return false;
-    }
-
-    public boolean removeTag(String tag) {
-        return this.tags.remove(tag);
     }
 
     public void setHeaderPicture(String headerPicture) {
@@ -142,28 +133,12 @@ public class Item {
         return ownerID;
     }
 
-    public String getRenteeID() {
-        return renteeID;
-    }
-
     public String getDescription() {
         return description;
     }
 
     public String getRentPrice() {
         return rentPrice;
-    }
-
-    public List<String> getTags() {
-        return tags;
-    }
-
-    public String getTagsToString() {
-        StringBuilder tagsStringBuilder = new StringBuilder();
-        for (int i = 0; i < tags.size(); i++) {
-            tagsStringBuilder.append(i == 0 ? tags.get(i) : ", " + tags.get(i));
-        }
-        return tagsStringBuilder.toString();
     }
 
     public String getHeaderPicture() {
@@ -182,11 +157,11 @@ public class Item {
         return address;
     }
 
-    public List<Transaction> getTransactions() {
+    public ArrayList<Transaction> getTransactions() {
         return transactions;
     }
 
-    public void setTransactions(List<Transaction> transactions) {
+    public void setTransactions(ArrayList<Transaction> transactions) {
         this.transactions = transactions;
     }
 
