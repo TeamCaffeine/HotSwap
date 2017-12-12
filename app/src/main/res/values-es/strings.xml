@@ -139,7 +139,7 @@
 
     <!--Home UI strings-->
     <string name="currently_renting">Alquilando</string>
-    <string name="currently_lending">Prestando</string>
+    <string name="pending_swaps">Intercambios Pendientes</string>
     <string name="list_item_button">Registrar un ítem</string>
     <string name="duplicate_item">Ya tienes un ítem con este nombre. Elija otro nombre.</string>
     <string name="enter_address_request">Por favor, primero escriba una dirección en su perfil.</string>
@@ -197,5 +197,8 @@
     <string name="unable_change_image">No se puede cambiar la imagen</string>
     <string name="unable_to_find_owner">No se puede encontrar el dueño en la base de datos, no se puede iniciar un chat</string>
     <string name="invalid_date_selected">Fecha invalida escogida</string>
+    <string name="distance_kilometers">Distancia (Kilómetros)</string>
+    <string name="set_tags">Dar Etiquetas</string>
+    <string name="item_requests_title">Solicitudes de ítemes</string>
 
 </resources>
