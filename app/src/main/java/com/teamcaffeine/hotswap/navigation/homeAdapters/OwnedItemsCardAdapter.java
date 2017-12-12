@@ -6,19 +6,23 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.common.base.Strings;
+import com.squareup.picasso.Picasso;
 import com.teamcaffeine.hotswap.R;
+import com.teamcaffeine.hotswap.navigation.NavigationActivity;
 import com.teamcaffeine.hotswap.swap.Item;
 
 import java.util.ArrayList;
 
-public class OwnedItemsAdapter extends BaseAdapter {
+public class OwnedItemsCardAdapter extends BaseAdapter {
 
     private ArrayList<Item> items;
     private Context context;
 
-    public OwnedItemsAdapter(Context aContext) {
+    public OwnedItemsCardAdapter(Context aContext) {
         context = aContext;  //saving the context we'll need it again (for intents)
         items = new ArrayList<Item>();
     }
@@ -54,7 +58,7 @@ public class OwnedItemsAdapter extends BaseAdapter {
 
         if(convertView == null){
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            row = inflater.inflate(R.layout.listview_row, parent, false);
+            row = inflater.inflate(R.layout.content_card, parent, false);
         }
 
         else
@@ -62,9 +66,15 @@ public class OwnedItemsAdapter extends BaseAdapter {
             row = convertView;
         }
 
-        TextView itemName = (TextView) row.findViewById(R.id.itemTitle);
-        TextView itemDescription = (TextView) row.findViewById(R.id.itemDescription);
+        ImageView circleImage = (ImageView) row.findViewById(R.id.circleImage);
+        TextView itemName = (TextView) row.findViewById(R.id.cardItemTitle);
+        TextView itemDescription = (TextView) row.findViewById(R.id.cardItemDescription);
 
+        Item item = items.get(position);
+        String picture = item.getHeaderPicture();
+        if (!Strings.isNullOrEmpty(picture)) {
+            Picasso.with(circleImage.getContext()).load(picture).into(circleImage);
+        }
         itemName.setText(items.get(position).getName());
         itemDescription.setText(items.get(position).getDescription());
         return row;

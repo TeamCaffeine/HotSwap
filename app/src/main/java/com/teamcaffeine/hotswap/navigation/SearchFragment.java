@@ -311,14 +311,14 @@ public class SearchFragment extends Fragment implements OnMapReadyCallback, Goog
     public void onPause() {
         super.onPause();
         super.onResume();
-        getActivity().overridePendingTransition(R.anim.slide_in_up, R.anim.slide_out_up);
+        getActivity().overridePendingTransition(R.anim.slide_in_down, R.anim.slide_out_down);
     }
 
         @Override
     public void onResume() {
         super.onResume();
         super.onPause();
-            getActivity().overridePendingTransition(R.anim.slide_in_down, R.anim.slide_out_down);
+            getActivity().overridePendingTransition(R.anim.slide_in_up, R.anim.slide_out_up);
     }
 
     public boolean checkLocationPermission() {
@@ -487,136 +487,6 @@ public class SearchFragment extends Fragment implements OnMapReadyCallback, Goog
         DoAfterMapsLoaded();
 
 
-//        if (prefs.contains("zip")) {
-//            String postalcode = prefs.getString("zip", "02215");
-//            String key = "https://maps.googleapis.com/maps/api/geocode/json?address=";
-//            String api = "&key=AIzaSyCdD6V_pMev1dl8LAsoJ6PLG5JLnR-OiUc";
-//            String stringUrl = key + postalcode + api;
-//
-//            OkHttpClient client = new OkHttpClient();
-//            Request request = new Request.Builder().url(stringUrl).get().build();
-//
-//            client.newCall(request).enqueue(new Callback() {
-//                @Override
-//                public void onFailure(Request request, IOException e) {
-//                    // do nothing, POC
-//                }
-//
-//                @Override
-//                public void onResponse(Response response) throws IOException {
-//                    String jsonData = response.body().string();
-//                    Gson gson = new Gson();
-//                    JsonObject jsonObject = gson.fromJson(jsonData, JsonObject.class);
-//                    final double lat = jsonObject.getAsJsonArray("results").get(0)
-//                            .getAsJsonObject().get("geometry")
-//                            .getAsJsonObject().get("location")
-//                            .getAsJsonObject().get("lat")
-//                            .getAsDouble();
-//                    final double lng = jsonObject.getAsJsonArray("results").get(0)
-//                            .getAsJsonObject().get("geometry")
-//                            .getAsJsonObject().get("location")
-//                            .getAsJsonObject().get("lng")
-//                            .getAsDouble();
-//                    getActivity().runOnUiThread(new Runnable() {
-//                        @Override
-//                        public void run() {
-//                            latlng = new LatLng(lat, lng);
-//
-//                            double dragLat = latlng.latitude;
-//                            double dragLong = latlng.longitude;
-//                            setLocaleArea(dragLat, dragLong);
-//                            setQueryinGoogleMaps(latlng);
-//
-//                            mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
-//                                @Override
-//                                public boolean onMarkerClick(Marker marker) {
-//                                    return false;
-//                                }
-//                            });
-//
-//                            progress.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-//                                public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-//                                }
-//
-//                                @Override
-//                                public void onStartTrackingTouch(final SeekBar seekBar) {
-//                                }
-//
-//                                @Override
-//                                public void onStopTrackingTouch(final SeekBar seekBar) {
-//                                    progressSeekbar = seekBar.getProgress();
-//                                    circleRange.setText(String.format("%.2f", progressSeekbar/1000.0));
-//                                    System.out.println(progressSeekbar);
-//                                    circle.setRadius(progressSeekbar);
-//                                    mMap.clear();
-//                                    lvAdapter.nuke();
-//                                    setQueryinGoogleMaps(latlng);
-//                                }
-//                            });
-//                            zoomlevel = 13.5f;
-//                            zoomlevel=mMap.getCameraPosition().zoom;
-//                            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latlng, zoomlevel));
-//                        }
-//                    });
-//                }
-//            });
-//        }
-//        else { // if preferences do not exist
-//            // set location to currentlocation
-//            // if location services not enabled
-//            // set Toast to tell user to enable location services
-//
-//
-//            if (currentLocationPermissions == true) {
-//                locationManager = (LocationManager)getActivity().getSystemService(Context.LOCATION_SERVICE);
-//                Criteria criteria = new Criteria();
-//                if (locationManager.getBestProvider(criteria, false) == null){
-//                    if (checkLocationPermission() == false) {
-//                        // LAT LNG OF CENTER OF AMERICA
-//                        latlng = new LatLng(37.0902, -95.7129);
-//                        zoomlevel = 3;
-//                    }
-//                    else{
-//                        provider = locationManager.getBestProvider(criteria, false);
-//                        lastLocation = locationManager.getLastKnownLocation(provider);
-//                        latlng = new LatLng(lastLocation.getLatitude(), lastLocation.getLongitude());
-//                        zoomlevel = 13.5f;
-//                    }
-//                }
-//                else {
-//                    provider = locationManager.getBestProvider(criteria, false);
-//                    lastLocation = locationManager.getLastKnownLocation(provider);
-//                    latlng = new LatLng(lastLocation.getLatitude(), lastLocation.getLongitude());
-//                    zoomlevel = 13.5f;
-//                }
-//
-//            }
-//            setQueryinGoogleMaps(latlng);
-//            progress.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-//                public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-//                }
-//
-//                @Override
-//                public void onStartTrackingTouch(final SeekBar seekBar) {
-//                }
-//
-//                @Override
-//                public void onStopTrackingTouch(final SeekBar seekBar) {
-//                    progressSeekbar = seekBar.getProgress();
-//                    circleRange.setText(String.format("%.2f", progressSeekbar/1000.0));
-//                    System.out.println(progressSeekbar);
-//                    circle.setRadius(progressSeekbar);
-//                    setQueryinGoogleMaps(latlng);
-//                }
-//            });
-//            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latlng, zoomlevel));
-//            zoomlevel = mMap.getCameraPosition().zoom;
-//
-//        }
-
-
-
-
     }
 
     protected synchronized void buildGoogleApiClient() {
@@ -721,25 +591,23 @@ public class SearchFragment extends Fragment implements OnMapReadyCallback, Goog
                             return;
                         }
 
-                        // for each word in entry
 
-                        String[] splited = tfLocation.getText().toString().toLowerCase().split("\\s+");
-
-                       // for (int i = 0; i < splited.length; i++){
-                            // if tag not matched
+                            // checks to make sure item does not belong to current user
                             if (!item.getOwnerID().equals(FirebaseAuth.getInstance().getCurrentUser().getUid())) {
-                             //   if (item.getName().toLowerCase().contains(splited[i])) {
+                                // checks the search edittext if user has a specific word to look for
                                 if (item.getName().toLowerCase().contains(tfLocation.getText().toString().toLowerCase())) {
-                                    // add to listview
-                                    lvAdapter.putItem(item);
-                                    String title = item.getName();
-                                    hashMapMarkerTitle.put(key, title);
-                                    hashMapMarker.get(key).title(title);
-                                    mMap.addMarker(hashMapMarker.get(key));
-                                    lvAdapter.notifyDataSetChanged();
+                                    // if tag not matched
+                                    if(item.getTag().contains(tagChosen.getText().toString())) {
+                                        // add to listview
+                                        lvAdapter.putItem(item);
+                                        String title = item.getName();
+                                        hashMapMarkerTitle.put(key, title);
+                                        hashMapMarker.get(key).title(title);
+                                        mMap.addMarker(hashMapMarker.get(key));
+                                        lvAdapter.notifyDataSetChanged();
+                                    }
                                 }
                             }
-                        //}
 
 
                     }

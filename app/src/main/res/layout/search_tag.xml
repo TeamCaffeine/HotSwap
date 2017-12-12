@@ -17,7 +17,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_weight="1"
-            android:text="JAKE"
+            android:text="Electronics"
             android:textAlignment="center"
             android:textColor="@color/white"
             />
@@ -28,7 +28,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_weight="1"
-            android:text="JAKU"
+            android:text="Sports, Leisure, and Games"
             android:textAlignment="center"
             android:textColor="@color/white"
             />
@@ -39,7 +39,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_weight="1"
-            android:text="JAKUU"
+            android:text="Movies, Books, and Music"
             android:textAlignment="center"
             android:textColor="@color/white"
             />
@@ -50,7 +50,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_weight="1"
-            android:text="JAKUUU"
+            android:text="Baby and Child"
             android:textAlignment="center"
             android:textColor="@color/white"
             />
@@ -61,7 +61,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_weight="1"
-            android:text="JAKUUUU"
+            android:text="Home and Garden"
             android:textAlignment="center"
             android:textColor="@color/white"
             />
@@ -71,7 +71,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="JAKUUUUU"
+            android:text="Other"
             android:textAlignment="center"
             android:textColor="@color/white"
             />

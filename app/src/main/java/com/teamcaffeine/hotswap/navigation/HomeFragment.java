@@ -1,24 +1,22 @@
 package com.teamcaffeine.hotswap.navigation;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.ProgressDialog;
-import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentPagerAdapter;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.Button;
-import android.widget.ListView;
 import android.widget.Toast;
 
+import com.github.florent37.hollyviewpager.HollyViewPager;
+import com.github.florent37.hollyviewpager.HollyViewPagerConfigurator;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -26,50 +24,44 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.teamcaffeine.hotswap.swap.ItemTransactions;
-import com.teamcaffeine.hotswap.login.User;
-import com.teamcaffeine.hotswap.navigation.homeAdapters.OwnedItemsAdapter;
-import com.teamcaffeine.hotswap.navigation.homeAdapters.RentingPendingItemsAdapter;
-import com.teamcaffeine.hotswap.swap.ActiveTransactionInfo;
-import com.teamcaffeine.hotswap.swap.ListItemActivity;
 import com.teamcaffeine.hotswap.R;
+import com.teamcaffeine.hotswap.login.User;
+import com.teamcaffeine.hotswap.navigation.homeAdapters.OwnedItemsCardAdapter;
+import com.teamcaffeine.hotswap.navigation.homeAdapters.RentingPendingItemsCardAdapter;
+import com.teamcaffeine.hotswap.navigation.homePages.OwnedScrollFragment;
+import com.teamcaffeine.hotswap.navigation.homePages.PendingScrollFragment;
+import com.teamcaffeine.hotswap.navigation.homePages.RentingScrollFragment;
 import com.teamcaffeine.hotswap.swap.Item;
-import com.teamcaffeine.hotswap.swap.Transaction;
+import com.teamcaffeine.hotswap.swap.ListItemActivity;
 
 import java.io.Serializable;
-import java.util.Date;
-
 
 public class HomeFragment extends Fragment {
 
     private String TAG = "HomeFragment";
 
-    // create objects to reference layout objects
-    private Button btnListItem;
-    private ListView listviewOwnedItems;
-    private OwnedItemsAdapter ownedItemsAdapter;
-    private ListView listviewRenting;
-    private RentingPendingItemsAdapter rentingAdapter;
-    private ListView listviewPending;
-    private RentingPendingItemsAdapter pendingAdapter;
+    int pageCount = 3;
+
+    private FirebaseUser firebaseUser;
+    private FirebaseDatabase database;
+    private DatabaseReference items; // reference to the items table, used for onDataChange listening
+    private DatabaseReference currentUser;
+    private String itemTable = "items";
+    private String userTable = "users";
+
+    private Button listItemButton;
+
+    private OwnedItemsCardAdapter ownedItemsCardAdapter;
+    private RentingPendingItemsCardAdapter rentingItemsCardAdapter;
+    private RentingPendingItemsCardAdapter pendingItemsCardAdapter;
+    private ValueEventListener itemsEventListener;
+    private ValueEventListener userEventListener;
+    private HollyViewPager hollyViewPager;
     private int LIST_ITEM_REQUEST_CODE = 999;
     private int RESULT_ERROR = 88;
 
     // progress dialog to show page is loading
     public ProgressDialog mProgressDialog;
-
-    // Database reference fields
-    private FirebaseUser firebaseUser;
-    private FirebaseDatabase database;
-    private DatabaseReference itemslocation;
-    private DatabaseReference items; // reference to the items table, used for onDataChange listening
-    private DatabaseReference currentUser;
-    private String itemTable = "items";
-    private String userTable = "users";
-    private String itemlocationsTable = "items_location";
-
-    private ValueEventListener itemsEventListener;
-    private ValueEventListener userEventListener;
 
     // progress dialog to show page is loading
     public void showProgressDialog() {
@@ -89,13 +81,9 @@ public class HomeFragment extends Fragment {
         }
     }
 
-    // fragment listener for inter-fragment communication from the Navigation Activity
-    private HomeFragmentListener HFL;
-
     public HomeFragment() {
         // Required empty public constructor
     }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -111,97 +99,48 @@ public class HomeFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         Log.i(TAG, "onViewCreated");
 
-        // get the views from the layout
-        btnListItem = view.findViewById(R.id.btnListItem);
+        // Get a database reference to our user
+        firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
 
-        listviewOwnedItems = view.findViewById(R.id.listviewAllItems);
-        listviewPending = view.findViewById(R.id.listviewPending);
-        listviewRenting = view.findViewById(R.id.listviewRenting);
+        hollyViewPager = view.findViewById(R.id.hollyViewPager);
 
-        // instantiate the list that wil hold all of the user's items
-        ownedItemsAdapter = new OwnedItemsAdapter(getContext());
-        rentingAdapter = new RentingPendingItemsAdapter(getContext());
-        pendingAdapter = new RentingPendingItemsAdapter(getContext());
-
-
-        // set tbe adapter on the listview in the UI
-        listviewOwnedItems.setAdapter(ownedItemsAdapter);
-        listviewOwnedItems.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        hollyViewPager.getViewPager().setPageMargin(getResources().getDimensionPixelOffset(R.dimen.viewpager_margin));
+        hollyViewPager.setConfigurator(new HollyViewPagerConfigurator() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                //TODO call tony's code
+            public float getHeightPercentForPage(int page) {
+                return 0.5f;
             }
         });
 
-        listviewRenting.setAdapter(rentingAdapter);
-        listviewRenting.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                // Do nothing. Future work, perhaps do some small informational activity or message.
-            }
-        });
+        // Initialize adapters
+        ownedItemsCardAdapter = new OwnedItemsCardAdapter(getContext());
+        rentingItemsCardAdapter = new RentingPendingItemsCardAdapter(getContext());
+        pendingItemsCardAdapter = new RentingPendingItemsCardAdapter(getContext());
 
-        listviewPending.setAdapter(pendingAdapter);
-        listviewPending.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        hollyViewPager.setAdapter(new FragmentPagerAdapter(getActivity().getSupportFragmentManager()) {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                //TODO check if the user is the owner or renter of item.
-                final ActiveTransactionInfo activeTransactionInfo = pendingAdapter.getActiveTransactionInfoAtPosition(position);
-
-                if (activeTransactionInfo.getRenterId().equals(FirebaseAuth.getInstance().getUid())) {
-                    AlertDialog alertDialog = new AlertDialog.Builder(getContext())
-                            //set message, title, and buttons
-                            .setTitle("Renting item")
-                            .setMessage("Have you picked up the item?")
-                            .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                                // when the user clicks the "delete" button, delete the transaction from the database
-                                // when the transaction is deleted from the database, the UI is automatically updated
-                                // by the value event listener on the database
-                                public void onClick(DialogInterface dialog, int whichButton) {
-                                    onItemReceived(activeTransactionInfo);
-                                    dialog.dismiss();
-                                }
-                            })
-                            .setNegativeButton("Not yet", new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int which) {
-                                    dialog.dismiss();
-                                }
-                            })
-                            .create();
-                    alertDialog.show();
-                } else {
-                    AlertDialog alertDialog = new AlertDialog.Builder(getContext())
-                            //set message, title, and buttons
-                            .setTitle("Receiving returned item")
-                            .setMessage("Did you get your item back?")
-                            .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                                // when the user clicks the "delete" button, delete the transaction from the database
-                                // when the transaction is deleted from the database, the UI is automatically updated
-                                // by the value event listener on the database
-                                public void onClick(DialogInterface dialog, int whichButton) {
-                                    onItemReturned(activeTransactionInfo);
-                                    dialog.dismiss();
-                                }
-                            })
-                            .setNegativeButton("Not yet", new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int which) {
-                                    dialog.dismiss();
-                                }
-                            })
-                            .create();
-                    alertDialog.show();
+            public Fragment getItem(int position) {
+                switch (position) {
+                    case 0: return OwnedScrollFragment.newInstance("Owned Items", ownedItemsCardAdapter);
+                    case 1: return RentingScrollFragment.newInstance("Rented Items", rentingItemsCardAdapter);
+                    case 2: return PendingScrollFragment.newInstance("Pending Items", pendingItemsCardAdapter);
                 }
+                return OwnedScrollFragment.newInstance("Owned Items", ownedItemsCardAdapter);
             }
-        });
 
-        listviewOwnedItems.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Item item = (Item) parent.getItemAtPosition(position);
-                Intent itemTransactionsIntent = new Intent(getActivity(), ItemTransactions.class);
-                itemTransactionsIntent.putExtra("itemID", item.getItemID());
-                itemTransactionsIntent.putExtra("itemName", item.getName());
-                startActivity(itemTransactionsIntent);
+            public int getCount() {
+                return pageCount;
+            }
+
+            @Override
+            public CharSequence getPageTitle(int position) {
+                switch (position) {
+                    case 0: return "Owned Items";
+                    case 1: return "Rented Items";
+                    case 2: return "Pending Items";
+                }
+                return "TITLE " + position;
             }
         });
 
@@ -210,24 +149,22 @@ public class HomeFragment extends Fragment {
 
         // get a reference to our database
         database = FirebaseDatabase.getInstance();
-
-        // get a reference to the items table, current user, and items location table
         items = database.getReference().child(itemTable);
         currentUser = database.getReference().child(userTable).child(firebaseUser.getUid());
-        itemslocation = database.getReference().child(itemlocationsTable);
 
+        // Initialize listeners
         itemsEventListener = new ValueEventListener() {
             @Override
             // get a data snapshot of the whole table
             public void onDataChange(DataSnapshot dataSnapshot) {
-                ownedItemsAdapter.clear();
+                ownedItemsCardAdapter.clear();
                 for (DataSnapshot i : dataSnapshot.getChildren()) {
                     Item item = i.getValue(Item.class);
                     if (item.getOwnerID().equals(firebaseUser.getUid())) {
-                        ownedItemsAdapter.putItem(item);
+                        ownedItemsCardAdapter.putItem(item);
                     }
                 }
-                ownedItemsAdapter.notifyDataSetChanged();
+                ownedItemsCardAdapter.notifyDataSetChanged();
             }
 
             @Override
@@ -245,11 +182,11 @@ public class HomeFragment extends Fragment {
             // get a data snapshot of the whole table
             public void onDataChange(DataSnapshot dataSnapshot) {
                 User user = dataSnapshot.getValue(User.class);
-                rentingAdapter.putItems(user.getRenting());
-                pendingAdapter.putItems(user.getPending());
+                rentingItemsCardAdapter.putItems(user.getRenting());
+                pendingItemsCardAdapter.putItems(user.getPending());
 
-                rentingAdapter.notifyDataSetChanged();
-                pendingAdapter.notifyDataSetChanged();
+                rentingItemsCardAdapter.notifyDataSetChanged();
+                pendingItemsCardAdapter.notifyDataSetChanged();
             }
 
             // if the read of the items table failed, log the error message
@@ -261,29 +198,20 @@ public class HomeFragment extends Fragment {
 
         currentUser.addValueEventListener(userEventListener);
 
-        btnListItem.setOnClickListener(new View.OnClickListener() {
+        listItemButton = view.findViewById(R.id.listItemButton);
+        listItemButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent i = new Intent(getActivity(), ListItemActivity.class);
                 // send the current list of items with the intent
                 Bundle args = new Bundle();
-                args.putSerializable("itemList", (Serializable) ownedItemsAdapter.getListOfItemNames());
+                args.putSerializable("itemList", (Serializable) ownedItemsCardAdapter.getListOfItemNames());
                 i.putExtra("BUNDLE", args);
 
                 // start the Activity with the appropriate request code
                 startActivityForResult(i, LIST_ITEM_REQUEST_CODE);
             }
         });
-    }
-
-    public interface HomeFragmentListener {
-        // required constructer for the interface for inter-fragment communication
-    }
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        HFL = (HomeFragment.HomeFragmentListener) context;  //context is a handle to the main activity, let's bind it to our interface.
     }
 
     // Once the user lists a new item in the List Item Activity, it will be added to their items list
@@ -323,38 +251,5 @@ public class HomeFragment extends Fragment {
         // using the reference to the items table, add the listener
         items.addValueEventListener(itemsEventListener);
         currentUser.addValueEventListener(userEventListener);
-    }
-
-    // For the renter when they receive the item they wish to rent
-    private void onItemReceived(ActiveTransactionInfo activeTransactionInfo) {
-        DatabaseReference users = FirebaseDatabase.getInstance().getReference().child("users");
-        String activeTransitionKey = activeTransactionInfo.toKey();
-        // Check if the date is valid (i.e is today past the start date of our transaction?)
-        Date today = new Date();
-        if (today.before(activeTransactionInfo.getDate())) {
-            Toast.makeText(getActivity(), "You cannot receive an item before the start date of your rent", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        // Add pending item to the owner user
-        users.child(activeTransactionInfo.getItem().getOwnerID()).child("pending").child(activeTransitionKey).setValue(activeTransactionInfo); //TODO: REPLACE WITH OBJECT OR tOMAP?
-
-        // Remove pending item from the renter user
-        users.child(activeTransactionInfo.getRenterId()).child("pending").child(activeTransitionKey).removeValue(); //TODO: SEE IF REMOVE GOT DEPRECATED
-
-        // Add renting item to the renter user
-        users.child(activeTransactionInfo.getRenterId()).child("renting").child(activeTransitionKey).setValue(activeTransactionInfo);
-    }
-
-    // For the lender when they are returned the item they lent
-    private void onItemReturned(ActiveTransactionInfo activeTransactionInfo) {
-        DatabaseReference users = FirebaseDatabase.getInstance().getReference().child("users");
-        String activeTransitionKey = activeTransactionInfo.toKey();
-
-        // Delete item from renting in renter user
-        users.child(activeTransactionInfo.getRenterId()).child("renting").child(activeTransitionKey).removeValue();
-
-        // Delete pending from owner user
-        users.child(activeTransactionInfo.getItem().getOwnerID()).child("pending").child(activeTransitionKey).removeValue();
     }
 }

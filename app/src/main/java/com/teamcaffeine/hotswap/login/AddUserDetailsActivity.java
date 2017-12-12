@@ -147,6 +147,7 @@ public class AddUserDetailsActivity extends AppCompatActivity {
                 Log.d(TAG, error.getMessage());
             }
         }
+        super.onActivityResult(requestCode, resultCode, data);
     }
 
     // Submit method

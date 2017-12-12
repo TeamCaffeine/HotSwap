@@ -50,6 +50,7 @@ import com.stripe.android.view.CardMultilineWidget;
 import com.teamcaffeine.hotswap.R;
 import com.teamcaffeine.hotswap.login.LoginActivity;
 import com.teamcaffeine.hotswap.login.User;
+import com.teamcaffeine.hotswap.swap.AddBalanceActivity;
 import com.theartofdev.edmodo.cropper.CropImage;
 
 import java.util.ArrayList;
@@ -75,13 +76,8 @@ public class ProfileFragment extends Fragment {
     private Button btnInviteFriends;
     private TextView txtEmail;
     private TextView txtPhoneNumber;
-    private Button btnAddPayment;
-    private Button btnRemovePayment;
-    private ListView listviewPayment;
-    private List<String> paymentElementsList;
-    private ArrayAdapter<String> paymentAdapter;
-    private TextView txtPastTransactions;
-    private String selectedPayment;
+    private TextView txtBalance;
+    private Button btnAddBalance;
 
     // Progress dialog, to show page is loading
     public ProgressDialog mProgressDialog;
@@ -112,15 +108,6 @@ public class ProfileFragment extends Fragment {
         }
     }
 
-    // Safely get the payment the user has selected
-    public String getSelectedPayment() {
-        if (selectedPayment != null) {
-            return selectedPayment;
-        } else {
-            return null;
-        }
-    }
-
     // fragment listener for inter-fragment communication
     ProfileFragmentListener PFL;
 
@@ -145,90 +132,14 @@ public class ProfileFragment extends Fragment {
         ft.add(R.id.layout_Addresses, addressesFragment);
         ft.commit();
 
-        btnAddPayment = view.findViewById(R.id.btnAddPayment);
-        btnAddPayment.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                addPaymentPopup();
-            }
-        });
-
-        // create a list to hold payments as strings
-        paymentElementsList = new ArrayList<String>();
-        listviewPayment = view.findViewById(R.id.listviewPayment);
-        listviewPayment.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                selectedPayment = paymentElementsList.get(position);
-            }
-        });
-
-        btnRemovePayment = view.findViewById(R.id.btnRemovePayment);
-        btnRemovePayment.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                // Safely handle remove click if there are no addresses or no address is selected
-                if (paymentElementsList.isEmpty() || listviewPayment.getCheckedItemPosition() == -1) {
-                    return;
-                }
-
-                AlertDialog myQuittingDialogBox = new AlertDialog.Builder(getContext())
-                        //set message, title, and buttons
-                        .setTitle(R.string.delete)
-                        .setMessage(R.string.delete_payment_question)
-                        .setPositiveButton(R.string.delete, new DialogInterface.OnClickListener() {
-                            // when the user clicks the "delete" button, delete the item from the database
-                            // when the item is deleted from the database, the UI is automatically updated
-                            // by the value event listener on the database
-                            public void onClick(DialogInterface dialog, int whichButton) {
-                                DatabaseReference ref = users.child(firebaseUser.getUid());
-                                ref.addListenerForSingleValueEvent(new ValueEventListener() {
-                                    @Override
-                                    public void onDataChange(DataSnapshot dataSnapshot) {
-                                        User user = dataSnapshot.getValue(User.class);
-                                        boolean didRemove = user.removePayment(getSelectedPayment());
-                                        if (didRemove) {
-                                            // Update database
-                                            users.child(firebaseUser.getUid()).updateChildren(user.toMap());
-                                            Toast.makeText(getContext(), R.string.card_deleted, Toast.LENGTH_SHORT).show();
-
-                                        } else {
-                                            Log.i(TAG, "User attempted to delete a nonexistent payment method");
-                                        }
-                                    }
-
-                                    @Override
-                                    public void onCancelled(DatabaseError databaseError) {
-                                        Log.e(TAG, "Payment update failed", databaseError.toException());
-                                    }
-                                });
-                                // after the item is deleted, dismiss the delete dialog
-                                dialog.dismiss();
-                            }
-                        })
-                        .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
-                                dialog.dismiss();
-                            }
-                        })
-                        .create();
-                myQuittingDialogBox.show();
-            }
-        });
-
-        paymentAdapter = new ArrayAdapter<String>
-                (getContext(), android.R.layout.simple_list_item_1, paymentElementsList);
-        listviewPayment.setAdapter(paymentAdapter);
-
-        txtPastTransactions = view.findViewById(R.id.txtPastTransactions);
-
         imgPhoto = view.findViewById(R.id.imgPhoto);
 
         txtName = view.findViewById(R.id.txtName);
         txtMemberSince = view.findViewById(R.id.txtMemberSince);
         txtEmail = view.findViewById(R.id.txtEmail);
         txtPhoneNumber = view.findViewById(R.id.txtPhoneNumber);
+        txtBalance = view.findViewById(R.id.txtBalance);
+        btnAddBalance = view.findViewById(R.id.btnAddBalance);
         // get references to the invite friends and logout buttons
         btnLogout = view.findViewById(R.id.btnLogout);
         btnInviteFriends = view.findViewById(R.id.btnInviteFriends);
@@ -257,11 +168,7 @@ public class ProfileFragment extends Fragment {
                 txtEmail.setText(user.getEmail());
                 txtPhoneNumber.setText(user.getPhoneNumber());
 
-                paymentElementsList = user.getPayments();
-                paymentAdapter = new ArrayAdapter<String>
-                        (getContext(), android.R.layout.simple_list_item_1, paymentElementsList);
-                listviewPayment.setAdapter(paymentAdapter);
-                paymentAdapter.notifyDataSetChanged();
+                txtBalance.setText(getString(R.string.current_balance) + " $" + Double.toString(user.getBalance()));
             }
 
             @Override
@@ -290,6 +197,14 @@ public class ProfileFragment extends Fragment {
             public void onClick(View view) {
                 CropImage.activity()
                         .start(getContext(), ProfileFragment.this);
+            }
+        });
+
+        btnAddBalance.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent addBalance = new Intent(getActivity(), AddBalanceActivity.class);
+                startActivity(addBalance);
             }
         });
     }
@@ -433,67 +348,4 @@ public class ProfileFragment extends Fragment {
         // finally show up your popup window
         popupWindow.showAtLocation(popupView, Gravity.CENTER, 0, 0);
     }
-
-    private void addPaymentPopup() {
-        View popupView = LayoutInflater.from(getActivity()).inflate(R.layout.add_payment_popup, null);
-        final PopupWindow popupWindow = new PopupWindow(popupView, 800, 800, true);
-        popupWindow.setOutsideTouchable(true);
-        popupWindow.setAnimationStyle(R.style.PopupAnimation);
-
-        final CardMultilineWidget mCardMultilineWidget = popupView.findViewById(R.id.card_multiline_widget);
-
-        Button btnAddCard = (Button) popupView.findViewById(R.id.btnAddCard);
-        btnAddCard.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                final Card cardToSave = mCardMultilineWidget.getCard();
-                if (cardToSave == null) {
-                    Log.i(TAG, "User attempted to add an invalid payment");
-                } else {
-
-                    DatabaseReference ref = users.child(firebaseUser.getUid());
-                    ref.addListenerForSingleValueEvent(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(DataSnapshot dataSnapshot) {
-                            User user = dataSnapshot.getValue(User.class);
-
-                            boolean didAdd = user.addPayment(cardToSave.getNumber());
-                            if (didAdd) {
-                                // Update database
-                                users.child(firebaseUser.getUid()).updateChildren(user.toMap());
-
-                                // tell user card was successfully added
-                                Toast.makeText(getContext(), R.string.card_added, Toast.LENGTH_SHORT).show();
-                                popupWindow.dismiss();
-
-                            } else {
-                                Log.i(TAG, "User attempted to add a duplicate payment");
-                                Toast.makeText(getContext(), R.string.duplicate_card, Toast.LENGTH_LONG).show();
-                            }
-                        }
-
-                        @Override
-                        public void onCancelled(DatabaseError databaseError) {
-                            Log.e(TAG, "Payments update failed", databaseError.toException());
-                        }
-                    });
-                    //TODO: add info to Stripe database
-                }
-            }
-        });
-
-
-        // define view buttons
-        Button btnClosePopUp = (Button) popupView.findViewById(R.id.btnClose);
-        btnClosePopUp.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                popupWindow.dismiss();
-            }
-        });
-
-        popupWindow.showAtLocation(popupView, Gravity.CENTER, 0, 0);
-    }
-
-
 }

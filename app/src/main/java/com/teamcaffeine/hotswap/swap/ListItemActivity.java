@@ -3,16 +3,26 @@ package com.teamcaffeine.hotswap.swap;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
+import android.text.SpannableString;
+import android.text.style.UnderlineSpan;
 import android.util.Log;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.PopupWindow;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.firebase.geofire.GeoFire;
@@ -56,6 +66,9 @@ public class ListItemActivity extends FragmentActivity {
     private String itemTable = "items";
     private String geoFireTable = "items_location";
     private Uri imageUri = null;
+    private RadioGroup tagList;
+    private TextView tagChosen, tag;
+
 
     private ImageView itemPhoto;
     private EditText editItemName;
@@ -107,12 +120,14 @@ public class ListItemActivity extends FragmentActivity {
 
                 final String itemPrice = editPrice.getText().toString();
                 final String itemDescription = editDescription.getText().toString();
+                final String tagSelected = tagChosen.getText().toString();
 
                 // FIELD VALIDATION
                 if (Strings.isNullOrEmpty(itemID) ||
                         Strings.isNullOrEmpty(itemName) ||
                         Strings.isNullOrEmpty(itemPrice) ||
-                        Strings.isNullOrEmpty(itemDescription)) {
+                        Strings.isNullOrEmpty(itemDescription) ||
+                        Strings.isNullOrEmpty(tagSelected)) {
                     Toast.makeText(getApplicationContext(), R.string.enter_all_fields, Toast.LENGTH_LONG).show();
                     return;
                 }
@@ -145,7 +160,7 @@ public class ListItemActivity extends FragmentActivity {
                         // taskSnapshot.getMetadata() contains file metadata such as size, content-type, and download URL.
                         final Uri downloadUrl = taskSnapshot.getDownloadUrl();
 
-                        Item newItem = new Item(itemID, itemName, firebaseUser.getUid(), itemDescription, itemPrice, itemAddress, downloadUrl.toString());
+                        Item newItem = new Item(itemID, itemName, firebaseUser.getUid(), itemDescription, itemPrice, itemAddress, downloadUrl.toString(), tagSelected);
 
                         // DATA VALIDATION
                         // a user cannot list 2 items with the same name
@@ -169,6 +184,19 @@ public class ListItemActivity extends FragmentActivity {
                         }
                     }
                 });
+            }
+        });
+        tagChosen = (TextView) findViewById(R.id.showTag);
+
+        tag = (TextView) findViewById(R.id.chooseTag);
+        SpannableString content = new SpannableString(tag.getText());
+        content.setSpan(new UnderlineSpan(), 0, content.length(), 0);
+        tag.setText(content);
+
+        tag.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                tagsPopup();
             }
         });
 
@@ -204,6 +232,7 @@ public class ListItemActivity extends FragmentActivity {
         final String itemID = newItem.getItemID();
         final String itemName = newItem.getName();
         final String itemAddress = newItem.getAddress();
+        final String tagSelected = newItem.getTag();
 
         items.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -252,6 +281,51 @@ public class ListItemActivity extends FragmentActivity {
         });
 
 
+
+    }
+
+    private void tagsPopup() {
+        final View popupView = LayoutInflater.from(this).inflate(R.layout.search_tag, null);
+        final PopupWindow popupWindow = new PopupWindow(popupView, 800, 800, true);
+        popupWindow.setAnimationStyle(R.style.PopupAnimation);
+        popupWindow.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        popupWindow.setOutsideTouchable(true);
+        tagList = (RadioGroup) popupView.findViewById(R.id.tagList);
+        final RadioButton tag1 = (RadioButton) popupView.findViewById(R.id.radioButton1);
+        final RadioButton tag2 = (RadioButton) popupView.findViewById(R.id.radioButton2);
+        final RadioButton tag3 = (RadioButton) popupView.findViewById(R.id.radioButton3);
+        final RadioButton tag4 = (RadioButton) popupView.findViewById(R.id.radioButton4);
+        final RadioButton tag5 = (RadioButton) popupView.findViewById(R.id.radioButton5);
+        final RadioButton tag6 = (RadioButton) popupView.findViewById(R.id.radioButton6);
+
+        // define view buttons
+        tagList.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                if(checkedId == R.id.radioButton1){
+                    tagChosen.setText(tag1.getText().toString());
+                }
+                else if(checkedId == R.id.radioButton2){
+                    tagChosen.setText(tag2.getText().toString());
+                }
+                else if(checkedId == R.id.radioButton3){
+                    tagChosen.setText(tag3.getText().toString());
+                }
+                else if(checkedId == R.id.radioButton4){
+                    tagChosen.setText(tag4.getText().toString());
+                }
+                else if(checkedId == R.id.radioButton5){
+                    tagChosen.setText(tag5.getText().toString());
+                }
+                else{ // radiobutton6
+                    tagChosen.setText(tag6.getText().toString());
+                }
+                popupWindow.dismiss();
+            }
+        });
+
+        // finally show up your popup window
+        popupWindow.showAtLocation(popupView, Gravity.CENTER, 0, 0);
 
     }
 }
