@@ -84,7 +84,6 @@ public class ItemTransactions extends AppCompatActivity {
                                                 break;
                                             }
                                         }
-
                                         items.child(itemID).updateChildren(item.toMap());
                                         // Set the transaction's confirmed field to false to true
                                         // We pull the item, because it may have changed since the time we pulled it in
@@ -111,8 +110,29 @@ public class ItemTransactions extends AppCompatActivity {
                                 dialog.dismiss();
                             }
                         })
-                        .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                        .setNegativeButton("Reject", new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
+
+                                FirebaseDatabase database = FirebaseDatabase.getInstance();
+                                final DatabaseReference items = database.getReference().child("items");
+
+                                items.child(itemID).addListenerForSingleValueEvent(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(DataSnapshot dataSnapshot) {
+                                        final Item item = dataSnapshot.getValue(Item.class);
+                                        for(Transaction mTransaction: item.getTransactions()) {
+                                            if (t.equals(mTransaction)) {
+                                                mTransaction.setConfirmed(true);
+                                                break;
+                                            }
+                                        }
+                                    }
+
+                                    @Override
+                                    public void onCancelled(DatabaseError databaseError) {
+
+                                    }
+                                });
 
                                 dialog.dismiss();
                             }
