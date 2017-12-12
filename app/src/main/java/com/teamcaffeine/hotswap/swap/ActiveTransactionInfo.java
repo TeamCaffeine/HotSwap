@@ -9,15 +9,17 @@ public class ActiveTransactionInfo {
     private Item item;
     private String renterId;
     private Date date;
+    private double price;
 
     public ActiveTransactionInfo() {
         // Required empty constructor to deserialize object
     }
 
-    public ActiveTransactionInfo(Item item, String renterId, Date date) {
+    public ActiveTransactionInfo(Item item, String renterId, Date date, double price) {
         this.item = item;
         this.renterId = renterId;
         this.date = date;
+        this.price = price;
     }
 
     public String toKey() {
@@ -29,6 +31,7 @@ public class ActiveTransactionInfo {
         result.put("item", item);
         result.put("renterId", renterId);
         result.put("date", date);
+        result.put("price", price);
         return result;
     }
 
@@ -55,4 +58,8 @@ public class ActiveTransactionInfo {
     public void setDate(Date date) {
         this.date = date;
     }
+
+    public double getPrice() { return price; }
+
+    public void setPrice(double price) { this.price = price; }
 }
