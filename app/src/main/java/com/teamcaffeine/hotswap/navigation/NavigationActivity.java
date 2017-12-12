@@ -98,7 +98,7 @@ public class NavigationActivity extends AppCompatActivity implements
             // No fragments exist yet, instantiate them
             selectedItem = navigation.getMenu().getItem(0);
 
-            homeFragment = new HomeFragment();
+            homeFragment = new NewHomeFragment();
             searchFragment = new SearchFragment();
             chatFragment = new ChatFragment();
             profileFragment = new ProfileFragment();
