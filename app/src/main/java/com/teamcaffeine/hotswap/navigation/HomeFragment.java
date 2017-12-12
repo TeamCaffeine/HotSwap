@@ -326,24 +326,64 @@ public class HomeFragment extends Fragment {
     }
 
     // For the renter when they receive the item they wish to rent
-    private void onItemReceived(ActiveTransactionInfo activeTransactionInfo) {
-        DatabaseReference users = FirebaseDatabase.getInstance().getReference().child("users");
-        String activeTransitionKey = activeTransactionInfo.toKey();
-        // Check if the date is valid (i.e is today past the start date of our transaction?)
-        Date today = new Date();
-        if (today.before(activeTransactionInfo.getDate())) {
-            Toast.makeText(getActivity(), "You cannot receive an item before the start date of your rent", Toast.LENGTH_SHORT).show();
-            return;
-        }
+    private void onItemReceived(final ActiveTransactionInfo activeTransactionInfo) {
+        final DatabaseReference users = FirebaseDatabase.getInstance().getReference().child("users");
+        DatabaseReference user = users.child(firebaseUser.getUid());
 
-        // Add pending item to the owner user
-        users.child(activeTransactionInfo.getItem().getOwnerID()).child("pending").child(activeTransitionKey).setValue(activeTransactionInfo); //TODO: REPLACE WITH OBJECT OR tOMAP?
+        user.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                User renter = dataSnapshot.getValue(User.class);
+                final double balance = renter.getBalance();
+                final double itemPrice = activeTransactionInfo.getPrice();
+                if (balance < itemPrice) {
+                    Toast.makeText(getActivity(), "You do not have enough balance to cover this payment of $" + Double.toString(itemPrice) + ". Please add balance in your profile page.", Toast.LENGTH_LONG).show();
+                    return;
+                }
 
-        // Remove pending item from the renter user
-        users.child(activeTransactionInfo.getRenterId()).child("pending").child(activeTransitionKey).removeValue(); //TODO: SEE IF REMOVE GOT DEPRECATED
+                String activeTransitionKey = activeTransactionInfo.toKey();
+                // Check if the date is valid (i.e is today past the start date of our transaction?)
+                Date today = new Date();
+                if (today.before(activeTransactionInfo.getDate())) {
+                    Toast.makeText(getActivity(), "You cannot receive an item before the start date of your rent", Toast.LENGTH_SHORT).show();
+                    return;
+                }
 
-        // Add renting item to the renter user
-        users.child(activeTransactionInfo.getRenterId()).child("renting").child(activeTransitionKey).setValue(activeTransactionInfo);
+                // Add pending item to the owner user
+                users.child(activeTransactionInfo.getItem().getOwnerID()).child("pending").child(activeTransitionKey).setValue(activeTransactionInfo); //TODO: REPLACE WITH OBJECT OR tOMAP?
+
+                // Remove pending item from the renter user
+                users.child(activeTransactionInfo.getRenterId()).child("pending").child(activeTransitionKey).removeValue(); //TODO: SEE IF REMOVE GOT DEPRECATED
+
+                // Add renting item to the renter user
+                users.child(activeTransactionInfo.getRenterId()).child("renting").child(activeTransitionKey).setValue(activeTransactionInfo);
+
+                // Deduct money from renter's balance
+                renter.deductBalance(itemPrice);
+                users.child(firebaseUser.getUid()).child("balance").setValue(renter.getBalance());
+
+                // Add money to owner's balance
+                users.child(activeTransactionInfo.getItem().getOwnerID()).addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        User owner = dataSnapshot.getValue(User.class);
+                        owner.addBalance(itemPrice);
+                        users.child(activeTransactionInfo.getItem().getOwnerID()).child("balance").setValue(owner.getBalance());
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                // Do nothing
+            }
+        });
+
     }
 
     // For the lender when they are returned the item they lent

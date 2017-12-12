@@ -118,6 +118,8 @@
     <string name="past_transactions"><u>View Past Transactions</u></string>
     <string name="invite_friends">Invite Friends</string>
     <string name="logout">Logout</string>
+    <string name="current_balance">Current Balance:</string>
+    <string name="add_balance">Add Balance</string>
     <string name="placeholder_name">Name</string>
     <string name="placeholder_member_since">Member Since:</string>
     <string name="placeholder_email">Email</string>
@@ -201,5 +203,9 @@
     <string name="copy">Copy</string>
     <string name="set_tags">Set Tags</string>
     <string name="distance_kilometers">Distance (Kilometers)</string>
+
+    <!-- Add Balance Activity -->
+    <string name="amount_to_transfer">Amount to Transfer</string>
+    <string name="enter_payment">Please enter your payment information below:</string>
 
 </resources>

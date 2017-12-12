@@ -93,73 +93,26 @@
         android:layout_height="0dp"
         android:layout_weight="2"
         android:orientation="horizontal"
-        android:weightSum="5" />
+        android:weightSum="5" >
 
-    <LinearLayout
-        android:id="@+id/layout_Payment"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="2"
-        android:orientation="horizontal"
-        android:weightSum="5">
-
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/txtPaymentLabel"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/payment_label" />
-
-            <Button
-                android:id="@+id/btnAddPayment"
-                style="@android:style/Widget.Material.Light.Button.Small"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/plus"
-                android:textColor="@color/blue" />
-
-            <Button
-                android:id="@+id/btnRemovePayment"
-                style="@android:style/Widget.Material.Light.Button.Small"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/minus"
-                android:textColor="@color/blue" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/layout_PaymentAndAdd"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="4"
-            android:orientation="vertical">
-
-            <ListView
-                android:id="@+id/listviewPayment"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:choiceMode="singleChoice"
-                android:listSelector="@color/gray_dark">
-            </ListView>
-
-        </LinearLayout>
-
-    </LinearLayout>
+    </FrameLayout>
 
     <TextView
-        android:id="@+id/txtPastTransactions"
+        android:id="@+id/txtBalance"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:gravity="center_vertical"
-        android:text="@string/past_transactions"
-        android:textColor="@color/blue" />
+        android:gravity="center"
+        android:text="@string/current_balance"
+        android:textAlignment="center"
+        android:textSize="18sp" />
+
+    <Button
+        android:id="@+id/btnAddBalance"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:text="@string/add_balance" />
 
 
     <LinearLayout
