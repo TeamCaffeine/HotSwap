@@ -19,7 +19,7 @@ public class User implements IUser {
     private String avatar = "";
     private boolean online = false;
     private List<String> addresses = new ArrayList<>();
-    private String balance = "";
+    private double balance = 0.0;
 
     // The list of item ids this user owns
     private List<String> owned = new ArrayList<>();
@@ -196,7 +196,7 @@ public class User implements IUser {
         this.email = newEmail;
     }
 
-    public void setBalance(String balance) {this.balance = balance;}
+    public void setBalance(double balance) {this.balance = balance;}
 
-    public String getBalance() {return balance; }
+    public double getBalance() {return balance; }
 }

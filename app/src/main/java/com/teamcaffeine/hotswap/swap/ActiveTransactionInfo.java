@@ -51,9 +51,7 @@ public class ActiveTransactionInfo {
         this.renterId = renterId;
     }
 
-    public Date getDate() {
-        return date;
-    }
+    public Date getDate() { return date; }
 
     public void setDate(Date date) {
         this.date = date;
