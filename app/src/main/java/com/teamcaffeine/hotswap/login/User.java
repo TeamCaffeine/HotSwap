@@ -1,14 +1,14 @@
 package com.teamcaffeine.hotswap.login;
 
 import com.stfalcon.chatkit.commons.models.IUser;
+import com.teamcaffeine.hotswap.swap.ActiveTransactionInfo;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-
-public class User implements IUser{
+public class User implements IUser {
     // Force empty initialization of default table fields
     private String Uid = "";
     private String firstName = "";
@@ -19,7 +19,14 @@ public class User implements IUser{
     private String avatar = "";
     private boolean online = false;
     private List<String> addresses = new ArrayList<>();
-    private List<String> payments = new ArrayList<>();
+    private double balance = 0.0;
+
+    // The list of item ids this user owns
+    private List<String> owned = new ArrayList<>();
+
+    // The users current renting or pending items
+    private HashMap<String, ActiveTransactionInfo> renting = new HashMap<>();
+    private HashMap<String, ActiveTransactionInfo> pending = new HashMap<>();
 
     User() {
     }
@@ -39,7 +46,10 @@ public class User implements IUser{
         this.avatar = user.getAvatar();
         this.online = user.getOnline();
         this.addresses = user.getAddresses();
-        this.payments = user.getPayments();
+        this.owned = user.getOwned();
+        this.renting = user.getRenting();
+        this.pending = user.getPending();
+        this.balance = user.getBalance();
     }
 
     public Map<String, Object> toMap() {
@@ -53,7 +63,10 @@ public class User implements IUser{
         result.put("avatar", avatar);
         result.put("online", online);
         result.put("addresses", addresses);
-        result.put("payments", payments);
+        result.put("owned", owned);
+        result.put("renting", renting);
+        result.put("pending", pending);
+        result.put("balance", balance);
         return result;
     }
 
@@ -138,6 +151,36 @@ public class User implements IUser{
         }
     }
 
+    public List<String> getOwned() {
+        return owned;
+    }
+
+    public void addOwnedItem(String itemID) {
+        if (!owned.contains(itemID)) {
+            owned.add(itemID);
+        }
+    }
+
+    public void setOwned(List<String> owned) {
+        this.owned = owned;
+    }
+
+    public HashMap<String, ActiveTransactionInfo> getRenting() {
+        return renting;
+    }
+
+    public void setRenting(HashMap<String, ActiveTransactionInfo> renting) {
+        this.renting = renting;
+    }
+
+    public HashMap<String, ActiveTransactionInfo> getPending() {
+        return pending;
+    }
+
+    public void setPending(HashMap<String, ActiveTransactionInfo> pending) {
+        this.pending = pending;
+    }
+
     // Methods that need to be implemented for the IUser class for chatkit
     @Override
     public String getId() {
@@ -153,21 +196,15 @@ public class User implements IUser{
         this.email = newEmail;
     }
 
+    public void setBalance(double balance) {this.balance = balance;}
 
-    public List<String> getPayments() {
-        return payments;
+    public void addBalance(double balance) {
+        this.balance += balance;
     }
 
-    public boolean removePayment(String p) {
-        return payments.remove(p);
+    public void deductBalance(double balance) {
+        this.balance -= balance;
     }
 
-    public boolean addPayment(String p) {
-        if (!payments.contains(p)) {
-            payments.add(p);
-            return true;
-        } else {
-            return false;
-        }
-    }
+    public double getBalance() {return balance; }
 }

@@ -1,13 +1,9 @@
-package com.teamcaffeine.hotswap;
+package com.teamcaffeine.hotswap.utility;
 
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.ViewGroup;
 import android.widget.ListView;
-
-/**
- * Created by megan on 12/4/2017.
- */
 
 public class NonScrollListView extends ListView {
 

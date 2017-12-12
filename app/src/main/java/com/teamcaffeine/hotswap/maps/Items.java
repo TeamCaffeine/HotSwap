@@ -11,10 +11,6 @@ import com.teamcaffeine.hotswap.swap.Item;
 
 import java.util.ArrayList;
 
-/**
- * Created by Tkixi on 11/28/17.
- */
-
 public class Items extends BaseAdapter {
     private
     ArrayList<Item> items;
@@ -23,8 +19,8 @@ public class Items extends BaseAdapter {
 
     public Items(Context aContext) {
         context = aContext;  //saving the context we'll need it again (for intents)
-
         items = new ArrayList<Item>();
+
     }
     @Override
     public int getCount() {
@@ -63,16 +59,11 @@ public class Items extends BaseAdapter {
             row = convertView;
         }
 
-//        ImageView imgItem = (ImageView) row.findViewById(R.id.imgItem);
         TextView itemTitle = (TextView) row.findViewById(R.id.itemTitle);
         TextView itemDescriptions = (TextView) row.findViewById(R.id.itemDescription);
 
         itemTitle.setText(items.get(position).getName());
         itemDescriptions.setText(items.get(position).getDescription());
-        //      imgItem.setImageResource(itemImages.get(position).intValue());
-
-
-
         return row;
 
     }

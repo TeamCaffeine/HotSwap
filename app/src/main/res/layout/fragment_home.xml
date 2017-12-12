@@ -1,58 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView
-    android:layout_height="match_parent"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
+    <Button
+        android:id="@+id/listItemButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="15dp"
+        android:layout_marginLeft="40dp"
+        android:layout_marginRight="40dp"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/hotswap_button"
+        android:text="@string/list_item_button"
+        android:textColor="@color/textColorPrimary"
+        android:textSize="16sp" />
+
+    <ImageView
+        android:id="@+id/divider1"
+        android:layout_width="match_parent"
+        android:layout_height="4dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        app:srcCompat="@drawable/hotswap_divider" />
+
+    <com.github.florent37.hollyviewpager.HollyViewPager
+        android:id="@+id/hollyViewPager"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        tools:context="com.teamcaffeine.hotswap.navigation.HomeFragment">
+        android:layout_marginBottom="56dp"
+        app:hvp_headerHeight="150dp" />
 
-        <!-- TODO: Update blank fragment layout -->
-
-        <TextView
-            android:id="@+id/txtItemsLabel"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/items_label" />
-
-        <com.teamcaffeine.hotswap.NonScrollListView
-            android:id="@+id/listviewAllItems"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-        </com.teamcaffeine.hotswap.NonScrollListView>
-
-        <TextView
-            android:id="@+id/txtRentingLabel"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/currently_renting" />
-
-        <TextView
-            android:id="@+id/txtCurrentlyRenting"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingLeft="30dp"/>
-
-        <TextView
-            android:id="@+id/txtLendingLabel"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/currently_lending" />
-
-        <com.teamcaffeine.hotswap.NonScrollListView
-            android:id="@+id/listviewLending"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-        </com.teamcaffeine.hotswap.NonScrollListView>
-
-        <Button
-            android:id="@+id/btnListItem"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/list_item_button" />
-    </LinearLayout>
-</ScrollView>
+</LinearLayout>

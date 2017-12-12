@@ -2,7 +2,6 @@ package com.teamcaffeine.hotswap.maps;
 
 import android.Manifest;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Location;
@@ -36,16 +35,8 @@ import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.Response;
 import com.teamcaffeine.hotswap.R;
-import com.teamcaffeine.hotswap.navigation.NavigationActivity;
 
 import java.io.IOException;
-
-
-
-
-/**
- * Created by Tkixi on 11/25/17.
- */
 
 public class LocationPrefs extends AppCompatActivity
         implements LocationListener, GoogleApiClient.ConnectionCallbacks,
@@ -57,6 +48,8 @@ public class LocationPrefs extends AppCompatActivity
     private LocationRequest locationRequest;
     private Location lastLocation;
     private SharedPreferences prefs;
+    public static final int REQUEST_LOCATION_CODE = 99;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,19 +85,13 @@ public class LocationPrefs extends AppCompatActivity
                 // sets EditText to current area zip code
 
                 if (ActivityCompat.checkSelfPermission(getBaseContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getBaseContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                    // TODO: Consider calling
-                    //    ActivityCompat#requestPermissions
-                    // here to request the missing permissions, and then overriding
-                    //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                    //                                          int[] grantResults)
-                    // to handle the case where the user grants the permission. See the documentation
-                    // for ActivityCompat#requestPermissions for more details.
+                    // Permission already granted
                     return;
                 }
                 Location location= LocationServices.FusedLocationApi.getLastLocation(client);
 
                 if (location == null) {
-                    Toast.makeText(getApplicationContext(), "GPS signal not found", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), R.string.GPS_no_signal, Toast.LENGTH_SHORT).show();
                 }
                 else{
                     // Reasoning: Geocoder kept throwing errors even though properly implemented,
@@ -118,7 +105,7 @@ public class LocationPrefs extends AppCompatActivity
                     String key = "https://maps.googleapis.com/maps/api/geocode/json?latlng=";
                     String latitude = Double.toString(lat);
                     String longitude = Double.toString(lng);
-                    String api = "&key=AIzaSyCdD6V_pMev1dl8LAsoJ6PLG5JLnR-OiUc";
+                    String api = "&key=" + getString(R.string.locale_key);
                     String stringUrl = key+latitude+","+longitude+api;
                     System.out.println(stringUrl);
 
@@ -173,7 +160,7 @@ public class LocationPrefs extends AppCompatActivity
                 if (s.length() == 5) {
                     String area = zip.getText().toString();
                     String key = "https://maps.googleapis.com/maps/api/geocode/json?address=";
-                    String api = "&key=AIzaSyCdD6V_pMev1dl8LAsoJ6PLG5JLnR-OiUc";
+                    String api = "&key=" + getString(R.string.locale_key);
                     String stringUrl = key + area + api;
                     System.out.println(stringUrl);
 
@@ -217,10 +204,17 @@ public class LocationPrefs extends AppCompatActivity
             @Override
             public void onClick(View view) {
                 // sends location preferences back to search page
-                prefs.edit().putString("city", result.getText().toString()).apply();
-                prefs.edit().putString("zip", zip.getText().toString()).apply();
-                finishActivity(-1);
-                finish();
+                // if valid input, send it to search page
+                // else toast and do nothing
+                if (zip.getText().toString().length() == 5) {
+                    prefs.edit().putString("city", result.getText().toString()).apply();
+                    prefs.edit().putString("zip", zip.getText().toString()).apply();
+                    finishActivity(-1);
+                    finish();
+                }
+                else{
+                    Toast.makeText(getBaseContext(), R.string.enter_zipcode, Toast.LENGTH_SHORT).show();
+                }
             }
         });
 

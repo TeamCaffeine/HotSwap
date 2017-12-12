@@ -27,11 +27,13 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import com.google.common.base.Strings;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -73,6 +75,8 @@ public class ChatFragment extends Fragment implements DialogsListAdapter.OnDialo
     private Handler mHandler;
     private DialogsList dialogsList;
     private ChatFragmentListener CFL;
+    private String TAG = "Chat Fragment Tag";
+    private String userEmail = FirebaseAuth.getInstance().getCurrentUser().getEmail();
 
     @Nullable
     @Override
@@ -90,17 +94,17 @@ public class ChatFragment extends Fragment implements DialogsListAdapter.OnDialo
             @Override
             public void loadImage(ImageView imageView, String url) {
                 // Set the url to a default picture if none exists //TODO: Decide how we wanna handle the default case, just doing so no crashes
-                if (url != "") {
-                    Picasso.with(getActivity().getApplicationContext()).load(url).into(imageView);
-                } else {
+                if (Strings.isNullOrEmpty(url)) {
                     Picasso.with(getActivity().getApplicationContext()).load("https://www.vccircle.com/wp-content/uploads/2017/03/default-profile.png").into(imageView);
+                } else {
+                    Picasso.with(getActivity().getApplicationContext()).load(url).into(imageView);
                 }
             }
         };
 
         /* Set Online */
         userRef = FirebaseDatabase.getInstance().getReference().child("presence")
-                .child(FirebaseAuth.getInstance().getCurrentUser().getEmail().replace(".", "|"));
+                .child(userEmail.replace(".", "|"));
         FirebaseDatabase.getInstance().getReference(".info/connected")
                 .addValueEventListener(new ValueEventListener() {
                     @Override
@@ -127,7 +131,6 @@ public class ChatFragment extends Fragment implements DialogsListAdapter.OnDialo
 
     @Override
     public void onDialogLongClick(Dialog dialog) {
-//        AppUtils.showToast(App.getAppContext(), dialog.getDialogName(), false);
     }
 
     @Override
@@ -202,7 +205,7 @@ public class ChatFragment extends Fragment implements DialogsListAdapter.OnDialo
     @Override
     public void onDialogClick(Dialog dialog) {
         Intent intent = new Intent(getActivity().getApplicationContext(), StyledMessagesActivity.class);
-        intent.putExtra("channel", FirebaseAuth.getInstance().getCurrentUser().getEmail());
+        intent.putExtra("channel", userEmail);
         intent.putExtra("subscription", dialog.getUsers().get(0).getEmail());
         startActivity(intent);
     }
@@ -238,8 +241,8 @@ public class ChatFragment extends Fragment implements DialogsListAdapter.OnDialo
      */
     private void getDialogs() {
         FirebaseDatabase.getInstance()
-                .getReference().child("channels").orderByChild("channel").equalTo(FirebaseAuth.getInstance().getCurrentUser().getEmail())
-                .limitToLast(1).addListenerForSingleValueEvent(new ValueEventListener() {
+                .getReference().child("channels").orderByChild("channel").equalTo(userEmail)
+                .limitToLast(1).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
@@ -279,8 +282,16 @@ public class ChatFragment extends Fragment implements DialogsListAdapter.OnDialo
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
                     final User currUser = postSnapshot.getValue(User.class);
+
+
+                    // Fixes logout bug
+                    if(FirebaseAuth.getInstance().getCurrentUser() == null) {
+                        Log.e(TAG, "Enter getDialog when there is no currentUser");
+                        return;
+                    }
+
                     FirebaseDatabase.getInstance()
-                            .getReference().child("chats").child("active").child(subscriptionChannel.replace(".", "|")).child(FirebaseAuth.getInstance().getCurrentUser().getEmail().replace(".", "|"))
+                            .getReference().child("chats").child("active").child(subscriptionChannel.replace(".", "|")).child(userEmail.replace(".", "|"))
                             .orderByChild("timestamp").addListenerForSingleValueEvent(new ValueEventListener() {
                         final User currentUser = new User(currUser);
 
@@ -317,7 +328,7 @@ public class ChatFragment extends Fragment implements DialogsListAdapter.OnDialo
                                 dialogsAdapter.notifyDataSetChanged();
                             } else {
                                 FirebaseDatabase.getInstance()
-                                        .getReference().child("chats").child("active").child(FirebaseAuth.getInstance().getCurrentUser().getEmail().replace(".", "|")).child(subscriptionChannel.replace(".", "|"))
+                                        .getReference().child("chats").child("active").child(userEmail.replace(".", "|")).child(subscriptionChannel.replace(".", "|"))
                                         .orderByChild("timestamp").addListenerForSingleValueEvent(new ValueEventListener() {
                                     final User currentUser = new User(currUser);
 
@@ -352,7 +363,7 @@ public class ChatFragment extends Fragment implements DialogsListAdapter.OnDialo
                                             dialogsAdapter.notifyDataSetChanged();
                                         } else {
                                             final String subChannel = subscriptionChannel.replace(".", "|");
-                                            final String channel = FirebaseAuth.getInstance().getCurrentUser().getEmail().replace(".", "|");
+                                            final String channel = userEmail.replace(".", "|");
 
                                             /* Look For Path */
                                             final String channelPath = subChannel + "-" + channel;

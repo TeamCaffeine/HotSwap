@@ -3,10 +3,19 @@
 
     <item android:drawable="@color/background"/>
 
-    <item>
-        <bitmap
-            android:gravity="center"
-            android:src="@mipmap/ic_launcher"/>
+    <item
+        android:drawable="@drawable/hotswap_logo_text"
+        android:bottom="100dp"
+        android:width="200dp"
+        android:height="47dp"
+        android:gravity="center">
+    </item>
+    <item
+        android:drawable="@drawable/hotswap_logo"
+        android:width="90dp"
+        android:height="106dp"
+        android:top="100dp"
+        android:gravity="center">
     </item>
 
 </layer-list>
