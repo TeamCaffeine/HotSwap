@@ -202,7 +202,7 @@
     <string name="item">Item</string>
     <string name="copy">Copy</string>
     <string name="set_tags">Set Tags</string>
-    <string name="distance_kilometers">Distance (Kilometers)</string>
+    <string name="distance_kilometers">km</string>
 
     <!-- Add Balance Activity -->
     <string name="amount_to_transfer">Amount to Transfer</string>
