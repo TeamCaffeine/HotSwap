@@ -6,6 +6,8 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -294,6 +296,7 @@ public class ProfileFragment extends Fragment {
     private void inviteFriendsPopup() {
         View popupView = LayoutInflater.from(getActivity()).inflate(R.layout.profile_invite_popup, null);
         final PopupWindow popupWindow = new PopupWindow(popupView, 600, 350, true);
+        popupWindow.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         popupWindow.setOutsideTouchable(true);
         popupWindow.setAnimationStyle(R.style.PopupAnimation);
 
