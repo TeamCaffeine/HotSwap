@@ -1,5 +1,8 @@
 package com.teamcaffeine.hotswap.navigation;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.IntentFilter;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.content.Intent;
@@ -9,6 +12,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Adapter;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -82,6 +86,18 @@ public class AddressesFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction("CLOSE_ALL");
+        BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                AddressesFragment.this.onDestroy();
+                getActivity().finish();
+            }
+        };
+        getActivity().registerReceiver(broadcastReceiver, intentFilter);
+
 
         // Get a reference to our user
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser();

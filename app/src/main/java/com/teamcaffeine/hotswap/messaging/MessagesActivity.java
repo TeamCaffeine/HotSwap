@@ -19,6 +19,10 @@ package com.teamcaffeine.hotswap.messaging;
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -69,6 +73,17 @@ public abstract class MessagesActivity extends AppCompatActivity
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction("CLOSE_ALL");
+        BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                finish();
+            }
+        };
+        registerReceiver(broadcastReceiver, intentFilter);
+
         imageLoader = new ImageLoader() {
             @Override
             public void loadImage(ImageView imageView, String url) {

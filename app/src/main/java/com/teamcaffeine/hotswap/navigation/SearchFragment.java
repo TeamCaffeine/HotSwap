@@ -1,8 +1,10 @@
 package com.teamcaffeine.hotswap.navigation;
 
 import android.Manifest;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
@@ -189,6 +191,17 @@ public class SearchFragment extends Fragment implements OnMapReadyCallback, Goog
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction("CLOSE_ALL");
+        BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                onDestroy();
+            }
+        };
+        getActivity().registerReceiver(broadcastReceiver, intentFilter);
+
 
         bSearch = (Button) view.findViewById(R.id.bSearch);
         lvItems = (ListView) view.findViewById(R.id.itemLists);

@@ -1,6 +1,9 @@
 package com.teamcaffeine.hotswap.swap;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -57,6 +60,17 @@ public class ItemDetailsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction("CLOSE_ALL");
+        BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                finish();
+            }
+        };
+        registerReceiver(broadcastReceiver, intentFilter);
+
         setContentView(R.layout.activity_item_details);
 
         channels = FirebaseDatabase.getInstance().getReference().child("channels");

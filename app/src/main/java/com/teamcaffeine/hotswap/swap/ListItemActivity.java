@@ -2,7 +2,10 @@ package com.teamcaffeine.hotswap.swap;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -71,6 +74,17 @@ public class ListItemActivity extends FragmentActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction("CLOSE_ALL");
+        BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                finish();
+            }
+        };
+        registerReceiver(broadcastReceiver, intentFilter);
+
         setContentView(R.layout.activity_list_item);
 
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
