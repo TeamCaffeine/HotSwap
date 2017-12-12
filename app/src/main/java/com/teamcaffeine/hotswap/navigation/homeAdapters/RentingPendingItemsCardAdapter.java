@@ -13,13 +13,13 @@ import com.teamcaffeine.hotswap.swap.ActiveTransactionInfo;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class RentingPendingItemsAdapter extends BaseAdapter {
+public class RentingPendingItemsCardAdapter extends BaseAdapter {
 
     Context context;
     private HashMap<String, ActiveTransactionInfo> items;
     private ArrayList<ActiveTransactionInfo> itemList;
 
-    public RentingPendingItemsAdapter(Context aContext) {
+    public RentingPendingItemsCardAdapter(Context aContext) {
         context = aContext;
         items = new HashMap<>();
         itemList = new ArrayList<ActiveTransactionInfo> (items.values());
@@ -51,13 +51,13 @@ public class RentingPendingItemsAdapter extends BaseAdapter {
 
         if (convertView == null) {
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            row = inflater.inflate(R.layout.listview_row, parent, false);
+            row = inflater.inflate(R.layout.content_card, parent, false);
         } else {
             row = convertView;
         }
 
-        TextView itemName = (TextView) row.findViewById(R.id.itemTitle);
-        TextView swapDates = (TextView) row.findViewById(R.id.itemDescription);
+        TextView itemName = (TextView) row.findViewById(R.id.cardItemTitle);
+        TextView swapDates = (TextView) row.findViewById(R.id.cardItemDescription);
 
         itemName.setText(itemList.get(position).getItem().getName());
         swapDates.setText(itemList.get(position).getDate().toString());

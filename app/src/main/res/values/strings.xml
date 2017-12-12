@@ -145,7 +145,7 @@
     <!--Home UI strings-->
     <string name="currently_renting">Currently Renting</string>
     <string name="pending_swaps">Pending Swaps</string>
-    <string name="list_item_button">List Item</string>
+    <string name="list_item_button">List A New Item</string>
     <string name="duplicate_item">You already have an item with that name. Choose another name.</string>
     <string name="enter_address_request">Please enter an address to your profile first!</string>
 
@@ -202,10 +202,13 @@
     <string name="item">Item</string>
     <string name="copy">Copy</string>
     <string name="set_tags">Set Tags</string>
-    <string name="distance_kilometers">Distance (Kilometers)</string>
+    <string name="distance_kilometers">km</string>
 
     <!-- Add Balance Activity -->
     <string name="amount_to_transfer">Amount to Transfer</string>
     <string name="enter_payment">Please enter your payment information below:</string>
+
+    <!-- Empty Views -->
+    <string name="empty_items">No items to display.</string>
 
 </resources>

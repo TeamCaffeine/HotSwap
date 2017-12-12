@@ -29,7 +29,8 @@
             android:ellipsize="end"
             android:fontFamily="@string/font_fontFamily_medium"
             android:includeFontPadding="false"
-            android:maxLines="1" />
+            android:maxLines="1"
+            android:textColor="@color/colorAccent" />
 
         <TextView
             android:id="@id/dialogDate"

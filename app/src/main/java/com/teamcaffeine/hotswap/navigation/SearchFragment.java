@@ -311,14 +311,14 @@ public class SearchFragment extends Fragment implements OnMapReadyCallback, Goog
     public void onPause() {
         super.onPause();
         super.onResume();
-        getActivity().overridePendingTransition(R.anim.slide_in_up, R.anim.slide_out_up);
+        getActivity().overridePendingTransition(R.anim.slide_in_down, R.anim.slide_out_down);
     }
 
         @Override
     public void onResume() {
         super.onResume();
         super.onPause();
-            getActivity().overridePendingTransition(R.anim.slide_in_down, R.anim.slide_out_down);
+            getActivity().overridePendingTransition(R.anim.slide_in_up, R.anim.slide_out_up);
     }
 
     public boolean checkLocationPermission() {
