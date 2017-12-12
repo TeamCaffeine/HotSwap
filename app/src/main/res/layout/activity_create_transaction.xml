@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:layout_margin="20dp">
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
@@ -14,14 +15,17 @@
         <TextView
             android:id="@+id/txtBeginSwap"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="1"
             android:text="@string/begin_a_swap"
             android:textAlignment="center"
+            android:textColor="@color/colorAccent"
             android:textSize="30sp" />
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="0"
             android:orientation="horizontal">
 
             <TextView
@@ -43,8 +47,10 @@
 
         <EditText
             android:id="@+id/edtAddNote"
+            style="@style/HotSwapEditTextStyle"
             android:layout_width="match_parent"
             android:layout_height="0dp"
+            android:layout_marginBottom="5dp"
             android:layout_weight="1"
             android:hint="@string/add_a_note_to_the_owner"
             android:imeOptions="actionDone"
@@ -60,7 +66,10 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginBottom="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_weight="0.5"
             android:orientation="horizontal">
 
             <TextView
@@ -69,6 +78,7 @@
                 android:layout_weight="1"
                 android:ems="10"
                 android:text="@string/total_price"
+                android:textAlignment="textEnd"
                 android:textSize="18sp" />
 
             <TextView
@@ -77,17 +87,20 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:ems="10"
+                android:textAlignment="textStart"
                 android:textSize="18sp" />
         </LinearLayout>
 
         <Button
             android:id="@+id/btnGetSwapping"
             android:layout_width="match_parent"
-            android:layout_height="65dp"
-            android:layout_weight="0.5"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:background="@drawable/hotswap_button"
             android:gravity="center"
             android:text="@string/get_swapping"
             android:textAlignment="center"
+            android:textColor="@color/textColorPrimary"
             android:textSize="24sp" />
 
     </LinearLayout>
