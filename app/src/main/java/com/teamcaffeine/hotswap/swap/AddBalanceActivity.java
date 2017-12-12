@@ -45,6 +45,7 @@ public class AddBalanceActivity extends AppCompatActivity {
     private String userTable = "users";
 
     private Stripe stripe;
+    private String TAG = "AddBalanceActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,9 +81,17 @@ public class AddBalanceActivity extends AppCompatActivity {
         transferButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                final double valueToAdd = Double.parseDouble(editTransferAmount.getText().toString());
+                double toAdd;
+                try {
+                    toAdd = Double.parseDouble(editTransferAmount.getText().toString());
+                } catch (NumberFormatException e) {
+                    Log.e(TAG, "NumberFormatException: ", e);
+                    Toast.makeText(getApplicationContext(), "Please add a value of at least $5 or more.", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                final double valueToAdd = toAdd;
                 if (valueToAdd < 5) {
-                    Toast.makeText(getApplicationContext(), "Please add a value of at least $5 or more.", Toast.LENGTH_SHORT);
+                    Toast.makeText(getApplicationContext(), "Please add a value of at least $5 or more.", Toast.LENGTH_SHORT).show();
                     return;
                 }
 
