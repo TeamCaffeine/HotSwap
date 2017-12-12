@@ -1,5 +1,6 @@
 package com.teamcaffeine.hotswap.navigation;
 
+import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.content.Intent;
@@ -157,8 +158,14 @@ public class AddressesFragment extends Fragment {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 User user = dataSnapshot.getValue(User.class);
                 addressElementsList = user.getAddresses();
+
+                Context context = getContext();
+
+                if (context == null) {
+                    return;
+                }
                 addressAdapter = new ArrayAdapter<String>
-                        (getContext(), android.R.layout.simple_list_item_1, addressElementsList);
+                        (context, android.R.layout.simple_list_item_1, addressElementsList);
                 listviewAddresses.setAdapter(addressAdapter);
                 addressAdapter.notifyDataSetChanged();
             }
