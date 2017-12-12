@@ -120,14 +120,13 @@ public class ListItemActivity extends FragmentActivity {
 
                 final String itemPrice = editPrice.getText().toString();
                 final String itemDescription = editDescription.getText().toString();
-                final String tagSelected = tagChosen.getText().toString();
+                final String tagSelected = "Other";
 
                 // FIELD VALIDATION
                 if (Strings.isNullOrEmpty(itemID) ||
                         Strings.isNullOrEmpty(itemName) ||
                         Strings.isNullOrEmpty(itemPrice) ||
-                        Strings.isNullOrEmpty(itemDescription) ||
-                        Strings.isNullOrEmpty(tagSelected)) {
+                        Strings.isNullOrEmpty(itemDescription)) {
                     Toast.makeText(getApplicationContext(), R.string.enter_all_fields, Toast.LENGTH_LONG).show();
                     return;
                 }
