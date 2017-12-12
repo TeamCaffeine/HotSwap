@@ -5,8 +5,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.common.base.Strings;
+import com.squareup.picasso.Picasso;
 import com.teamcaffeine.hotswap.R;
 import com.teamcaffeine.hotswap.swap.ActiveTransactionInfo;
 
@@ -56,9 +59,15 @@ public class RentingPendingItemsCardAdapter extends BaseAdapter {
             row = convertView;
         }
 
+        ImageView circleImage = (ImageView) row.findViewById(R.id.circleImage);
         TextView itemName = (TextView) row.findViewById(R.id.cardItemTitle);
         TextView swapDates = (TextView) row.findViewById(R.id.cardItemDescription);
 
+        ActiveTransactionInfo activeTransactionInfo = itemList.get(position);
+        String picture = activeTransactionInfo.getItem().getHeaderPicture();
+        if (!Strings.isNullOrEmpty(picture)) {
+            Picasso.with(circleImage.getContext()).load(picture).into(circleImage);
+        }
         itemName.setText(itemList.get(position).getItem().getName());
         swapDates.setText(itemList.get(position).getDate().toString());
         return row;
