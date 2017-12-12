@@ -50,6 +50,7 @@ import com.stripe.android.view.CardMultilineWidget;
 import com.teamcaffeine.hotswap.R;
 import com.teamcaffeine.hotswap.login.LoginActivity;
 import com.teamcaffeine.hotswap.login.User;
+import com.teamcaffeine.hotswap.swap.AddBalanceActivity;
 import com.theartofdev.edmodo.cropper.CropImage;
 
 import java.util.ArrayList;
@@ -196,6 +197,14 @@ public class ProfileFragment extends Fragment {
             public void onClick(View view) {
                 CropImage.activity()
                         .start(getContext(), ProfileFragment.this);
+            }
+        });
+
+        btnAddBalance.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent addBalance = new Intent(getActivity(), AddBalanceActivity.class);
+                startActivity(addBalance);
             }
         });
     }

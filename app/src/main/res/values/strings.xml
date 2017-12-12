@@ -204,4 +204,8 @@
     <string name="set_tags">Set Tags</string>
     <string name="distance_kilometers">Distance (Kilometers)</string>
 
+    <!-- Add Balance Activity -->
+    <string name="amount_to_transfer">Amount to Transfer</string>
+    <string name="enter_payment">Please enter your payment information below:</string>
+
 </resources>
