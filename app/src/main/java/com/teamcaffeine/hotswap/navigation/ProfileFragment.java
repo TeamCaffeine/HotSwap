@@ -78,10 +78,12 @@ public class ProfileFragment extends Fragment {
     private TextView txtEmail;
     private TextView txtPhoneNumber;
     private Button btnAddPayment;
+    private Button btnRemovePayment;
     private ListView listviewPayment;
     private List<String> paymentElementsList;
     private ArrayAdapter<String> paymentAdapter;
     private TextView txtPastTransactions;
+    private String selectedPayment;
 
     // Progress dialog, to show page is loading
     public ProgressDialog mProgressDialog;
@@ -112,6 +114,15 @@ public class ProfileFragment extends Fragment {
         }
     }
 
+    // Safely get the payment the user has selected
+    public String getSelectedPayment() {
+        if (selectedPayment != null) {
+            return selectedPayment;
+        } else {
+            return null;
+        }
+    }
+
     // fragment listener for inter-fragment communication
     ProfileFragmentListener PFL;
 
@@ -131,20 +142,12 @@ public class ProfileFragment extends Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        // populate the listview with the user's addresses
-        // step 1: instantiate the Address Fragment
         AddressesFragment addressesFragment = new AddressesFragment();
-        // step 2: begin the fragment transaction
         FragmentTransaction ft = getFragmentManager().beginTransaction();
-        // step 3: add fragment to the activity state
         ft.add(R.id.layout_Addresses, addressesFragment);
-        // step 4: commit the transaction
         ft.commit();
 
-        // instantiate the button to add a payment method to the user's profile
         btnAddPayment = view.findViewById(R.id.btnAddPayment);
-        // set on click listener to open a popup to add the payment using a Stripe widget
-        // see method below
         btnAddPayment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -152,22 +155,26 @@ public class ProfileFragment extends Fragment {
             }
         });
 
-        // create a list to hold item names as strings
+        // create a list to hold payments as strings
         paymentElementsList = new ArrayList<String>();
-        // instantiate the listview to hold the list of item names
         listviewPayment = view.findViewById(R.id.listviewPayment);
-
-        /**
-         * DELETE AN ITEM
-         */
-
-        // set an onClick listener so that when a user clicks on an item,
-        // they get a dialog to delete the item
         listviewPayment.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
-                // create an alert dialog that asks the user if they want to delete the item,
-                // and gives them the option to delete or cancel
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                selectedPayment = paymentElementsList.get(position);
+            }
+        });
+
+        btnRemovePayment = view.findViewById(R.id.btnRemovePayment);
+        btnRemovePayment.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                // Safely handle remove click if there are no addresses or no address is selected
+                if (paymentElementsList.isEmpty() || listviewPayment.getCheckedItemPosition() == -1) {
+                    return;
+                }
+
                 AlertDialog myQuittingDialogBox = new AlertDialog.Builder(getContext())
                         //set message, title, and buttons
                         .setTitle(R.string.delete)
@@ -177,40 +184,22 @@ public class ProfileFragment extends Fragment {
                             // when the item is deleted from the database, the UI is automatically updated
                             // by the value event listener on the database
                             public void onClick(DialogInterface dialog, int whichButton) {
-                                // get a reference to the current user
                                 DatabaseReference ref = users.child(firebaseUser.getUid());
-                                // add a single value event listener to the user reference to
-                                // delete the single item from their account
                                 ref.addListenerForSingleValueEvent(new ValueEventListener() {
-                                    // get a datasnapshot of the current user to access its data
                                     @Override
                                     public void onDataChange(DataSnapshot dataSnapshot) {
-                                        // create a user object from the datasnapshot
                                         User user = dataSnapshot.getValue(User.class);
-
-                                        // remove the payment item that was selected in the listview from
-                                        // the user's list  of payments
-                                        // the removePayment method in the User class returns a boolean value on
-                                        // success or failure of removal
-                                        boolean didRemove = user.removePayment(listviewPayment.getItemAtPosition(position).toString());
-                                        // when removePayment is successfuly and returns true, we can delete the payment method
-                                        // from the database
-                                        // we only ever want to delete from the database when we delete from the in-app list,
-                                        // and vice versa, to make sure the UI and the backend database remain synced
+                                        boolean didRemove = user.removePayment(getSelectedPayment());
                                         if (didRemove) {
                                             // Update database
                                             users.child(firebaseUser.getUid()).updateChildren(user.toMap());
-
-                                            // show a toast to tell the user the card was deleted
                                             Toast.makeText(getContext(), R.string.card_deleted, Toast.LENGTH_SHORT).show();
 
-                                        // if removing the payment method was not successful, log the error
                                         } else {
                                             Log.i(TAG, "User attempted to delete a nonexistent payment method");
                                         }
                                     }
 
-                                    // if the user closed the delete dialog, log the error
                                     @Override
                                     public void onCancelled(DatabaseError databaseError) {
                                         Log.e(TAG, "Payment update failed", databaseError.toException());
@@ -220,34 +209,24 @@ public class ProfileFragment extends Fragment {
                                 dialog.dismiss();
                             }
                         })
-                        // if the user clicks cancel, close the delete dialog
                         .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
                                 dialog.dismiss();
                             }
                         })
-                        // once all of the functionality is added to the delete dialog, create the dialog
                         .create();
-                // once the dialog is created, show it
                 myQuittingDialogBox.show();
             }
         });
 
-        // create an adapter for the listview that displays the payments
-        // the adapter handles UI updates when the list that populates
-        // the listview is changed
         paymentAdapter = new ArrayAdapter<String>
                 (getContext(), android.R.layout.simple_list_item_1, paymentElementsList);
-        // set the adapater on the listview
         listviewPayment.setAdapter(paymentAdapter);
 
-        // get the reference to the past transactions button (actually a textview for display purposes) on the UI
         txtPastTransactions = view.findViewById(R.id.txtPastTransactions);
 
-        // get reference to profile picutre
         imgPhoto = view.findViewById(R.id.imgPhoto);
 
-        // get references to all user info textviews
         txtName = view.findViewById(R.id.txtName);
         txtMemberSince = view.findViewById(R.id.txtMemberSince);
         txtEmail = view.findViewById(R.id.txtEmail);
@@ -256,26 +235,15 @@ public class ProfileFragment extends Fragment {
         btnLogout = view.findViewById(R.id.btnLogout);
         btnInviteFriends = view.findViewById(R.id.btnInviteFriends);
 
-        // Get an authentication reference to the current user
-        // we will use this to get the user's ID in our database, which we
-        // will use to pull the user's information
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
-        // get database references
         database = FirebaseDatabase.getInstance();
         users = database.getReference().child(userTable);
 
-        // get a database reference to the current user, user the auth reference above
         DatabaseReference ref = users.child(firebaseUser.getUid());
-        // add a value event listener to the user reference
-        // this value event listener populates all of the user's data in the profile UI
-        // by being a Value Event Listener and not a Single Value Event Listener, it will
-        // constantly listen to the database for changes and automatically update the UI
-        // when the user's data is changed
         ref.addValueEventListener(new ValueEventListener() {
             @Override
             // get a datasnapshot of the current user to access its data
             public void onDataChange(DataSnapshot dataSnapshot) {
-                // create a user object from the datasnapshot
                 User user = dataSnapshot.getValue(User.class);
                 // set the profile picture
                 String avatar = user.getAvatar();
@@ -286,18 +254,11 @@ public class ProfileFragment extends Fragment {
                 // set the user's name
                 txtName.setText(user.getFirstName() + " " + user.getLastName());
 
-                // set the value of their member since field
-                // like of most social media platforms, this field indicates how long a user
-                // has been using the app, which could indicate reliability and experience
-                // to potential renters
                 txtMemberSince.setText(getResources().getString(R.string.member_since) + " " + user.getMemberSince());
 
-                // set the user's email
                 txtEmail.setText(user.getEmail());
-                // set the user's phone number
                 txtPhoneNumber.setText(user.getPhoneNumber());
 
-                // get the user's payment methods
                 paymentElementsList = user.getPayments();
                 paymentAdapter = new ArrayAdapter<String>
                         (getContext(), android.R.layout.simple_list_item_1, paymentElementsList);
@@ -312,7 +273,6 @@ public class ProfileFragment extends Fragment {
         });
 
 
-        // Set logout functionality of the Logout button
         btnLogout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -327,7 +287,6 @@ public class ProfileFragment extends Fragment {
             }
         });
 
-        // Set onClick functionality for profile picture
         imgPhoto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -369,19 +328,19 @@ public class ProfileFragment extends Fragment {
                                 user.setAvatar(downloadUrl.toString());
                                 users.child(firebaseUser.getUid()).updateChildren(user.toMap());
 
-                                Toast.makeText(getActivity(), "Successfully updated profile picture.", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getActivity(), R.string.profile_pic_update_success, Toast.LENGTH_SHORT).show();
                             }
 
                             @Override
                             public void onCancelled(DatabaseError databaseError) {
-                                Toast.makeText(getActivity(), "Unable to update profile picture.", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getActivity(), R.string.profile_pic_update_failed, Toast.LENGTH_SHORT).show();
                                 Log.e(TAG, "The read failed:", databaseError.toException());
                             }
                         });
                     }
                 });
             } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
-                Toast.makeText(getActivity(), "Unable to change image.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), R.string.unable_change_image, Toast.LENGTH_SHORT).show();
                 Exception error = result.getError();
                 Log.d(TAG, error.getMessage());
             }
@@ -535,7 +494,6 @@ public class ProfileFragment extends Fragment {
             }
         });
 
-        // finally show up your popup window
         popupWindow.showAtLocation(popupView, Gravity.CENTER, 0, 0);
     }
 

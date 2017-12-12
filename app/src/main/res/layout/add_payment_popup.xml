@@ -17,7 +17,7 @@
             android:layout_width="41dp"
             android:layout_height="wrap_content"
             android:layout_gravity="right"
-            android:text="X" />
+            android:text="@string/x" />
 
         <com.stripe.android.view.CardMultilineWidget
             android:id="@+id/card_multiline_widget"
@@ -32,6 +32,6 @@
         android:id="@+id/btnAddCard"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Add Card" />
+        android:text="@string/add_card_button" />
 
 </LinearLayout>

@@ -1,27 +1,19 @@
 package com.teamcaffeine.hotswap.swap;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
-import com.google.common.base.Strings;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.squareup.picasso.Picasso;
 import com.teamcaffeine.hotswap.R;
 import com.teamcaffeine.hotswap.login.User;
 import com.teamcaffeine.hotswap.maps.Items;
@@ -35,6 +27,7 @@ import java.util.ArrayList;
 public class ItemTransactions extends AppCompatActivity {
     private DatabaseReference items;
     private ListView lvItems;
+    private TextView title;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +35,8 @@ public class ItemTransactions extends AppCompatActivity {
         setContentView(R.layout.activity_item_transactions);
         lvItems = (ListView) findViewById(R.id.itemLists);
         final ArrayList<String> transaction = new ArrayList<>();
+        title = (TextView) findViewById(R.id.transTitle);
+
 
 
 
@@ -49,19 +44,28 @@ public class ItemTransactions extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 // do stuff
-                // show alert box to confirm or reject transaction
+                User u = (User) adapterView.getItemAtPosition(i);
+                Toast.makeText(getApplicationContext(), "THIS USER IS : " + u.getName(), Toast.LENGTH_LONG).show();
+                // show alert box to confirm or reject transaction with this user
             }
         });
 
 
-        //TODO: replace with item key sent in from Megan's bundle that gets passed to this activity
-        String itemWithTransaction = "-L-au0kTc3rhO_wd6fca";
-        // Bundle extras = getIntent().getExtras();
-        // itemID = extras.getString("itemID");
 
-        items = FirebaseDatabase.getInstance().getReference().child("items").child(itemWithTransaction);
+         Bundle extras = getIntent().getExtras();
+         String itemID = extras.getString("itemID");
+         String itemName = extras.getString("itemName");
+
+         title.setText("Transactions with Item: " + itemName);
+
+
+        items = FirebaseDatabase.getInstance().getReference().child("items").child(itemID);
 
         // if items is null, show nothing in Listview or show no transactions exist for this item
+
+        final Users itemAdapter = new Users(this);
+
+        lvItems.setAdapter(itemAdapter);
 
 
         // Set up Firebase
@@ -69,20 +73,17 @@ public class ItemTransactions extends AppCompatActivity {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 Item i = dataSnapshot.getValue(Item.class);
-                for (Transaction t : i.getTransactions()) {
-                    String uid = t.getRequestUserID();
-                    final String dist = Double.toString(t.getDistance());
-
+                for (final Transaction t : i.getTransactions()) {
+                    final String uid = t.getRequestUserID();
+                    final String dist = String.format("%.2f", t.getDistance());
                     FirebaseDatabase database = FirebaseDatabase.getInstance();
                     DatabaseReference users = database.getReference().child("users");
                     users.child(uid).addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
                             User u = dataSnapshot.getValue(User.class);
-                            String name = u.getFirstName() + " " + u.getLastName();
-                            transaction.add("Name: " + name + " | Distance: " + dist);
-                            ArrayAdapter<String> lvAdapter = new ArrayAdapter<String>(ItemTransactions.this, android.R.layout.simple_list_item_1, android.R.id.text1, transaction);
-                            lvItems.setAdapter(lvAdapter);
+                            itemAdapter.putUser(u);
+                            itemAdapter.notifyDataSetChanged();
                         }
                         @Override
                         public void onCancelled(DatabaseError databaseError) {
@@ -97,6 +98,8 @@ public class ItemTransactions extends AppCompatActivity {
 
             }
         });
+
+
 
 
     }
