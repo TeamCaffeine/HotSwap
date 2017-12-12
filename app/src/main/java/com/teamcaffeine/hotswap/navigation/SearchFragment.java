@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.ColorDrawable;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationManager;
@@ -28,6 +30,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.PopupWindow;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
@@ -79,7 +83,7 @@ import java.util.HashMap;
  */
 public class SearchFragment extends Fragment implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener, LocationListener, GoogleMap.OnMarkerDragListener {
-    private float zoomlevel;
+    private float zoomlevel = 13.5f;
     private GoogleMap mMap;
     private GoogleApiClient client;
     private Location lastLocation;
@@ -101,9 +105,9 @@ public class SearchFragment extends Fragment implements OnMapReadyCallback, Goog
     private String provider;
     private boolean currentLocationPermissions = true;
     private LatLng latlng;
-    private TextView circleRange;
+    private TextView circleRange, tagChosen;
     private EditText tfLocation;
-
+    private RadioGroup tagList;
 
 
 
@@ -138,15 +142,48 @@ public class SearchFragment extends Fragment implements OnMapReadyCallback, Goog
     }
 
     private void tagsPopup() {
-        View popupView = LayoutInflater.from(getActivity()).inflate(R.layout.search_tag, null);
+        final View popupView = LayoutInflater.from(getActivity()).inflate(R.layout.search_tag, null);
         final PopupWindow popupWindow = new PopupWindow(popupView, 800, 800, true);
-        popupWindow.setOutsideTouchable(true);
         popupWindow.setAnimationStyle(R.style.PopupAnimation);
+        popupWindow.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        popupWindow.setOutsideTouchable(true);
+        tagList = (RadioGroup) popupView.findViewById(R.id.tagList);
+        final RadioButton tag1 = (RadioButton) popupView.findViewById(R.id.radioButton1);
+        final RadioButton tag2 = (RadioButton) popupView.findViewById(R.id.radioButton2);
+        final RadioButton tag3 = (RadioButton) popupView.findViewById(R.id.radioButton3);
+        final RadioButton tag4 = (RadioButton) popupView.findViewById(R.id.radioButton4);
+        final RadioButton tag5 = (RadioButton) popupView.findViewById(R.id.radioButton5);
+        final RadioButton tag6 = (RadioButton) popupView.findViewById(R.id.radioButton6);
 
         // define view buttons
+        tagList.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                if(checkedId == R.id.radioButton1){
+                    tagChosen.setText(tag1.getText().toString());
+                }
+                else if(checkedId == R.id.radioButton2){
+                    tagChosen.setText(tag2.getText().toString());
+                }
+                else if(checkedId == R.id.radioButton3){
+                    tagChosen.setText(tag3.getText().toString());
+                }
+                else if(checkedId == R.id.radioButton4){
+                    tagChosen.setText(tag4.getText().toString());
+                }
+                else if(checkedId == R.id.radioButton5){
+                    tagChosen.setText(tag5.getText().toString());
+                }
+                else{ // radiobutton6
+                    tagChosen.setText(tag6.getText().toString());
+                }
+                popupWindow.dismiss();
+            }
+        });
 
         // finally show up your popup window
         popupWindow.showAtLocation(popupView, Gravity.CENTER, 0, 0);
+
     }
 
     @Override
@@ -157,6 +194,7 @@ public class SearchFragment extends Fragment implements OnMapReadyCallback, Goog
         lvItems = (ListView) view.findViewById(R.id.itemLists);
         circleRange = (TextView) view.findViewById(R.id.distanceInput);
         tfLocation = (EditText) view.findViewById(R.id.tfLocation);
+        tagChosen = (TextView) view.findViewById(R.id.tagChosen);
 
         lvAdapter = new Items(getActivity());
 
@@ -317,12 +355,12 @@ public class SearchFragment extends Fragment implements OnMapReadyCallback, Goog
                     String jsonData = response.body().string();
                     Gson gson = new Gson();
                     JsonObject jsonObject = gson.fromJson(jsonData, JsonObject.class);
-                    final double lat = jsonObject.getAsJsonArray("results").get(0)
+                    lat = jsonObject.getAsJsonArray("results").get(0)
                             .getAsJsonObject().get("geometry")
                             .getAsJsonObject().get("location")
                             .getAsJsonObject().get("lat")
                             .getAsDouble();
-                    final double lng = jsonObject.getAsJsonArray("results").get(0)
+                    lng = jsonObject.getAsJsonArray("results").get(0)
                             .getAsJsonObject().get("geometry")
                             .getAsJsonObject().get("location")
                             .getAsJsonObject().get("lng")
@@ -358,6 +396,7 @@ public class SearchFragment extends Fragment implements OnMapReadyCallback, Goog
                                     circleRange.setText(String.format("%.2f", progressSeekbar/1000.0));
                                     System.out.println(progressSeekbar);
                                     circle.setRadius(progressSeekbar);
+                                    setQueryinGoogleMaps(latlng);
                                     bSearch.setOnClickListener(new View.OnClickListener() {
                                         @Override
                                         public void onClick(View v) {
@@ -366,8 +405,7 @@ public class SearchFragment extends Fragment implements OnMapReadyCallback, Goog
                                     });
                                 }
                             });
-                            zoomlevel = 13.5f;
-                            zoomlevel=mMap.getCameraPosition().zoom;
+//                            zoomlevel=mMap.getCameraPosition().zoom;
                             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latlng, zoomlevel));
                         }
                     });
@@ -419,6 +457,7 @@ public class SearchFragment extends Fragment implements OnMapReadyCallback, Goog
                     circleRange.setText(String.format("%.2f", progressSeekbar/1000.0));
                     System.out.println(progressSeekbar);
                     circle.setRadius(progressSeekbar);
+                    setQueryinGoogleMaps(latlng);
                     bSearch.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
@@ -681,27 +720,27 @@ public class SearchFragment extends Fragment implements OnMapReadyCallback, Goog
                         if(item == null) {
                             return;
                         }
-                        if (!item.getOwnerID().equals(FirebaseAuth.getInstance().getCurrentUser().getUid())) {
-                            if (item.getName().toLowerCase().contains(tfLocation.getText().toString().toLowerCase())) {
-                                // add to listview
-                                lvAdapter.putItem(item);
-                                String title = item.getName();
-                                hashMapMarkerTitle.put(key, title);
-                                hashMapMarker.get(key).title(title);
-                                mMap.addMarker(hashMapMarker.get(key));
-                                lvAdapter.notifyDataSetChanged();
+
+                        // for each word in entry
+
+                        String[] splited = tfLocation.getText().toString().toLowerCase().split("\\s+");
+
+                       // for (int i = 0; i < splited.length; i++){
+                            // if tag not matched
+                            if (!item.getOwnerID().equals(FirebaseAuth.getInstance().getCurrentUser().getUid())) {
+                             //   if (item.getName().toLowerCase().contains(splited[i])) {
+                                if (item.getName().toLowerCase().contains(tfLocation.getText().toString().toLowerCase())) {
+                                    // add to listview
+                                    lvAdapter.putItem(item);
+                                    String title = item.getName();
+                                    hashMapMarkerTitle.put(key, title);
+                                    hashMapMarker.get(key).title(title);
+                                    mMap.addMarker(hashMapMarker.get(key));
+                                    lvAdapter.notifyDataSetChanged();
+                                }
                             }
+                        //}
 
-                        }
-
-
-
-//                        lvAdapter.putItem(item);
-//                        String title =  item.getName();
-//                        hashMapMarkerTitle.put(key, title);
-//                        hashMapMarker.get(key).title(title);
-//                        mMap.addMarker(hashMapMarker.get(key));
-//                        lvAdapter.notifyDataSetChanged();
 
                     }
 
@@ -793,12 +832,10 @@ public class SearchFragment extends Fragment implements OnMapReadyCallback, Goog
         double dragLat = dragPosition.latitude;
         double dragLong = dragPosition.longitude;
         setLocaleArea(dragLat, dragLong);
-        final LatLng latlng = new LatLng(dragLat, dragLong);
+        latlng = new LatLng(dragLat, dragLong);
         setQueryinGoogleMaps(latlng);
-
         progress.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-
             }
 
             @Override
@@ -811,6 +848,7 @@ public class SearchFragment extends Fragment implements OnMapReadyCallback, Goog
                 circleRange.setText(String.format("%.2f", progressSeekbar/1000.0));
                 System.out.println(progressSeekbar);
                 circle.setRadius(progressSeekbar);
+                setQueryinGoogleMaps(latlng);
                 bSearch.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {

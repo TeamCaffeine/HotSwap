@@ -24,6 +24,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.teamcaffeine.hotswap.swap.ItemTransactions;
 import com.teamcaffeine.hotswap.login.User;
 import com.teamcaffeine.hotswap.navigation.homeAdapters.OwnedItemsAdapter;
 import com.teamcaffeine.hotswap.navigation.homeAdapters.RentingPendingItemsAdapter;
@@ -118,6 +119,8 @@ public class HomeFragment extends Fragment {
         rentingAdapter = new RentingPendingItemsAdapter(getContext());
         pendingAdapter = new RentingPendingItemsAdapter(getContext());
 
+
+
         // set tbe adapter on the listview in the UI
         listviewOwnedItems.setAdapter(ownedItemsAdapter);
         listviewOwnedItems.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -160,6 +163,17 @@ public class HomeFragment extends Fragment {
                             // add the ActiveTransactionInfo to pending for item's owner
                             // adjust the UI for both lists... again, this doesn't need to be coded out, the userEventListener
                             // will handle this behavior.
+            }
+        });
+
+        listviewOwnedItems.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Item item = (Item) parent.getItemAtPosition(position);
+                Intent itemTransactionsIntent = new Intent(getActivity(), ItemTransactions.class);
+                itemTransactionsIntent.putExtra("itemID", item.getItemID());
+                itemTransactionsIntent.putExtra("itemName", item.getName());
+                startActivity(itemTransactionsIntent);
             }
         });
 
