@@ -154,6 +154,8 @@ public class ItemTransactions extends AppCompatActivity {
 
         final TransactionsAdapter transactionsAdapter = new TransactionsAdapter(this);
 
+        TextView emptyView = findViewById(R.id.emptyView);
+        lvItems.setEmptyView(emptyView);
         lvItems.setAdapter(transactionsAdapter);
 
 
