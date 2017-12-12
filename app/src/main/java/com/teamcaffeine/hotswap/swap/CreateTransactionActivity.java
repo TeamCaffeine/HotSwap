@@ -101,7 +101,7 @@ public class CreateTransactionActivity extends AppCompatActivity {
                 for (Date d : calendarPickerView.getSelectedDates()) {
                     if (previousDate.equals(d)) {
                         // Ignore. This is the first iteration.
-                    } else if (d.getDay() == previousDate.getDay() + 1){
+                    } else if (d.getDay() == (previousDate.getDay() + 1) % 7){
                         previousDate = (Date) d.clone();
                     } else {
                         // We must have skipped a day. Log and handle appropriately.
