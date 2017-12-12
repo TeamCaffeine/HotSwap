@@ -21,7 +21,6 @@
             android:id="@+id/cardView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="20dp"
             app:cardBackgroundColor="@color/colorPrimaryDark">
 
             <LinearLayout
@@ -49,7 +48,20 @@
                 <com.teamcaffeine.hotswap.utility.NonScrollListView
                     android:id="@+id/cardListView"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"></com.teamcaffeine.hotswap.utility.NonScrollListView>
+                    android:layout_height="wrap_content">
+
+
+                </com.teamcaffeine.hotswap.utility.NonScrollListView>
+
+                <TextView
+                    android:id="@+id/emptyView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="40dp"
+                    android:fontFamily="sans-serif"
+                    android:text="@string/empty_items"
+                    android:textAlignment="center"
+                    android:visibility="gone" />
 
             </LinearLayout>
 

@@ -208,4 +208,7 @@
     <string name="amount_to_transfer">Amount to Transfer</string>
     <string name="enter_payment">Please enter your payment information below:</string>
 
+    <!-- Empty Views -->
+    <string name="empty_items">No items to display.</string>
+
 </resources>

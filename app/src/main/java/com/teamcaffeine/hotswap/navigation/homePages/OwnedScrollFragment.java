@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.CardView;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -61,6 +62,9 @@ public class OwnedScrollFragment extends Fragment {
         HollyViewPagerBus.registerScrollView(getActivity(), scrollView);
 
         cardListView = view.findViewById(R.id.cardListView);
+
+        TextView emptyView = view.findViewById(R.id.emptyView);
+        cardListView.setEmptyView(emptyView);
         cardListView.setAdapter(adapter);
 
         cardListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
