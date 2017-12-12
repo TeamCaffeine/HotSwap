@@ -58,6 +58,36 @@
         android:imeOptions="actionDone"
         android:inputType="textLongMessage"
         android:textSize="18sp" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/chooseTag"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="3"
+            android:ems="10"
+            android:text="Choose Tag"
+            android:imeOptions="actionDone"
+            android:layout_marginLeft="5dp"
+            android:inputType="textLongMessage"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/showTag"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1.5"
+            android:layout_marginStart="10dp"
+            android:ems="10"
+            android:hint="No Tag Chosen"
+            android:textSize="18sp" />
+
+    </LinearLayout>
+
 
     <FrameLayout
         android:id="@+id/addressContent"
