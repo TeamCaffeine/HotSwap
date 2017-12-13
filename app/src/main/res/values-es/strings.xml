@@ -200,5 +200,11 @@
     <string name="distance_kilometers">Distancia (Kilómetros)</string>
     <string name="set_tags">Dar Etiquetas</string>
     <string name="item_requests_title">Solicitudes de ítemes</string>
+    <string name="empty_items">"No hay ítemes para mostrar "</string>
+    <string name="enter_payment">Por favor, ingrese su información de pago a continuación:</string>
+    <string name="amount_to_transfer">La cantidad a transferir</string>
+    <string name="add_balance">Agregar saldo</string>
+    <string name="current_balance">Saldo actual</string>
+    <string name="picture_upload_hint">Toca la imagen para subir un avatar</string>
 
 </resources>
